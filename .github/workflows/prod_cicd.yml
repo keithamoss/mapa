@@ -26,6 +26,8 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
+          mkdir secrets/prod
+          mkdir secrets/dev
           echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
           echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
           echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
@@ -57,6 +59,8 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
+          mkdir secrets/prod
+          mkdir secrets/dev
           echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
           echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
           echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
