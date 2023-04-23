@@ -1,0 +1,9 @@
+# production
+/build
+
+# misc
+.DS_Store
+
+# app-specific
+supervisord.pid
+static/
