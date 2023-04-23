@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git pull origin master
+git pull origin main
 docker compose -f mapa-production.yml pull
 docker compose -f mapa-production.yml stop
 docker compose -f mapa-production.yml up --remove-orphans -d
