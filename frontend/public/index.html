@@ -9,13 +9,17 @@
   <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/app-icon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/app-icon/favicon-16x16.png">
 
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, viewport-fit=cover" /> -->
+  <!-- viewport-fit=cover is still quite experimental -->
+  <!-- https://udn.realityripple.com/docs/Web/CSS/@viewport/viewport-fit -->
+  <!-- https://stackoverflow.com/a/69704451 -->
+  <!-- https://stackoverflow.com/a/60939741 -->
   <meta name="viewport"
-    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
 
-  <meta name="theme-color" content="#000000" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#fafaf8" />
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
 
   <meta name="description" content="For H, with ❤️" />
   <!--
