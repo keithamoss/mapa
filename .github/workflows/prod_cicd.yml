@@ -1,5 +1,4 @@
 name: Production CI/CD
-environment: PRODUCTION
 
 on:
   push:
@@ -16,6 +15,7 @@ env:
 jobs:
   build-frontend:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
     steps:
       - uses: actions/checkout@v3
 
@@ -46,6 +46,7 @@ jobs:
 
   build-django-static:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
     steps:
       - uses: actions/checkout@v3
 
@@ -76,6 +77,7 @@ jobs:
 
   build-nginx:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
     needs: [build-frontend, build-django-static]
     steps:
       - uses: actions/checkout@v3
@@ -111,6 +113,7 @@ jobs:
 
   build-django:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
     steps:
       - uses: actions/checkout@v3
 
@@ -130,6 +133,7 @@ jobs:
 
   deploy-app:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
     needs: [build-nginx, build-django]
     steps:
       - name: Deploy to Digital Ocean droplet via SSH action
