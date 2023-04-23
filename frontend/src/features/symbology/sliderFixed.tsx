@@ -6,7 +6,7 @@ import { forwardRef, useEffect } from "react";
 // c.f. https://github.com/mui/material-ui/issues/20990
 
 const StyledSlider = styled(Slider)`
-  touch-action: auto;
+  /* touch-action: auto; */
 `;
 
 function SliderFixed(props: SliderProps, ref: any) {
