@@ -77,32 +77,6 @@ export const mapsApi = api.injectEndpoints({
       // In this case, `getMap` will be re-run. `getMaps` *might*  rerun, if this id was under its results.
       invalidatesTags: (result, error, { id }) => [{ type: "Map", id }],
     }),
-    // favouriteSymbolOnMap: builder.mutation<
-    //   void,
-    //   { mapId: number; schemaId: number; symbolId: number }
-    // >({
-    //   query: ({ mapId, ...data }) => ({
-    //     url: `maps/${mapId}/favourite_symbol/`,
-    //     method: "POST",
-    //     body: data,
-    //   }),
-    //   // Invalidates all Map-type queries providing the `LIST` id - after all, depending of the sort order,
-    //   // that newly created map could show up in any lists.
-    //   invalidatesTags: [{ type: "Map", id: "LIST" }],
-    // }),
-    // unfavouriteSymbolOnMap: builder.mutation<
-    //   void,
-    //   { mapId: number; schemaId: number; symbolId: number }
-    // >({
-    //   query: ({ mapId, ...data }) => ({
-    //     url: `maps/${mapId}/unfavourite_symbol/`,
-    //     method: "POST",
-    //     body: data,
-    //   }),
-    //   // Invalidates all Map-type queries providing the `LIST` id - after all, depending of the sort order,
-    //   // that newly created map could show up in any lists.
-    //   invalidatesTags: [{ type: "Map", id: "LIST" }],
-    // }),
   }),
 });
 
@@ -111,6 +85,4 @@ export const {
   useAddMapMutation,
   useUpdateMapMutation,
   usePatchMapMutation,
-  // useFavouriteSymbolOnMapMutation,
-  // useUnfavouriteSymbolOnMapMutation,
 } = mapsApi;
