@@ -1,4 +1,5 @@
 name: Production CI/CD
+environment: PRODUCTION
 
 on:
   push:
