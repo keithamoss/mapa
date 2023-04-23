@@ -13,7 +13,7 @@ services:
     volumes:
       - ./keys/:/app/keys/:delegated
       - ./logs/nginx:/var/log/nginx:delegated
-      - ./nginx/docker.prod.mapa.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx-prod/docker.prod.mapa.conf:/etc/nginx/conf.d/nginx.conf
     depends_on:
       - mapa
     ports:
