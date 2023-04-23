@@ -1,0 +1,40 @@
+/* 
+Courtesy of https: //codepen.io/leemartin/pen/ExPXRzx
+
+https://codepen.io/keithamoss/pen/yLROxwa
+*/
+
+.colourPicker {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    height: 6em;
+    padding: 0;
+    width: 6em;
+}
+
+.colourPicker *:focus {
+    border-radius: 0;
+    outline: none;
+}
+
+.colourPicker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.colourPicker::-webkit-color-swatch {
+    border: 0;
+    border-radius: 0;
+}
+
+.colourPicker::-moz-color-swatch,
+.colourPicker::-moz-focus-inner {
+    border: 0;
+}
+
+.colourPicker::-moz-focus-inner {
+    padding: 0;
+}
