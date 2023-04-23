@@ -1,0 +1,143 @@
+name: Production CI/CD
+
+on:
+  push:
+    # branches: [production]
+    branches: [main]
+  pull_request:
+    # branches: [production]
+    branches: [main]
+    types: [closed]
+
+env:
+  LATEST_IMAGE_TAG: latest-production
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
+          echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Frontend - Build
+        run: docker compose --file build_production.yml run frontend
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-frontend
+          path: ./nginx-prod/build/frontend.tgz
+
+  build-django-static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
+          echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Django - Build
+        run: docker compose --file build_production.yml run django
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-django
+          path: ./nginx-prod/build/django.tgz
+
+  build-nginx:
+    runs-on: ubuntu-latest
+    needs: [build-frontend, build-django-static]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Download artifacts for container building
+        uses: actions/download-artifact@v3
+        with:
+          path: ./build/
+
+      - name: Move artifacts
+        run: |
+          mv ./build/build-frontend/frontend.tgz ./nginx-prod/build/frontend.tgz
+          mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
+
+      - name: Containers - Build Nginx
+        run: docker build -t keithmoss/mapa-nginx:production-$GITHUB_SHA -t keithmoss/mapa-nginx:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: nginx-prod
+
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/mapa-nginx --all-tags
+
+  build-django:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Containers - Build Django
+        run: docker build -t keithmoss/mapa-django:production-$GITHUB_SHA -t keithmoss/mapa-django:${{ env.LATEST_IMAGE_TAG }} .
+        working-directory: django
+
+      - name: Containers - Push to Docker Hub
+        run: |
+          docker push keithmoss/mapa-django --all-tags
+
+  deploy-app:
+    runs-on: ubuntu-latest
+    needs: [build-nginx, build-django, build-rq-dashboard]
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_PRODUCTION_HOST }}
+          username: ${{ secrets.SSH_PRODUCTION_USERNAME }}
+          key: ${{ secrets.SSH_PRODUCTION_KEY }}
+          passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
+          script: |
+            cd /apps/mapa/
+            ./mapa-production-redeploy.sh

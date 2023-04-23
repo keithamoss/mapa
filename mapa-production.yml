@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  mapa:
+    image: keithmoss/mapa-django:latest-production
+    command: supervisord
+    volumes:
+      - ./logs/mapa-django:/app/logs:delegated
+    env_file:
+      - secrets/mapa-web.env
+      - secrets/mapa-db.env
+  nginx:
+    image: keithmoss/mapa-nginx:latest-production
+    volumes:
+      - ./keys/:/app/keys/:delegated
+      - ./logs/nginx:/var/log/nginx:delegated
+      - ./nginx/docker.prod.mapa.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - mapa
+    ports:
+      - "443:443"
+  # logrotate:
+  #   image: blacklabelops/logrotate
+  #   volumes:
+  #     - ./logs/mapa-django:/app/logs/mapa-django:delegated
+  #     - ./logs/nginx:/app/logs/nginx:delegated
+  #     - ./logs:/app/logs:delegated
+  #   environment:
+  #     - LOGS_DIRECTORIES=/app/logs
+  #     - LOGROTATE_INTERVAL=weekly
+  #     - LOGROTATE_COPIES=520
+  #     - LOGROTATE_SIZE=20M
+  #     - LOGROTATE_COMPRESSION=compress
+  #     - LOGROTATE_PARAMETERS=f
+  #     - LOGROTATE_LOGFILE=/app/logs/logrotate.log
+  #     - LOGROTATE_DATEFORMAT=-%d-%m-%Y_%H:%M
+  #     - LOGROTATE_OLDDIR=./old
+  #     - TZ=Australia/Perth

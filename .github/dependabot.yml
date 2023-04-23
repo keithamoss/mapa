@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/django"
+    schedule:
+      interval: weekly
+      day: saturday
+      time: "09:30"
+      timezone: Australia/Perth
+    open-pull-requests-limit: 99
+  - package-ecosystem: npm
+    directory: "/frontend"
+    schedule:
+      interval: weekly
+      day: saturday
+      time: "09:30"
+      timezone: Australia/Perth
+    open-pull-requests-limit: 99

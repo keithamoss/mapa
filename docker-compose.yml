@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  db:
+    image: postgis/postgis:15-3.3-alpine
+    command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    ports:
+      - "5432:5432"
+    env_file:
+      - secrets/dev/db.dev.env
+    volumes:
+      # Enable this mapping to inject the tweaked postgresql.conf file into our PostgreSQL container.
+      - ./db-pg/postgresql.conf:/etc/postgresql/postgresql.conf
+
+      # Enable this mapping and create ./dev/pg_log/ to get easier access to PostgreSQL's log files for debugging.
+      # - ./dev/pg_log/:/var/lib/postgresql/data/pg_log/
+
+      # Enable this to store the PostgreSQL data on the host
+      - ./db-pg/data:/var/lib/postgresql/data
+
+      - ./db-pg/scripts:/var/lib/postgresql/scripts
+  django:
+    build: django/
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./django/:/app:delegated
+    ports:
+      - "8000:8000"
+    env_file:
+      - secrets/dev/web.dev.env
+      - secrets/dev/web-db.dev.env
+    depends_on:
+      - db
+  frontend:
+    image: node:16-alpine3.14
+    entrypoint: /app/docker-entrypoint.sh
+    volumes:
+      - ./frontend:/app:delegated
+    env_file:
+      - secrets/dev/frontend.dev.env
+    environment:
+      # Fixes bug where websocket connection is fixed to default port 3000
+      - WDS_SOCKET_PORT=0
+  nginx:
+    build: nginx/
+    volumes:
+      - ./nginx:/app
+      - ./nginx/nginx/docker.https.dev.conf:/etc/nginx/conf.d/nginx.conf
+      - ./keys/:/app/keys/:delegated
+    depends_on:
+      - django
+      - frontend
+    ports:
+      - "443:443"
+      - "8001:8001"
