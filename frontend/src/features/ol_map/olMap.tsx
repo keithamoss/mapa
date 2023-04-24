@@ -3,11 +3,10 @@ import { default as OLFeature } from "ol/Feature";
 import { Geometry, Point } from "ol/geom";
 import { Modify } from "ol/interaction.js";
 import { ModifyEvent } from "ol/interaction/Modify";
-import TileLayer from "ol/layer/Tile";
+import MapboxVector from "ol/layer/MapboxVector";
 import VectorLayer from "ol/layer/Vector";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
-import OSM from "ol/source/OSM";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 
 import { StyleFunction } from "ol/style/Style";
@@ -154,12 +153,9 @@ function OLMap(props: Props) {
       const initialMap = new Map({
         target: mapTargetElementId,
         layers: [
-          new TileLayer({
-            source: new OSM({
-              // https://carto.com/location-data-services/basemaps/
-              url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-              attributions: `&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors.`,
-            }),
+          new MapboxVector({
+            styleUrl: "mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g",
+            accessToken: process.env.REACT_APP_MAPBOX_API_KEY,
           }),
         ],
         view: new View(view),

@@ -5,6 +5,9 @@ import { forwardRef, useEffect } from "react";
 // MUI issue tracking this:
 // https://github.com/mui/material-ui/issues/20990
 
+// Ionic has/had the same issue:
+// https://github.com/ionic-team/ionic-framework/issues/19004
+
 // c.f. https://stackoverflow.com/questions/64776560/scroll-events-unintentionally-changing-material-ui-slider-values
 // Original touch-action idea via
 // Source: https://stackoverflow.com/a/69273037
