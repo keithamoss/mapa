@@ -30,6 +30,9 @@ export const symbologyFormValidationSchema = (
         iconFieldRequired === true
           ? yup.string().required()
           : yup.string().optional(),
+      // We could strictly check IconStyle (and in schemas.ts), but we'd need to maintain
+      // our own const(feeding the type and type array) of IconStyles, so meh for now.
+      icon_style: yup.string().required(),
       colour: colourOptional,
       fill: colourOptional,
       size: positiveIntegerOptional

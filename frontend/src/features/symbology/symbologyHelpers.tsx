@@ -5,14 +5,14 @@ import {
   SymbologyProps,
 } from "../../app/services/schemas";
 
-import { IconPrefix, IconStyle } from "@fortawesome/fontawesome-svg-core";
+import { IconPrefix } from "@fortawesome/fontawesome-svg-core";
 import {
   FontAwesomeIcon,
   FontAwesomeIconProps,
 } from "@fortawesome/react-fontawesome";
 import { getIconByName } from "./font-awesome/fontAwesome";
 
-export const defaultSymbolIcon = "0";
+export const defaultSymbolIcon = "comments";
 export const defaultSymbolColour = "#000000";
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 20;
@@ -103,7 +103,7 @@ export const getAppDefaultSymbologyConfig = () =>
   } as SymbologyProps);
 
 const getFontAwesomeIconPrefixForStyle = (
-  styleName: IconStyle
+  styleName: string
 ): IconPrefix | undefined => {
   if (styleName === "solid") {
     return "fas";
@@ -125,6 +125,7 @@ const getFontAwesomeIconPrefixForStyle = (
 
 export const getFontAwesomeIconFromLibrary = (
   iconName: string,
+  iconStyle?: string,
   iconProps?: Partial<FontAwesomeIconProps>
 ) => {
   const icon = getIconByName(iconName);
@@ -133,12 +134,17 @@ export const getFontAwesomeIconFromLibrary = (
     return null;
   }
 
+  const faIconStyle = getFontAwesomeIconPrefixForStyle(
+    iconStyle || icon.styles[0]
+  );
+
+  if (faIconStyle === undefined) {
+    return null;
+  }
+
   return (
     <FontAwesomeIcon
-      icon={[
-        getFontAwesomeIconPrefixForStyle(icon.styles[0]) || "fas",
-        icon.name,
-      ]}
+      icon={[faIconStyle, icon.name]}
       {...getFontAwesomeIconPropsForSymbolPreview(
         getAppDefaultSymbologyConfig()
       )}
@@ -191,7 +197,7 @@ export const getFontAwesomeIconForSymbolPreview = (
   symbol: Partial<SymbologyProps>,
   propOverrides?: Partial<SymbologyProps>
 ) => {
-  const { icon, ...props } = symbol;
+  const { icon, icon_style, ...props } = symbol;
 
   if (icon === undefined) {
     return null;
@@ -204,6 +210,7 @@ export const getFontAwesomeIconForSymbolPreview = (
 
   return getFontAwesomeIconFromLibrary(
     icon,
+    icon_style,
     getFontAwesomeIconPropsForSymbolPreview(local_symbol)
   );
 };
@@ -211,7 +218,7 @@ export const getFontAwesomeIconForSymbolPreview = (
 export const getFontAwesomeIconForSymbolForOpenLayers = (
   symbol: Partial<SymbologyProps>
 ) => {
-  const { icon, ...props } = symbol;
+  const { icon, icon_style, ...props } = symbol;
 
   if (icon === undefined) {
     return null;
@@ -219,6 +226,7 @@ export const getFontAwesomeIconForSymbolForOpenLayers = (
 
   return getFontAwesomeIconFromLibrary(
     icon,
+    icon_style,
     getFontAwesomeIconPropsForOpenLayersSymbol(props)
   );
 };

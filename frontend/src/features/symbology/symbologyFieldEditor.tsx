@@ -59,7 +59,12 @@ import {
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import "./colourPicker.css";
-import { getIconLabelByName } from "./font-awesome/fontAwesome";
+import {
+  getIconAvailableStyles,
+  getIconAvailableStylesOrEmptyString,
+  getIconByName,
+  getIconLabelByName,
+} from "./font-awesome/fontAwesome";
 import SliderFixed from "./sliderFixed";
 import SymbologyIconAutocomplete from "./symbologyIconAutocomplete";
 
@@ -80,6 +85,13 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
       symbol,
       "icon",
       defaultSymbolIcon
+    ),
+    icon_style: getStringOrDefaultForSymbologyField(
+      symbol,
+      "icon_style",
+      getIconAvailableStylesOrEmptyString(
+        symbol?.icon_style || defaultSymbolIcon
+      )
     ),
     colour: getStringOrDefaultForSymbologyField(
       symbol,
@@ -192,7 +204,16 @@ function SymbologyFieldEditor(props: Props) {
     defaultValues: getDefaultValues(symbol),
   });
 
-  const { icon, colour, fill, size, stroke_width, rotation, opacity } = watch();
+  const {
+    icon,
+    icon_style,
+    colour,
+    fill,
+    size,
+    stroke_width,
+    rotation,
+    opacity,
+  } = watch();
 
   const onChooseGroupId = (e: SelectChangeEvent<number>) => {
     const groupId = parseInt(`${e.target.value}`);
@@ -206,6 +227,11 @@ function SymbologyFieldEditor(props: Props) {
     onCloseIconChooserDialog();
 
     setValue("icon", icon !== null ? icon : defaultSymbolIcon);
+
+    setValue(
+      "icon_style",
+      icon !== null ? getIconByName(icon)?.styles[0] : undefined
+    );
   };
 
   const copyStrokeColourToFillColour = () => {
@@ -309,10 +335,10 @@ function SymbologyFieldEditor(props: Props) {
           Symbol
           <div style={{ position: "absolute", top: "20px", right: "30px" }}>
             {symbol !== null &&
-              symbol !== undefined &&
               getFontAwesomeIconForSymbolPreview({
                 ...symbol,
                 icon,
+                icon_style,
                 colour,
                 fill,
                 size,
@@ -322,6 +348,7 @@ function SymbologyFieldEditor(props: Props) {
               })}
           </div>
         </DialogTitle>
+
         <DialogContent>
           <form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
             {nameFieldRequired !== false && (
@@ -362,11 +389,8 @@ function SymbologyFieldEditor(props: Props) {
                 variant="outlined"
               >
                 <FormGroup>
-                  <InputLabel id="demo-simple-select-autowidth-label">
-                    Group
-                  </InputLabel>
+                  <InputLabel>Group</InputLabel>
                   <Select
-                    labelId="demo-simple-select-autowidth-label"
                     label="Group"
                     defaultValue={currentGroupId || defaultSymbologyGroupId}
                     onChange={onChooseGroupId}
@@ -415,6 +439,37 @@ function SymbologyFieldEditor(props: Props) {
 
               {errors.icon && (
                 <FormHelperText error>{errors.icon.message}</FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl
+              fullWidth={true}
+              sx={{ mb: 3 }}
+              component="fieldset"
+              variant="outlined"
+            >
+              <FormGroup>
+                <InputLabel>Style</InputLabel>
+
+                <Controller
+                  name="icon_style"
+                  control={control}
+                  render={({ field }) => (
+                    <Select {...field} label="Style">
+                      {getIconAvailableStyles(icon).map((styleName) => (
+                        <MenuItem key={styleName} value={styleName}>
+                          {styleName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormGroup>
+
+              {errors.icon_style && (
+                <FormHelperText error>
+                  {errors.icon_style.message}
+                </FormHelperText>
               )}
             </FormControl>
 

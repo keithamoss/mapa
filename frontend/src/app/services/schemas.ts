@@ -4,6 +4,9 @@ import { api } from "./api";
 export interface SymbologyProps {
   name?: string;
   icon?: string;
+  // @NOTE: This could be strictly typed to IconStyle, rather than string, ...
+  // but it's bit of a pfaff: https://yidaotus.medium.com/using-yup-and-typescript-for-typesafe-select-validation-e9ee9d4bceec
+  icon_style?: string;
   colour?: string;
   size?: number;
   stroke_width?: number;

@@ -1,4 +1,4 @@
-import { IconName } from "@fortawesome/fontawesome-svg-core";
+import { IconName, IconStyle } from "@fortawesome/fontawesome-svg-core";
 import categories from "./categories.json";
 import icons from "./icons.json";
 
@@ -83,11 +83,7 @@ export type IFontAwesomeCategories = {
   };
 };
 
-export type MyType = typeof categories;
-
 export const getCategories = () => categories as IFontAwesomeCategories;
-
-export type FontAwesomeStyle = "solid" | "regular" | "brands";
 
 export interface IFontAwesomeIcon {
   changes: string[];
@@ -95,7 +91,7 @@ export interface IFontAwesomeIcon {
   search: {
     terms: string[];
   };
-  styles: FontAwesomeStyle[];
+  styles: IconStyle[];
   unicode: string;
   label: string;
   name: IconName;
@@ -110,7 +106,7 @@ export interface IFontAwesomeIcon {
       path: string;
     };
   };
-  free: FontAwesomeStyle[];
+  free: IconStyle[];
 }
 
 export interface IFontAwesomeIcons {
@@ -179,7 +175,7 @@ export const mapCategoriesToIcons = () => {
   const categories = getCategories();
   const iconsWithCategories: any = {};
 
-  for (const [categoryName, category] of Object.entries(categories)) {
+  for (const [, category] of Object.entries(categories)) {
     category.icons.forEach((iconName) => {
       if (iconsWithCategories[iconName] === undefined) {
         iconsWithCategories[iconName] = [];
@@ -214,3 +210,9 @@ export const getIconsSortedByCategory = () => {
 
   return iconsByCategory;
 };
+
+export const getIconAvailableStylesOrEmptyString = (iconName?: string) =>
+  iconName !== undefined ? getIconByName(iconName)?.styles[0] || "" : "";
+
+export const getIconAvailableStyles = (iconName?: string) =>
+  iconName !== undefined ? getIconByName(iconName)?.styles || [] : [];
