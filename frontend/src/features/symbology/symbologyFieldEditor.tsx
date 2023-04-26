@@ -43,7 +43,6 @@ import {
   FeatureSchemaSymbologyGroup,
   SymbologyProps,
 } from "../../app/services/schemas";
-import { getIconsMetadataByIconName } from "../ol_map/iconsMetadata";
 import {
   defaultSymbolColour,
   defaultSymbolFillColourForSymbologyForm,
@@ -53,13 +52,14 @@ import {
   defaultSymbolSize,
   defaultSymbolStrokeWidth,
   defaultSymbologyGroupId,
-  getAppDefaultSymbologyConfig,
-  getIconForSymbolForFormPreview,
+  getFontAwesomeIconForSymbolPreview,
+  getFontAwesomeIconFromLibrary,
 } from "./symbologyHelpers";
 
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import "./colourPicker.css";
+import { getIconLabelByName } from "./font-awesome/fontAwesome";
 import SliderFixed from "./sliderFixed";
 import SymbologyIconAutocomplete from "./symbologyIconAutocomplete";
 
@@ -288,9 +288,7 @@ function SymbologyFieldEditor(props: Props) {
         <Paper elevation={0} sx={{ m: 3, mt: 3 }}>
           <SymbologyIconAutocomplete
             ref={autocompleteInputRef}
-            selectedSymbol={
-              icon !== undefined ? getIconsMetadataByIconName(icon) : undefined
-            }
+            selectedSymbol={icon}
             onChooseSymbol={onChooseSymbol}
           />
         </Paper>
@@ -310,9 +308,10 @@ function SymbologyFieldEditor(props: Props) {
         <DialogTitle>
           Symbol
           <div style={{ position: "absolute", top: "20px", right: "30px" }}>
-            {getIconForSymbolForFormPreview(
-              { ...getAppDefaultSymbologyConfig(), ...symbol },
-              {
+            {symbol !== null &&
+              symbol !== undefined &&
+              getFontAwesomeIconForSymbolPreview({
+                ...symbol,
                 icon,
                 colour,
                 fill,
@@ -320,8 +319,7 @@ function SymbologyFieldEditor(props: Props) {
                 stroke_width,
                 rotation,
                 opacity,
-              }
-            )}
+              })}
           </div>
         </DialogTitle>
         <DialogContent>
@@ -401,17 +399,14 @@ function SymbologyFieldEditor(props: Props) {
                   InputProps={{
                     startAdornment:
                       icon !== undefined ? (
-                        <InputAdornment position="start" sx={{ mr: 2 }}>
-                          {getIconForSymbolForFormPreview(
-                            getAppDefaultSymbologyConfig(),
-                            { icon: icon }
-                          )}
+                        <InputAdornment position="start" sx={{ mr: 1 }}>
+                          {getFontAwesomeIconFromLibrary(icon)}
                         </InputAdornment>
                       ) : undefined,
                   }}
                 >
                   {icon !== undefined ? (
-                    <MenuItem value={icon}>{icon}</MenuItem>
+                    <MenuItem value={icon}>{getIconLabelByName(icon)}</MenuItem>
                   ) : (
                     <MenuItem />
                   )}

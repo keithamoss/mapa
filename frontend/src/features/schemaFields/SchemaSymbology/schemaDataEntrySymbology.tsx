@@ -26,8 +26,9 @@ import { selectFeatureSchemaById } from "../../schemas/schemasSlice";
 import SymbologyFieldEditor from "../../symbology/symbologyFieldEditor";
 import {
   addSymbolToGroup,
+  defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
-  getIconForSymbolForPreview,
+  getFontAwesomeIconForSymbolPreview,
   getSymbolFromSchemaSymbologyGroup,
 } from "../../symbology/symbologyHelpers";
 import SchemaSymbologyAutocomplete from "./schemaSymbologyAutocomplete";
@@ -194,8 +195,10 @@ function SchemaDataEntrySymbology(props: Props) {
           InputProps={{
             startAdornment:
               selectedSymbol !== undefined ? (
-                <InputAdornment position="start" sx={{ mr: 2 }}>
-                  {getIconForSymbolForPreview(selectedSymbol.props)}
+                <InputAdornment position="start" sx={{ mr: 1 }}>
+                  {getFontAwesomeIconForSymbolPreview(selectedSymbol.props, {
+                    size: defaultSymbolSizeForFormFields,
+                  })}
                 </InputAdornment>
               ) : undefined,
           }}

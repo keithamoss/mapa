@@ -9,27 +9,14 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import { forwardRef } from "react";
 import {
-  IconMetadata,
-  getIconsMetadataByCategory,
-} from "../ol_map/iconsMetadata";
-import {
-  getAppDefaultSymbologyConfig,
-  getIconForSymbolForFormPreview,
-  getOrderedIconCategories,
-} from "./symbologyHelpers";
-
-const getOptionsForAutocomplete = (): IconMetadata[] => {
-  const iconsMetadataByCategory = getIconsMetadataByCategory();
-
-  let options: IconMetadata[] = [];
-  getOrderedIconCategories().forEach(
-    (category) => (options = [...options, ...iconsMetadataByCategory[category]])
-  );
-  return options;
-};
+  IFontAwesomeIconsByCategory,
+  getIconByNameWithFirstCategory,
+  getIconsSortedByCategory,
+} from "./font-awesome/fontAwesome";
+import { getFontAwesomeIconFromLibrary } from "./symbologyHelpers";
 
 interface Props {
-  selectedSymbol: IconMetadata | undefined;
+  selectedSymbol: string | undefined;
   onChooseSymbol: (icon: string | null) => void;
 }
 
@@ -40,11 +27,11 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
 
   const onChange = (
     event: React.SyntheticEvent,
-    value: IconMetadata | null
+    value: IFontAwesomeIconsByCategory | null
   ) => {
     // Allows the user to delete all of the text in the search box
     if (value !== null) {
-      onChooseSymbol(value?.iconComponentName || null);
+      onChooseSymbol(value.icon.name || null);
     }
   };
 
@@ -52,25 +39,31 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
     <Autocomplete
       fullWidth
       sx={{ maxWidth: 350 }}
-      options={getOptionsForAutocomplete()}
-      value={selectedSymbol}
+      options={getIconsSortedByCategory()}
+      value={
+        selectedSymbol !== undefined
+          ? getIconByNameWithFirstCategory(selectedSymbol)
+          : undefined
+      }
       isOptionEqualToValue={(option, value) =>
-        value !== undefined &&
-        option.iconComponentName === value.iconComponentName
+        value !== undefined && option.icon.name === value.icon.name
       }
       filterOptions={createFilterOptions({
-        stringify: (option) => `${option.iconComponentName} ${option.category}`,
+        stringify: (option) =>
+          `${option.icon.label} ${
+            option.category.label
+          } ${option.icon.search.terms.join(" ")}`,
       })}
-      groupBy={(option) => option.category}
-      getOptionLabel={(option) => option.iconComponentName}
+      groupBy={(option) => option.category.label}
+      getOptionLabel={(option) => option.icon.label}
       onChange={onChange}
       openOnFocus={true}
       blurOnSelect={true}
       renderOption={(props, option, { inputValue }) => {
-        const matches = match(option.iconComponentName, inputValue, {
+        const matches = match(option.icon.label, inputValue, {
           insideWords: true,
         });
-        const parts = parse(option.iconComponentName, matches);
+        const parts = parse(option.icon.label, matches);
 
         return (
           <Box
@@ -78,9 +71,7 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
             sx={{ "& > svg": { mr: 2, flexShrink: 0 } }}
             {...props}
           >
-            {getIconForSymbolForFormPreview(getAppDefaultSymbologyConfig(), {
-              icon: option.iconComponentName,
-            })}
+            {getFontAwesomeIconFromLibrary(option.icon.name)}
             {parts.map((part, index) => (
               <span
                 key={index}
@@ -103,11 +94,8 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
             inputRef: ref,
             startAdornment:
               selectedSymbol !== undefined ? (
-                <InputAdornment position="start">
-                  {getIconForSymbolForFormPreview(
-                    getAppDefaultSymbologyConfig(),
-                    { icon: selectedSymbol.iconComponentName }
-                  )}
+                <InputAdornment position="start" sx={{ ml: 1 }}>
+                  {getFontAwesomeIconFromLibrary(selectedSymbol)}
                 </InputAdornment>
               ) : undefined,
           }}

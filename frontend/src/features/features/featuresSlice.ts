@@ -27,6 +27,9 @@ export const initFeatureFromMapCentre = (mapId: number) => {
       return null;
     };
 
+    // This checking of view is important.
+    // It prevents the user from creating features while
+    // we're still trying to retrieve their location.
     if (map !== undefined && view?.center !== undefined) {
       return {
         geom: getPointGeoJSONFromCoordinates(new Point(view.center)),

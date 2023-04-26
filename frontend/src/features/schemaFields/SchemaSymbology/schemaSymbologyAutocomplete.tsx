@@ -9,8 +9,8 @@ import {
   FeatureSchemaSymbologySymbolsValue,
 } from "../../../app/services/schemas";
 import {
-  getAppDefaultSymbologyConfig,
-  getIconForSymbolForFormPreview,
+  defaultSymbolSizeForFormFields,
+  getFontAwesomeIconForSymbolPreview,
   getSymbolFromSchemaSymbologyGroup,
   getSymbologyGroupById,
 } from "../../symbology/symbologyHelpers";
@@ -166,10 +166,9 @@ function SchemaSymbologyAutocomplete(props: Props, ref: any) {
             sx={{ "& > svg": { mr: 2, flexShrink: 0 } }}
             {...props}
           >
-            {getIconForSymbolForFormPreview(
-              getAppDefaultSymbologyConfig(),
-              option.symbol.props
-            )}
+            {getFontAwesomeIconForSymbolPreview(option.symbol.props, {
+              size: defaultSymbolSizeForFormFields,
+            })}
             {parts.map((part, index) => (
               <span
                 key={index}
@@ -192,11 +191,10 @@ function SchemaSymbologyAutocomplete(props: Props, ref: any) {
             inputRef: ref,
             startAdornment:
               selectedSymbol !== undefined ? (
-                <InputAdornment position="start">
-                  {getIconForSymbolForFormPreview(
-                    getAppDefaultSymbologyConfig(),
-                    selectedSymbol.props
-                  )}
+                <InputAdornment position="start" sx={{ ml: 1 }}>
+                  {getFontAwesomeIconForSymbolPreview(selectedSymbol.props, {
+                    size: defaultSymbolSizeForFormFields,
+                  })}
                 </InputAdornment>
               ) : undefined,
           }}

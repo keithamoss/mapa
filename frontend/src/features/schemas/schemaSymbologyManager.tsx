@@ -28,8 +28,9 @@ import {
 } from "../../app/services/schemas";
 import SymbologyFieldEditor from "../symbology/symbologyFieldEditor";
 import {
+  defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
-  getIconForSymbolForPreview,
+  getFontAwesomeIconForSymbolPreview,
   getSymbolGroups,
   getSymbologyGroupById,
   getSymbolsForGroup,
@@ -233,7 +234,9 @@ function SchemaSymbologyManager(props: Props) {
                 )}
 
                 <ListItemButton onClick={onEditSymbol(symbol)} disableGutters>
-                  {getIconForSymbolForPreview(symbol.props)}
+                  {getFontAwesomeIconForSymbolPreview(symbol.props, {
+                    size: defaultSymbolSizeForFormFields,
+                  })}
                   <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
                 </ListItemButton>
               </ListItem>

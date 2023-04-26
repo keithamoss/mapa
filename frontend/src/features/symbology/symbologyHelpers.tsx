@@ -1,5 +1,3 @@
-import { pickBy } from "lodash-es";
-
 import {
   FeatureSchemaSymbology,
   FeatureSchemaSymbologyGroup,
@@ -7,73 +5,25 @@ import {
   SymbologyProps,
 } from "../../app/services/schemas";
 
-import { iconsLibrary } from "../ol_map/iconsLibrary";
+import { IconPrefix, IconStyle } from "@fortawesome/fontawesome-svg-core";
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconProps,
+} from "@fortawesome/react-fontawesome";
+import { getIconByName } from "./font-awesome/fontAwesome";
 
-export const defaultSymbolIcon = "PinAlt";
+export const defaultSymbolIcon = "0";
 export const defaultSymbolColour = "#000000";
 export const defaultSymbolSize = 15;
+export const defaultSymbolSizeForFormFields = 20;
 export const defaultSymbolStrokeWidth = 1.5;
 // <input type="color" /> doesn't support opacity, so provide pure white for the form and very opaque black for the map
 export const defaultSymbolFillColour = "#FFFFFF03"; // So the whole icon is draggable in OL
 export const defaultSymbolFillColourForSymbologyForm = "#FFFFFF"; // So the whole icon is draggable in OL
 export const defaultSymbolRotation = 0;
-
 export const defaultSymbolOpacity = 1;
 
-// export const getAvailableIcons = () => Object.keys(iconsLibrary);
-
-export const getOrderedIconCategories = () => [
-  // Priority categories
-  ...[
-    "Food",
-    "Shapes",
-    "Maps",
-    "Nature",
-    "Activities",
-    "Buildings",
-    "Transport",
-    "Science",
-  ],
-  // Everything else
-  ...[
-    "Communication",
-    "Database",
-    "Navigation",
-    "Actions",
-    "Layout",
-    "3D Editor",
-    "Devices",
-    "System",
-    "Other",
-    "Docs",
-    "Design Tools",
-    "Animations",
-    "Photos and Videos",
-    "Shopping",
-    "Users",
-    "Home",
-    "Connectivity",
-    "Music",
-    "Editor",
-    "Development",
-    "Finance",
-    "Gaming",
-    "Organization",
-    "Clothing",
-    "Social",
-    "Git",
-    "Cloud",
-    "Weather",
-    "Health",
-    "Gestures",
-    "Emojis",
-    "Identity",
-    "Business",
-    "Security",
-    "Audio",
-    "Tools",
-  ],
-];
+export const defaultSymbologyGroupId = 1;
 
 // https://css-tricks.com/converting-color-spaces-in-javascript/
 // https://stackoverflow.com/a/5624139
@@ -141,121 +91,6 @@ export const hextoRGBACSS = (
   return "rgba(" + +r + "," + +g + "," + +b + "," + a + ")";
 };
 
-export const getIconFromLibrary = (symbol: Partial<SymbologyProps>) => {
-  return symbol.icon !== undefined && symbol.icon in iconsLibrary
-    ? iconsLibrary[symbol.icon]
-    : null;
-};
-
-export const getIconPropsForSymbol = (symbol: Partial<SymbologyProps>) => {
-  return {
-    strokeWidth:
-      symbol.stroke_width !== undefined
-        ? symbol.stroke_width
-        : defaultSymbolStrokeWidth,
-    color:
-      symbol.colour !== undefined
-        ? hextoRGBACSS(symbol.colour)
-        : hextoRGBACSS(defaultSymbolColour),
-    fill:
-      symbol.fill !== undefined
-        ? hextoRGBACSS(symbol.fill)
-        : defaultSymbolFillColour,
-    width: symbol.size,
-    height: symbol.size,
-    opacity: symbol.opacity,
-    rotation: symbol.rotation,
-  };
-};
-
-export const getIconPropsForSymbolForPreview = (
-  symbol: Partial<SymbologyProps>
-) => {
-  const localSymbol = {
-    ...symbol,
-    size: symbol.size !== undefined ? symbol.size * 1.5 : undefined,
-  };
-  return getIconPropsForSymbol(localSymbol);
-};
-
-export const getIconForSymbolForPreview = (symbol: Partial<SymbologyProps>) => {
-  const localSymbol = pickBy(
-    {
-      ...getAppDefaultSymbologyConfig(),
-      ...symbol,
-    },
-    (v) => v !== undefined
-  );
-
-  const Icon = getIconFromLibrary(localSymbol);
-  if (Icon === null) {
-    return null;
-  }
-
-  return (
-    <Icon
-      {...getIconPropsForSymbolForPreview(localSymbol)}
-      // Fake OL's behaviour with CSS for the user preview
-      style={{
-        opacity: symbol.opacity,
-        transform: `rotate(${symbol.rotation}deg)`,
-      }}
-    />
-  );
-};
-
-export const getIconForSymbolForFormPreview = (
-  baseSymbol: Partial<SymbologyProps>,
-  // @TODO Make me SymbologyValue
-  symbol: Partial<SymbologyProps>
-) => {
-  const localSymbol = {
-    ...baseSymbol,
-    ...pickBy(symbol, (v) => v !== undefined && v !== ""),
-  };
-
-  // Hackily deal with form colour controls not supporting RGBA
-  // @TODO Make this less hacky, maybe use https://github.com/viclafouch/mui-color-input if it can support opacity channel?
-  if (localSymbol.fill === defaultSymbolFillColourForSymbologyForm) {
-    localSymbol.fill = defaultSymbolFillColour;
-  }
-
-  const Icon = getIconFromLibrary(localSymbol);
-  if (Icon === null) {
-    return null;
-  }
-
-  return (
-    <Icon
-      {...getIconPropsForSymbolForPreview(localSymbol)}
-      // Fake OL's behaviour with CSS for the user preview
-      style={{
-        opacity: symbol.opacity,
-        transform: `rotate(${symbol.rotation}deg)`,
-      }}
-    />
-  );
-};
-
-export const getIconPropsForSymbolForOpenLayers = (
-  symbol: Partial<SymbologyProps>
-) => {
-  const { width, height, opacity, rotation, ...props } =
-    getIconPropsForSymbol(symbol);
-  return props;
-};
-
-export const getIconForSymbolForOpenLayers = (
-  symbol: Partial<SymbologyProps>
-) => {
-  const Icon = getIconFromLibrary(symbol);
-  if (Icon === null) {
-    return null;
-  }
-
-  return <Icon {...getIconPropsForSymbolForOpenLayers(symbol)} />;
-};
-
 export const getAppDefaultSymbologyConfig = () =>
   ({
     icon: defaultSymbolIcon,
@@ -267,7 +102,126 @@ export const getAppDefaultSymbologyConfig = () =>
     opacity: defaultSymbolOpacity,
   } as SymbologyProps);
 
-export const defaultSymbologyGroupId = 1;
+const getFontAwesomeIconPrefixForStyle = (
+  styleName: IconStyle
+): IconPrefix | undefined => {
+  if (styleName === "solid") {
+    return "fas";
+  } else if (styleName === "regular") {
+    return "far";
+  } else if (styleName === "light") {
+    return "fal";
+  } else if (styleName === "thin") {
+    return "fat";
+  } else if (styleName === "duotone") {
+    return "fad";
+  } else if (styleName === "brands") {
+    return "fab";
+  }
+  // @TOOD From Pro
+  // fak, fass, fasr, fasl
+  return undefined;
+};
+
+export const getFontAwesomeIconFromLibrary = (
+  iconName: string,
+  iconProps?: Partial<FontAwesomeIconProps>
+) => {
+  const icon = getIconByName(iconName);
+
+  if (icon === null) {
+    return null;
+  }
+
+  return (
+    <FontAwesomeIcon
+      icon={[
+        getFontAwesomeIconPrefixForStyle(icon.styles[0]) || "fas",
+        icon.name,
+      ]}
+      {...getFontAwesomeIconPropsForSymbolPreview(
+        getAppDefaultSymbologyConfig()
+      )}
+      {...iconProps}
+    />
+  );
+};
+
+export const getFontAwesomeIconPropsForOpenLayersSymbol = (
+  symbol: Partial<SymbologyProps>
+): Partial<FontAwesomeIconProps> => {
+  return {
+    // strokeWidth:
+    //   symbol.stroke_width !== undefined
+    //     ? symbol.stroke_width
+    //     : defaultSymbolStrokeWidth,
+    color:
+      symbol.colour !== undefined
+        ? hextoRGBACSS(symbol.colour)
+        : hextoRGBACSS(defaultSymbolColour),
+    // fill:
+    //   symbol.fill !== undefined
+    //     ? hextoRGBACSS(symbol.fill)
+    //     : defaultSymbolFillColour,
+    width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+    height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+    style: {
+      opacity: symbol?.opacity || defaultSymbolOpacity,
+      // Ensure transparent areas of the icon are draggable
+      backgroundColor: hextoRGBACSS(defaultSymbolFillColour),
+    },
+    transform: { rotate: symbol.rotation || defaultSymbolRotation },
+  };
+};
+
+export const getFontAwesomeIconPropsForSymbolPreview = (
+  symbol: Partial<SymbologyProps>
+): Partial<FontAwesomeIconProps> => {
+  return {
+    color: symbol?.colour,
+    style: {
+      fontSize: `${(symbol?.size || defaultSymbolSize) / 14}em`,
+      opacity: symbol?.opacity || 1,
+    },
+    transform: { rotate: symbol?.rotation || 0 },
+  };
+};
+
+export const getFontAwesomeIconForSymbolPreview = (
+  symbol: Partial<SymbologyProps>,
+  propOverrides?: Partial<SymbologyProps>
+) => {
+  const { icon, ...props } = symbol;
+
+  if (icon === undefined) {
+    return null;
+  }
+
+  const local_symbol = {
+    ...props,
+    ...propOverrides,
+  };
+
+  return getFontAwesomeIconFromLibrary(
+    icon,
+    getFontAwesomeIconPropsForSymbolPreview(local_symbol)
+  );
+};
+
+export const getFontAwesomeIconForSymbolForOpenLayers = (
+  symbol: Partial<SymbologyProps>
+) => {
+  const { icon, ...props } = symbol;
+
+  if (icon === undefined) {
+    return null;
+  }
+
+  return getFontAwesomeIconFromLibrary(
+    icon,
+    getFontAwesomeIconPropsForOpenLayersSymbol(props)
+  );
+};
 
 export const getSymbolGroups = (symbology: FeatureSchemaSymbology) =>
   Object.values(symbology.groups) as FeatureSchemaSymbologyGroup[];

@@ -1,8 +1,6 @@
-// import Internet from "iconoir/icons/internet.svg";
 import { default as OLFeature } from "ol/Feature";
 import { Icon } from "ol/style";
 import Style from "ol/style/Style";
-import React from "react";
 import { renderToString } from "react-dom/server";
 
 import { Feature, FeatureDataItem } from "../../app/services/features";
@@ -23,7 +21,7 @@ import {
 } from "../schemas/schemaHelpers";
 import {
   getAppDefaultSymbologyConfig,
-  getIconForSymbolForOpenLayers,
+  getFontAwesomeIconForSymbolForOpenLayers,
   getSymbolFromSchemaSymbologyGroup,
 } from "../symbology/symbologyHelpers";
 
@@ -31,22 +29,21 @@ export const getIconForSymbologyConfig = (
   olFeature: OLFeature,
   symbologyConfig: Partial<SymbologyProps>
 ) => {
-  const icon = getIconForSymbolForOpenLayers(symbologyConfig);
+  const icon = getFontAwesomeIconForSymbolForOpenLayers(symbologyConfig);
+
   if (icon === null) {
     return null;
   }
 
   return new Style({
     image: new Icon({
-      scale:
-        symbologyConfig.size !== undefined ? symbologyConfig.size / 10 : 1.5,
-      rotation:
-        symbologyConfig.rotation !== undefined ? symbologyConfig.rotation : 0, // radians
-      opacity:
-        symbologyConfig.opacity !== undefined ? symbologyConfig.opacity : 1,
       src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${renderToString(
         icon
       )}`,
+      // @NOTE: This is doable, we'd "just" need to inject and translate the styling onto the raw SVG element
+      // src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${
+      //   iconObj.svg[Object.keys(iconObj.svg)[0]].raw
+      //   }`,
     }),
   });
 };
@@ -169,6 +166,3 @@ export const olStyleFunction = (
     symbologyConfig as Partial<SymbologyProps>
   );
 };
-
-const foobar = () => <React.Fragment></React.Fragment>;
-export default foobar;
