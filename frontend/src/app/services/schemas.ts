@@ -6,13 +6,14 @@ export interface SymbologyProps {
   icon?: string;
   // @NOTE: This could be strictly typed to IconStyle, rather than string, ...
   // but it's bit of a pfaff: https://yidaotus.medium.com/using-yup-and-typescript-for-typesafe-select-validation-e9ee9d4bceec
+  icon_family?: string;
   icon_style?: string;
-  colour?: string;
   size?: number;
-  stroke_width?: number;
-  fill?: string;
   rotation?: number;
+  colour?: string;
   opacity?: number;
+  secondary_colour?: string;
+  secondary_opacity?: number;
 }
 
 export interface FeatureSchemaSymbologySymbolsValue {

@@ -316,7 +316,7 @@ function SchemaForm(props: Props) {
 
               {errors.default_symbology && (
                 <FormHelperText error>
-                  {errors.default_symbology.message}
+                  Errors: {errors.default_symbology.message}
                 </FormHelperText>
               )}
             </FormControl>

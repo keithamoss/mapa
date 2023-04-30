@@ -9,7 +9,6 @@ import { authApi } from "./app/services/auth";
 import { store } from "./app/store";
 import { theme } from "./app/ui/theme";
 import "./browserstack";
-import "./features/symbology/font-awesome/loader";
 import reportWebVitals from "./reportWebVitals";
 
 const container = document.getElementById("root")!;

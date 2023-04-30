@@ -1,7 +1,6 @@
 import { default as OLFeature } from "ol/Feature";
 import { Icon } from "ol/style";
 import Style from "ol/style/Style";
-import { renderToString } from "react-dom/server";
 
 import { Feature, FeatureDataItem } from "../../app/services/features";
 
@@ -21,7 +20,7 @@ import {
 } from "../schemas/schemaHelpers";
 import {
   getAppDefaultSymbologyConfig,
-  getFontAwesomeIconForSymbolForOpenLayers,
+  getFontAwesomeIconForSymbolAsSVGString,
   getSymbolFromSchemaSymbologyGroup,
 } from "../symbology/symbologyHelpers";
 
@@ -29,7 +28,7 @@ export const getIconForSymbologyConfig = (
   olFeature: OLFeature,
   symbologyConfig: Partial<SymbologyProps>
 ) => {
-  const icon = getFontAwesomeIconForSymbolForOpenLayers(symbologyConfig);
+  const icon = getFontAwesomeIconForSymbolAsSVGString(symbologyConfig);
 
   if (icon === null) {
     return null;
@@ -37,13 +36,7 @@ export const getIconForSymbologyConfig = (
 
   return new Style({
     image: new Icon({
-      src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${renderToString(
-        icon
-      )}`,
-      // @NOTE: This is doable, we'd "just" need to inject and translate the styling onto the raw SVG element
-      // src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${
-      //   iconObj.svg[Object.keys(iconObj.svg)[0]].raw
-      //   }`,
+      src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`,
     }),
   });
 };

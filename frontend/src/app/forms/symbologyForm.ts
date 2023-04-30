@@ -9,8 +9,6 @@ import {
 
 export const symbolMinimumSize = 1;
 export const symbolMaximumSize = 50;
-export const symbolMinimumStrokeWidth = 0;
-export const symbolMaximumStrokeWidth = 5;
 export const symbolMinimumRotation = 0;
 export const symbolMaximumRotation = 360;
 export const symbolMinimumOpacity = 0;
@@ -32,17 +30,26 @@ export const symbologyFormValidationSchema = (
           : yup.string().optional(),
       // We could strictly check IconStyle (and in schemas.ts), but we'd need to maintain
       // our own const(feeding the type and type array) of IconStyles, so meh for now.
-      icon_style: yup.string().required(),
-      colour: colourOptional,
-      fill: colourOptional,
+      icon_style:
+        iconFieldRequired === true
+          ? yup.string().required()
+          : yup.string().optional(),
+      icon_family:
+        iconFieldRequired === true
+          ? yup.string().required()
+          : yup.string().optional(),
       size: positiveIntegerOptional
         .min(symbolMinimumSize)
         .max(symbolMaximumSize),
-      stroke_width: positiveFloatOptional.min(0.1, "Must be 0.1 or larger"),
       rotation: positiveIntegerOptional
         .min(0, "Must be 0 or larger")
         .max(360, "Must be 360 or smaller"),
+      colour: colourOptional,
       opacity: positiveFloatOptional
+        .min(0, "Must be 0 or larger")
+        .max(1, "Must be 1 or smaller"),
+      secondary_colour: colourOptional,
+      secondary_opacity: positiveFloatOptional
         .min(0, "Must be 0 or larger")
         .max(1, "Must be 1 or smaller"),
     })

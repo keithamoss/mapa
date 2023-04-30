@@ -1,6 +1,15 @@
-import { IconName, IconStyle } from "@fortawesome/fontawesome-svg-core";
-import categories from "./categories.json";
-import icons from "./icons.json";
+import {
+  IconFamily,
+  IconName,
+  IconStyle,
+} from "@fortawesome/fontawesome-svg-core";
+import { upperFirst } from "lodash-es";
+import {
+  defaultSymbolIconFamily,
+  defaultSymbolIconStyle,
+} from "../symbologyHelpers";
+import categories from "./pro/categories.json";
+import icons from "./pro/icon-families.json";
 
 export type FontAwesomeCategory =
   | "accessibility"
@@ -19,11 +28,9 @@ export type FontAwesomeCategory =
   | "clothing-fashion"
   | "coding"
   | "communication"
-  | "hands-asl-interpreting"
   | "connectivity"
   | "construction"
   | "design"
-  | "highlighter"
   | "devices-hardware"
   | "disaster"
   | "editing"
@@ -63,11 +70,9 @@ export type FontAwesomeCategory =
   | "shapes"
   | "shopping"
   | "social"
-  | "heart"
   | "spinners"
   | "sports-fitness"
   | "text-formatting"
-  | "i-cursor"
   | "time"
   | "toggle"
   | "transportation"
@@ -85,28 +90,38 @@ export type IFontAwesomeCategories = {
 
 export const getCategories = () => categories as IFontAwesomeCategories;
 
+export interface IconFamilyStyle {
+  family: IconFamily;
+  style: IconStyle;
+}
+
 export interface IFontAwesomeIcon {
+  name: IconName; // Injected by us in getIconByName() after reading the JSON file
+
   changes: string[];
   ligatures: string[];
   search: {
     terms: string[];
   };
-  styles: IconStyle[];
   unicode: string;
   label: string;
-  name: IconName;
   voted: boolean;
-  svg: {
-    [key: string]: {
-      last_modified: number;
-      raw: string;
-      viewBox: [number, number, number, number];
-      width: number;
-      height: number;
-      path: string;
+  svgs: {
+    [key in IconFamily]: {
+      [key in IconStyle]: {
+        last_modified: number;
+        raw: string;
+        viewBox: [number, number, number, number];
+        width: number;
+        height: number;
+        path: string;
+      };
     };
   };
-  free: IconStyle[];
+  familyStylesByLicense: {
+    free: IconFamilyStyle[];
+    pro: IconFamilyStyle[];
+  };
 }
 
 export interface IFontAwesomeIcons {
@@ -212,7 +227,61 @@ export const getIconsSortedByCategory = () => {
 };
 
 export const getIconAvailableStylesOrEmptyString = (iconName?: string) =>
-  iconName !== undefined ? getIconByName(iconName)?.styles[0] || "" : "";
+  iconName !== undefined
+    ? getIconByName(iconName)?.familyStylesByLicense.pro[0].style || ""
+    : "";
 
 export const getIconAvailableStyles = (iconName?: string) =>
-  iconName !== undefined ? getIconByName(iconName)?.styles || [] : [];
+  iconName !== undefined
+    ? getIconByName(iconName)?.familyStylesByLicense.pro || []
+    : [];
+
+export const getDefaultFamilyForIconByName = (iconName: string) => {
+  const icon = getIconByName(iconName);
+  if (icon === null) {
+    return defaultSymbolIconFamily;
+  }
+
+  return getDefaultFamilyForIcon(icon);
+};
+
+export const getDefaultFamilyForIcon = (icon: IFontAwesomeIcon) =>
+  "classic" in icon.svgs
+    ? "classic"
+    : (Object.keys(icon.svgs)[0] as IconFamily);
+
+export const getDefaultStyleForIconByName = (iconName: string) => {
+  const icon = getIconByName(iconName);
+  if (icon === null) {
+    return defaultSymbolIconStyle;
+  }
+
+  return getDefaultStyleForIcon(icon);
+};
+
+export const getDefaultStyleForIcon = (icon: IFontAwesomeIcon) =>
+  "solid" in icon.svgs.classic
+    ? "solid"
+    : (Object.keys(icon.svgs.classic)[0] as IconStyle);
+
+export const getIconSVG = (
+  icon: IFontAwesomeIcon,
+  iconFamily?: IconFamily,
+  iconStyle?: IconStyle
+) => {
+  const localIconFamily: IconFamily =
+    iconFamily !== undefined ? iconFamily : getDefaultFamilyForIcon(icon);
+
+  const localIconStyle: IconStyle =
+    iconStyle !== undefined ? iconStyle : getDefaultStyleForIcon(icon);
+
+  return icon.svgs[localIconFamily][localIconStyle].raw;
+};
+
+export const getIconFamilyAndStyleName = (
+  icon_family: IconFamily,
+  icon_style: IconStyle
+) =>
+  icon_family === "classic"
+    ? upperFirst(icon_style)
+    : `${upperFirst(icon_family)} ${upperFirst(icon_style)}`;

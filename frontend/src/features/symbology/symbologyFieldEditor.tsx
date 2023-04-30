@@ -1,5 +1,4 @@
 import CloseIcon from "@mui/icons-material/Close";
-import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -12,6 +11,9 @@ import {
   FormHelperText,
   FormLabel,
   IconButton,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -32,11 +34,9 @@ import {
   symbolMaximumOpacity,
   symbolMaximumRotation,
   symbolMaximumSize,
-  symbolMaximumStrokeWidth,
   symbolMinimumOpacity,
   symbolMinimumRotation,
   symbolMinimumSize,
-  symbolMinimumStrokeWidth,
   symbologyFormValidationSchema,
 } from "../../app/forms/symbologyForm";
 import {
@@ -45,87 +45,98 @@ import {
 } from "../../app/services/schemas";
 import {
   defaultSymbolColour,
-  defaultSymbolFillColourForSymbologyForm,
   defaultSymbolIcon,
   defaultSymbolOpacity,
   defaultSymbolRotation,
+  defaultSymbolSecondaryColour,
+  defaultSymbolSecondaryOpacity,
   defaultSymbolSize,
-  defaultSymbolStrokeWidth,
   defaultSymbologyGroupId,
+  getAppDefaultSymbologyConfig,
   getFontAwesomeIconForSymbolPreview,
-  getFontAwesomeIconFromLibrary,
+  getFontAwesomeIconFromLibraryAsSVGImage,
 } from "./symbologyHelpers";
 
+import { IconFamily, IconStyle } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import "./colourPicker.css";
 import {
+  getDefaultFamilyForIconByName,
+  getDefaultStyleForIconByName,
   getIconAvailableStyles,
-  getIconAvailableStylesOrEmptyString,
   getIconByName,
+  getIconFamilyAndStyleName,
   getIconLabelByName,
 } from "./font-awesome/fontAwesome";
 import SliderFixed from "./sliderFixed";
 import SymbologyIconAutocomplete from "./symbologyIconAutocomplete";
 
-const getSymbologyDefaults = () => ({
-  icon: defaultSymbolIcon,
-  size: defaultSymbolSize,
-  stroke_width: defaultSymbolStrokeWidth,
-  rotation: defaultSymbolRotation,
-  opacity: defaultSymbolOpacity,
-  colour: defaultSymbolColour,
-  fill: defaultSymbolFillColourForSymbologyForm,
-});
-
 const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
+  const icon = getStringOrDefaultForSymbologyField(
+    symbol,
+    "icon",
+    defaultSymbolIcon
+  );
+
   const defaultValues = {
     name: getStringOrEmptyStringForSymbologyField(symbol, "name"),
-    icon: getStringOrDefaultForSymbologyField(
+    icon,
+    icon_family: getStringOrDefaultForSymbologyField(
       symbol,
-      "icon",
-      defaultSymbolIcon
+      "icon_family",
+      getDefaultFamilyForIconByName(icon)
     ),
     icon_style: getStringOrDefaultForSymbologyField(
       symbol,
       "icon_style",
-      getIconAvailableStylesOrEmptyString(
-        symbol?.icon_style || defaultSymbolIcon
-      )
-    ),
-    colour: getStringOrDefaultForSymbologyField(
-      symbol,
-      "colour",
-      defaultSymbolColour
-    ),
-    fill: getStringOrDefaultForSymbologyField(
-      symbol,
-      "fill",
-      defaultSymbolFillColourForSymbologyForm
+      getDefaultStyleForIconByName(icon)
     ),
     size: getNumberOrDefaultForSymbologyField(
       symbol,
       "size",
       defaultSymbolSize
     ),
-    stroke_width: getNumberOrDefaultForSymbologyField(
+    rotation: getNumberOrDefaultForSymbologyField(
       symbol,
-      "stroke_width",
-      defaultSymbolStrokeWidth
+      "rotation",
+      defaultSymbolRotation
+    ),
+    colour: getStringOrDefaultForSymbologyField(
+      symbol,
+      "colour",
+      defaultSymbolColour
     ),
     opacity: getNumberOrDefaultForSymbologyField(
       symbol,
       "opacity",
       defaultSymbolOpacity
     ),
-    rotation: getNumberOrDefaultForSymbologyField(
+    secondary_colour: getStringOrDefaultForSymbologyField(
       symbol,
-      "rotation",
-      defaultSymbolRotation
+      "secondary_colour",
+      defaultSymbolSecondaryColour
+    ),
+    secondary_opacity: getNumberOrDefaultForSymbologyField(
+      symbol,
+      "secondary_opacity",
+      defaultSymbolSecondaryOpacity
     ),
   };
 
   return pickBy(defaultValues, (v) => v !== undefined);
+};
+
+export const getAppDefaultSymbologyConfigForForm = () => {
+  const defaults = getAppDefaultSymbologyConfig();
+
+  // This UI is all about choosing an icon, so we don't want
+  // to delete any defaults props about the icon itself
+  delete defaults.icon;
+  delete defaults.icon_family;
+  delete defaults.icon_style;
+
+  return defaults;
 };
 
 const removeDefaultValuesFromForm = (
@@ -133,7 +144,7 @@ const removeDefaultValuesFromForm = (
   nameFieldRequired: boolean,
   iconFieldRequired: boolean
 ) => {
-  const defaults = getSymbologyDefaults() as SymbologyProps;
+  const defaults = getAppDefaultSymbologyConfigForForm();
 
   Object.keys(data).forEach((propName) => {
     if (
@@ -159,6 +170,11 @@ const removeDefaultValuesFromForm = (
       delete data[propName as keyof SymbologyProps];
     }
   });
+
+  if (data.icon_family !== "duotone") {
+    delete data["secondary_colour"];
+    delete data["secondary_opacity"];
+  }
 
   return data;
 };
@@ -206,13 +222,14 @@ function SymbologyFieldEditor(props: Props) {
 
   const {
     icon,
+    icon_family,
     icon_style,
-    colour,
-    fill,
     size,
-    stroke_width,
     rotation,
+    colour,
     opacity,
+    secondary_colour,
+    secondary_opacity,
   } = watch();
 
   const onChooseGroupId = (e: SelectChangeEvent<number>) => {
@@ -230,12 +247,10 @@ function SymbologyFieldEditor(props: Props) {
 
     setValue(
       "icon_style",
-      icon !== null ? getIconByName(icon)?.styles[0] : undefined
+      icon !== null
+        ? getIconByName(icon)?.familyStylesByLicense.pro[0].style
+        : undefined
     );
-  };
-
-  const copyStrokeColourToFillColour = () => {
-    setValue("fill", colour);
   };
 
   const onDoneWithForm: SubmitHandler<SymbologyProps> = (data) => {
@@ -282,6 +297,30 @@ function SymbologyFieldEditor(props: Props) {
   // Symbol Chooser Dialog (End)
   // ######################
 
+  // ######################
+  // Icon Family and Style Chooser Dialog
+  // ######################
+  const [
+    isIconFamilyAndStyleChooserDialogOpen,
+    setIsIconFamilyAndStyleChooserDialogOpen,
+  ] = useState(false);
+
+  const onOpenIconFamilyAndStyleChooserDialog = () =>
+    setIsIconFamilyAndStyleChooserDialogOpen(true);
+
+  const onCloseIconFamilyAndStyleChooserDialog = () =>
+    setIsIconFamilyAndStyleChooserDialogOpen(false);
+
+  const onChooseIconFamilyAndStyle =
+    (icon_family: IconFamily, icon_style: IconStyle) => () => {
+      setValue("icon_family", icon_family);
+      setValue("icon_style", icon_style);
+      onCloseIconFamilyAndStyleChooserDialog();
+    };
+  // ######################
+  // Icon Family and Style Chooser Dialog (End)
+  // ######################
+
   return (
     <React.Fragment>
       <DialogWithTransition
@@ -321,6 +360,56 @@ function SymbologyFieldEditor(props: Props) {
       </DialogWithTransition>
 
       <DialogWithTransition
+        onClose={onCloseIconFamilyAndStyleChooserDialog}
+        dialogProps={{
+          open: isIconFamilyAndStyleChooserDialogOpen,
+          fullScreen: false,
+          fullWidth: true,
+        }}
+      >
+        <DialogTitle>Icon Style</DialogTitle>
+
+        <DialogContent>
+          <ImageList>
+            {getIconAvailableStyles(icon).map((familyStyle) => (
+              <ImageListItem
+                key={`${familyStyle.family}_${familyStyle.style}`}
+                onClick={onChooseIconFamilyAndStyle(
+                  familyStyle.family,
+                  familyStyle.style
+                )}
+                sx={{
+                  "& > img": {
+                    maxWidth: 100,
+                    maxHeight: 100,
+                  },
+                }}
+              >
+                {getFontAwesomeIconFromLibraryAsSVGImage(
+                  icon!,
+                  familyStyle.family,
+                  familyStyle.style
+                )}
+                <ImageListItemBar
+                  title={getIconFamilyAndStyleName(
+                    familyStyle.family,
+                    familyStyle.style
+                  )}
+                  position="below"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={onCloseIconFamilyAndStyleChooserDialog}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </DialogWithTransition>
+
+      <DialogWithTransition
         onClose={onCancel}
         dialogProps={{ fullScreen: false }}
         transitionProps={{
@@ -338,13 +427,14 @@ function SymbologyFieldEditor(props: Props) {
               getFontAwesomeIconForSymbolPreview({
                 ...symbol,
                 icon,
+                icon_family,
                 icon_style,
                 colour,
-                fill,
+                secondary_colour,
                 size,
-                stroke_width,
                 rotation,
                 opacity,
+                secondary_opacity,
               })}
           </div>
         </DialogTitle>
@@ -424,7 +514,7 @@ function SymbologyFieldEditor(props: Props) {
                     startAdornment:
                       icon !== undefined ? (
                         <InputAdornment position="start" sx={{ mr: 1 }}>
-                          {getFontAwesomeIconFromLibrary(icon)}
+                          {getFontAwesomeIconFromLibraryAsSVGImage(icon)}
                         </InputAdornment>
                       ) : undefined,
                   }}
@@ -449,22 +539,47 @@ function SymbologyFieldEditor(props: Props) {
               variant="outlined"
             >
               <FormGroup>
-                <InputLabel>Style</InputLabel>
-
-                <Controller
-                  name="icon_style"
-                  control={control}
-                  render={({ field }) => (
-                    <Select {...field} label="Style">
-                      {getIconAvailableStyles(icon).map((styleName) => (
-                        <MenuItem key={styleName} value={styleName}>
-                          {styleName}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                <TextField
+                  label="Style"
+                  select
+                  value={`${icon_family}_${icon_style}` || ""}
+                  SelectProps={{
+                    open: false,
+                    onClick: onOpenIconFamilyAndStyleChooserDialog,
+                  }}
+                  InputProps={{
+                    startAdornment:
+                      icon !== undefined &&
+                      icon_family !== undefined &&
+                      icon_style !== undefined ? (
+                        <InputAdornment position="start" sx={{ mr: 1 }}>
+                          {getFontAwesomeIconFromLibraryAsSVGImage(
+                            icon,
+                            icon_family,
+                            icon_style
+                          )}
+                        </InputAdornment>
+                      ) : undefined,
+                  }}
+                >
+                  {icon_family !== undefined && icon_style !== undefined ? (
+                    <MenuItem value={`${icon_family}_${icon_style}`}>
+                      {getIconFamilyAndStyleName(
+                        icon_family as IconFamily,
+                        icon_style as IconStyle
+                      )}
+                    </MenuItem>
+                  ) : (
+                    <MenuItem />
                   )}
-                />
+                </TextField>
               </FormGroup>
+
+              {errors.icon_family && (
+                <FormHelperText error>
+                  {errors.icon_family.message}
+                </FormHelperText>
+              )}
 
               {errors.icon_style && (
                 <FormHelperText error>
@@ -523,52 +638,6 @@ function SymbologyFieldEditor(props: Props) {
               component="fieldset"
               variant="outlined"
             >
-              <FormLabel component="legend">Stroke</FormLabel>
-
-              <FormGroup>
-                <Controller
-                  name="stroke_width"
-                  control={control}
-                  render={({ field }) => (
-                    <SliderFixed
-                      {...field}
-                      valueLabelDisplay="auto"
-                      min={symbolMinimumStrokeWidth}
-                      max={symbolMaximumStrokeWidth}
-                      track={false}
-                      step={0.1}
-                      marks={[
-                        {
-                          value: 0,
-                          label: "0",
-                        },
-                        {
-                          value: 2.5,
-                          label: "2.5",
-                        },
-                        {
-                          value: 5,
-                          label: "5",
-                        },
-                      ]}
-                    />
-                  )}
-                />
-              </FormGroup>
-
-              {errors.stroke_width && (
-                <FormHelperText error>
-                  {errors.stroke_width.message}
-                </FormHelperText>
-              )}
-            </FormControl>
-
-            <FormControl
-              fullWidth={true}
-              sx={{ mb: 3, pl: 1, pr: 1 }}
-              component="fieldset"
-              variant="outlined"
-            >
               <FormLabel component="legend">Rotation</FormLabel>
 
               <FormGroup>
@@ -617,77 +686,31 @@ function SymbologyFieldEditor(props: Props) {
 
             <FormControl
               fullWidth={true}
-              sx={{ mb: 3, pl: 1, pr: 1 }}
               component="fieldset"
               variant="outlined"
             >
-              <FormLabel component="legend">Opacity</FormLabel>
-
-              <FormGroup>
-                <Controller
-                  name="opacity"
-                  control={control}
-                  render={({ field }) => (
-                    <SliderFixed
-                      {...field}
-                      valueLabelDisplay="auto"
-                      min={symbolMinimumOpacity}
-                      max={symbolMaximumOpacity}
-                      track={false}
-                      step={0.1}
-                      marks={[
-                        {
-                          value: 0,
-                          label: "0",
-                        },
-                        {
-                          value: 0.25,
-                          label: "0.25",
-                        },
-                        {
-                          value: 0.5,
-                          label: "0.5",
-                        },
-                        {
-                          value: 0.75,
-                          label: "0.75",
-                        },
-                        {
-                          value: 1,
-                          label: "1",
-                        },
-                      ]}
-                    />
-                  )}
-                />
-              </FormGroup>
-
-              {errors.opacity && (
-                <FormHelperText error>{errors.opacity.message}</FormHelperText>
-              )}
+              <FormLabel component="legend" sx={{ mb: 1 }}>
+                Colour and Opacity
+              </FormLabel>
             </FormControl>
 
             <div
               style={{
                 display: "flex",
                 flexDirection: "row",
+                paddingLeft: "8px",
+                paddingRight: "8px",
+                marginBottom: icon_family === "duotone" ? "24px" : "0px",
               }}
             >
               <FormControl
                 fullWidth={true}
                 sx={{
-                  width: "calc(40%)",
-                  textAlign: "center",
-                  alignItems: "center",
-                  margin: "0 auto",
+                  width: "calc(30%)",
                 }}
                 component="fieldset"
                 variant="outlined"
               >
-                <FormLabel component="legend" sx={{ mb: 1 }}>
-                  Stroke
-                </FormLabel>
-
                 <FormGroup>
                   <input
                     type="color"
@@ -704,52 +727,159 @@ function SymbologyFieldEditor(props: Props) {
               <FormControl
                 fullWidth={true}
                 sx={{
-                  width: "calc(10%)",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto",
+                  width: "calc(70%)",
                 }}
                 component="fieldset"
                 variant="outlined"
               >
-                <IconButton
-                  sx={{ mt: 3 }}
-                  onClick={copyStrokeColourToFillColour}
-                >
-                  <TrendingFlatIcon />
-                </IconButton>
-              </FormControl>
-
-              <FormControl
-                fullWidth={true}
-                sx={{
-                  width: "calc(40%)",
-                  textAlign: "center",
-                  alignItems: "center",
-                  margin: "0 auto",
-                }}
-                component="fieldset"
-                variant="outlined"
-              >
-                <FormLabel component="legend" sx={{ mb: 1 }}>
-                  Fill
-                </FormLabel>
-
                 <FormGroup>
-                  <input
-                    type="color"
-                    className="colourPicker"
-                    {...register("fill")}
+                  <Controller
+                    name="opacity"
+                    control={control}
+                    render={({ field }) => (
+                      <SliderFixed
+                        {...field}
+                        valueLabelDisplay="auto"
+                        min={symbolMinimumOpacity}
+                        max={symbolMaximumOpacity}
+                        track={false}
+                        step={0.1}
+                        marks={[
+                          {
+                            value: 0,
+                            label: "0",
+                          },
+                          {
+                            value: 0.25,
+                            label: "0.25",
+                          },
+                          {
+                            value: 0.5,
+                            label: "0.5",
+                          },
+                          {
+                            value: 0.75,
+                            label: "0.75",
+                          },
+                          {
+                            value: 1,
+                            label: "1",
+                          },
+                        ]}
+                      />
+                    )}
                   />
                 </FormGroup>
 
-                {errors.fill && (
-                  <FormHelperText error>{errors.fill.message}</FormHelperText>
+                {errors.opacity && (
+                  <FormHelperText error>
+                    {errors.opacity.message}
+                  </FormHelperText>
                 )}
               </FormControl>
             </div>
+
+            {icon_family === "duotone" && (
+              <React.Fragment>
+                <FormControl
+                  fullWidth={true}
+                  component="fieldset"
+                  variant="outlined"
+                >
+                  <FormLabel component="legend" sx={{ mb: 1 }}>
+                    Secondary Colour and Opacity
+                  </FormLabel>
+                </FormControl>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    paddingLeft: "8px",
+                    paddingRight: "8px",
+                  }}
+                >
+                  <FormControl
+                    fullWidth={true}
+                    sx={{
+                      width: "calc(30%)",
+                    }}
+                    component="fieldset"
+                    variant="outlined"
+                  >
+                    <FormGroup>
+                      <input
+                        type="color"
+                        className="colourPicker"
+                        {...register("secondary_colour")}
+                      />
+                    </FormGroup>
+
+                    {errors.secondary_colour && (
+                      <FormHelperText error>
+                        {errors.secondary_colour.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <FormControl
+                    fullWidth={true}
+                    sx={{
+                      width: "calc(70%)",
+                    }}
+                    component="fieldset"
+                    variant="outlined"
+                  >
+                    <FormGroup>
+                      <Controller
+                        name="secondary_opacity"
+                        control={control}
+                        render={({ field }) => (
+                          <SliderFixed
+                            {...field}
+                            valueLabelDisplay="auto"
+                            min={symbolMinimumOpacity}
+                            max={symbolMaximumOpacity}
+                            track={false}
+                            step={0.1}
+                            marks={[
+                              {
+                                value: 0,
+                                label: "0",
+                              },
+                              {
+                                value: 0.25,
+                                label: "0.25",
+                              },
+                              {
+                                value: 0.5,
+                                label: "0.5",
+                              },
+                              {
+                                value: 0.75,
+                                label: "0.75",
+                              },
+                              {
+                                value: 1,
+                                label: "1",
+                              },
+                            ]}
+                          />
+                        )}
+                      />
+                    </FormGroup>
+
+                    {errors.secondary_opacity && (
+                      <FormHelperText error>
+                        {errors.secondary_opacity.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+              </React.Fragment>
+            )}
           </form>
         </DialogContent>
+
         <DialogActions>
           <Button onClick={onCancel}>Cancel</Button>
           <Button onClick={onClickSave}>Save</Button>

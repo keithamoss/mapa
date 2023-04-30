@@ -13,7 +13,7 @@ import {
   getIconByNameWithFirstCategory,
   getIconsSortedByCategory,
 } from "./font-awesome/fontAwesome";
-import { getFontAwesomeIconFromLibrary } from "./symbologyHelpers";
+import { getFontAwesomeIconFromLibraryAsSVGImage } from "./symbologyHelpers";
 
 interface Props {
   selectedSymbol: string | undefined;
@@ -68,10 +68,10 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
         return (
           <Box
             component="li"
-            sx={{ "& > svg": { mr: 2, flexShrink: 0 } }}
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
             {...props}
           >
-            {getFontAwesomeIconFromLibrary(option.icon.name)}
+            {getFontAwesomeIconFromLibraryAsSVGImage(option.icon.name)}
             {parts.map((part, index) => (
               <span
                 key={index}
@@ -95,7 +95,7 @@ function SymbologyIconAutocomplete(props: Props, ref: any) {
             startAdornment:
               selectedSymbol !== undefined ? (
                 <InputAdornment position="start" sx={{ ml: 1 }}>
-                  {getFontAwesomeIconFromLibrary(selectedSymbol)}
+                  {getFontAwesomeIconFromLibraryAsSVGImage(selectedSymbol)}
                 </InputAdornment>
               ) : undefined,
           }}

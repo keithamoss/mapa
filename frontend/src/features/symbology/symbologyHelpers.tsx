@@ -5,128 +5,54 @@ import {
   SymbologyProps,
 } from "../../app/services/schemas";
 
-import { IconPrefix } from "@fortawesome/fontawesome-svg-core";
-import {
-  FontAwesomeIcon,
-  FontAwesomeIconProps,
-} from "@fortawesome/react-fontawesome";
-import { getIconByName } from "./font-awesome/fontAwesome";
+import { IconFamily, IconStyle } from "@fortawesome/fontawesome-svg-core";
+import { hextoRGBACSS } from "../../app/colourUtils";
+import { getIconByName, getIconSVG } from "./font-awesome/fontAwesome";
 
 export const defaultSymbolIcon = "comments";
+export const defaultSymbolIconFamily = "classic";
+export const defaultSymbolIconStyle = "solid";
 export const defaultSymbolColour = "#000000";
+export const defaultSymbolSecondaryColour = "#A6A6A6";
 export const defaultSymbolSize = 15;
-export const defaultSymbolSizeForFormFields = 20;
-export const defaultSymbolStrokeWidth = 1.5;
+export const defaultSymbolSizeForFormFields = 15;
 // <input type="color" /> doesn't support opacity, so provide pure white for the form and very opaque black for the map
 export const defaultSymbolFillColour = "#FFFFFF03"; // So the whole icon is draggable in OL
-export const defaultSymbolFillColourForSymbologyForm = "#FFFFFF"; // So the whole icon is draggable in OL
+// export const defaultSymbolFillColourForSymbologyForm = "#FFFFFF"; // So the whole icon is draggable in OL
 export const defaultSymbolRotation = 0;
 export const defaultSymbolOpacity = 1;
+export const defaultSymbolSecondaryOpacity = 0.4;
 
 export const defaultSymbologyGroupId = 1;
 
-// https://css-tricks.com/converting-color-spaces-in-javascript/
-// https://stackoverflow.com/a/5624139
-// export const hexToRGB = (hex: string) => {
-//   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-//   var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-//   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
-//     return r + r + g + g + b + b;
-//   });
-
-//   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-//   return result
-//     ? {
-//         r: parseInt(result[1], 16),
-//         g: parseInt(result[2], 16),
-//         b: parseInt(result[3], 16),
-//       }
-//     : null;
-// };
-
-// export const hexToRGBCSS = (
-//   hex: string | undefined,
-//   default_colour = "rgba(0, 0, 0, 0.01)"
-// ) => {
-//   if (hex === undefined) {
-//     return default_colour;
-//   }
-//   const rgb = hexToRGB(hex);
-//   return rgb !== null ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : default_colour;
-// };
-
-export const hextoRGBACSS = (
-  h: string | undefined,
-  default_colour = "rgba(0, 0, 0, 0.01)"
-) => {
-  if (h === undefined) {
-    return default_colour;
-  }
-
-  let r: any = 0,
-    g: any = 0,
-    b: any = 0,
-    a: any = 255;
-
-  // #FFF0
-  if (h.length === 5) {
-    r = "0x" + h[1] + h[1];
-    g = "0x" + h[2] + h[2];
-    b = "0x" + h[3] + h[3];
-    a = "0x" + h[4] + h[4];
-    // #FFFFFF (default to opacity=1 aka 255)
-  } else if (h.length === 7) {
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
-    // #FFFFFF00
-  } else if (h.length === 9) {
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
-    a = "0x" + h[7] + h[8];
-  }
-  a = +(a / 255).toFixed(3);
-
-  return "rgba(" + +r + "," + +g + "," + +b + "," + a + ")";
-};
+export interface FontAwesomeIconSVGProps {
+  width: number;
+  height: number;
+  rotation: number;
+  colour: string;
+  secondaryColour: string;
+  secondaryOpacity: number;
+  backgroundColour: string;
+}
 
 export const getAppDefaultSymbologyConfig = () =>
   ({
     icon: defaultSymbolIcon,
-    colour: defaultSymbolColour,
+    icon_family: defaultSymbolIconFamily,
+    icon_style: defaultSymbolIconStyle,
     size: defaultSymbolSize,
-    stroke_width: defaultSymbolStrokeWidth,
-    fill: defaultSymbolFillColour,
     rotation: defaultSymbolRotation,
+    colour: defaultSymbolColour,
     opacity: defaultSymbolOpacity,
+    secondary_colour: defaultSymbolSecondaryColour,
+    secondary_opacity: defaultSymbolSecondaryOpacity,
   } as SymbologyProps);
 
-const getFontAwesomeIconPrefixForStyle = (
-  styleName: string
-): IconPrefix | undefined => {
-  if (styleName === "solid") {
-    return "fas";
-  } else if (styleName === "regular") {
-    return "far";
-  } else if (styleName === "light") {
-    return "fal";
-  } else if (styleName === "thin") {
-    return "fat";
-  } else if (styleName === "duotone") {
-    return "fad";
-  } else if (styleName === "brands") {
-    return "fab";
-  }
-  // @TOOD From Pro
-  // fak, fass, fasr, fasl
-  return undefined;
-};
-
 export const getFontAwesomeIconFromLibrary = (
+  iconProps: FontAwesomeIconSVGProps,
   iconName: string,
-  iconStyle?: string,
-  iconProps?: Partial<FontAwesomeIconProps>
+  iconFamily?: IconFamily,
+  iconStyle?: IconStyle
 ) => {
   const icon = getIconByName(iconName);
 
@@ -134,70 +60,88 @@ export const getFontAwesomeIconFromLibrary = (
     return null;
   }
 
-  const faIconStyle = getFontAwesomeIconPrefixForStyle(
-    iconStyle || icon.styles[0]
-  );
+  let svg = getIconSVG(icon, iconFamily, iconStyle);
 
-  if (faIconStyle === undefined) {
+  svg = svg
+    .replace(
+      "<svg",
+      `<svg aria-hidden="true" focusable="false" role="img" style="background-color: ${iconProps.backgroundColour}; transform: rotate(${iconProps.rotation}deg);" color="${iconProps.colour}" width="${iconProps.width}" height="${iconProps.height}"`
+    )
+    .replace("<path", '<path fill="currentColor"');
+
+  if (iconFamily === "duotone") {
+    svg = svg
+      .replace(
+        '<path class="fa-secondary"',
+        `<path class="fa-secondary" fill="${iconProps.secondaryColour}"`
+      )
+      .replace(
+        ".fa-secondary{opacity:.4}",
+        `.fa-secondary{opacity:${iconProps.secondaryOpacity}}`
+      );
+  }
+
+  return svg;
+};
+
+export const getFontAwesomeIconProps = (
+  symbol: Partial<SymbologyProps>
+): FontAwesomeIconSVGProps => {
+  return {
+    width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+    height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+    rotation: symbol?.rotation || defaultSymbolRotation,
+    colour: hextoRGBACSS(
+      symbol?.colour || defaultSymbolColour,
+      symbol?.opacity || defaultSymbolOpacity
+    ),
+    secondaryColour: hextoRGBACSS(
+      symbol?.secondary_colour || defaultSymbolSecondaryColour
+    ),
+    secondaryOpacity:
+      symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of on colour
+    backgroundColour: hextoRGBACSS(defaultSymbolFillColour), // Ensure transparent areas of the icon are draggable
+  };
+};
+
+export const getFontAwesomeIconForSymbolAsSVGString = (
+  symbol: Partial<SymbologyProps>
+) => {
+  const { icon, icon_family, icon_style, ...props } = symbol;
+
+  if (icon === undefined) {
     return null;
   }
 
-  return (
-    <FontAwesomeIcon
-      icon={[faIconStyle, icon.name]}
-      {...getFontAwesomeIconPropsForSymbolPreview(
-        getAppDefaultSymbologyConfig()
-      )}
-      {...iconProps}
-    />
+  return getFontAwesomeIconFromLibrary(
+    getFontAwesomeIconProps(props),
+    icon,
+    icon_family as IconFamily,
+    icon_style as IconStyle
   );
 };
 
-export const getFontAwesomeIconPropsForOpenLayersSymbol = (
-  symbol: Partial<SymbologyProps>
-): Partial<FontAwesomeIconProps> => {
-  return {
-    // strokeWidth:
-    //   symbol.stroke_width !== undefined
-    //     ? symbol.stroke_width
-    //     : defaultSymbolStrokeWidth,
-    color:
-      symbol.colour !== undefined
-        ? hextoRGBACSS(symbol.colour)
-        : hextoRGBACSS(defaultSymbolColour),
-    // fill:
-    //   symbol.fill !== undefined
-    //     ? hextoRGBACSS(symbol.fill)
-    //     : defaultSymbolFillColour,
-    width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
-    height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
-    style: {
-      opacity: symbol?.opacity || defaultSymbolOpacity,
-      // Ensure transparent areas of the icon are draggable
-      backgroundColor: hextoRGBACSS(defaultSymbolFillColour),
-    },
-    transform: { rotate: symbol.rotation || defaultSymbolRotation },
-  };
-};
-
-export const getFontAwesomeIconPropsForSymbolPreview = (
-  symbol: Partial<SymbologyProps>
-): Partial<FontAwesomeIconProps> => {
-  return {
-    color: symbol?.colour,
-    style: {
-      fontSize: `${(symbol?.size || defaultSymbolSize) / 14}em`,
-      opacity: symbol?.opacity || 1,
-    },
-    transform: { rotate: symbol?.rotation || 0 },
-  };
-};
+export const getFontAwesomeIconFromLibraryAsSVGImage = (
+  iconName: string,
+  iconFamily?: string,
+  iconStyle?: string
+) => (
+  <img
+    alt={iconName}
+    src={`data:image/svg+xml;utf8,${getFontAwesomeIconFromLibrary(
+      getFontAwesomeIconProps({}),
+      iconName,
+      iconFamily as IconFamily,
+      iconStyle as IconStyle
+    )}`}
+  />
+);
 
 export const getFontAwesomeIconForSymbolPreview = (
   symbol: Partial<SymbologyProps>,
   propOverrides?: Partial<SymbologyProps>
 ) => {
-  const { icon, icon_style, ...props } = symbol;
+  const { icon, icon_family, icon_style, ...props } = symbol;
 
   if (icon === undefined) {
     return null;
@@ -208,27 +152,18 @@ export const getFontAwesomeIconForSymbolPreview = (
     ...propOverrides,
   };
 
-  return getFontAwesomeIconFromLibrary(
+  const svg = getFontAwesomeIconFromLibrary(
+    getFontAwesomeIconProps(local_symbol),
     icon,
-    icon_style,
-    getFontAwesomeIconPropsForSymbolPreview(local_symbol)
+    icon_family as IconFamily,
+    icon_style as IconStyle
   );
-};
 
-export const getFontAwesomeIconForSymbolForOpenLayers = (
-  symbol: Partial<SymbologyProps>
-) => {
-  const { icon, icon_style, ...props } = symbol;
-
-  if (icon === undefined) {
+  if (svg === null) {
     return null;
   }
 
-  return getFontAwesomeIconFromLibrary(
-    icon,
-    icon_style,
-    getFontAwesomeIconPropsForOpenLayersSymbol(props)
-  );
+  return <img alt={icon} src={`data:image/svg+xml;utf8,${svg}`} />;
 };
 
 export const getSymbolGroups = (symbology: FeatureSchemaSymbology) =>

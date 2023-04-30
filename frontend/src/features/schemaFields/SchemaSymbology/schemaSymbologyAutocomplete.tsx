@@ -163,7 +163,7 @@ function SchemaSymbologyAutocomplete(props: Props, ref: any) {
         return (
           <Box
             component="li"
-            sx={{ "& > svg": { mr: 2, flexShrink: 0 } }}
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
             {...props}
           >
             {getFontAwesomeIconForSymbolPreview(option.symbol.props, {
