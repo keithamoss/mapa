@@ -1,3 +1,5 @@
+import MiniSearch from "minisearch";
+
 import {
   IconFamily,
   IconName,
@@ -125,6 +127,7 @@ export interface IconFamilyStyle {
 
 export interface IFontAwesomeIcon {
   name: IconName; // Injected by us in getIconByName() after reading the JSON file
+  categories?: string[]; // Injected by us in getIconsBySearchTermAndMaybeCategory() after reading the JSON file for searching
 
   changes: string[];
   ligatures: string[];
@@ -218,23 +221,43 @@ export const getIconsBySearchTermAndMaybeCategory = (
   searchTerm: string,
   categoryName?: string
 ) => {
-  const searchTermLower = searchTerm.toLowerCase();
   const icons =
     categoryName === undefined
       ? getIcons()
       : getIconsForCategoryByIconName(categoryName);
-  const filteredIcons: IFontAwesomeIcon[] = [];
 
+  const iconsForSearch: IFontAwesomeIcon[] = [];
   for (const [iconName, icon] of Object.entries(icons)) {
-    if (iconName.toLowerCase().includes(searchTermLower) === true) {
-      filteredIcons.push({
-        ...icon,
-        name: iconName as IconName,
-      });
-    }
+    iconsForSearch.push({
+      ...icon,
+      name: iconName as IconName,
+      categories: getCategoriesForIcon(iconName).map(
+        (category) => category.label
+      ),
+    });
   }
 
-  return filteredIcons;
+  const miniSearch = new MiniSearch({
+    idField: "name",
+    fields: ["label", "search.terms", "categories"], // Fields to index for full-text search
+    storeFields: ["name", "label", "search.terms", "categories"], // Fields to return with search results
+    searchOptions: {
+      boost: { name: 3, categories: 1.5 }, // Fields to boost in the results
+      prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
+      combineWith: "AND", // Combine terms with AND, not OR
+      // Fuzzy search with a max edit distance of 0.2 * term length,
+      // rounded to nearest integer. The mispelled 'ismael' will match 'ishmael'.
+      // fuzzy: 0.2,
+    },
+    // Access nested fields (and regular top-level fields)
+    extractField: (document, fieldName) =>
+      fieldName.split(".").reduce((doc, key) => doc && doc[key], document),
+  });
+
+  // Index all documents
+  miniSearch.addAll(Object.values(iconsForSearch));
+
+  return miniSearch.search(searchTerm);
 };
 
 export const mapCategoriesToIcons = () => {

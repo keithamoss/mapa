@@ -20,14 +20,16 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getFontAwesomeIconFromLibraryAsSVGImage } from "./symbologyHelpers";
 
 import { grey } from "@mui/material/colors";
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
+import { debounce } from "lodash-es";
 import React from "react";
 import { usePrevious } from "../../app/hooks/usePrevious";
+import { useUnmount } from "../../app/hooks/useUnmount";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import "./colourPicker.css";
 import {
@@ -89,14 +91,11 @@ function SymbologyIconChooser(props: Props) {
   // ######################
   // Icon Searching
   // ######################
-  const [iconSearchFieldValue, setIconSearchFieldValue] = useState("");
-
   const [iconSearchTerm, setIconSearchTerm] = useState("");
 
   const onIconSearchInputChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setIconSearchFieldValue(event.target.value);
     setIconChosen(undefined);
 
     if (event.target.value.length >= 3) {
@@ -108,8 +107,24 @@ function SymbologyIconChooser(props: Props) {
     }
   };
 
+  // https://dmitripavlutin.com/react-throttle-debounce/
+  const debouncedOnIconSearchInputChange = useMemo(
+    () => debounce(onIconSearchInputChange, 250, { maxWait: 750 }),
+    []
+  );
+
+  // Stop the invocation of the debounced function after unmounting
+  useUnmount(() => {
+    debouncedOnIconSearchInputChange.cancel();
+  });
+
+  const textInput = React.useRef<HTMLInputElement>(null);
+
   const onClearIconSearchInput = () => {
-    setIconSearchFieldValue("");
+    if (textInput.current !== null) {
+      textInput.current.value = "";
+    }
+
     setIconSearchTerm("");
     navigateToPreviousPage();
   };
@@ -170,6 +185,11 @@ function SymbologyIconChooser(props: Props) {
   // Icon Choosing (End)
   // ######################
 
+  const iconSearchResults =
+    selectedPage === IconChooserPage.IconSearchResults
+      ? getIconsBySearchTermAndMaybeCategory(iconSearchTerm, chosenIconCategory)
+      : [];
+
   return (
     <React.Fragment>
       <DialogWithTransition>
@@ -207,6 +227,7 @@ function SymbologyIconChooser(props: Props) {
                   )}`}
             </InputLabel>
             <OutlinedInput
+              inputRef={textInput}
               label={
                 chosenIconCategory === undefined
                   ? "Search for an icon"
@@ -214,8 +235,7 @@ function SymbologyIconChooser(props: Props) {
                       chosenIconCategory
                     )}`
               }
-              onChange={onIconSearchInputChange}
-              value={iconSearchFieldValue}
+              onChange={debouncedOnIconSearchInputChange}
               endAdornment={
                 iconSearchTerm.length > 0 ? (
                   <CloseIcon
@@ -394,7 +414,6 @@ function SymbologyIconChooser(props: Props) {
                             )}
                           >
                             <Paper
-                              // variant="outlined"
                               elevation={0}
                               sx={{
                                 display: "flex",
@@ -453,18 +472,23 @@ function SymbologyIconChooser(props: Props) {
                 bgcolor: "background.paper",
               }}
             >
-              {getIconsBySearchTermAndMaybeCategory(
-                iconSearchTerm,
-                chosenIconCategory
-              ).map((icon) => {
-                const matches = match(icon.label, iconSearchTerm, {
+              {iconSearchResults.length === 0 && iconSearchTerm !== "" && (
+                <Typography variant="caption" sx={{ fontStyle: "italic" }}>
+                  No icons found :(
+                </Typography>
+              )}
+
+              {iconSearchResults.map((iconSearchResult) => {
+                const matches = match(iconSearchResult.label, iconSearchTerm, {
                   insideWords: true,
                 });
-                const parts = parse(icon.label, matches);
+                const parts = parse(iconSearchResult.label, matches);
 
                 return (
-                  <ListItem key={icon.name} disablePadding>
-                    <ListItemButton onClick={onChooseIcon(icon.name)}>
+                  <ListItem key={iconSearchResult.name} disablePadding>
+                    <ListItemButton
+                      onClick={onChooseIcon(iconSearchResult.name)}
+                    >
                       <ListItemAvatar>
                         <Avatar
                           sx={{
@@ -474,7 +498,9 @@ function SymbologyIconChooser(props: Props) {
                             "& > img": { width: 25, height: 25 },
                           }}
                         >
-                          {getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
+                          {getFontAwesomeIconFromLibraryAsSVGImage(
+                            iconSearchResult.name
+                          )}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
