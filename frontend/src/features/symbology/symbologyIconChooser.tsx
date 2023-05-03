@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getFontAwesomeIconFromLibraryAsSVGImage } from "./symbologyHelpers";
 
 import { grey } from "@mui/material/colors";
@@ -72,6 +72,9 @@ function SymbologyIconChooser(props: Props) {
     onClose,
   } = props;
 
+  // ######################
+  // Hacky Page History
+  // ######################
   const [selectedPage, setSelectedPage] = useState(
     openAtFamilyAndStyleChooser === true
       ? IconChooserPage.IconFamilyAndStyleChooser
@@ -80,13 +83,31 @@ function SymbologyIconChooser(props: Props) {
 
   const previousSelectedPage = usePrevious(selectedPage);
 
-  const navigateToPreviousPage = () => {
+  const pageHistory: IconChooserPage[] = useMemo(() => [], []);
+
+  useEffect(() => {
     if (previousSelectedPage !== undefined) {
-      setSelectedPage(previousSelectedPage);
+      pageHistory.push(previousSelectedPage);
+    }
+  }, [pageHistory, previousSelectedPage]);
+
+  const getLastPageExceptFor = (pageToIgnore: IconChooserPage) => {
+    const filteredPageHistory = pageHistory.filter(
+      (page) => page !== pageToIgnore
+    );
+    return filteredPageHistory[filteredPageHistory.length - 1];
+  };
+
+  const navigateToPreviousPageFromSearchResults = () => {
+    if (previousSelectedPage !== undefined) {
+      setSelectedPage(getLastPageExceptFor(IconChooserPage.IconSearchResults));
     } else {
       setSelectedPage(IconChooserPage.AllCategories);
     }
   };
+  // ######################
+  // Hacky Page History (End)
+  // ######################
 
   // ######################
   // Icon Searching
@@ -96,15 +117,9 @@ function SymbologyIconChooser(props: Props) {
   const onIconSearchInputChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setIconChosen(undefined);
+    setSelectedPage(IconChooserPage.IconSearchResults);
 
-    if (event.target.value.length >= 3) {
-      setIconSearchTerm(event.target.value);
-      setSelectedPage(IconChooserPage.IconSearchResults);
-    } else if (event.target.value.length === 0) {
-      setIconSearchTerm("");
-      setSelectedPage(IconChooserPage.IconSearchResults);
-    }
+    setIconSearchTerm(event.target.value);
   };
 
   // https://dmitripavlutin.com/react-throttle-debounce/
@@ -126,7 +141,7 @@ function SymbologyIconChooser(props: Props) {
     }
 
     setIconSearchTerm("");
-    navigateToPreviousPage();
+    navigateToPreviousPageFromSearchResults();
   };
   // ######################
   // Icon Searching (End)
