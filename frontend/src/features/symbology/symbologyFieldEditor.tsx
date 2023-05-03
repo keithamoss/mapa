@@ -2,18 +2,13 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+  AppBar,
   Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormGroup,
   FormHelperText,
   FormLabel,
   IconButton,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -21,10 +16,12 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Toolbar,
+  Typography,
 } from "@mui/material";
 
 import { isEmpty, pickBy } from "lodash-es";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { stopPropagate } from "../../app/forms/formUtils";
 import {
@@ -51,6 +48,7 @@ import {
   defaultSymbolSecondaryColour,
   defaultSymbolSecondaryOpacity,
   defaultSymbolSize,
+  defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
   getAppDefaultSymbologyConfig,
   getFontAwesomeIconForSymbolPreview,
@@ -64,13 +62,11 @@ import "./colourPicker.css";
 import {
   getDefaultFamilyForIconByName,
   getDefaultStyleForIconByName,
-  getIconAvailableStyles,
-  getIconByName,
   getIconFamilyAndStyleName,
   getIconLabelByName,
 } from "./font-awesome/fontAwesome";
 import SliderFixed from "./sliderFixed";
-import SymbologyIconAutocomplete from "./symbologyIconAutocomplete";
+import SymbologyIconChooser from "./symbologyIconChooser";
 
 const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
   const icon = getStringOrDefaultForSymbologyField(
@@ -240,19 +236,6 @@ function SymbologyFieldEditor(props: Props) {
     }
   };
 
-  const onChooseSymbol = (icon: string | null) => {
-    onCloseIconChooserDialog();
-
-    setValue("icon", icon !== null ? icon : defaultSymbolIcon);
-
-    setValue(
-      "icon_style",
-      icon !== null
-        ? getIconByName(icon)?.familyStylesByLicense.pro[0].style
-        : undefined
-    );
-  };
-
   const onDoneWithForm: SubmitHandler<SymbologyProps> = (data) => {
     const dataWithDefaultsRemoved = removeDefaultValuesFromForm(
       data,
@@ -275,91 +258,55 @@ function SymbologyFieldEditor(props: Props) {
   const textInput = useRef<HTMLInputElement>(null);
 
   // ######################
-  // Symbol Chooser Dialog
+  // Icon Chooser Dialog
   // ######################
-  const [isIconChooserDialogOpen, setIsIconChooserDialogOpen] = useState(false);
+  const [isIconSymbologyChooserOpen, setIsIconSymbologyChooserOpen] =
+    useState(false);
 
-  const onOpenIconChooserDialog = () => setIsIconChooserDialogOpen(true);
+  const [openAtFamilyAndStyleChooser, setOpenAtFamilyAndStyleChooser] =
+    useState(false);
 
-  const onCloseIconChooserDialog = () => setIsIconChooserDialogOpen(false);
+  const onOpenSymbologyIconChooser = () => {
+    setOpenAtFamilyAndStyleChooser(false);
+    setIsIconSymbologyChooserOpen(true);
+  };
 
-  const autocompleteInputRef = useRef<HTMLElement>(null);
+  const onOpenSymbologyIconChooserAtFamilyAndStyleChooser = () => {
+    setOpenAtFamilyAndStyleChooser(true);
+    setIsIconSymbologyChooserOpen(true);
+  };
 
-  const transitionEndEvent = useCallback(() => {
-    if (
-      autocompleteInputRef.current !== null &&
-      document?.activeElement !== autocompleteInputRef.current
-    ) {
-      autocompleteInputRef.current.focus();
-    }
-  }, []);
+  const onChooseIconFamilyAndStyleFromSymbologyIconChooser = (
+    icon: string,
+    icon_family: string,
+    icon_style: string
+  ) => {
+    setValue("icon", icon);
+    setValue("icon_family", icon_family);
+    setValue("icon_style", icon_style);
+    setIsIconSymbologyChooserOpen(false);
+  };
+
+  const onCloseSymbologyIconChooser = () =>
+    setIsIconSymbologyChooserOpen(false);
   // ######################
-  // Symbol Chooser Dialog (End)
-  // ######################
-
-  // ######################
-  // Icon Family and Style Chooser Dialog
-  // ######################
-  const [
-    isIconFamilyAndStyleChooserDialogOpen,
-    setIsIconFamilyAndStyleChooserDialogOpen,
-  ] = useState(false);
-
-  const onOpenIconFamilyAndStyleChooserDialog = () =>
-    setIsIconFamilyAndStyleChooserDialogOpen(true);
-
-  const onCloseIconFamilyAndStyleChooserDialog = () =>
-    setIsIconFamilyAndStyleChooserDialogOpen(false);
-
-  const onChooseIconFamilyAndStyle =
-    (icon_family: IconFamily, icon_style: IconStyle) => () => {
-      setValue("icon_family", icon_family);
-      setValue("icon_style", icon_style);
-      onCloseIconFamilyAndStyleChooserDialog();
-    };
-  // ######################
-  // Icon Family and Style Chooser Dialog (End)
+  // Icon Chooser Dialog (End)
   // ######################
 
   return (
     <React.Fragment>
-      <DialogWithTransition
-        dialogProps={{ open: isIconChooserDialogOpen }}
-        transitionProps={{
-          onEnter: (node: HTMLElement, isAppearing: boolean) => {
-            if (isAppearing === true) {
-              node.addEventListener("transitionend", transitionEndEvent, {
-                capture: false,
-                once: true,
-              });
-            }
-          },
-        }}
-      >
-        <DialogTitle>
-          <IconButton
-            onClick={onCloseIconChooserDialog}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+      {isIconSymbologyChooserOpen === true && (
+        <SymbologyIconChooser
+          selectedIcon={icon}
+          selectedIconFamily={icon_family}
+          selectedIconStyle={icon_style}
+          openAtFamilyAndStyleChooser={openAtFamilyAndStyleChooser}
+          onChoose={onChooseIconFamilyAndStyleFromSymbologyIconChooser}
+          onClose={onCloseSymbologyIconChooser}
+        />
+      )}
 
-        <Paper elevation={0} sx={{ m: 3, mt: 3 }}>
-          <SymbologyIconAutocomplete
-            ref={autocompleteInputRef}
-            selectedSymbol={icon}
-            onChooseSymbol={onChooseSymbol}
-          />
-        </Paper>
-      </DialogWithTransition>
-
-      <DialogWithTransition
+      {/* <DialogWithTransition
         onClose={onCloseIconFamilyAndStyleChooserDialog}
         dialogProps={{
           open: isIconFamilyAndStyleChooserDialogOpen,
@@ -370,7 +317,7 @@ function SymbologyFieldEditor(props: Props) {
         <DialogTitle>Icon Style</DialogTitle>
 
         <DialogContent>
-          <ImageList>
+          <ImageList gap={8}>
             {getIconAvailableStyles(icon).map((familyStyle) => (
               <ImageListItem
                 key={`${familyStyle.family}_${familyStyle.style}`}
@@ -379,9 +326,17 @@ function SymbologyFieldEditor(props: Props) {
                   familyStyle.style
                 )}
                 sx={{
+                  backgroundColor: grey[100],
+                  height: "100px !important",
                   "& > img": {
                     maxWidth: 100,
                     maxHeight: 100,
+                    width: "60px !important",
+                    height: "60px !important",
+                    objectFit: "contain !important",
+                    position: "relative !important",
+                    left: "36px !important",
+                    top: "-3px !important",
                   },
                 }}
               >
@@ -391,10 +346,15 @@ function SymbologyFieldEditor(props: Props) {
                   familyStyle.style
                 )}
                 <ImageListItemBar
-                  title={getIconFamilyAndStyleName(
+                  subtitle={getIconFamilyAndStyleName(
                     familyStyle.family,
                     familyStyle.style
                   )}
+                  sx={{
+                    backgroundColor: "white",
+                    // mb: "",
+                    "& > div": { pt: "6px", pb: "6px", pl: "4px", pr: "8px" },
+                  }}
                   position="below"
                 />
               </ImageListItem>
@@ -407,40 +367,57 @@ function SymbologyFieldEditor(props: Props) {
             Cancel
           </Button>
         </DialogActions>
-      </DialogWithTransition>
+      </DialogWithTransition> */}
 
       <DialogWithTransition
         onClose={onCancel}
-        dialogProps={{ fullScreen: false }}
-        transitionProps={{
-          addEndListener: () => {
-            if (textInput.current !== null && textInput.current.value === "") {
-              // textInput.current.focus();
-            }
-          },
-        }}
+        dialogProps={{ fullScreen: true }}
+        // transitionProps={{
+        //   addEndListener: () => {
+        //     if (textInput.current !== null && textInput.current.value === "") {
+        //       // textInput.current.focus();
+        //     }
+        //   },
+        // }}
       >
-        <DialogTitle>
-          Symbol
-          <div style={{ position: "absolute", top: "20px", right: "30px" }}>
-            {symbol !== null &&
-              getFontAwesomeIconForSymbolPreview({
-                ...symbol,
-                icon,
-                icon_family,
-                icon_style,
-                colour,
-                secondary_colour,
-                size,
-                rotation,
-                opacity,
-                secondary_opacity,
-              })}
-          </div>
-        </DialogTitle>
+        <AppBar sx={{ position: "sticky" }}>
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={onCancel}>
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              Symbol
+            </Typography>
+            <Button color="inherit" onClick={onClickSave}>
+              Save
+            </Button>
+          </Toolbar>
+        </AppBar>
 
-        <DialogContent>
-          <form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
+        <form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
+          <Paper elevation={0} sx={{ m: 3 }}>
+            <Paper
+              variant="outlined"
+              sx={{ textAlign: "center", mb: 1, pt: 2, pb: 2 }}
+            >
+              {symbol !== null &&
+                getFontAwesomeIconForSymbolPreview(
+                  {
+                    ...symbol,
+                    icon,
+                    icon_family,
+                    icon_style,
+                    colour,
+                    secondary_colour,
+                    size,
+                    rotation,
+                    opacity,
+                    secondary_opacity,
+                  },
+                  { size: defaultSymbolSizeForFormFields * 2.5 }
+                )}
+            </Paper>
+
             {nameFieldRequired !== false && (
               <FormControl
                 fullWidth={true}
@@ -508,7 +485,7 @@ function SymbologyFieldEditor(props: Props) {
                   value={icon || ""}
                   SelectProps={{
                     open: false,
-                    onClick: onOpenIconChooserDialog,
+                    onClick: onOpenSymbologyIconChooser,
                   }}
                   InputProps={{
                     startAdornment:
@@ -545,7 +522,7 @@ function SymbologyFieldEditor(props: Props) {
                   value={`${icon_family}_${icon_style}` || ""}
                   SelectProps={{
                     open: false,
-                    onClick: onOpenIconFamilyAndStyleChooserDialog,
+                    onClick: onOpenSymbologyIconChooserAtFamilyAndStyleChooser,
                   }}
                   InputProps={{
                     startAdornment:
@@ -877,13 +854,8 @@ function SymbologyFieldEditor(props: Props) {
                 </div>
               </React.Fragment>
             )}
-          </form>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={onCancel}>Cancel</Button>
-          <Button onClick={onClickSave}>Save</Button>
-        </DialogActions>
+          </Paper>
+        </form>
       </DialogWithTransition>
     </React.Fragment>
   );

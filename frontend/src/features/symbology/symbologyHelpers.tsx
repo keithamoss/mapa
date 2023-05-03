@@ -12,7 +12,7 @@ import { getIconByName, getIconSVG } from "./font-awesome/fontAwesome";
 export const defaultSymbolIcon = "comments";
 export const defaultSymbolIconFamily = "classic";
 export const defaultSymbolIconStyle = "solid";
-export const defaultSymbolColour = "#000000";
+export const defaultSymbolColour = "#183153";
 export const defaultSymbolSecondaryColour = "#A6A6A6";
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 15;
@@ -124,12 +124,13 @@ export const getFontAwesomeIconForSymbolAsSVGString = (
 export const getFontAwesomeIconFromLibraryAsSVGImage = (
   iconName: string,
   iconFamily?: string,
-  iconStyle?: string
+  iconStyle?: string,
+  propOverrides?: Partial<SymbologyProps>
 ) => (
   <img
     alt={iconName}
     src={`data:image/svg+xml;utf8,${getFontAwesomeIconFromLibrary(
-      getFontAwesomeIconProps({}),
+      getFontAwesomeIconProps(propOverrides || {}),
       iconName,
       iconFamily as IconFamily,
       iconStyle as IconStyle

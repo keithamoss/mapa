@@ -90,6 +90,34 @@ export type IFontAwesomeCategories = {
 
 export const getCategories = () => categories as IFontAwesomeCategories;
 
+export const getCategoryByName = (categoryName: string) => {
+  const categories = getCategories();
+
+  return categoryName in categories
+    ? categories[categoryName as FontAwesomeCategory]
+    : null;
+};
+
+export const getCategoryLabelByName = (categoryName: string) => {
+  const category = getCategoryByName(categoryName);
+  return category !== null ? category.label : null;
+};
+
+export const getCategoriesMetadata = () => {
+  const categories = getCategories();
+  const data = [];
+
+  for (const [categoryName, category] of Object.entries(categories)) {
+    data.push({
+      name: categoryName,
+      label: category.label,
+      icon: category.icons[0],
+    });
+  }
+
+  return data;
+};
+
 export interface IconFamilyStyle {
   family: IconFamily;
   style: IconStyle;
@@ -186,6 +214,29 @@ export const getIconByNameWithFirstCategory = (iconName: string) => {
   return null;
 };
 
+export const getIconsBySearchTermAndMaybeCategory = (
+  searchTerm: string,
+  categoryName?: string
+) => {
+  const searchTermLower = searchTerm.toLowerCase();
+  const icons =
+    categoryName === undefined
+      ? getIcons()
+      : getIconsForCategoryByIconName(categoryName);
+  const filteredIcons: IFontAwesomeIcon[] = [];
+
+  for (const [iconName, icon] of Object.entries(icons)) {
+    if (iconName.toLowerCase().includes(searchTermLower) === true) {
+      filteredIcons.push({
+        ...icon,
+        name: iconName as IconName,
+      });
+    }
+  }
+
+  return filteredIcons;
+};
+
 export const mapCategoriesToIcons = () => {
   const categories = getCategories();
   const iconsWithCategories: any = {};
@@ -201,6 +252,32 @@ export const mapCategoriesToIcons = () => {
   }
 
   return iconsWithCategories;
+};
+
+export const getIconsForCategory = (categoryName: string) => {
+  const categories = getCategories();
+  const icons: IFontAwesomeIcon[] = [];
+
+  if (categories[categoryName as FontAwesomeCategory] !== undefined) {
+    categories[categoryName as FontAwesomeCategory].icons.forEach(
+      (iconName: string) => {
+        const icon = getIconByName(iconName);
+        if (icon !== null) {
+          icons.push(icon);
+        }
+      }
+    );
+  }
+
+  return icons;
+};
+
+export const getIconsForCategoryByIconName = (categoryName: string) => {
+  const icons: IFontAwesomeIcons = {};
+  getIconsForCategory(categoryName).forEach(
+    (icon) => (icons[icon.name] = icon)
+  );
+  return icons;
 };
 
 export const getIconsSortedByCategory = () => {
@@ -224,6 +301,22 @@ export const getIconsSortedByCategory = () => {
   }
 
   return iconsByCategory;
+};
+
+export const getCategoriesForIcon = (iconName: string) => {
+  const categories = getCategories();
+  const availableCategories = [];
+
+  for (const [categoryName, category] of Object.entries(categories)) {
+    if (category.icons.includes(iconName as IconName) === true) {
+      availableCategories.push({
+        name: categoryName,
+        label: category.label,
+      });
+    }
+  }
+
+  return availableCategories;
 };
 
 export const getIconAvailableStylesOrEmptyString = (iconName?: string) =>
