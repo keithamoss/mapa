@@ -63,8 +63,8 @@ function SymbologyIconChooser(props: Props) {
 
   const {
     selectedIcon,
-    selectedIconFamily,
-    selectedIconStyle,
+    // selectedIconFamily,
+    // selectedIconStyle,
     openAtFamilyAndStyleChooser,
     onChoose,
     onClose,
@@ -274,18 +274,6 @@ function SymbologyIconChooser(props: Props) {
                 {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
                 <Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
                   <Grid container direction="row" alignItems="center">
-                    {/* <Grid item>
-                    <Avatar
-                      sx={{
-                        bgcolor: grey[50],
-                        width: "45px",
-                        height: "45px",
-                        "& > img": { width: 25, height: 25 },
-                      }}
-                    >
-                      <CategoryOutlinedIcon />
-                    </Avatar>
-                  </Grid> */}
                     <Grid item>
                       <CategoryOutlinedIcon sx={{ verticalAlign: "middle" }} />
                     </Grid>
@@ -299,40 +287,12 @@ function SymbologyIconChooser(props: Props) {
                         All Categories
                       </Link>
                     </Grid>
-                    {/* <Grid item>
-                    <Button
-                      variant="outlined"
-                      startIcon={<ArrowBackIcon />}
-                      onClick={onGoBackFromIconFamilyAndStyleChooser}
-                    >
-                      Back
-                    </Button>
-                  </Grid> */}
                   </Grid>
                 </Grid>
 
-                {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
-                <Grid container direction="column" sx={{ mt: 1 }}>
-                  <Grid container direction="row" alignItems="center">
-                    {/* <Grid item>
-                      <CategoryOutlinedIcon />
-                    </Grid> */}
-                    <Grid item sx={{ ml: 1, flexGrow: 1 }}>
-                      <Typography variant="h6">
-                        {getCategoryLabelByName(chosenIconCategory)}
-                      </Typography>
-                    </Grid>
-                    {/* <Grid item>
-                      <Button
-                        variant="outlined"
-                        startIcon={<ArrowBackIcon />}
-                        onClick={onCloseIconCategory}
-                      >
-                        Back
-                      </Button>
-                    </Grid> */}
-                  </Grid>
-                </Grid>
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  {getCategoryLabelByName(chosenIconCategory)}
+                </Typography>
 
                 <List
                   sx={{
@@ -372,44 +332,11 @@ function SymbologyIconChooser(props: Props) {
           {selectedPage === IconChooserPage.IconFamilyAndStyleChooser &&
             iconChosen !== undefined && (
               <React.Fragment>
-                {/* <ButtonGroup variant="contained">
-                <Button>One</Button>
-                <Button>Two</Button>
-                <Button>Three</Button>
-                <Button>Four</Button>
-                <Button>Five</Button>
-                <Button>Six</Button>
-                <Button>Seven</Button>
-                <Button>Eight</Button>
-              </ButtonGroup>
-
-              <ButtonGroup variant="contained">
-                {getCategoriesForIcon(iconChosen).map(
-                  (categoryName: string) => (
-                    <Button>{categoryName}</Button>
-                  )
-                )}
-              </ButtonGroup> */}
-
                 {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
                 <Grid container direction="column" sx={{ mt: 1 }}>
                   <Grid container direction="row" alignItems="center">
-                    {/* <Grid item>
-                    <Avatar
-                      sx={{
-                        bgcolor: grey[50],
-                        width: "45px",
-                        height: "45px",
-                        "& > img": { width: 25, height: 25 },
-                      }}
-                    >
-                      <CategoryOutlinedIcon />
-                    </Avatar>
-                  </Grid> */}
-                    <Grid item>
-                      <CategoryOutlinedIcon sx={{ verticalAlign: "middle" }} />
-                    </Grid>
                     <Grid item sx={{ mr: 1, flexGrow: 1 }}>
+                      <CategoryOutlinedIcon sx={{ verticalAlign: "middle" }} />
                       <Link
                         component="button"
                         variant="body2"
@@ -432,47 +359,17 @@ function SymbologyIconChooser(props: Props) {
                         </Link>
                       ))}
                     </Grid>
-                    {/* <Grid item>
-                    <Button
-                      variant="outlined"
-                      startIcon={<ArrowBackIcon />}
-                      onClick={onGoBackFromIconFamilyAndStyleChooser}
-                    >
-                      Back
-                    </Button>
-                  </Grid> */}
                   </Grid>
                 </Grid>
 
                 {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
                 <Grid container direction="column" sx={{ mt: 1 }}>
                   <Grid container direction="row" alignItems="center">
-                    {/* <Grid item>
-                    <Avatar
-                      sx={{
-                        bgcolor: grey[50],
-                        width: "45px",
-                        height: "45px",
-                        "& > img": { width: 25, height: 25 },
-                      }}
-                    >
-                      {getFontAwesomeIconFromLibraryAsSVGImage(iconChosen)}
-                    </Avatar>
-                  </Grid> */}
                     <Grid item sx={{ flexGrow: 1 }}>
                       <Typography variant="h6">
                         {getIconLabelByName(iconChosen)}
                       </Typography>
                     </Grid>
-                    {/* <Grid item>
-                      <Button
-                        variant="outlined"
-                        startIcon={<ArrowBackIcon />}
-                        onClick={onGoBackFromIconFamilyAndStyleChooser}
-                      >
-                        Back
-                      </Button>
-                    </Grid> */}
                   </Grid>
                 </Grid>
 
@@ -545,109 +442,6 @@ function SymbologyIconChooser(props: Props) {
 
           {/* 
           ############################################
-          Choose from the available styles for an icon
-          (List-based variant.)
-          ############################################
-          */}
-          {/* {showAvailableStylesForChosenIcon === true && (
-            <List
-              sx={{
-                width: "100%",
-                maxWidth: 360,
-                bgcolor: "background.paper",
-              }}
-            >
-              {getIconAvailableStyles(iconChosen).map((familyStyle) => {
-                return (
-                  <ListItem
-                    key={`${familyStyle.family}_${familyStyle.style}`}
-                    disablePadding
-                  >
-                    <ListItemButton
-                    // onClick={onChooseIcon(icon.name)}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            bgcolor: grey[50],
-                            width: "45px",
-                            height: "45px",
-                            "& > img": { width: 25, height: 25 },
-                          }}
-                        >
-                          {getFontAwesomeIconFromLibraryAsSVGImage(
-                            iconChosen,
-                            familyStyle.family,
-                            familyStyle.style
-                          )}
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={getIconFamilyAndStyleName(
-                          familyStyle.family,
-                          familyStyle.style
-                        )}
-                      ></ListItemText>
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
-          )} */}
-
-          {/* 
-          ############################################
-          Choose from the available styles for an icon
-          (ImageList-based variant.)
-          ############################################
-          */}
-          {/* {showAvailableStylesForChosenIcon === true && (
-            <ImageList gap={8}>
-              {getIconAvailableStyles(iconChosen).map((familyStyle) => (
-                <ImageListItem
-                  key={`${familyStyle.family}_${familyStyle.style}`}
-                  onClick={onChooseIconFamilyAndStyle(
-                    familyStyle.family,
-                    familyStyle.style
-                  )}
-                  sx={{
-                    backgroundColor: grey[50],
-                    height: "100px !important",
-                    "& > img": {
-                      maxWidth: 100,
-                      maxHeight: 100,
-                      width: "60px !important",
-                      height: "60px !important",
-                      objectFit: "contain !important",
-                      position: "relative !important",
-                      left: "36px !important",
-                      top: "-3px !important",
-                    },
-                  }}
-                >
-                  {getFontAwesomeIconFromLibraryAsSVGImage(
-                    icon!,
-                    familyStyle.family,
-                    familyStyle.style
-                  )}
-                  <ImageListItemBar
-                    subtitle={getIconFamilyAndStyleName(
-                      familyStyle.family,
-                      familyStyle.style
-                    )}
-                    sx={{
-                      backgroundColor: "white",
-                      "& > div": { pt: "6px", pb: "6px", pl: "4px", pr: "8px" },
-                    }}
-                    position="below"
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          )} */}
-
-          {/* 
-          ############################################
           Display the icon search results
           ############################################
           */}
@@ -705,70 +499,6 @@ function SymbologyIconChooser(props: Props) {
               })}
             </List>
           )}
-
-          {/* 
-          ############################################
-          Display the icon search results
-          (Paper-based variant.)
-          ############################################
-          */}
-          {/* {showIconSearchResults === true && (
-            <Box sx={{ width: "100%" }}>
-              <Grid container spacing={1}>
-                {getIconsBySearchTermAndMaybeCategory(iconSearchTerm).map((icon) => {
-                  const matches = match(icon.label, iconSearchTerm, {
-                    insideWords: true,
-                  });
-                  const parts = parse(icon.label, matches);
-
-                  return (
-                    <Grid key={icon.name} item xs={6}>
-                      <Paper
-                        // variant="outlined"
-                        elevation={0}
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 1,
-                          minHeight: "116px",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            pb: 1,
-                            "& > img": {
-                              height: 40,
-                              width: 40,
-                            },
-                          }}
-                        >
-                          {getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
-                        </Box>
-
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ textAlign: "center" }}
-                        >
-                          {parts.map((part, index) => (
-                            <span
-                              key={index}
-                              style={{
-                                fontWeight: part.highlight ? 700 : 400,
-                              }}
-                            >
-                              {part.text}
-                            </span>
-                          ))}
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Box>
-          )} */}
         </Paper>
       </DialogWithTransition>
     </React.Fragment>
