@@ -1,18 +1,13 @@
-import CloseIcon from "@mui/icons-material/Close";
-
 import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
-  DialogTitle,
   FormGroup,
-  IconButton,
   InputAdornment,
   MenuItem,
-  Paper,
   TextField,
 } from "@mui/material";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useAppSelector } from "../../../app/hooks/store";
 import { useGetFeaturesForMapQuery } from "../../../app/services/features";
@@ -21,7 +16,6 @@ import {
   SymbologyProps,
   useUpdateFeatureSchemaMutation,
 } from "../../../app/services/schemas";
-import { DialogWithTransition } from "../../../app/ui/dialog";
 import { selectFeatureSchemaById } from "../../schemas/schemasSlice";
 import SymbologyFieldEditor from "../../symbology/symbologyFieldEditor";
 import {
@@ -31,7 +25,7 @@ import {
   getFontAwesomeIconForSymbolPreview,
   getSymbolFromSchemaSymbologyGroup,
 } from "../../symbology/symbologyHelpers";
-import SchemaSymbologyAutocomplete from "./schemaSymbologyAutocomplete";
+import SchemaSymbologyChooser from "./schemaSymbologyChooser";
 
 interface Props {
   mapId: number;
@@ -63,6 +57,9 @@ function SchemaDataEntrySymbology(props: Props) {
     }
   };
 
+  // ######################
+  // Add Symbol
+  // ######################
   const [isAddingSymbol, setIsAddingSymbol] = useState(false);
 
   const [
@@ -107,6 +104,9 @@ function SchemaDataEntrySymbology(props: Props) {
   const onCancelAddingSymbol = () => {
     setIsAddingSymbol(false);
   };
+  // ######################
+  // Add Symbol (End)
+  // ######################
 
   // ######################
   // Symbol Chooser Dialog
@@ -117,17 +117,6 @@ function SchemaDataEntrySymbology(props: Props) {
   const onOpenSymbolChooserDialog = () => setIsSymbolChooserDialogOpen(true);
 
   const onCloseSymbolChooserDialog = () => setIsSymbolChooserDialogOpen(false);
-
-  const autocompleteInputRef = useRef<HTMLElement>(null);
-
-  const transitionEndEvent = useCallback(() => {
-    if (
-      autocompleteInputRef.current !== null &&
-      document?.activeElement !== autocompleteInputRef.current
-    ) {
-      autocompleteInputRef.current.focus();
-    }
-  }, []);
   // ######################
   // Symbol Chooser Dialog (End)
   // ######################
@@ -143,45 +132,17 @@ function SchemaDataEntrySymbology(props: Props) {
 
   return (
     <React.Fragment>
-      <DialogWithTransition
-        dialogProps={{ open: isSymbolChooserDialogOpen }}
-        transitionProps={{
-          onEnter: (node: HTMLElement, isAppearing: boolean) => {
-            if (isAppearing === true) {
-              node.addEventListener("transitionend", transitionEndEvent, {
-                capture: false,
-                once: true,
-              });
-            }
-          },
-        }}
-      >
-        <DialogTitle>
-          <IconButton
-            onClick={onCloseSymbolChooserDialog}
-            sx={{
-              position: "absolute",
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-
-        <Paper elevation={0} sx={{ m: 3, mt: 3 }}>
-          <SchemaSymbologyAutocomplete
-            ref={autocompleteInputRef}
-            mapId={mapId}
-            schemaId={schema.id}
-            symbology={schema.symbology}
-            symbolId={symbolId}
-            features={features !== undefined ? Object.values(features) : []}
-            onChooseSymbol={onChooseSymbol}
-          />
-        </Paper>
-      </DialogWithTransition>
+      {isSymbolChooserDialogOpen === true && (
+        <SchemaSymbologyChooser
+          mapId={mapId}
+          schemaId={schema.id}
+          symbology={schema.symbology}
+          symbolId={symbolId}
+          features={features !== undefined ? Object.values(features) : []}
+          onChoose={onChooseSymbol}
+          onClose={onCloseSymbolChooserDialog}
+        />
+      )}
 
       <FormGroup>
         <TextField
