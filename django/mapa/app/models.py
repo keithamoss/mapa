@@ -2,6 +2,7 @@
 from mapa.app.enums import GeomType, ProfileSettings
 from mapa.util import make_logger
 from model_utils import FieldTracker
+from simple_history.models import HistoricalRecords
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
@@ -60,6 +61,8 @@ class FeatureSchemas(models.Model):
     default_symbology = JSONField(null=True)
     deleted_at = models.DateTimeField(null=True)
 
+    history = HistoricalRecords()
+
 
 class Maps(models.Model):
     name = models.TextField(unique=False)
@@ -70,6 +73,8 @@ class Maps(models.Model):
     last_used_schema_id = models.ForeignKey(FeatureSchemas, null=True, on_delete=models.CASCADE, db_column="last_used_schema_id")
     # favourited_symbols = JSONField(default=list, blank=True)
 
+    history = HistoricalRecords()
+
 
 class Features(models.Model):
     geom = models.PointField(geography=True)
@@ -79,3 +84,5 @@ class Features(models.Model):
     symbol_id = models.IntegerField(blank=True, null=True)
     data = JSONField(default=list, blank=True)
     deleted_at = models.DateTimeField(null=True)
+
+    history = HistoricalRecords()
