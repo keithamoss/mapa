@@ -8,7 +8,7 @@ import { router } from "./app/routing/routes";
 import { authApi } from "./app/services/auth";
 import { store } from "./app/store";
 import { theme } from "./app/ui/theme";
-import "./browserstack";
+// import "./browserstack";
 import reportWebVitals from "./reportWebVitals";
 
 const container = document.getElementById("root")!;
