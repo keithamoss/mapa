@@ -1,9 +1,12 @@
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FlightIcon from "@mui/icons-material/Flight";
 import {
   AppBar,
   Button,
   FormControl,
   FormLabel,
+  Grid,
   IconButton,
   Paper,
   Toolbar,
@@ -198,6 +201,13 @@ function FeatureEditor(props: Props) {
     });
   };
 
+  const onDeleteFeature = () => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm("Are you sure?") === true) {
+      deleteFeature(feature.id);
+    }
+  };
+
   return (
     <DialogWithTransition
     // For some reason this was causing the dialog to close as soon as it opened when the feature had no schema selected
@@ -265,6 +275,35 @@ function FeatureEditor(props: Props) {
             />
           </React.Fragment>
         )}
+
+        <FormControl sx={{ mb: 3 }} component="fieldset" variant="outlined">
+          <Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
+            <Grid container direction="row" alignItems="center">
+              <Grid item sx={{ mr: 1, flexGrow: 1 }}>
+                <FormLabel component="legend">Danger Zone</FormLabel>
+              </Grid>
+              <Grid item>
+                <FlightIcon
+                  sx={{
+                    verticalAlign: "middle",
+                    color: "rgb(0, 0, 0)",
+                    opacity: 0.6,
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<DeleteIcon color="error" />}
+            onClick={onDeleteFeature}
+            sx={{ maxWidth: 350 }}
+          >
+            Delete
+          </Button>
+        </FormControl>
       </Paper>
 
       {schemaIdForEditing !== undefined && (
