@@ -9,7 +9,7 @@ import { IconFamily, IconStyle } from "@fortawesome/fontawesome-svg-core";
 import { hextoRGBACSS } from "../../app/colourUtils";
 import { getIconByName, getIconSVG } from "./font-awesome/fontAwesome";
 
-export const defaultSymbolIcon = "comments";
+export const defaultSymbolIcon = "location-question";
 export const defaultSymbolIconFamily = "classic";
 export const defaultSymbolIconStyle = "solid";
 export const defaultSymbolColour = "#183153";
