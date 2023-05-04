@@ -35,7 +35,10 @@ function SchemaManager(props: Props) {
 
   const [patchMap] = usePatchMapMutation();
 
-  const onToggleSchemaVisibility = (schemaId: number) => () => {
+  const onToggleSchemaVisibility = (schemaId: number) => (event: any) => {
+    // @TODO Don't worry about the 'any' for now, we'll rewrite this bit of the UI soonish
+    event.stopPropagation();
+
     if (map !== undefined) {
       if (map.hidden_schema_ids.includes(schemaId) === false) {
         patchMap({
