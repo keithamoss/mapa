@@ -22,7 +22,7 @@ jsonschema = "^4.17.3"
 djangorestframework-gis = "^1.0"
 django-filter = "21.1"
 djangorestframework-csv = "^2.1.1"
-pytz = "^2022.6"
+pytz = "^2023.3"
 
 [tool.poetry.dev-dependencies]
 
