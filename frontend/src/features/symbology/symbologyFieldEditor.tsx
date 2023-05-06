@@ -328,21 +328,21 @@ function SymbologyFieldEditor(props: Props) {
               sx={{ textAlign: "center", mb: 1, pt: 2, pb: 2 }}
             >
               {symbol !== null &&
-                getFontAwesomeIconForSymbolPreview(
-                  {
-                    ...symbol,
-                    icon,
-                    icon_family,
-                    icon_style,
-                    colour,
-                    secondary_colour,
-                    size,
-                    rotation,
-                    opacity,
-                    secondary_opacity,
-                  },
-                  { size: defaultSymbolSizeForFormFields * 2.5 }
-                )}
+                getFontAwesomeIconForSymbolPreview({
+                  ...symbol,
+                  icon,
+                  icon_family,
+                  icon_style,
+                  colour,
+                  secondary_colour,
+                  size:
+                    (size !== undefined
+                      ? size
+                      : defaultSymbolSizeForFormFields) * 2,
+                  rotation,
+                  opacity,
+                  secondary_opacity,
+                })}
             </Paper>
 
             {nameFieldRequired !== false && (
