@@ -279,7 +279,7 @@ function FeatureEditor(props: Props) {
         <FormControl sx={{ mb: 3 }} component="fieldset" variant="outlined">
           <Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
             <Grid container direction="row" alignItems="center">
-              <Grid item sx={{ mr: 1, flexGrow: 1 }}>
+              <Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
                 <FormLabel component="legend">Danger Zone</FormLabel>
               </Grid>
               <Grid item>
@@ -287,7 +287,8 @@ function FeatureEditor(props: Props) {
                   sx={{
                     verticalAlign: "middle",
                     color: "rgb(0, 0, 0)",
-                    opacity: 0.6,
+                    opacity: 0.5,
+                    fontSize: "16px",
                   }}
                 />
               </Grid>

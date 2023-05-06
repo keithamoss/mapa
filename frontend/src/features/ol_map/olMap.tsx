@@ -103,12 +103,7 @@ function OLMap(props: Props) {
 
   // R1 when features are retrieved
   const { data: features } = useGetFeaturesForMapQuery(mapId);
-  // Filter out features that either have no schema (how does that even happen??) or that aren't part of the available scheams for this map (why??)
-  const filteredFeatures = Object.values(features || []).filter(
-    (feature) =>
-      feature.schema_id === null ||
-      map?.hidden_schema_ids.includes(feature.schema_id) === false
-  );
+  const mapFeatures = Object.values(features || []);
 
   let vectorLayer = useRef<VectorLayer<VectorSource<Geometry>> | undefined>(
     undefined
@@ -274,7 +269,7 @@ function OLMap(props: Props) {
       if (vectorLayer.current === undefined) {
         // console.log("manage vector layer: create");
         vectorLayer.current = createDataVectorLayer(
-          filteredFeatures,
+          mapFeatures,
           styleFunction as StyleFunction
         );
         olMapRef.current.addLayer(vectorLayer.current);
@@ -323,7 +318,7 @@ function OLMap(props: Props) {
         olMapRef.current.addInteraction(modify);
       } else {
         // console.log("manage vector layer: update");
-        updateDataVectorLayer(filteredFeatures, vectorLayer.current);
+        updateDataVectorLayer(mapFeatures, vectorLayer.current);
         vectorLayer.current.setStyle(styleFunction as StyleFunction);
       }
     }

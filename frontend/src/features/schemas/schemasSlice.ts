@@ -29,7 +29,7 @@ export const getSchemasAvailableForMap = createSelector(
   selectAllFeatureSchemas,
   selectMapById,
   (schemas, map) =>
-    schemas.filter((s) => map?.hidden_schema_ids.includes(s.id) === false)
+    schemas.filter((s) => map?.available_schema_ids.includes(s.id) === true)
 );
 
 export const getNextSchemaFieldId = (

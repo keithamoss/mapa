@@ -69,7 +69,7 @@ class Maps(models.Model):
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column="owner_id")
     default_symbology = JSONField(null=True)
     deleted_at = models.DateTimeField(null=True)
-    hidden_schema_ids = JSONField(default=list, blank=True)
+    available_schema_ids = JSONField(default=list, blank=True)
     last_used_schema_id = models.ForeignKey(FeatureSchemas, null=True, on_delete=models.CASCADE, db_column="last_used_schema_id")
     # favourited_symbols = JSONField(default=list, blank=True)
 

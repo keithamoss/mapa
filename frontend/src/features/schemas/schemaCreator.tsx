@@ -1,9 +1,13 @@
 import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks/store";
+import { usePatchMapMutation } from "../../app/services/maps";
 import {
   NewFeatureSchema,
   useAddFeatureSchemaMutation,
 } from "../../app/services/schemas";
+import { selectActiveMapId } from "../app/appSlice";
+import { selectMapById } from "../maps/mapsSlice";
 import SchemaForm from "./schemaForm";
 
 interface Props {}
@@ -13,30 +17,42 @@ function SchemaCreator(props: Props) {
 
   const navigate = useNavigate();
 
-  const [
-    addSchema,
-    {
-      isSuccess:
-        isAddingSchemaSuccessful /*, isLoading: isAddingSchemaLoading*/,
-    },
-  ] = useAddFeatureSchemaMutation();
+  const mapId = useAppSelector(selectActiveMapId);
+  const map = useAppSelector((state) =>
+    mapId !== undefined ? selectMapById(state, mapId) : undefined
+  );
 
-  // See note in MapEditor about usage of useEffect
+  const [addSchema, { isSuccess: isAddingSchemaSuccessful }] =
+    useAddFeatureSchemaMutation();
+
   useEffect(() => {
-    if (isAddingSchemaSuccessful === true) {
+    if (isAddingSchemaSuccessful === true && mapId === undefined) {
       navigate(-1);
     }
-  }, [isAddingSchemaSuccessful, navigate]);
+  }, [isAddingSchemaSuccessful, mapId, navigate]);
 
-  // if (isAddingSchemaSuccessful === true) {
-  //   navigate(-1);
-  // }
+  const [patchMap, { isSuccess: isPatchingMapSuccessful }] =
+    usePatchMapMutation();
+
+  useEffect(() => {
+    if (isPatchingMapSuccessful === true && mapId !== undefined) {
+      navigate(-1);
+    }
+  }, [isPatchingMapSuccessful, mapId, navigate]);
 
   const onDoneAdding = useCallback(
-    (schema: NewFeatureSchema) => {
-      addSchema(schema);
+    async (schema: NewFeatureSchema) => {
+      const newSchema = await addSchema(schema).unwrap();
+
+      if (mapId !== undefined && map !== undefined) {
+        patchMap({
+          id: mapId,
+          available_schema_ids: [...map.available_schema_ids, newSchema.id],
+        });
+      } else {
+      }
     },
-    [addSchema]
+    [addSchema, map, mapId, patchMap]
   );
 
   return <SchemaForm onDoneAdding={onDoneAdding} />;

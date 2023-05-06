@@ -92,7 +92,7 @@ const getSymbolOptions = (
       features !== undefined ? Object.values(features) : []
     ).map((symbol) => ({
       symbol,
-      option_group: "Most commonly used on this map",
+      option_group: "Frequently used on this map",
     }));
 
   const availableSymbols = sortBy(
@@ -207,7 +207,7 @@ function SchemaSymbologyChooser(props: Props) {
               </React.Fragment>
             )}
 
-            {optionsGrouped["Most commonly used on this map"] !== undefined && (
+            {optionsGrouped["Frequently used on this map"] !== undefined && (
               <React.Fragment>
                 <ListSubheader
                   sx={{
@@ -216,10 +216,10 @@ function SchemaSymbologyChooser(props: Props) {
                   color="primary"
                   disableGutters
                 >
-                  Most commonly used on this map
+                  Frequently used on this map
                 </ListSubheader>
 
-                {optionsGrouped["Most commonly used on this map"].map(
+                {optionsGrouped["Frequently used on this map"].map(
                   (option, index) => createSymbolListItem(option, onClickSymbol)
                 )}
               </React.Fragment>
@@ -233,7 +233,7 @@ function SchemaSymbologyChooser(props: Props) {
                       sx={{
                         mt:
                           (optionsGrouped["Favourites"] !== undefined ||
-                            optionsGrouped["Most commonly used on this map"] !==
+                            optionsGrouped["Frequently used on this map"] !==
                               undefined) &&
                           symbologyGroup.id === defaultSymbologyGroupId
                             ? 2

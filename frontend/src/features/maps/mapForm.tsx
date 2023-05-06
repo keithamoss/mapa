@@ -5,13 +5,21 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   AppBar,
+  Box,
   Button,
+  Checkbox,
+  Chip,
   FormControl,
   FormGroup,
   FormHelperText,
   FormLabel,
   IconButton,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
   Paper,
+  Select,
   TextField,
   Toolbar,
   Typography,
@@ -21,9 +29,11 @@ import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { mapFormValidationSchema } from "../../app/forms/mapForm";
+import { useAppSelector } from "../../app/hooks/store";
 import { Map, MapModifiableProps, NewMap } from "../../app/services/maps";
 import { SymbologyProps } from "../../app/services/schemas";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import { selectAllFeatureSchemas } from "../schemas/schemasSlice";
 import SymbologyFieldEditor from "../symbology/symbologyFieldEditor";
 
 interface Props {
@@ -39,6 +49,8 @@ function MapForm(props: Props) {
 
   const navigate = useNavigate();
 
+  const schemas = useAppSelector(selectAllFeatureSchemas);
+
   const {
     watch,
     setValue,
@@ -50,10 +62,11 @@ function MapForm(props: Props) {
     defaultValues: {
       name: map?.name || "",
       default_symbology: map?.default_symbology || undefined,
+      available_schema_ids: map?.available_schema_ids || [],
     },
   });
 
-  const { default_symbology } = watch();
+  const { default_symbology, available_schema_ids } = watch();
 
   // ######################
   // Default Symbology
@@ -174,6 +187,76 @@ function MapForm(props: Props) {
               {errors.default_symbology && (
                 <FormHelperText error>
                   {errors.default_symbology.message}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl
+              fullWidth={true}
+              sx={{ mb: 3 }}
+              component="fieldset"
+              variant="outlined"
+            >
+              <FormGroup>
+                <FormLabel component="legend" sx={{ mb: 1 }}>
+                  Schemas
+                </FormLabel>
+
+                <Typography variant="body2">
+                  Choose the schemas you would like to use on this map.
+                </Typography>
+              </FormGroup>
+            </FormControl>
+
+            <FormControl
+              fullWidth={true}
+              sx={{ mb: 3 }}
+              component="fieldset"
+              variant="outlined"
+            >
+              <FormGroup>
+                <InputLabel>Schemas</InputLabel>
+
+                <Controller
+                  name="available_schema_ids"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      multiple
+                      input={<OutlinedInput label="Schemas" />}
+                      renderValue={(selected) => (
+                        <Box
+                          sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                        >
+                          {schemas
+                            .filter(
+                              (schema) => selected.includes(schema.id) === true
+                            )
+                            .map((schema) => (
+                              <Chip key={schema.id} label={schema.name} />
+                            ))}
+                        </Box>
+                      )}
+                    >
+                      {schemas.map((schema) => (
+                        <MenuItem key={schema.id} value={schema.id}>
+                          <Checkbox
+                            checked={
+                              available_schema_ids.includes(schema.id) === true
+                            }
+                          />
+                          <ListItemText primary={schema.name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </FormGroup>
+
+              {errors.available_schema_ids && (
+                <FormHelperText error>
+                  {errors.available_schema_ids.message}
                 </FormHelperText>
               )}
             </FormControl>

@@ -44,7 +44,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maps
-        fields = ("id", "name", "owner_id", "default_symbology", "hidden_schema_ids", "last_used_schema_id")
+        fields = ("id", "name", "owner_id", "default_symbology", "available_schema_ids", "last_used_schema_id")
 
 
 class FeatureSerializer(serializers.ModelSerializer):

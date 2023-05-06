@@ -5,6 +5,7 @@ import { SymbologyProps } from "./schemas";
 export interface MapModifiableProps {
   name: string;
   default_symbology: SymbologyProps | null;
+  available_schema_ids: number[];
 }
 
 export interface NewMap extends MapModifiableProps {}
@@ -12,9 +13,7 @@ export interface NewMap extends MapModifiableProps {}
 export interface Map extends MapModifiableProps {
   id: number;
   owner_id: number;
-  hidden_schema_ids: number[];
   last_used_schema_id: number | null;
-  // favourited_symbols: MapFavouritedSymbols[];
 }
 
 export interface MapFavouritedSymbols {
