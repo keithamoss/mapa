@@ -264,17 +264,18 @@ export const modifySymbolInGroup = (
   symbol: FeatureSchemaSymbologySymbolsValue,
   symbology: FeatureSchemaSymbology
 ) => {
-  const local_symbology: FeatureSchemaSymbology = { ...symbology };
+  const symbolIdx = symbology.symbols.findIndex((s) => s.id === symbol.id);
 
-  const symbolIdx = local_symbology.symbols.findIndex(
-    (s) => s.id === symbol.id
-  );
-
-  if (symbolIdx !== -1 && symbolIdx in local_symbology.symbols) {
-    local_symbology.symbols[symbolIdx] = symbol;
+  if (symbolIdx !== -1 && symbolIdx in symbology.symbols) {
+    return {
+      ...symbology,
+      symbols: symbology.symbols.map((s, idx) =>
+        idx === symbolIdx ? symbol : s
+      ),
+    };
   }
 
-  return local_symbology;
+  return symbology;
 };
 
 export const moveSymbolsToGroup = (

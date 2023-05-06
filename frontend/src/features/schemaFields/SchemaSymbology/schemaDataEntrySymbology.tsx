@@ -1,4 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   FormGroup,
@@ -24,6 +25,7 @@ import {
   defaultSymbologyGroupId,
   getFontAwesomeIconForSymbolPreview,
   getSymbolFromSchemaSymbologyGroup,
+  modifySymbolInGroup,
 } from "../../symbology/symbologyHelpers";
 import SchemaSymbologyChooser from "./schemaSymbologyChooser";
 
@@ -109,6 +111,42 @@ function SchemaDataEntrySymbology(props: Props) {
   // ######################
 
   // ######################
+  // Edit Symbol
+  // ######################
+  const [isEditingSymbol, setIsEditingSymbol] = useState(false);
+
+  const onEditSymbol = () => {
+    setIsEditingSymbol(true);
+  };
+
+  const onCancelEditingSymbol = () => setIsEditingSymbol(false);
+
+  const onDoneEditingSymbol = (
+    symbologyField: SymbologyProps,
+    groupId: number
+  ) => {
+    if (selectedSymbol !== undefined) {
+      const local_symbol: FeatureSchemaSymbologySymbolsValue = {
+        ...selectedSymbol,
+        props: symbologyField,
+        group_id: groupId,
+      };
+
+      if (schema !== undefined) {
+        updateSchema({
+          ...schema,
+          symbology: modifySymbolInGroup(local_symbol, schema.symbology),
+        });
+
+        setIsEditingSymbol(false);
+      }
+    }
+  };
+  // ######################
+  // Edit Symbol (End)
+  // ######################
+
+  // ######################
   // Symbol Chooser Dialog
   // ######################
   const [isSymbolChooserDialogOpen, setIsSymbolChooserDialogOpen] =
@@ -175,6 +213,17 @@ function SchemaDataEntrySymbology(props: Props) {
       </FormGroup>
 
       <FormGroup row={true}>
+        {selectedSymbol !== undefined && (
+          <Button
+            variant="outlined"
+            startIcon={<EditIcon />}
+            onClick={onEditSymbol}
+            sx={{ mt: 2, mr: 1, maxWidth: 350 }}
+          >
+            Edit Symbol
+          </Button>
+        )}
+
         <Button
           variant="outlined"
           startIcon={<AddIcon />}
@@ -191,6 +240,18 @@ function SchemaDataEntrySymbology(props: Props) {
           onCancel={onCancelAddingSymbol}
           groups={schema.symbology.groups}
           currentGroupId={defaultSymbologyGroupId}
+          nameFieldRequired={true}
+          iconFieldRequired={true}
+        />
+      )}
+
+      {isEditingSymbol === true && selectedSymbol !== undefined && (
+        <SymbologyFieldEditor
+          symbol={selectedSymbol.props}
+          onDone={onDoneEditingSymbol}
+          onCancel={onCancelEditingSymbol}
+          groups={schema.symbology.groups}
+          currentGroupId={selectedSymbol.group_id}
           nameFieldRequired={true}
           iconFieldRequired={true}
         />
