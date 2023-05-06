@@ -277,6 +277,19 @@ export const modifySymbolInGroup = (
   return local_symbology;
 };
 
+export const moveSymbolsToGroup = (
+  symbolIds: number[],
+  groupId: number,
+  symbology: FeatureSchemaSymbology
+) => ({
+  ...symbology,
+  symbols: symbology.symbols.map((symbol) =>
+    symbolIds.includes(symbol.id) === true
+      ? { ...symbol, group_id: groupId }
+      : symbol
+  ),
+});
+
 // export const modifySymbolProps = (
 //   symbol: SymbologyProps,
 //   symbology: FeatureSchemaSymbology,

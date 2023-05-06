@@ -8,3 +8,9 @@ export const symbologyGroupFormValidationSchema: ObjectSchema<FeatureSchemaSymbo
       name: yup.string().required(),
     })
     .required();
+
+export const symbologyGroupFormValidationSchemaIDOnly = yup
+  .object({
+    id: yup.number().required(),
+  })
+  .required();

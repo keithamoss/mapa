@@ -49,6 +49,7 @@ import {
   editSymbologyGroup,
   favouriteSymbolForMap,
   modifySymbolInGroup,
+  moveSymbolsToGroup,
   removeSymbolFromGroup,
   unfavouriteSymbolForMap,
 } from "../symbology/symbologyHelpers";
@@ -160,6 +161,11 @@ function SchemaForm(props: Props) {
       );
       setValue("symbology", local_symbology);
     }
+  };
+
+  const onRearrangeSymbolsToGroup = (symbolIds: number[], groupId: number) => {
+    const local_symbology = moveSymbolsToGroup(symbolIds, groupId, symbology);
+    setValue("symbology", local_symbology);
   };
   // ######################
   // Symbology (End)
@@ -342,6 +348,7 @@ function SchemaForm(props: Props) {
                   onDeleteObject={onDeleteSymbol}
                   onFavouriteSymbol={onFavouriteSymbol}
                   onUnfavouriteSymbol={onUnfavouriteSymbol}
+                  onRearrangeSymbolsToGroup={onRearrangeSymbolsToGroup}
                 />
               </FormGroup>
 

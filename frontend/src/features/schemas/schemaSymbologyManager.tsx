@@ -1,6 +1,8 @@
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MediationIcon from "@mui/icons-material/Mediation";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -8,6 +10,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import {
+  AppBar,
+  Box,
   Button,
   ButtonGroup,
   IconButton,
@@ -17,6 +21,7 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Toolbar,
 } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import React, { useState } from "react";
@@ -35,6 +40,7 @@ import {
   getSymbologyGroupById,
   getSymbolsForGroup,
 } from "../symbology/symbologyHelpers";
+import SchemaSymbologyGroupChooserForRerranging from "./schemaSymbologyGroupChooserForRerranging";
 import SchemaSymbologyGroupEditor from "./schemaSymbologyGroupEditor";
 
 interface Props {
@@ -47,6 +53,7 @@ interface Props {
   onDeleteObject: (symbolId: number, groupId: number) => void;
   onFavouriteSymbol: (symbolId: number) => void;
   onUnfavouriteSymbol: (symbolId: number) => void;
+  onRearrangeSymbolsToGroup: (symbolIds: number[], groupId: number) => void;
 }
 
 function SchemaSymbologyManager(props: Props) {
@@ -62,8 +69,12 @@ function SchemaSymbologyManager(props: Props) {
     // onDeleteObject,
     onFavouriteSymbol,
     onUnfavouriteSymbol,
+    onRearrangeSymbolsToGroup,
   } = props;
 
+  // ######################
+  // Add Group
+  // ######################
   const [isAddingGroup, setIsAddingGroup] = useState(false);
 
   const onAddNewGroup = () => {
@@ -78,7 +89,13 @@ function SchemaSymbologyManager(props: Props) {
   const onCancelAddingGroup = () => {
     setIsAddingGroup(false);
   };
+  // ######################
+  // Add Group (End)
+  // ######################
 
+  // ######################
+  // Edit Group
+  // ######################
   const [groupForEditing, setGroupForEditing] =
     useState<FeatureSchemaSymbologyGroup | null>(null);
 
@@ -96,7 +113,61 @@ function SchemaSymbologyManager(props: Props) {
   const onCancelEditingGroup = () => {
     setGroupForEditing(null);
   };
+  // ######################
+  // Edit Group (End)
+  // ######################
 
+  // ######################
+  // Rearrange Symbols
+  // ######################
+  const [isRearrangingSymbols, setIsRearrangingSymbols] = useState(false);
+
+  const onRearrangeSymbols = () => {
+    setIsRearrangingSymbols(true);
+  };
+
+  const onCancelRearrangingSymbols = () => {
+    setIsRearrangingSymbols(false);
+    setSymbolsToRearrange([]);
+  };
+
+  const [symbolsToRearrange, setSymbolsToRearrange] = useState<number[]>([]);
+
+  const onClickAddSymbolToRearrange = (sybmolId: number) => () => {
+    setSymbolsToRearrange([...symbolsToRearrange, sybmolId]);
+  };
+
+  const onClickRemoveSymbolFromRearrange = (sybmolId: number) => () => {
+    setSymbolsToRearrange(symbolsToRearrange.filter((id) => id !== sybmolId));
+  };
+
+  const [
+    isRearrangingSymbolsGroupChooserOpen,
+    setIsRearrangingSymbolsGroupChooserOpen,
+  ] = useState(false);
+
+  const onOpenGroupChooserForSymbolRearrange = () => {
+    if (symbolsToRearrange.length >= 1) {
+      setIsRearrangingSymbolsGroupChooserOpen(true);
+    }
+  };
+
+  const onDoneRearrangingSymbols = (groupId: number) => {
+    onRearrangeSymbolsToGroup(symbolsToRearrange, groupId);
+    setIsRearrangingSymbolsGroupChooserOpen(false);
+    setIsRearrangingSymbols(false);
+    setSymbolsToRearrange([]);
+  };
+
+  const onCancelChoosingGroupToRearrangeSymbolsTo = () =>
+    setIsRearrangingSymbolsGroupChooserOpen(false);
+  // ######################
+  // Rearrange Symbols (End)
+  // ######################
+
+  // ######################
+  // Add Symbol
+  // ######################
   const [isAddingSymbologyField, setIsAddingSymbologyField] = useState(false);
 
   const [groupIdForNewSymbologyField, setGroupIdForNewSymbologyField] =
@@ -121,7 +192,13 @@ function SchemaSymbologyManager(props: Props) {
     setGroupIdForNewSymbologyField(undefined);
     setIsAddingSymbologyField(false);
   };
+  // ######################
+  // Add Symbol (End)
+  // ######################
 
+  // ######################
+  // Edit Symbol
+  // ######################
   const [symbolFieldForEditor, setSymbolFieldForEditor] = useState<
     FeatureSchemaSymbologySymbolsValue | undefined
   >();
@@ -147,7 +224,13 @@ function SchemaSymbologyManager(props: Props) {
       setSymbolFieldForEditor(undefined);
     }
   };
+  // ######################
+  // Edit Symbol (End)
+  // ######################
 
+  // ######################
+  // (Un)favourite Symbols
+  // ######################
   const onClickFavouriteSymbol = (symbolId: number) => () => {
     if (Number.isNaN(symbolId) === false) {
       onFavouriteSymbol(symbolId);
@@ -159,6 +242,9 @@ function SchemaSymbologyManager(props: Props) {
       onUnfavouriteSymbol(symbolId);
     }
   };
+  // ######################
+  // (Un)favourite Symbols (End)
+  // ######################
 
   //   const onDeleteSymbol = (e: any) => {
   //     // eslint-disable-next-line no-restricted-globals
@@ -183,6 +269,15 @@ function SchemaSymbologyManager(props: Props) {
         Create Group
       </Button>
 
+      <Button
+        variant="outlined"
+        startIcon={<MediationIcon />}
+        onClick={onRearrangeSymbols}
+        sx={{ mt: 1, maxWidth: 350 }}
+      >
+        Rearrange Symbols
+      </Button>
+
       <List>
         {getSymbolGroups(symbology).map((symbologyGroup, idx) => (
           <React.Fragment key={symbologyGroup.id}>
@@ -201,6 +296,7 @@ function SchemaSymbologyManager(props: Props) {
               >
                 Add
               </Button>
+
               <Button
                 startIcon={<EditIcon />}
                 onClick={onClickEditGroup(symbologyGroup.id)}
@@ -208,42 +304,94 @@ function SchemaSymbologyManager(props: Props) {
               >
                 Edit
               </Button>
+
               <Button startIcon={<DeleteIcon />} disabled={true}>
                 Delete
               </Button>
             </ButtonGroup>
 
-            {getSymbolsForGroup(symbologyGroup.id, symbology).map((symbol) => (
-              <ListItem
-                key={symbol.id}
-                secondaryAction={
-                  <IconButton edge="end" aria-label="delete" disabled={true}>
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              >
-                {mapId !== undefined &&
-                symbol.favourited_map_ids.includes(mapId) === true ? (
-                  <ListItemIcon onClick={onClickUnfavouriteSymbol(symbol.id)}>
-                    <FavoriteIcon sx={{ color: pink[500] }} />
-                  </ListItemIcon>
-                ) : (
-                  <ListItemIcon onClick={onClickFavouriteSymbol(symbol.id)}>
-                    <FavoriteBorderIcon />
-                  </ListItemIcon>
-                )}
+            {getSymbolsForGroup(symbologyGroup.id, symbology).map((symbol) =>
+              isRearrangingSymbols === false ? (
+                <ListItem
+                  key={symbol.id}
+                  secondaryAction={
+                    <IconButton edge="end" aria-label="delete" disabled={true}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                  {mapId !== undefined &&
+                  symbol.favourited_map_ids.includes(mapId) === true ? (
+                    <ListItemIcon onClick={onClickUnfavouriteSymbol(symbol.id)}>
+                      <FavoriteIcon sx={{ color: pink[500] }} />
+                    </ListItemIcon>
+                  ) : (
+                    <ListItemIcon onClick={onClickFavouriteSymbol(symbol.id)}>
+                      <FavoriteBorderIcon />
+                    </ListItemIcon>
+                  )}
 
-                <ListItemButton onClick={onEditSymbol(symbol)} disableGutters>
-                  {getFontAwesomeIconForSymbolPreview(symbol.props, {
-                    size: defaultSymbolSizeForFormFields,
-                  })}
-                  <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                  <ListItemButton onClick={onEditSymbol(symbol)} disableGutters>
+                    {getFontAwesomeIconForSymbolPreview(symbol.props, {
+                      size: defaultSymbolSizeForFormFields,
+                    })}
+                    <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
+                  </ListItemButton>
+                </ListItem>
+              ) : (
+                <ListItem key={symbol.id}>
+                  <ListItemButton
+                    onClick={
+                      symbolsToRearrange.includes(symbol.id) === false
+                        ? onClickAddSymbolToRearrange(symbol.id)
+                        : onClickRemoveSymbolFromRearrange(symbol.id)
+                    }
+                    disableGutters
+                  >
+                    <ListItemIcon
+                      onClick={onClickAddSymbolToRearrange(symbol.id)}
+                    >
+                      {symbolsToRearrange.includes(symbol.id) === false ? (
+                        <CheckBoxOutlineBlankIcon color="info" />
+                      ) : (
+                        <CheckBoxIcon color="info" />
+                      )}
+                    </ListItemIcon>
+
+                    {getFontAwesomeIconForSymbolPreview(symbol.props, {
+                      size: defaultSymbolSizeForFormFields,
+                    })}
+                    <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
           </React.Fragment>
         ))}
       </List>
+
+      {isRearrangingSymbols === true && (
+        <AppBar
+          position="fixed"
+          color="default"
+          sx={{ top: "auto", bottom: 0 }}
+        >
+          <Toolbar>
+            <Button color="inherit" onClick={onCancelRearrangingSymbols}>
+              Cancel
+            </Button>
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            <Button
+              color="inherit"
+              onClick={onOpenGroupChooserForSymbolRearrange}
+            >
+              Move
+            </Button>
+          </Toolbar>
+        </AppBar>
+      )}
 
       {isAddingSymbologyField === true && (
         <SymbologyFieldEditor
@@ -280,6 +428,14 @@ function SchemaSymbologyManager(props: Props) {
           group={groupForEditing}
           onDone={onDoneEditingGroup}
           onCancel={onCancelEditingGroup}
+        />
+      )}
+
+      {isRearrangingSymbolsGroupChooserOpen === true && (
+        <SchemaSymbologyGroupChooserForRerranging
+          groups={symbology.groups}
+          onDone={onDoneRearrangingSymbols}
+          onCancel={onCancelChoosingGroupToRearrangeSymbolsTo}
         />
       )}
     </React.Fragment>
