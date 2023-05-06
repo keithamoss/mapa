@@ -8,7 +8,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@hookform/resolvers": "^3.1.0",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.2",
+    "@mui/material": "^5.12.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@sentry/react": "^7.50.0",
     "@sentry/tracing": "^7.51.0",
