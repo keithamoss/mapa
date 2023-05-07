@@ -323,8 +323,9 @@ function SchemaForm(props: Props) {
 
               <FormGroup>
                 <Typography variant="body2">
-                  You can set symbology defaults for this schema. These will be
-                  replaced by any symbology set by individual features.
+                  You can set symbology defaults for this schema that replace
+                  the map's defaults. These will themselves be replaced by any
+                  symbology set by individual features.
                 </Typography>
 
                 <Button
@@ -399,6 +400,11 @@ function SchemaForm(props: Props) {
               </FormLabel>
 
               <FormGroup>
+                <Typography variant="body2">
+                  You can use fields to capture additional data about features
+                  or further customise their symbology.
+                </Typography>
+
                 <Button
                   variant="outlined"
                   startIcon={<TuneIcon />}
