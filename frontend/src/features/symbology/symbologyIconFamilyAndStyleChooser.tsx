@@ -13,6 +13,7 @@ import { getFontAwesomeIconFromLibraryAsSVGImage } from "./symbologyHelpers";
 
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import { defaultNakedDialogColour } from "../../app/ui/theme";
 import {
   IconFamilyStyle,
   getIconAvailableStyles,
@@ -37,7 +38,7 @@ function SymbologyIconFamilyAndStyleChooser(props: Props) {
 
   return (
     <React.Fragment>
-      <DialogWithTransition>
+      <DialogWithTransition themeColour={defaultNakedDialogColour}>
         <DialogTitle>
           <IconButton
             onClick={onClose}

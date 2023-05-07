@@ -31,6 +31,7 @@ import { debounce } from "lodash-es";
 import React from "react";
 import { useUnmount } from "../../app/hooks/useUnmount";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import { defaultNakedDialogColour } from "../../app/ui/theme";
 import {
   getCategoriesMetadata,
   getCategoryLabelByName,
@@ -162,7 +163,7 @@ function SymbologyIconChooser(props: Props) {
         />
       )}
 
-      <DialogWithTransition>
+      <DialogWithTransition themeColour={defaultNakedDialogColour}>
         <DialogTitle>
           <IconButton
             onClick={onClose}

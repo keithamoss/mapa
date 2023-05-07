@@ -20,6 +20,7 @@ import {
   FeatureSchemaSymbologySymbolsValue,
 } from "../../../app/services/schemas";
 import { DialogWithTransition } from "../../../app/ui/dialog";
+import { defaultNakedDialogColour } from "../../../app/ui/theme";
 import {
   defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
@@ -167,7 +168,7 @@ function SchemaSymbologyChooser(props: Props) {
 
   return (
     <React.Fragment>
-      <DialogWithTransition>
+      <DialogWithTransition themeColour={defaultNakedDialogColour}>
         <DialogTitle>
           <IconButton
             onClick={onClose}
