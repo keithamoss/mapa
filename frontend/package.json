@@ -8,10 +8,10 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@hookform/resolvers": "^3.1.0",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.12.2",
+    "@mui/material": "^5.12.3",
     "@reduxjs/toolkit": "^1.9.5",
-    "@sentry/react": "^7.50.0",
-    "@sentry/tracing": "^7.50.0",
+    "@sentry/react": "^7.51.0",
+    "@sentry/tracing": "^7.51.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.9",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.10.0",
+    "react-router-dom": "^6.11.1",
     "react-scripts": "5.0.1",
     "typescript": "4.9.5",
     "web-vitals": "^3.3.1",
@@ -59,8 +59,8 @@
     "@types/jest": "^29.5.1",
     "@types/js-cookie": "^3.0.3",
     "@types/lodash-es": "^4.17.7",
-    "@types/node": "^18.15.13",
-    "@types/react": "^18.0.38",
-    "@types/react-dom": "^18.0.11"
+    "@types/node": "^20.1.0",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.4"
   }
 }
