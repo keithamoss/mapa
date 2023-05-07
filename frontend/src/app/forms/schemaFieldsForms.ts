@@ -11,7 +11,7 @@ export const schemaTextFieldFormValidationSchema: ObjectSchema<FeatureSchemaFiel
   yup
     .object({
       name: yup.string().required(),
-      default_value: yup.string().required(),
+      default_value: yup.string().ensure().defined(),
     })
     .required();
 
