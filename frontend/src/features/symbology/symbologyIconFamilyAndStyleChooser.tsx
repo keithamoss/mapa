@@ -16,7 +16,7 @@ import { DialogWithTransition } from "../../app/ui/dialog";
 import { defaultNakedDialogColour } from "../../app/ui/theme";
 import {
   IconFamilyStyle,
-  getIconAvailableStyles,
+  getAvailableStylesForIcon,
   getIconFamilyAndStyleName,
   getIconLabelByName,
 } from "./font-awesome/fontAwesome";
@@ -72,59 +72,57 @@ function SymbologyIconFamilyAndStyleChooser(props: Props) {
 
           <Box sx={{ width: "100%" }}>
             <Grid container spacing={1}>
-              {getIconAvailableStyles(selectedIcon).map(
-                (familyStyle, index) => {
-                  return (
-                    <Grid
-                      key={`${familyStyle.family}_${familyStyle.style}`}
-                      item
-                      xs={6}
+              {getAvailableStylesForIcon(selectedIcon).map(
+                (familyStyle, index) => (
+                  <Grid
+                    key={`${familyStyle.family}_${familyStyle.style}`}
+                    item
+                    xs={6}
+                    sx={{
+                      //   Avoid padding on the first column so elements aren't offset a wee bit too much to the right on this two column layout
+                      pl: index % 2 === 0 ? "0 !important" : "1 !important",
+                    }}
+                    onClick={onChooseIconFamilyAndStyle(familyStyle)}
+                  >
+                    <Paper
+                      elevation={0}
                       sx={{
-                        //   Avoid padding on the first column so elements aren't offset a wee bit too much to the right on this two column layout
-                        pl: index % 2 === 0 ? "0 !important" : "1 !important",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        padding: 1,
+                        minHeight: "116px",
                       }}
-                      onClick={onChooseIconFamilyAndStyle(familyStyle)}
                     >
-                      <Paper
-                        elevation={0}
+                      <Box
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 1,
-                          minHeight: "116px",
+                          pb: 1,
+                          "& > img": {
+                            height: 40,
+                            width: 40,
+                          },
                         }}
                       >
-                        <Box
-                          sx={{
-                            pb: 1,
-                            "& > img": {
-                              height: 40,
-                              width: 40,
-                            },
-                          }}
-                        >
-                          {getFontAwesomeIconFromLibraryAsSVGImage(
-                            selectedIcon,
-                            familyStyle.family,
-                            familyStyle.style
-                          )}
-                        </Box>
+                        {getFontAwesomeIconFromLibraryAsSVGImage(
+                          selectedIcon,
+                          familyStyle.family,
+                          familyStyle.style
+                        )}
+                      </Box>
 
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ textAlign: "center" }}
-                        >
-                          {getIconFamilyAndStyleName(
-                            familyStyle.family,
-                            familyStyle.style
-                          )}
-                        </Typography>
-                      </Paper>
-                    </Grid>
-                  );
-                }
+                      <Typography
+                        variant="subtitle2"
+                        sx={{ textAlign: "center" }}
+                      >
+                        {getIconFamilyAndStyleName(
+                          familyStyle.family,
+                          familyStyle.style
+                        )}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                )
               )}
             </Grid>
           </Box>

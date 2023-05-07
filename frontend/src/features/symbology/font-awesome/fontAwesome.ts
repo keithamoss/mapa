@@ -10,8 +10,9 @@ import {
   defaultSymbolIconFamily,
   defaultSymbolIconStyle,
 } from "../symbologyHelpers";
-import categories from "./pro/categories.json";
-import icons from "./pro/icon-families.json";
+
+import categories from "./pro/categories-processed.json";
+import icons from "./pro/icon-families-processed.json";
 
 export type FontAwesomeCategory =
   | "accessibility"
@@ -85,8 +86,10 @@ export type FontAwesomeCategory =
 
 export type IFontAwesomeCategories = {
   [key in FontAwesomeCategory]: {
-    icons: IconName[];
+    name: FontAwesomeCategory;
     label: string;
+    hero_icon: string;
+    icons: IconName[];
   };
 };
 
@@ -105,54 +108,24 @@ export const getCategoryLabelByName = (categoryName: string) => {
   return category !== null ? category.label : null;
 };
 
-export const getCategoriesMetadata = () => {
-  const categories = getCategories();
-  const data = [];
-
-  for (const [categoryName, category] of Object.entries(categories)) {
-    data.push({
-      name: categoryName,
-      label: category.label,
-      icon: category.icons[0],
-    });
-  }
-
-  return data;
-};
-
 export interface IconFamilyStyle {
   family: IconFamily;
   style: IconStyle;
 }
 
 export interface IFontAwesomeIcon {
-  name: IconName; // Injected by us in getIconByName() after reading the JSON file
-  categories?: string[]; // Injected by us in getIconsBySearchTermAndMaybeCategory() after reading the JSON file for searching
-
-  changes: string[];
-  ligatures: string[];
+  name: IconName;
+  label: string;
+  categories: string[];
   search: {
     terms: string[];
   };
-  unicode: string;
-  label: string;
-  voted: boolean;
   svgs: {
     [key in IconFamily]: {
-      [key in IconStyle]: {
-        last_modified: number;
-        raw: string;
-        viewBox: [number, number, number, number];
-        width: number;
-        height: number;
-        path: string;
-      };
+      [key in IconStyle]: string;
     };
   };
-  familyStylesByLicense: {
-    free: IconFamilyStyle[];
-    pro: IconFamilyStyle[];
-  };
+  familyStyles: IconFamilyStyle[];
 }
 
 export interface IFontAwesomeIcons {
@@ -185,57 +158,11 @@ export const getIconLabelByName = (iconName: string) => {
   return icon !== null ? icon.label : "Unnamed icon";
 };
 
-export const getFirstCategoryForIcon = (iconName: string) => {
-  const categories = getCategories();
-
-  for (const [categoryName, category] of Object.entries(categories)) {
-    if (category.icons.includes(iconName as IconName) === true) {
-      return {
-        name: categoryName,
-        label: category.label,
-      };
-    }
-  }
-
-  return null;
-};
-
-export const getIconByNameWithFirstCategory = (iconName: string) => {
-  const icons = getIcons();
-  const category = getFirstCategoryForIcon(iconName);
-
-  if (category !== null) {
-    return {
-      icon: {
-        ...icons[iconName],
-        name: iconName as IconName,
-      },
-      category,
-    };
-  }
-
-  return null;
-};
-
-export const getIconsBySearchTermAndMaybeCategory = (
-  searchTerm: string,
-  categoryName?: string
-) => {
+export const searchIcons = (searchTerm: string, categoryName?: string) => {
   const icons =
     categoryName === undefined
       ? getIcons()
-      : getIconsForCategoryByIconName(categoryName);
-
-  const iconsForSearch: IFontAwesomeIcon[] = [];
-  for (const [iconName, icon] of Object.entries(icons)) {
-    iconsForSearch.push({
-      ...icon,
-      name: iconName as IconName,
-      categories: getCategoriesForIcon(iconName).map(
-        (category) => category.label
-      ),
-    });
-  }
+      : getIconsForCategoryIndexedByIconName(categoryName);
 
   const miniSearch = new MiniSearch({
     idField: "name",
@@ -255,26 +182,9 @@ export const getIconsBySearchTermAndMaybeCategory = (
   });
 
   // Index all documents
-  miniSearch.addAll(Object.values(iconsForSearch));
+  miniSearch.addAll(Object.values(icons));
 
   return miniSearch.search(searchTerm);
-};
-
-export const mapCategoriesToIcons = () => {
-  const categories = getCategories();
-  const iconsWithCategories: any = {};
-
-  for (const [, category] of Object.entries(categories)) {
-    category.icons.forEach((iconName) => {
-      if (iconsWithCategories[iconName] === undefined) {
-        iconsWithCategories[iconName] = [];
-      }
-
-      iconsWithCategories[iconName].push(category.label);
-    });
-  }
-
-  return iconsWithCategories;
 };
 
 export const getIconsForCategory = (categoryName: string) => {
@@ -285,6 +195,7 @@ export const getIconsForCategory = (categoryName: string) => {
     categories[categoryName as FontAwesomeCategory].icons.forEach(
       (iconName: string) => {
         const icon = getIconByName(iconName);
+
         if (icon !== null) {
           icons.push(icon);
         }
@@ -295,7 +206,7 @@ export const getIconsForCategory = (categoryName: string) => {
   return icons;
 };
 
-export const getIconsForCategoryByIconName = (categoryName: string) => {
+export const getIconsForCategoryIndexedByIconName = (categoryName: string) => {
   const icons: IFontAwesomeIcons = {};
   getIconsForCategory(categoryName).forEach(
     (icon) => (icons[icon.name] = icon)
@@ -303,56 +214,10 @@ export const getIconsForCategoryByIconName = (categoryName: string) => {
   return icons;
 };
 
-export const getIconsSortedByCategory = () => {
-  const categories = getCategories();
-  const iconsByCategory: IFontAwesomeIconsByCategory[] = [];
+export const getAvailableStylesForIcon = (iconName?: string) =>
+  iconName !== undefined ? getIconByName(iconName)?.familyStyles || [] : [];
 
-  for (const [categoryName, category] of Object.entries(categories)) {
-    category.icons.forEach((iconName) => {
-      const icon = getIconByName(iconName);
-
-      if (icon !== null) {
-        iconsByCategory.push({
-          icon,
-          category: {
-            name: categoryName,
-            label: category.label,
-          },
-        });
-      }
-    });
-  }
-
-  return iconsByCategory;
-};
-
-export const getCategoriesForIcon = (iconName: string) => {
-  const categories = getCategories();
-  const availableCategories = [];
-
-  for (const [categoryName, category] of Object.entries(categories)) {
-    if (category.icons.includes(iconName as IconName) === true) {
-      availableCategories.push({
-        name: categoryName,
-        label: category.label,
-      });
-    }
-  }
-
-  return availableCategories;
-};
-
-export const getIconAvailableStylesOrEmptyString = (iconName?: string) =>
-  iconName !== undefined
-    ? getIconByName(iconName)?.familyStylesByLicense.pro[0].style || ""
-    : "";
-
-export const getIconAvailableStyles = (iconName?: string) =>
-  iconName !== undefined
-    ? getIconByName(iconName)?.familyStylesByLicense.pro || []
-    : [];
-
-export const getDefaultFamilyForIconByName = (iconName: string) => {
+export const getDefaultFamilyByIconName = (iconName: string) => {
   const icon = getIconByName(iconName);
   if (icon === null) {
     return defaultSymbolIconFamily;
@@ -366,7 +231,7 @@ export const getDefaultFamilyForIcon = (icon: IFontAwesomeIcon) =>
     ? "classic"
     : (Object.keys(icon.svgs)[0] as IconFamily);
 
-export const getDefaultStyleForIconByName = (iconName: string) => {
+export const getDefaultStyleByIconName = (iconName: string) => {
   const icon = getIconByName(iconName);
   if (icon === null) {
     return defaultSymbolIconStyle;
@@ -391,7 +256,7 @@ export const getIconSVG = (
   const localIconStyle: IconStyle =
     iconStyle !== undefined ? iconStyle : getDefaultStyleForIcon(icon);
 
-  return icon.svgs[localIconFamily][localIconStyle].raw;
+  return icon.svgs[localIconFamily][localIconStyle];
 };
 
 export const getIconFamilyAndStyleName = (

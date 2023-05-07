@@ -61,8 +61,8 @@ import { DialogWithTransition } from "../../app/ui/dialog";
 import DiscardChangesDialog from "../../app/ui/discardChangesDialog";
 import "./colourPicker.css";
 import {
-  getDefaultFamilyForIconByName,
-  getDefaultStyleForIconByName,
+  getDefaultFamilyByIconName,
+  getDefaultStyleByIconName,
   getIconFamilyAndStyleName,
   getIconLabelByName,
 } from "./font-awesome/fontAwesome";
@@ -83,12 +83,12 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
     icon_family: getStringOrDefaultForSymbologyField(
       symbol,
       "icon_family",
-      getDefaultFamilyForIconByName(icon)
+      getDefaultFamilyByIconName(icon)
     ),
     icon_style: getStringOrDefaultForSymbologyField(
       symbol,
       "icon_style",
-      getDefaultStyleForIconByName(icon)
+      getDefaultStyleByIconName(icon)
     ),
     size: getNumberOrDefaultForSymbologyField(
       symbol,

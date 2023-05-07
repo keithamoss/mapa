@@ -33,10 +33,10 @@ import { useUnmount } from "../../app/hooks/useUnmount";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import { defaultNakedDialogColour } from "../../app/ui/theme";
 import {
-  getCategoriesMetadata,
+  getCategories,
   getCategoryLabelByName,
-  getIconsBySearchTermAndMaybeCategory,
   getIconsForCategory,
+  searchIcons,
 } from "./font-awesome/fontAwesome";
 import SymbologyIconFamilyAndStyleChooser from "./symbologyIconFamilyAndStyleChooser";
 
@@ -150,7 +150,7 @@ function SymbologyIconChooser(props: Props) {
 
   const iconSearchResults =
     iconSearchTerm !== ""
-      ? getIconsBySearchTermAndMaybeCategory(iconSearchTerm, chosenIconCategory)
+      ? searchIcons(iconSearchTerm, chosenIconCategory)
       : [];
 
   return (
@@ -299,7 +299,7 @@ function SymbologyIconChooser(props: Props) {
                 bgcolor: "background.paper",
               }}
             >
-              {getCategoriesMetadata().map((category) => (
+              {Object.values(getCategories()).map((category) => (
                 <ListItem key={category.name} disablePadding>
                   <ListItemButton onClick={onChooseIconCategory(category.name)}>
                     <ListItemAvatar>
@@ -311,7 +311,11 @@ function SymbologyIconChooser(props: Props) {
                           "& > img": { width: 25, height: 25 },
                         }}
                       >
-                        {getFontAwesomeIconFromLibraryAsSVGImage(category.icon)}
+                        {getFontAwesomeIconFromLibraryAsSVGImage(
+                          category.hero_icon,
+                          "classic",
+                          "solid"
+                        )}
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={category.label} />
