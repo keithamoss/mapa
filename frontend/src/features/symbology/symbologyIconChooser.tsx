@@ -1,15 +1,16 @@
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ClearIcon from "@mui/icons-material/Clear";
+
 import CloseIcon from "@mui/icons-material/Close";
 
 import {
   Avatar,
-  Box,
+  Button,
   DialogTitle,
   FormControl,
   Grid,
   IconButton,
   InputLabel,
-  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -20,7 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getFontAwesomeIconFromLibraryAsSVGImage } from "./symbologyHelpers";
 
 import { grey } from "@mui/material/colors";
@@ -28,34 +29,18 @@ import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import { debounce } from "lodash-es";
 import React from "react";
-import { usePrevious } from "../../app/hooks/usePrevious";
 import { useUnmount } from "../../app/hooks/useUnmount";
 import { DialogWithTransition } from "../../app/ui/dialog";
-import "./colourPicker.css";
 import {
-  IconFamilyStyle,
-  getCategoriesForIcon,
   getCategoriesMetadata,
   getCategoryLabelByName,
-  getIconAvailableStyles,
-  getIconFamilyAndStyleName,
-  getIconLabelByName,
   getIconsBySearchTermAndMaybeCategory,
   getIconsForCategory,
 } from "./font-awesome/fontAwesome";
-
-const enum IconChooserPage {
-  AllCategories,
-  IconsInCategory,
-  IconSearchResults,
-  IconFamilyAndStyleChooser,
-}
+import SymbologyIconFamilyAndStyleChooser from "./symbologyIconFamilyAndStyleChooser";
 
 interface Props {
   selectedIcon?: string;
-  selectedIconFamily?: string;
-  selectedIconStyle?: string;
-  openAtFamilyAndStyleChooser: boolean;
   onChoose: (icon: string, icon_family: string, icon_style: string) => void;
   onClose: () => void;
 }
@@ -64,50 +49,10 @@ function SymbologyIconChooser(props: Props) {
   console.log("### SymbologyIconChooser ###");
 
   const {
-    selectedIcon,
-    // selectedIconFamily,
-    // selectedIconStyle,
-    openAtFamilyAndStyleChooser,
+    // selectedIcon,
     onChoose,
     onClose,
   } = props;
-
-  // ######################
-  // Hacky Page History
-  // ######################
-  const [selectedPage, setSelectedPage] = useState(
-    openAtFamilyAndStyleChooser === true
-      ? IconChooserPage.IconFamilyAndStyleChooser
-      : IconChooserPage.AllCategories
-  );
-
-  const previousSelectedPage = usePrevious(selectedPage);
-
-  const pageHistory: IconChooserPage[] = useMemo(() => [], []);
-
-  useEffect(() => {
-    if (previousSelectedPage !== undefined) {
-      pageHistory.push(previousSelectedPage);
-    }
-  }, [pageHistory, previousSelectedPage]);
-
-  const getLastPageExceptFor = (pageToIgnore: IconChooserPage) => {
-    const filteredPageHistory = pageHistory.filter(
-      (page) => page !== pageToIgnore
-    );
-    return filteredPageHistory[filteredPageHistory.length - 1];
-  };
-
-  const navigateToPreviousPageFromSearchResults = () => {
-    if (previousSelectedPage !== undefined) {
-      setSelectedPage(getLastPageExceptFor(IconChooserPage.IconSearchResults));
-    } else {
-      setSelectedPage(IconChooserPage.AllCategories);
-    }
-  };
-  // ######################
-  // Hacky Page History (End)
-  // ######################
 
   // ######################
   // Icon Searching
@@ -117,9 +62,11 @@ function SymbologyIconChooser(props: Props) {
   const onIconSearchInputChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
-    setSelectedPage(IconChooserPage.IconSearchResults);
-
-    setIconSearchTerm(event.target.value);
+    if (event.target.value.length >= 3) {
+      setIconSearchTerm(event.target.value);
+    } else if (event.target.value.length === 0) {
+      setIconSearchTerm("");
+    }
   };
 
   // https://dmitripavlutin.com/react-throttle-debounce/
@@ -138,10 +85,8 @@ function SymbologyIconChooser(props: Props) {
   const onClearIconSearchInput = () => {
     if (textInput.current !== null) {
       textInput.current.value = "";
+      setIconSearchTerm("");
     }
-
-    setIconSearchTerm("");
-    navigateToPreviousPageFromSearchResults();
   };
   // ######################
   // Icon Searching (End)
@@ -156,20 +101,10 @@ function SymbologyIconChooser(props: Props) {
 
   const onChooseIconCategory = (categoryName: string) => () => {
     setChosenIconCategory(categoryName);
-    setSelectedPage(IconChooserPage.IconsInCategory);
   };
 
-  const onChooseIconCategoryFromQuickLinks = (categoryName: string) => () => {
-    setIconChosen(undefined);
-    setChosenIconCategory(categoryName);
-    setSelectedPage(IconChooserPage.IconsInCategory);
-  };
-
-  const onChooseNavigateToAllCategories = () => () => {
+  const onChooseNavigateToAllCategories = () =>
     setChosenIconCategory(undefined);
-    setIconSearchTerm("");
-    setSelectedPage(IconChooserPage.AllCategories);
-  };
   // ######################
   // Icon Categories (End)
   // ######################
@@ -177,36 +112,56 @@ function SymbologyIconChooser(props: Props) {
   // ######################
   // Icon Choosing
   // ######################
-  const [iconChosen, setIconChosen] = useState<string | undefined>(
-    selectedIcon !== undefined ? selectedIcon : undefined
-  );
+  const [iconName, setIconName] = useState<string | undefined>(undefined);
 
   const onChooseIcon = (iconName: string) => () => {
-    setIconChosen(iconName);
-    setSelectedPage(IconChooserPage.IconFamilyAndStyleChooser);
+    setIconName(iconName);
+    setIsIconFamilyAndStyleChooserOpen(true);
   };
-
-  const onChooseIconFamilyAndStyleFromIconChoosingPath =
-    (familyStyle: IconFamilyStyle) => () => {
-      if (iconChosen !== undefined) {
-        setChosenIconCategory(undefined);
-        setIconSearchTerm("");
-        setIconChosen(undefined);
-
-        onChoose(iconChosen, familyStyle.family, familyStyle.style);
-      }
-    };
   // ######################
   // Icon Choosing (End)
   // ######################
 
+  // ######################
+  // Icon Family and Style Choosing
+  // ######################
+  const [isIconFamilyAndStyleChooserOpen, setIsIconFamilyAndStyleChooserOpen] =
+    useState(false);
+
+  const onChooseIconFamilyAndStyle = (
+    icon_family: string,
+    icon_style: string
+  ) => {
+    if (iconName !== undefined) {
+      setChosenIconCategory(undefined);
+      setIconSearchTerm("");
+      setIconName(undefined);
+
+      onChoose(iconName, icon_family, icon_style);
+    }
+  };
+
+  const onCloseIconFamilyAndStyleChooser = () =>
+    setIsIconFamilyAndStyleChooserOpen(false);
+  // ######################
+  // Icon Family and Style Choosing (End)
+  // ######################
+
   const iconSearchResults =
-    selectedPage === IconChooserPage.IconSearchResults
+    iconSearchTerm !== ""
       ? getIconsBySearchTermAndMaybeCategory(iconSearchTerm, chosenIconCategory)
       : [];
 
   return (
     <React.Fragment>
+      {isIconFamilyAndStyleChooserOpen === true && iconName !== undefined && (
+        <SymbologyIconFamilyAndStyleChooser
+          selectedIcon={iconName}
+          onChoose={onChooseIconFamilyAndStyle}
+          onClose={onCloseIconFamilyAndStyleChooser}
+        />
+      )}
+
       <DialogWithTransition>
         <DialogTitle>
           <IconButton
@@ -253,7 +208,7 @@ function SymbologyIconChooser(props: Props) {
               onChange={debouncedOnIconSearchInputChange}
               endAdornment={
                 iconSearchTerm.length > 0 ? (
-                  <CloseIcon
+                  <ClearIcon
                     sx={{ color: grey[500] }}
                     onClick={onClearIconSearchInput}
                   />
@@ -265,221 +220,10 @@ function SymbologyIconChooser(props: Props) {
 
           {/* 
           ############################################
-          Display the available icon categories
-          ############################################
-          */}
-          {selectedPage === IconChooserPage.AllCategories && (
-            <List
-              sx={{
-                width: "100%",
-                maxWidth: 360,
-                bgcolor: "background.paper",
-              }}
-            >
-              {getCategoriesMetadata().map((category) => (
-                <ListItem key={category.name} disablePadding>
-                  <ListItemButton onClick={onChooseIconCategory(category.name)}>
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: grey[50],
-                          width: "45px",
-                          height: "45px",
-                          "& > img": { width: 25, height: 25 },
-                        }}
-                      >
-                        {getFontAwesomeIconFromLibraryAsSVGImage(category.icon)}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={category.label} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          )}
-
-          {/* 
-          ############################################
-          Display the icons within your chosen category
-          ############################################
-          */}
-          {selectedPage === IconChooserPage.IconsInCategory &&
-            chosenIconCategory !== undefined && (
-              <React.Fragment>
-                {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
-                <Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
-                  <Grid container direction="row" alignItems="center">
-                    <Grid item>
-                      <CategoryOutlinedIcon sx={{ verticalAlign: "middle" }} />
-                    </Grid>
-                    <Grid item sx={{ mr: 1, flexGrow: 1 }}>
-                      <Link
-                        component="button"
-                        variant="body2"
-                        sx={{ pl: 1 }}
-                        onClick={onChooseNavigateToAllCategories()}
-                      >
-                        All Categories
-                      </Link>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                <Typography variant="h6" sx={{ mt: 1 }}>
-                  {getCategoryLabelByName(chosenIconCategory)}
-                </Typography>
-
-                <List
-                  sx={{
-                    width: "100%",
-                    maxWidth: 360,
-                    bgcolor: "background.paper",
-                  }}
-                >
-                  {getIconsForCategory(chosenIconCategory).map((icon) => (
-                    <ListItem key={icon.name} disablePadding>
-                      <ListItemButton onClick={onChooseIcon(icon.name)}>
-                        <ListItemAvatar>
-                          <Avatar
-                            sx={{
-                              bgcolor: grey[50],
-                              width: "45px",
-                              height: "45px",
-                              "& > img": { width: 25, height: 25 },
-                            }}
-                          >
-                            {getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={icon.label} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
-              </React.Fragment>
-            )}
-
-          {/* 
-          ############################################
-          Choose from the available styles for an icon
-          ############################################
-          */}
-          {selectedPage === IconChooserPage.IconFamilyAndStyleChooser &&
-            iconChosen !== undefined && (
-              <React.Fragment>
-                {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
-                <Grid container direction="column" sx={{ mt: 1 }}>
-                  <Grid container direction="row" alignItems="center">
-                    <Grid item sx={{ mr: 1, flexGrow: 1 }}>
-                      <CategoryOutlinedIcon sx={{ verticalAlign: "middle" }} />
-                      <Link
-                        component="button"
-                        variant="body2"
-                        sx={{ pl: 1 }}
-                        onClick={onChooseNavigateToAllCategories()}
-                      >
-                        All Categories
-                      </Link>
-                      {getCategoriesForIcon(iconChosen).map((category) => (
-                        <Link
-                          key={category.name}
-                          component="button"
-                          variant="body2"
-                          sx={{ pl: 1 }}
-                          onClick={onChooseIconCategoryFromQuickLinks(
-                            category.name
-                          )}
-                        >
-                          {category.label}
-                        </Link>
-                      ))}
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
-                <Grid container direction="column" sx={{ mt: 1 }}>
-                  <Grid container direction="row" alignItems="center">
-                    <Grid item sx={{ flexGrow: 1 }}>
-                      <Typography variant="h6">
-                        {getIconLabelByName(iconChosen)}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                <Box sx={{ width: "100%" }}>
-                  <Grid container spacing={1}>
-                    {getIconAvailableStyles(iconChosen).map(
-                      (familyStyle, index) => {
-                        return (
-                          <Grid
-                            key={`${familyStyle.family}_${familyStyle.style}`}
-                            item
-                            xs={6}
-                            sx={{
-                              //   Avoid padding on the first column so elements aren't offset a wee bit too much to the right on this two column layout
-                              pl:
-                                index % 2 === 0
-                                  ? "0 !important"
-                                  : "1 !important",
-                            }}
-                            onClick={onChooseIconFamilyAndStyleFromIconChoosingPath(
-                              familyStyle
-                            )}
-                          >
-                            <Paper
-                              elevation={0}
-                              sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                padding: 1,
-                                minHeight: "116px",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  pb: 1,
-                                  "& > img": {
-                                    height: 40,
-                                    width: 40,
-                                  },
-                                }}
-                              >
-                                {getFontAwesomeIconFromLibraryAsSVGImage(
-                                  iconChosen,
-                                  familyStyle.family,
-                                  familyStyle.style
-                                )}
-                              </Box>
-
-                              <Typography
-                                variant="subtitle2"
-                                sx={{ textAlign: "center" }}
-                              >
-                                {getIconFamilyAndStyleName(
-                                  familyStyle.family,
-                                  familyStyle.style
-                                )}
-                              </Typography>
-                            </Paper>
-                          </Grid>
-                        );
-                      }
-                    )}
-                  </Grid>
-                </Box>
-              </React.Fragment>
-            )}
-
-          {/* 
-          ############################################
           Display the icon search results
           ############################################
           */}
-          {selectedPage === IconChooserPage.IconSearchResults && (
+          {iconSearchTerm !== "" && (
             <List
               sx={{
                 width: "100%",
@@ -539,6 +283,98 @@ function SymbologyIconChooser(props: Props) {
                 );
               })}
             </List>
+          )}
+
+          {/* 
+          ############################################
+          Display the available icon categories
+          ############################################
+          */}
+          {chosenIconCategory === undefined && iconSearchTerm === "" && (
+            <List
+              sx={{
+                width: "100%",
+                maxWidth: 360,
+                bgcolor: "background.paper",
+              }}
+            >
+              {getCategoriesMetadata().map((category) => (
+                <ListItem key={category.name} disablePadding>
+                  <ListItemButton onClick={onChooseIconCategory(category.name)}>
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          bgcolor: grey[50],
+                          width: "45px",
+                          height: "45px",
+                          "& > img": { width: 25, height: 25 },
+                        }}
+                      >
+                        {getFontAwesomeIconFromLibraryAsSVGImage(category.icon)}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={category.label} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {/* 
+          ############################################
+          Display the icons within your chosen category
+          ############################################
+          */}
+          {chosenIconCategory !== undefined && iconSearchTerm === "" && (
+            <React.Fragment>
+              {/* Flexbox wrapping a row flex in a column flex appears to be the only way to use Flexbox to take up all vertical *and* horizontal space. Other recommendations were to use CSS Grid or - maybe - wait until MUI takes their Grid 2 component out of beta. */}
+              <Grid container direction="column" sx={{ mt: 1 }}>
+                <Grid container direction="row" alignItems="center">
+                  <Grid item sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6">
+                      {getCategoryLabelByName(chosenIconCategory)}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="outlined"
+                      startIcon={<ArrowBackIcon />}
+                      onClick={onChooseNavigateToAllCategories}
+                    >
+                      Back
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <List
+                sx={{
+                  width: "100%",
+                  maxWidth: 360,
+                  bgcolor: "background.paper",
+                }}
+              >
+                {getIconsForCategory(chosenIconCategory).map((icon) => (
+                  <ListItem key={icon.name} disablePadding>
+                    <ListItemButton onClick={onChooseIcon(icon.name)}>
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{
+                            bgcolor: grey[50],
+                            width: "45px",
+                            height: "45px",
+                            "& > img": { width: 25, height: 25 },
+                          }}
+                        >
+                          {getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={icon.label} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </React.Fragment>
           )}
         </Paper>
       </DialogWithTransition>

@@ -67,6 +67,7 @@ import {
 } from "./font-awesome/fontAwesome";
 import SliderFixed from "./sliderFixed";
 import SymbologyIconChooser from "./symbologyIconChooser";
+import SymbologyIconFamilyAndStyleChooser from "./symbologyIconFamilyAndStyleChooser";
 
 const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
   const icon = getStringOrDefaultForSymbologyField(
@@ -260,23 +261,11 @@ function SymbologyFieldEditor(props: Props) {
   // ######################
   // Icon Chooser Dialog
   // ######################
-  const [isIconSymbologyChooserOpen, setIsIconSymbologyChooserOpen] =
-    useState(false);
+  const [isIconChooserOpen, setIsIconChooserOpen] = useState(false);
 
-  const [openAtFamilyAndStyleChooser, setOpenAtFamilyAndStyleChooser] =
-    useState(false);
+  const onOpenIconChooser = () => setIsIconChooserOpen(true);
 
-  const onOpenSymbologyIconChooser = () => {
-    setOpenAtFamilyAndStyleChooser(false);
-    setIsIconSymbologyChooserOpen(true);
-  };
-
-  const onOpenSymbologyIconChooserAtFamilyAndStyleChooser = () => {
-    setOpenAtFamilyAndStyleChooser(true);
-    setIsIconSymbologyChooserOpen(true);
-  };
-
-  const onChooseIconFamilyAndStyleFromSymbologyIconChooser = (
+  const onChooseIconFromIconChooser = (
     icon: string,
     icon_family: string,
     icon_style: string
@@ -284,25 +273,53 @@ function SymbologyFieldEditor(props: Props) {
     setValue("icon", icon);
     setValue("icon_family", icon_family);
     setValue("icon_style", icon_style);
-    setIsIconSymbologyChooserOpen(false);
+    setIsIconChooserOpen(false);
   };
 
-  const onCloseSymbologyIconChooser = () =>
-    setIsIconSymbologyChooserOpen(false);
+  const onCloseSymbologyIconChooser = () => setIsIconChooserOpen(false);
   // ######################
   // Icon Chooser Dialog (End)
   // ######################
 
+  // ######################
+  // Icon Family and Style Choosing
+  // ######################
+  const [isIconFamilyAndStyleChooserOpen, setIsIconFamilyAndStyleChooserOpen] =
+    useState(false);
+
+  const onOpenIconFamilyAndStyleChooser = () =>
+    setIsIconFamilyAndStyleChooserOpen(true);
+
+  const onChooseIconFamilyAndStyle = (
+    icon_family: string,
+    icon_style: string
+  ) => {
+    setValue("icon_family", icon_family);
+    setValue("icon_style", icon_style);
+    setIsIconFamilyAndStyleChooserOpen(false);
+  };
+
+  const onCloseFamilyAndStyleChooser = () =>
+    setIsIconFamilyAndStyleChooserOpen(false);
+  // ######################
+  // Icon Family and Style Choosing (End)
+  // ######################
+
   return (
     <React.Fragment>
-      {isIconSymbologyChooserOpen === true && (
+      {isIconChooserOpen === true && (
         <SymbologyIconChooser
           selectedIcon={icon}
-          selectedIconFamily={icon_family}
-          selectedIconStyle={icon_style}
-          openAtFamilyAndStyleChooser={openAtFamilyAndStyleChooser}
-          onChoose={onChooseIconFamilyAndStyleFromSymbologyIconChooser}
+          onChoose={onChooseIconFromIconChooser}
           onClose={onCloseSymbologyIconChooser}
+        />
+      )}
+
+      {isIconFamilyAndStyleChooserOpen === true && icon !== undefined && (
+        <SymbologyIconFamilyAndStyleChooser
+          selectedIcon={icon}
+          onChoose={onChooseIconFamilyAndStyle}
+          onClose={onCloseFamilyAndStyleChooser}
         />
       )}
 
@@ -412,7 +429,7 @@ function SymbologyFieldEditor(props: Props) {
                   value={icon || ""}
                   SelectProps={{
                     open: false,
-                    onClick: onOpenSymbologyIconChooser,
+                    onClick: onOpenIconChooser,
                   }}
                   InputProps={{
                     startAdornment:
@@ -446,10 +463,11 @@ function SymbologyFieldEditor(props: Props) {
                 <TextField
                   label="Style"
                   select
+                  disabled={icon === undefined}
                   value={`${icon_family}_${icon_style}` || ""}
                   SelectProps={{
                     open: false,
-                    onClick: onOpenSymbologyIconChooserAtFamilyAndStyleChooser,
+                    onClick: onOpenIconFamilyAndStyleChooser,
                   }}
                   InputProps={{
                     startAdornment:
