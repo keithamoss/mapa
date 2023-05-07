@@ -24,7 +24,7 @@ import {
   defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
   getFontAwesomeIconForSymbolPreview,
-  getSymbolFromSchemaSymbologyGroup,
+  getSymbolFromSchemaSymbology,
   modifySymbolInGroup,
 } from "../../symbology/symbologyHelpers";
 import SchemaSymbologyChooser from "./schemaSymbologyChooser";
@@ -165,7 +165,7 @@ function SchemaDataEntrySymbology(props: Props) {
 
   const selectedSymbol =
     symbolId !== null
-      ? getSymbolFromSchemaSymbologyGroup(symbolId, schema.symbology)
+      ? getSymbolFromSchemaSymbology(symbolId, schema.symbology)
       : undefined;
 
   return (

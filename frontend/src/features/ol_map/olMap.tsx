@@ -20,7 +20,12 @@ import {
   useGetFeaturesForMapQuery,
   useUpdateFeatureMutation,
 } from "../../app/services/features";
-import { OLMapView, setMapView, setSelectedFeatures } from "../app/appSlice";
+import {
+  OLMapView,
+  getFilteredFeatureIds,
+  setMapView,
+  setSelectedFeatures,
+} from "../app/appSlice";
 import { selectMapById } from "../maps/mapsSlice";
 import { selectAllFeatureSchemas } from "../schemas/schemasSlice";
 import LocationFetchingIndicator from "./locationFetchingIndicator";
@@ -47,12 +52,33 @@ interface Props {
 const defaultZoomLevel = 18;
 const mapTargetElementId = "map";
 
+const getFeatures = (
+  filteredFeatureIds: number[],
+  features?: {
+    [key: number]: Feature;
+  }
+) => {
+  if (features === undefined) {
+    return [];
+  }
+
+  if (filteredFeatureIds.length === 0) {
+    return Object.values(features);
+  }
+
+  return Object.values(features).filter((f) =>
+    filteredFeatureIds.includes(f.id)
+  );
+};
+
 function OLMap(props: Props) {
   console.log("### OLMap ###");
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
+
+  const filteredFeatureIds = useAppSelector(getFilteredFeatureIds);
 
   const { mapId } = props;
 
@@ -103,7 +129,7 @@ function OLMap(props: Props) {
 
   // R1 when features are retrieved
   const { data: features } = useGetFeaturesForMapQuery(mapId);
-  const mapFeatures = Object.values(features || []);
+  const mapFeatures = getFeatures(filteredFeatureIds, features);
 
   let vectorLayer = useRef<VectorLayer<VectorSource<Geometry>> | undefined>(
     undefined
@@ -326,7 +352,7 @@ function OLMap(props: Props) {
     // but that's OK because we don't need it to re - render the component when olMapRef.current changes - we just need
     // this to run as part of this re-rendering of the component and have it react to olMap now being set.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [olMapRef.current, map, features, featureSchemas]);
+  }, [olMapRef.current, map, features, featureSchemas, mapFeatures]);
 
   // R7
   // Manage the vector layer with the user's current position

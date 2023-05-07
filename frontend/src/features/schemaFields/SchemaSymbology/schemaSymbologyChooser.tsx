@@ -25,7 +25,7 @@ import {
   defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
   getFontAwesomeIconForSymbolPreview,
-  getSymbolFromSchemaSymbologyGroup,
+  getSymbolFromSchemaSymbology,
   getSymbolGroups,
   getSymbologyGroupById,
 } from "../../symbology/symbologyHelpers";
@@ -69,7 +69,7 @@ const getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema = (
     .slice(0, 3)
     .map((i) =>
       i.symbolId !== null
-        ? getSymbolFromSchemaSymbologyGroup(i.symbolId, symbology)
+        ? getSymbolFromSchemaSymbology(i.symbolId, symbology)
         : null
     );
 

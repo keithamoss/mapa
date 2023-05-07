@@ -21,7 +21,7 @@ import {
 import {
   getAppDefaultSymbologyConfig,
   getFontAwesomeIconForSymbolAsSVGString,
-  getSymbolFromSchemaSymbologyGroup,
+  getSymbolFromSchemaSymbology,
 } from "../symbology/symbologyHelpers";
 
 export const getIconForSymbologyConfig = (
@@ -73,7 +73,7 @@ export const olStyleFunction = (
 
     // Add in any symbology config present in the schema symbology
     if (feature.symbol_id !== null) {
-      const symbol = getSymbolFromSchemaSymbologyGroup(
+      const symbol = getSymbolFromSchemaSymbology(
         feature.symbol_id,
         schema.symbology
       );

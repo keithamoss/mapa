@@ -8,6 +8,7 @@ import MapManager from "../../features/maps/mapsManager";
 import SchemaCreator from "../../features/schemas/schemaCreator";
 import SchemaEditor from "../../features/schemas/schemaEditor";
 import SchemaManager from "../../features/schemas/schemaManager";
+import SearchManager from "../../features/search/searchManager";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
       {
         path: "FeatureManager/Edit/:featureId",
         element: <FeatureEditor />,
+      },
+      {
+        path: "SearchManager",
+        element: <SearchManager />,
       },
     ],
   },

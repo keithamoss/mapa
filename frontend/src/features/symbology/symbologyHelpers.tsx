@@ -1,4 +1,5 @@
 import {
+  FeatureSchema,
   FeatureSchemaSymbology,
   FeatureSchemaSymbologyGroup,
   FeatureSchemaSymbologySymbolsValue,
@@ -368,7 +369,16 @@ export const removeSymbolFromGroup = (
   return local_symbology;
 };
 
-export const getSymbolFromSchemaSymbologyGroup = (
+export const getSymbolFromSchemaSymbology = (
   symbolId: number,
   symbology: FeatureSchemaSymbology
 ) => symbology.symbols.find((s) => s.id === symbolId);
+
+export const getSymbolNameBySymbolId = (
+  symbolId: number,
+  schema: FeatureSchema
+) => {
+  const symbol = getSymbolFromSchemaSymbology(symbolId, schema.symbology);
+
+  return symbol !== undefined ? symbol.props.name : null;
+};

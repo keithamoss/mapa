@@ -1,12 +1,39 @@
 import { Schema } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from "@mui/icons-material/Map";
 import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { Badge, SpeedDialIcon, styled } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
+import SpeedDialAction, {
+  SpeedDialActionProps,
+} from "@mui/material/SpeedDialAction";
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks/store";
+import { getCountOfFilteredFeatureIds } from "./appSlice";
+
+const SpeedDialActionWithOptionalBadge = (
+  props: SpeedDialActionProps & { badgeCount?: number }
+) => {
+  const { badgeCount, ...rest } = props;
+
+  return (
+    <SpeedDialAction
+      {...rest}
+      icon={
+        badgeCount !== undefined && badgeCount >= 1 ? (
+          <Badge badgeContent={badgeCount} color="primary">
+            {rest.icon}
+          </Badge>
+        ) : (
+          rest.icon
+        )
+      }
+    />
+  );
+};
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -35,6 +62,14 @@ const actions = [
     ),
     name: "Schemas",
   },
+  {
+    icon: (
+      <Link to="/SearchManager">
+        <SearchIcon color="primary" />
+      </Link>
+    ),
+    name: "Search",
+  },
 ];
 
 interface Props {
@@ -54,22 +89,27 @@ export default function SpeedDialNavigation(props: Props) {
     setOpen(false);
   };
 
+  const searchResultCount = useAppSelector(getCountOfFilteredFeatureIds);
+
   return (
     <React.Fragment>
       <Backdrop open={open} />
       <StyledSpeedDial
         ariaLabel="The primary navigation element for the app"
-        icon={<MenuIcon />}
+        icon={<SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />}
         onClose={handleClose}
         onOpen={handleOpen}
         open={open}
       >
         {actions.map((action) => (
-          <SpeedDialAction
+          <SpeedDialActionWithOptionalBadge
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
             onClick={onActionClick(action.name)}
+            badgeCount={
+              action.name === "Search" ? searchResultCount : undefined
+            }
           />
         ))}
       </StyledSpeedDial>
