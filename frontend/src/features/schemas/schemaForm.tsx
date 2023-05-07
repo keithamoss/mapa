@@ -38,6 +38,7 @@ import {
   SymbologyProps,
 } from "../../app/services/schemas";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import DiscardChangesDialog from "../../app/ui/discardChangesDialog";
 import { selectActiveMapId } from "../app/appSlice";
 import SchemaFieldCreatorAndEditor from "../schemaFields/schemaFieldCreatorAndEditor";
 import SchemaFieldListManager from "../schemaFields/schemaFieldListManager";
@@ -77,7 +78,7 @@ function SchemaForm(props: Props) {
     setValue,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<FeatureSchemaModifiableProps>({
     resolver: yupResolver(schemaFormValidationSchema),
     defaultValues: {
@@ -108,7 +109,7 @@ function SchemaForm(props: Props) {
   };
 
   const onDoneSettingDefaultSymbol = (symbolField: SymbologyProps) => {
-    setValue("default_symbology", symbolField);
+    setValue("default_symbology", symbolField, { shouldDirty: true });
     setIsSettingDefaultSymbol(false);
   };
 
@@ -122,33 +123,33 @@ function SchemaForm(props: Props) {
   // ######################
   const onAddSymbolGroup = (groupName: string) => {
     const local_symbology = addNewSymbologyGroup(groupName, symbology);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
   const onEditSymbolGroup = (groupId: number, groupName: string) => {
     const local_symbology = editSymbologyGroup(groupId, groupName, symbology);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
   const onAddSymbol = (symbol: SymbologyProps, groupId: number) => {
     const [local_symbology] = addSymbolToGroup(symbol, symbology, groupId);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
   const onEditSymbol = (symbol: FeatureSchemaSymbologySymbolsValue) => {
     const local_symbology = modifySymbolInGroup(symbol, symbology);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
   const onDeleteSymbol = (symbolId: number, groupId: number) => {
     const local_symbology = removeSymbolFromGroup(symbolId, symbology);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
   const onFavouriteSymbol = (symbolId: number) => {
     if (mapId !== undefined) {
       const local_symbology = favouriteSymbolForMap(symbolId, mapId, symbology);
-      setValue("symbology", local_symbology);
+      setValue("symbology", local_symbology, { shouldDirty: true });
     }
   };
 
@@ -159,13 +160,13 @@ function SchemaForm(props: Props) {
         mapId,
         symbology
       );
-      setValue("symbology", local_symbology);
+      setValue("symbology", local_symbology, { shouldDirty: true });
     }
   };
 
   const onRearrangeSymbolsToGroup = (symbolIds: number[], groupId: number) => {
     const local_symbology = moveSymbolsToGroup(symbolIds, groupId, symbology);
-    setValue("symbology", local_symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
   };
   // ######################
   // Symbology (End)
@@ -195,13 +196,17 @@ function SchemaForm(props: Props) {
   const onDoneAddingField = (
     field: NewFeatureSchemaFieldDefinitionCollection
   ) => {
-    setValue("definition", [
-      ...(definition || []),
-      {
-        ...field,
-        id: getNextSchemaFieldId(definition),
-      } as FeatureSchemaFieldDefinitionCollection,
-    ]);
+    setValue(
+      "definition",
+      [
+        ...(definition || []),
+        {
+          ...field,
+          id: getNextSchemaFieldId(definition),
+        } as FeatureSchemaFieldDefinitionCollection,
+      ],
+      { shouldDirty: true }
+    );
 
     setFieldTypeToAdd(undefined);
     setIsAddFieldTypeChooserOpen(false);
@@ -212,7 +217,7 @@ function SchemaForm(props: Props) {
   const onFieldChange = (
     definition: FeatureSchemaFieldDefinitionCollection[]
   ) => {
-    setValue("definition", definition);
+    setValue("definition", definition, { shouldDirty: true });
   };
   // ######################
   // Fields (End)
@@ -236,7 +241,7 @@ function SchemaForm(props: Props) {
     }
   };
 
-  const onCancelForm = () => {
+  const onClose = () => {
     if (onCancel === undefined) {
       navigate(-1);
     } else {
@@ -244,8 +249,31 @@ function SchemaForm(props: Props) {
     }
   };
 
+  const onCancelForm = () => {
+    if (isDirty === true) {
+      setIsDiscardChangesDialogShown(true);
+    } else {
+      onClose();
+    }
+  };
+
+  const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] =
+    useState(false);
+
+  const onConfirmDiscardChanges = () => onClose();
+
+  const onCancelDiscardChangesDialog = () =>
+    setIsDiscardChangesDialogShown(false);
+
   return (
     <React.Fragment>
+      {isDiscardChangesDialogShown === true && (
+        <DiscardChangesDialog
+          onNo={onCancelDiscardChangesDialog}
+          onYes={onConfirmDiscardChanges}
+        />
+      )}
+
       <DialogWithTransition onClose={onCancelForm}>
         <AppBar sx={{ position: "sticky" }}>
           <Toolbar>

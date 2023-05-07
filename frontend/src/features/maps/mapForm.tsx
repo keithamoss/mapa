@@ -33,6 +33,7 @@ import { useAppSelector } from "../../app/hooks/store";
 import { Map, MapModifiableProps, NewMap } from "../../app/services/maps";
 import { SymbologyProps } from "../../app/services/schemas";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import DiscardChangesDialog from "../../app/ui/discardChangesDialog";
 import { selectAllFeatureSchemas } from "../schemas/schemasSlice";
 import SymbologyFieldEditor from "../symbology/symbologyFieldEditor";
 
@@ -56,7 +57,7 @@ function MapForm(props: Props) {
     setValue,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<MapModifiableProps>({
     resolver: yupResolver(mapFormValidationSchema),
     defaultValues: {
@@ -78,7 +79,7 @@ function MapForm(props: Props) {
   };
 
   const onDoneSettingDefaultSymbol = (symbolField: SymbologyProps) => {
-    setValue("default_symbology", symbolField);
+    setValue("default_symbology", symbolField, { shouldDirty: true });
     setIsSettingDefaultSymbol(false);
   };
 
@@ -103,12 +104,33 @@ function MapForm(props: Props) {
     }
   };
 
+  const onClose = () => navigate(-1);
+
   const onCancelForm = () => {
-    navigate(-1);
+    if (isDirty === true) {
+      setIsDiscardChangesDialogShown(true);
+    } else {
+      onClose();
+    }
   };
+
+  const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] =
+    useState(false);
+
+  const onConfirmDiscardChanges = () => onClose();
+
+  const onCancelDiscardChangesDialog = () =>
+    setIsDiscardChangesDialogShown(false);
 
   return (
     <React.Fragment>
+      {isDiscardChangesDialogShown === true && (
+        <DiscardChangesDialog
+          onNo={onCancelDiscardChangesDialog}
+          onYes={onConfirmDiscardChanges}
+        />
+      )}
+
       <DialogWithTransition onClose={onCancelForm}>
         <AppBar sx={{ position: "sticky" }}>
           <Toolbar>

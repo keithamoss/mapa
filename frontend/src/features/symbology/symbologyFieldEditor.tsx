@@ -58,6 +58,7 @@ import {
 import { IconFamily, IconStyle } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import DiscardChangesDialog from "../../app/ui/discardChangesDialog";
 import "./colourPicker.css";
 import {
   getDefaultFamilyForIconByName,
@@ -209,7 +210,7 @@ function SymbologyFieldEditor(props: Props) {
     setValue,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<SymbologyProps>({
     resolver: yupResolver(
       symbologyFormValidationSchema(nameFieldRequired, iconFieldRequired)
@@ -228,6 +229,8 @@ function SymbologyFieldEditor(props: Props) {
     secondary_colour,
     secondary_opacity,
   } = watch();
+
+  const textInput = useRef<HTMLInputElement>(null);
 
   const onChooseGroupId = (e: SelectChangeEvent<number>) => {
     const groupId = parseInt(`${e.target.value}`);
@@ -248,7 +251,7 @@ function SymbologyFieldEditor(props: Props) {
       onDone(dataWithDefaultsRemoved, selectedGroupId);
     } else {
       // Avoids SymbologyIconAutocomplete problems with undefined values
-      onCancel();
+      onClose();
     }
   };
 
@@ -256,7 +259,26 @@ function SymbologyFieldEditor(props: Props) {
     handleSubmit(onDoneWithForm)();
   };
 
-  const textInput = useRef<HTMLInputElement>(null);
+  const onClose = () => onCancel();
+
+  const onCancelForm = () => {
+    if (
+      isDirty === true ||
+      selectedGroupId !== (currentGroupId || defaultSymbologyGroupId)
+    ) {
+      setIsDiscardChangesDialogShown(true);
+    } else {
+      onClose();
+    }
+  };
+
+  const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] =
+    useState(false);
+
+  const onConfirmDiscardChanges = () => onClose();
+
+  const onCancelDiscardChangesDialog = () =>
+    setIsDiscardChangesDialogShown(false);
 
   // ######################
   // Icon Chooser Dialog
@@ -270,9 +292,9 @@ function SymbologyFieldEditor(props: Props) {
     icon_family: string,
     icon_style: string
   ) => {
-    setValue("icon", icon);
-    setValue("icon_family", icon_family);
-    setValue("icon_style", icon_style);
+    setValue("icon", icon, { shouldDirty: true });
+    setValue("icon_family", icon_family, { shouldDirty: true });
+    setValue("icon_style", icon_style, { shouldDirty: true });
     setIsIconChooserOpen(false);
   };
 
@@ -294,8 +316,8 @@ function SymbologyFieldEditor(props: Props) {
     icon_family: string,
     icon_style: string
   ) => {
-    setValue("icon_family", icon_family);
-    setValue("icon_style", icon_style);
+    setValue("icon_family", icon_family, { shouldDirty: true });
+    setValue("icon_style", icon_style, { shouldDirty: true });
     setIsIconFamilyAndStyleChooserOpen(false);
   };
 
@@ -307,6 +329,13 @@ function SymbologyFieldEditor(props: Props) {
 
   return (
     <React.Fragment>
+      {isDiscardChangesDialogShown === true && (
+        <DiscardChangesDialog
+          onNo={onCancelDiscardChangesDialog}
+          onYes={onConfirmDiscardChanges}
+        />
+      )}
+
       {isIconChooserOpen === true && (
         <SymbologyIconChooser
           selectedIcon={icon}
@@ -323,10 +352,10 @@ function SymbologyFieldEditor(props: Props) {
         />
       )}
 
-      <DialogWithTransition onClose={onCancel}>
+      <DialogWithTransition onClose={onCancelForm}>
         <AppBar sx={{ position: "sticky" }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={onCancel}>
+            <IconButton edge="start" color="inherit" onClick={onCancelForm}>
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
