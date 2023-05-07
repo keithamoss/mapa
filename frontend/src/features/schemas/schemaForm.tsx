@@ -31,6 +31,7 @@ import {
   FeatureSchema,
   FeatureSchemaFieldDefinitionCollection,
   FeatureSchemaFieldType,
+  FeatureSchemaFieldTypeLabel,
   FeatureSchemaModifiableProps,
   FeatureSchemaSymbologySymbolsValue,
   NewFeatureSchema,
@@ -461,7 +462,7 @@ function SchemaForm(props: Props) {
             <ButtonGroup orientation="vertical" variant="outlined" fullWidth>
               {Object.values(FeatureSchemaFieldType).map((value) => (
                 <Button key={value} onClick={onChooseFieldTypeToAdd(value)}>
-                  {value}
+                  {FeatureSchemaFieldTypeLabel[value]}
                 </Button>
               ))}
             </ButtonGroup>

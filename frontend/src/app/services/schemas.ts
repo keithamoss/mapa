@@ -57,6 +57,12 @@ export enum FeatureSchemaFieldType {
   SymbologyFieldBoolean = "symbology_field_boolean",
 }
 
+export enum FeatureSchemaFieldTypeLabel {
+  text_field = "Text field",
+  boolean_field = "Boolean field",
+  symbology_field_boolean = "Symbology field boolean",
+}
+
 export type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps = {
   name: string;
   default_value: string;

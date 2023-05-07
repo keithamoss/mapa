@@ -16,7 +16,10 @@ import {
   styled,
 } from "@mui/material";
 import React, { useState } from "react";
-import { FeatureSchemaFieldDefinitionCollection } from "../../app/services/schemas";
+import {
+  FeatureSchemaFieldDefinitionCollection,
+  FeatureSchemaFieldTypeLabel,
+} from "../../app/services/schemas";
 import { moveFieldDown, moveFieldUp } from "../schemas/schemaHelpers";
 import { getFieldFromSchemaById } from "../schemas/schemasSlice";
 import SchemaFieldCreatorAndEditor from "./schemaFieldCreatorAndEditor";
@@ -174,7 +177,10 @@ function SchemaFieldListManager(props: Props) {
             }
           >
             <ListItemButton onClick={onEditField(field.id)} disableGutters>
-              <ListItemText primary={field.name} secondary={field.type} />
+              <ListItemText
+                primary={field.name}
+                secondary={FeatureSchemaFieldTypeLabel[field.type]}
+              />
             </ListItemButton>
           </ListItem>
         ))}
