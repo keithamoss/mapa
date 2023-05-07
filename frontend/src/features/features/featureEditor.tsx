@@ -32,6 +32,7 @@ import { DialogWithTransition } from "../../app/ui/dialog";
 import { selectActiveMapId } from "../app/appSlice";
 import SchemaDataEntrySymbology from "../schemaFields/SchemaSymbology/schemaDataEntrySymbology";
 import SchemaFieldDataEntryManager from "../schemaFields/schemaFieldDataEntryManager";
+import SchemaFieldSummaryPanel from "../schemaFields/schemaFieldSummaryPanel";
 import { SchemaEditor } from "../schemas/schemaEditor";
 import SchemaSelectFormControls from "../schemas/schemaSelectFormControls";
 import { getSchemasAvailableForMap } from "../schemas/schemasSlice";
@@ -269,6 +270,24 @@ function FeatureEditor(props: Props) {
       </AppBar>
 
       <Paper elevation={0} sx={{ m: 3, mt: 2 }}>
+        {localFeature.data.length >= 1 && (
+          <FormControl
+            fullWidth={true}
+            sx={{ mb: 2 }}
+            component="fieldset"
+            variant="outlined"
+          >
+            <FormLabel component="legend">Feature Info</FormLabel>
+
+            {localFeature.schema_id !== null && (
+              <SchemaFieldSummaryPanel
+                schemaId={localFeature.schema_id}
+                feature={localFeature}
+              />
+            )}
+          </FormControl>
+        )}
+
         <FormControl
           fullWidth={true}
           sx={{ mb: 3 }}
