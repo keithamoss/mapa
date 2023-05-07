@@ -1,4 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
+import ForkRightIcon from "@mui/icons-material/ForkRight";
 import {
   AppBar,
   Button,
@@ -14,7 +15,15 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks/store";
+import { usePatchMapMutation } from "../../app/services/maps";
+import {
+  FeatureSchema,
+  FeatureSchemaModifiableProps,
+  useAddFeatureSchemaMutation,
+} from "../../app/services/schemas";
 import { DialogWithTransition } from "../../app/ui/dialog";
+import { selectActiveMapId } from "../app/appSlice";
+import { selectMapById } from "../maps/mapsSlice";
 import { selectAllFeatureSchemas } from "./schemasSlice";
 
 interface Props {}
@@ -26,12 +35,45 @@ function SchemaManager(props: Props) {
 
   const navigate = useNavigate();
 
+  const mapId = useAppSelector(selectActiveMapId);
+  const map = useAppSelector((state) =>
+    mapId !== undefined ? selectMapById(state, mapId) : undefined
+  );
+
   const onClickSchema = (schemaId: number) => () =>
     navigate(`/SchemaManager/Edit/${schemaId}/`);
 
   const onClose = () => navigate("/");
 
   const onCreate = () => navigate("/SchemaManager/Create");
+
+  // ######################
+  // Fork Schema
+  // ######################
+  const onForkSchema = (schema: FeatureSchema) => async () => {
+    const forkedSchema: FeatureSchemaModifiableProps = {
+      name: `${schema.name} (Forked)`,
+      definition: schema.definition,
+      symbology: schema.symbology,
+      default_symbology: schema.default_symbology,
+    };
+
+    const newSchema = await addSchema(forkedSchema).unwrap();
+
+    if (mapId !== undefined && map !== undefined) {
+      patchMap({
+        id: mapId,
+        available_schema_ids: [...map.available_schema_ids, newSchema.id],
+      });
+    }
+  };
+
+  const [addSchema] = useAddFeatureSchemaMutation();
+
+  const [patchMap] = usePatchMapMutation();
+  // ######################
+  // Fork Schema (End)
+  // ######################
 
   return (
     <DialogWithTransition onClose={onClose}>
@@ -52,7 +94,14 @@ function SchemaManager(props: Props) {
       <List>
         {schemas.map((schema) => (
           <React.Fragment key={schema.id}>
-            <ListItem disablePadding>
+            <ListItem
+              secondaryAction={
+                <IconButton edge="end" onClick={onForkSchema(schema)}>
+                  <ForkRightIcon />
+                </IconButton>
+              }
+              disablePadding
+            >
               <ListItemButton onClick={onClickSchema(schema.id)}>
                 <ListItemText primary={schema.name} inset />
               </ListItemButton>

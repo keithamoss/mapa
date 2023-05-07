@@ -49,7 +49,6 @@ function SchemaCreator(props: Props) {
           id: mapId,
           available_schema_ids: [...map.available_schema_ids, newSchema.id],
         });
-      } else {
       }
     },
     [addSchema, map, mapId, patchMap]
