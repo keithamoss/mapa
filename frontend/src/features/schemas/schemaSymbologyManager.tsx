@@ -289,7 +289,11 @@ function SchemaSymbologyManager(props: Props) {
               {symbologyGroup.name}
             </ListSubheader>
 
-            <ButtonGroup variant="text" fullWidth sx={{ mb: 1 }}>
+            <ButtonGroup
+              variant="text"
+              fullWidth
+              sx={{ mb: 1, "& > button": { maxWidth: 115 } }}
+            >
               <Button
                 startIcon={<AddIcon />}
                 onClick={onAddSymbologyField(symbologyGroup.id)}
