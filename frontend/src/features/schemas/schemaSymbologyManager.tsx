@@ -297,17 +297,20 @@ function SchemaSymbologyManager(props: Props) {
                 Add
               </Button>
 
-              <Button
-                startIcon={<EditIcon />}
-                onClick={onClickEditGroup(symbologyGroup.id)}
-                disabled={symbologyGroup.id === defaultSymbologyGroupId}
-              >
-                Edit
-              </Button>
+              {symbologyGroup.id !== defaultSymbologyGroupId && (
+                <React.Fragment>
+                  <Button
+                    startIcon={<EditIcon />}
+                    onClick={onClickEditGroup(symbologyGroup.id)}
+                  >
+                    Edit
+                  </Button>
 
-              <Button startIcon={<DeleteIcon />} disabled={true}>
-                Delete
-              </Button>
+                  <Button startIcon={<DeleteIcon />} disabled={true}>
+                    Delete
+                  </Button>
+                </React.Fragment>
+              )}
             </ButtonGroup>
 
             {getSymbolsForGroup(symbologyGroup.id, symbology).map((symbol) =>
