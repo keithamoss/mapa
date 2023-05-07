@@ -2,51 +2,54 @@ import { TextField } from "@mui/material";
 import React from "react";
 import {
   FeatureDataItem,
-  FeatureDataItemTextField,
+  FeatureDataItemNumberField,
 } from "../../../app/services/features";
 import {
-  FeatureSchemaFieldDefinitionTextField,
+  FeatureSchemaFieldDefinitionNumberField,
   FeatureSchemaFieldType,
 } from "../../../app/services/schemas";
 
 interface Props {
-  schemaField: FeatureSchemaFieldDefinitionTextField;
+  schemaField: FeatureSchemaFieldDefinitionNumberField;
   dataItem: FeatureDataItem | undefined;
   onFieldChange: (featureDataItem: FeatureDataItem) => void;
   onFieldRemove: (schemaFieldId: number) => void;
 }
 
-function SchemaDataEntryTextField(props: Props) {
-  console.log("### SchemaDataEntryTextField ###");
+function SchemaDataEntryNumberField(props: Props) {
+  console.log("### SchemaDataEntryNumberField ###");
 
   const { schemaField, dataItem, onFieldChange, onFieldRemove } = props;
 
   const onTextFieldChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
+    console.log("e.target.value", e.target.value);
     if (e.target.value !== "") {
       onFieldChange({
         schema_field_id: schemaField.id,
-        value: e.target.value,
-      } as FeatureDataItemTextField);
+        value: parseInt(e.target.value),
+      } as FeatureDataItemNumberField);
     } else {
       onFieldRemove(schemaField.id);
     }
   };
 
-  if (schemaField.type !== FeatureSchemaFieldType.TextField) {
+  if (schemaField.type !== FeatureSchemaFieldType.NumberField) {
     return null;
   }
 
   return (
     <TextField
+      type="number"
+      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
       onChange={onTextFieldChange}
       defaultValue={
         dataItem !== undefined ? dataItem.value : schemaField.default_value
       }
       label={schemaField.name}
       helperText={
-        schemaField.default_value !== ""
+        schemaField.default_value !== undefined
           ? `Default value: ${schemaField.default_value}`
           : undefined
       }
@@ -57,4 +60,4 @@ function SchemaDataEntryTextField(props: Props) {
   );
 }
 
-export default SchemaDataEntryTextField;
+export default SchemaDataEntryNumberField;

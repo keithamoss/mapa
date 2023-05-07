@@ -4,6 +4,7 @@ import { Feature, FeatureDataItem } from "../../app/services/features";
 import { FeatureSchemaFieldType } from "../../app/services/schemas";
 import { selectFeatureSchemaById } from "../schemas/schemasSlice";
 import SchemaDataEntryBooleanyTypeFields from "./BooleanyTypeFields/schemaDataEntryBooleanyTypeFields";
+import SchemaDataEntryNumberField from "./NumberField/schemaDataEntryNumberField";
 import SchemaDataEntryTextField from "./TextField/schemaDataEntryTextField";
 
 interface Props {
@@ -43,6 +44,16 @@ function SchemaFieldDataEntryManager(props: Props) {
             case FeatureSchemaFieldType.TextField:
               return (
                 <SchemaDataEntryTextField
+                  key={fieldDefinition.id}
+                  schemaField={fieldDefinition}
+                  dataItem={featureDataItemForSchemaField}
+                  onFieldChange={onFieldChange}
+                  onFieldRemove={onFieldRemove}
+                />
+              );
+            case FeatureSchemaFieldType.NumberField:
+              return (
+                <SchemaDataEntryNumberField
                   key={fieldDefinition.id}
                   schemaField={fieldDefinition}
                   dataItem={featureDataItemForSchemaField}

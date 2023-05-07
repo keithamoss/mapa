@@ -23,3 +23,16 @@ export const getStringOrEmptyStringForSchemasFieldsFormField = (
   schemaField[fieldName] === undefined
     ? ""
     : `${schemaField[fieldName]}`;
+
+export const getNumberOrZeroForSchemasFieldsFormField = (
+  schemaField:
+    | Partial<FeatureSchemaFieldDefinitionCollection>
+    | null
+    | undefined,
+  fieldName: keyof FeatureSchemaFieldDefinitionCollection
+) =>
+  schemaField === undefined ||
+  schemaField === null ||
+  schemaField[fieldName] === undefined
+    ? 0
+    : Number(schemaField[fieldName]);

@@ -2,6 +2,7 @@ import * as yup from "yup";
 import { ObjectSchema } from "yup";
 import {
   FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
+  FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
   FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
   FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
 } from "../services/schemas";
@@ -12,6 +13,17 @@ export const schemaTextFieldFormValidationSchema: ObjectSchema<FeatureSchemaFiel
     .object({
       name: yup.string().required(),
       default_value: yup.string().ensure().defined(),
+    })
+    .required();
+
+export const schemaNumberFieldFormValidationSchema: ObjectSchema<FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps> =
+  yup
+    .object({
+      name: yup.string().required(),
+      default_value: yup
+        .number()
+        .transform((_, val) => (isNaN(Number(val)) === false ? Number(val) : 0))
+        .defined(),
     })
     .required();
 

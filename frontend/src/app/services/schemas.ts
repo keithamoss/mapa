@@ -53,12 +53,14 @@ export interface FeatureSchema extends FeatureSchemaModifiableProps {
 
 export enum FeatureSchemaFieldType {
   TextField = "text_field",
+  NumberField = "number_field",
   BooleanField = "boolean_field",
   SymbologyFieldBoolean = "symbology_field_boolean",
 }
 
 export enum FeatureSchemaFieldTypeLabel {
   text_field = "Text field",
+  number_field = "Number field",
   boolean_field = "Boolean field",
   symbology_field_boolean = "Symbology field boolean",
 }
@@ -71,6 +73,17 @@ export type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps = {
 export type FeatureSchemaFieldDefinitionTextField =
   FeatureSchemaFieldDefinitionTextFieldFormModifiableProps & {
     type: FeatureSchemaFieldType.TextField;
+    id: number;
+  };
+
+export type FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps = {
+  name: string;
+  default_value: number;
+};
+
+export type FeatureSchemaFieldDefinitionNumberField =
+  FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps & {
+    type: FeatureSchemaFieldType.NumberField;
     id: number;
   };
 
@@ -99,11 +112,13 @@ export type FeatureSchemaFieldDefinitionSymbologyBoolean =
 
 export type FeatureSchemaFieldDefinitionFormModifiablePropsCollection =
   | FeatureSchemaFieldDefinitionTextFieldFormModifiableProps
+  | FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps
   | FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps
   | FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps;
 
 export type FeatureSchemaFieldDefinitionCollection =
   | FeatureSchemaFieldDefinitionTextField
+  | FeatureSchemaFieldDefinitionNumberField
   | FeatureSchemaFieldDefinitionBooleanField
   | FeatureSchemaFieldDefinitionSymbologyBoolean;
 

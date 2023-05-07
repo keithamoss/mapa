@@ -52,6 +52,7 @@ function SchemaDataEntryBooleanyTypeFields(props: Props) {
         />
       }
       label={schemaField.name}
+      sx={{ mt: -1, mb: 2 }}
     />
   );
 }

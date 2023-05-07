@@ -3,12 +3,14 @@ import {
   FeatureSchemaFieldDefinitionBooleanField,
   FeatureSchemaFieldDefinitionCollection,
   FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
+  FeatureSchemaFieldDefinitionNumberField,
   FeatureSchemaFieldDefinitionSymbologyBoolean,
   FeatureSchemaFieldDefinitionTextField,
   FeatureSchemaFieldType,
   NewFeatureSchemaFieldDefinitionCollection,
 } from "../../app/services/schemas";
 import SchemaFieldFormForBooleanField from "./BooleanField/schemaFieldFormForBooleanField";
+import SchemaFieldFormForNumberField from "./NumberField/schemaFieldFormForNumberField";
 import SchemaFieldFormForSymbologyBoolean from "./SymbologyBooleanField/schemaFieldFormForSymbologyBoolean";
 import SchemaFieldFormForTextField from "./TextField/schemaFieldFormForTextField";
 
@@ -52,6 +54,15 @@ function SchemaFieldCreatorAndEditor(props: Props) {
         fieldToEdit?.type === FeatureSchemaFieldType.TextField) && (
         <SchemaFieldFormForTextField
           field={fieldToEdit as FeatureSchemaFieldDefinitionTextField}
+          onDone={onDone}
+          onCancel={onCancel}
+        />
+      )}
+
+      {(fieldTypeToAdd === FeatureSchemaFieldType.NumberField ||
+        fieldToEdit?.type === FeatureSchemaFieldType.NumberField) && (
+        <SchemaFieldFormForNumberField
+          field={fieldToEdit as FeatureSchemaFieldDefinitionNumberField}
           onDone={onDone}
           onCancel={onCancel}
         />

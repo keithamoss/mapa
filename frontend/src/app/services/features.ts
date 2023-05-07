@@ -19,6 +19,10 @@ export interface FeatureDataItemTextField extends FeatureDataItemBase {
   value: string;
 }
 
+export interface FeatureDataItemNumberField extends FeatureDataItemBase {
+  value: number;
+}
+
 export interface FeatureDataItemBooleanField extends FeatureDataItemBase {
   value: boolean;
 }
@@ -30,6 +34,7 @@ export interface FeatureDataItemSymbologyBooleanField
 
 export type FeatureDataItem =
   | FeatureDataItemTextField
+  | FeatureDataItemNumberField
   | FeatureDataItemBooleanField
   | FeatureDataItemSymbologyBooleanField;
 
