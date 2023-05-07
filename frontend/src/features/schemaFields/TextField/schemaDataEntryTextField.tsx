@@ -41,6 +41,7 @@ function SchemaDataEntryTextField(props: Props) {
   return (
     <TextField
       onChange={onTextFieldChange}
+      required={schemaField.required_field}
       defaultValue={
         dataItem !== undefined ? dataItem.value : schemaField.default_value
       }

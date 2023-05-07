@@ -3,10 +3,12 @@ import { isEmpty } from "lodash-es";
 
 import {
   Button,
+  Checkbox,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControl,
+  FormControlLabel,
   FormGroup,
   FormHelperText,
   TextField,
@@ -47,6 +49,7 @@ function SchemaFieldFormForTextField(props: Props) {
         field,
         "default_value"
       ),
+      required_field: field?.required_field || false,
     },
   });
 
@@ -91,7 +94,12 @@ function SchemaFieldFormForTextField(props: Props) {
             )}
           </FormControl>
 
-          <FormControl fullWidth={true} component="fieldset" variant="outlined">
+          <FormControl
+            fullWidth={true}
+            sx={{ mb: 1, mt: 1 }}
+            component="fieldset"
+            variant="outlined"
+          >
             <FormGroup>
               <Controller
                 name="default_value"
@@ -109,6 +117,27 @@ function SchemaFieldFormForTextField(props: Props) {
             {errors.default_value && (
               <FormHelperText error>
                 {errors.default_value.message}
+              </FormHelperText>
+            )}
+          </FormControl>
+
+          <FormControl fullWidth={true} component="fieldset" variant="outlined">
+            <FormGroup>
+              <Controller
+                name="required_field"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} />}
+                    label="Required field?"
+                  />
+                )}
+              />
+            </FormGroup>
+
+            {errors.required_field && (
+              <FormHelperText error>
+                {errors.required_field.message}
               </FormHelperText>
             )}
           </FormControl>

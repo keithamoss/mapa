@@ -24,6 +24,10 @@ import {
   useUpdateFeatureMutation,
 } from "../../app/services/features";
 import { usePatchMapMutation } from "../../app/services/maps";
+import {
+  FeatureSchema,
+  FeatureSchemaFieldType,
+} from "../../app/services/schemas";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import { selectActiveMapId } from "../app/appSlice";
 import SchemaDataEntrySymbology from "../schemaFields/SchemaSymbology/schemaDataEntrySymbology";
@@ -31,6 +35,7 @@ import SchemaFieldDataEntryManager from "../schemaFields/schemaFieldDataEntryMan
 import { SchemaEditor } from "../schemas/schemaEditor";
 import SchemaSelectFormControls from "../schemas/schemaSelectFormControls";
 import { getSchemasAvailableForMap } from "../schemas/schemasSlice";
+import { getFeatureDataItemForSchemaField } from "./featureHelpers";
 import { selectFeatureById } from "./featuresSlice";
 
 function FeatureEditorEntrypoint() {
@@ -51,6 +56,33 @@ function FeatureEditorEntrypoint() {
 
   return null;
 }
+
+const areAllRequiredFieldsFilled = (
+  feature: Feature,
+  schema?: FeatureSchema
+) => {
+  let isValid = true;
+
+  if (schema !== undefined) {
+    schema.definition.forEach((fieldDefinition) => {
+      if (
+        fieldDefinition.type === FeatureSchemaFieldType.TextField &&
+        fieldDefinition.required_field === true
+      ) {
+        const dataItem = getFeatureDataItemForSchemaField(
+          fieldDefinition,
+          feature
+        );
+
+        if (dataItem === undefined || dataItem.value === "") {
+          isValid = false;
+        }
+      }
+    });
+  }
+
+  return isValid;
+};
 
 interface LocationState {
   isAdding?: boolean;
@@ -169,13 +201,22 @@ function FeatureEditor(props: Props) {
   };
 
   const onDoneForEditor = () => {
-    updateFeature(localFeature);
+    if (
+      areAllRequiredFieldsFilled(
+        localFeature,
+        availableSchemas.find((s) => s.id === localFeature.schema_id)
+      ) === true
+    ) {
+      updateFeature(localFeature);
 
-    if (localFeature.schema_id !== null) {
-      patchMap({
-        id: mapId,
-        last_used_schema_id: localFeature.schema_id,
-      });
+      if (localFeature.schema_id !== null) {
+        patchMap({
+          id: mapId,
+          last_used_schema_id: localFeature.schema_id,
+        });
+      }
+    } else {
+      alert("One or more required fields remain unfilled");
     }
   };
 

@@ -68,6 +68,7 @@ export enum FeatureSchemaFieldTypeLabel {
 export type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps = {
   name: string;
   default_value: string;
+  required_field: boolean;
 };
 
 export type FeatureSchemaFieldDefinitionTextField =
