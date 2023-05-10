@@ -269,7 +269,7 @@ function SearchManager(props: Props) {
                       <ListItem key={result.id}>
                         <ListItemText
                           primary={result.terms.join(", ")}
-                          secondary={result.id}
+                          secondary={`#${result.id}`}
                         ></ListItemText>
                       </ListItem>
                     ))}
