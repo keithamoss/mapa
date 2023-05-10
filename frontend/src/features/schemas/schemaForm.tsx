@@ -1,3 +1,5 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import FlightIcon from "@mui/icons-material/Flight";
 import TuneIcon from "@mui/icons-material/Tune";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +17,7 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
+  Grid,
   IconButton,
   Paper,
   TextField,
@@ -24,7 +27,7 @@ import {
 import { isEmpty } from "lodash-es";
 import React, { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { schemaFormValidationSchema } from "../../app/forms/schemaForm";
 import { useAppSelector } from "../../app/hooks/store";
 import {
@@ -48,11 +51,12 @@ import {
   addNewSymbologyGroup,
   addSymbolToGroup,
   defaultSymbologyGroupId,
+  deleteSymbologyGroup,
   editSymbologyGroup,
   favouriteSymbolForMap,
   modifySymbolInGroup,
   moveSymbolsToGroup,
-  removeSymbolFromGroup,
+  removeSymbol,
   unfavouriteSymbolForMap,
 } from "../symbology/symbologyHelpers";
 import SchemaSymbologyManager from "./schemaSymbologyManager";
@@ -132,6 +136,11 @@ function SchemaForm(props: Props) {
     setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
+  const onDeleteSymbolGroup = (groupId: number) => {
+    const local_symbology = deleteSymbologyGroup(groupId, symbology);
+    setValue("symbology", local_symbology, { shouldDirty: true });
+  };
+
   const onAddSymbol = (symbol: SymbologyProps, groupId: number) => {
     const [local_symbology] = addSymbolToGroup(symbol, symbology, groupId);
     setValue("symbology", local_symbology, { shouldDirty: true });
@@ -142,8 +151,8 @@ function SchemaForm(props: Props) {
     setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
-  const onDeleteSymbol = (symbolId: number, groupId: number) => {
-    const local_symbology = removeSymbolFromGroup(symbolId, symbology);
+  const onDeleteSymbol = (symbolId: number) => {
+    const local_symbology = removeSymbol(symbolId, symbology);
     setValue("symbology", local_symbology, { shouldDirty: true });
   };
 
@@ -369,10 +378,12 @@ function SchemaForm(props: Props) {
 
               <FormGroup>
                 <SchemaSymbologyManager
+                  schemaId={schema?.id}
                   symbology={symbology}
                   mapId={mapId}
                   onAddGroup={onAddSymbolGroup}
                   onEditGroup={onEditSymbolGroup}
+                  onDeleteGroup={onDeleteSymbolGroup}
                   onAddObject={onAddSymbol}
                   onEditObject={onEditSymbol}
                   onDeleteObject={onDeleteSymbol}
@@ -420,6 +431,7 @@ function SchemaForm(props: Props) {
 
                 {definition !== undefined && (
                   <SchemaFieldListManager
+                    schemaId={schema?.id}
                     schemaDefinition={definition}
                     onSchemaDefinitionChange={onFieldChange}
                   />
@@ -444,6 +456,43 @@ function SchemaForm(props: Props) {
                 </FormHelperText>
               )}
             </FormControl>
+
+            {schema !== undefined && (
+              <FormControl
+                sx={{ mb: 3 }}
+                component="fieldset"
+                variant="outlined"
+              >
+                <Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
+                  <Grid container direction="row" alignItems="center">
+                    <Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
+                      <FormLabel component="legend">Danger Zone</FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <FlightIcon
+                        sx={{
+                          verticalAlign: "middle",
+                          color: "rgb(0, 0, 0)",
+                          opacity: 0.5,
+                          fontSize: "16px",
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon color="error" />}
+                  component={Link}
+                  to={`/SchemaManager/Delete/${schema.id}`}
+                  sx={{ maxWidth: 350 }}
+                >
+                  Delete
+                </Button>
+              </FormControl>
+            )}
           </Paper>
         </form>
       </DialogWithTransition>

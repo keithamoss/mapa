@@ -6,6 +6,7 @@ import MapCreator from "../../features/maps/mapCreator";
 import MapEditor from "../../features/maps/mapEditor";
 import MapManager from "../../features/maps/mapsManager";
 import SchemaCreator from "../../features/schemas/schemaCreator";
+import SchemaDeleteManager from "../../features/schemas/schemaDeleteManager";
 import SchemaEditor from "../../features/schemas/schemaEditor";
 import SchemaManager from "../../features/schemas/schemaManager";
 import SearchManager from "../../features/search/searchManager";
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
       {
         path: "SchemaManager/Edit/:schemaId",
         element: <SchemaEditor />,
+      },
+      {
+        path: "SchemaManager/Delete/:schemaId",
+        element: <SchemaDeleteManager />,
       },
       {
         path: "FeatureManager",

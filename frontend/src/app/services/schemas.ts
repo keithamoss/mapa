@@ -127,7 +127,25 @@ export type NewFeatureSchemaFieldDefinitionCollection = Omit<
   FeatureSchemaFieldDefinitionCollection,
   "id"
 >;
+
 type FeatureSchemasResponse = FeatureSchema[];
+
+interface CanDeleteSchemaSymbolRequest {
+  schemaId: number;
+  symbolId: number;
+}
+
+interface CanDeleteSchemaFieldRequest {
+  schemaId: number;
+  fieldId: number;
+}
+
+export interface CanDeleteSchemaThingResponse {
+  deletable: boolean;
+  count: number;
+  count_by_map: { map_id: number; count: number }[];
+}
+
 export const featureSchemasAdapter = createEntityAdapter<FeatureSchema>();
 
 const initialState = featureSchemasAdapter.getInitialState();
@@ -168,6 +186,37 @@ export const featureSchemasApi = api.injectEndpoints({
         { type: "FeatureSchema", id },
       ],
     }),
+    checkCanDelete: builder.query<CanDeleteSchemaThingResponse, number>({
+      query: (id) => `schemas/${id}/can_delete/`,
+    }),
+    deleteSchema: builder.mutation<FeatureSchema, number>({
+      query: (id) => ({
+        url: `schemas/${id}/`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "FeatureSchema", id },
+        { type: "Map", id: "LIST" },
+      ],
+    }),
+    checkCanDeleteSymbol: builder.query<
+      CanDeleteSchemaThingResponse,
+      CanDeleteSchemaSymbolRequest
+    >({
+      query: ({ schemaId, symbolId }) => ({
+        url: `schemas/${schemaId}/can_delete_symbol/`,
+        params: { symbolID: symbolId },
+      }),
+    }),
+    checkCanDeleteField: builder.query<
+      CanDeleteSchemaThingResponse,
+      CanDeleteSchemaFieldRequest
+    >({
+      query: ({ schemaId, fieldId }) => ({
+        url: `schemas/${schemaId}/can_delete_field/`,
+        params: { fieldID: fieldId },
+      }),
+    }),
   }),
 });
 
@@ -175,4 +224,8 @@ export const {
   useGetFeatureSchemasQuery,
   useAddFeatureSchemaMutation,
   useUpdateFeatureSchemaMutation,
+  useCheckCanDeleteQuery,
+  useDeleteSchemaMutation,
+  useCheckCanDeleteSymbolQuery,
+  useCheckCanDeleteFieldQuery,
 } = featureSchemasApi;

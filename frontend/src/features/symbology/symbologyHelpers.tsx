@@ -238,6 +238,21 @@ export const editSymbologyGroup = (
   return local_symbology;
 };
 
+export const deleteSymbologyGroup = (
+  groupId: number,
+  symbology: FeatureSchemaSymbology
+) => {
+  const local_symbology: FeatureSchemaSymbology = { ...symbology };
+
+  if (getSymbolsForGroup(groupId, symbology).length === 0) {
+    local_symbology.groups = local_symbology.groups.filter(
+      (g) => g.id !== groupId
+    );
+  }
+
+  return local_symbology;
+};
+
 export const addSymbolToGroup = (
   symbol: SymbologyProps,
   symbology: FeatureSchemaSymbology,
@@ -311,6 +326,17 @@ export const moveSymbolsToGroup = (
 //   return local_symbology;
 // };
 
+export const removeSymbol = (
+  symbolId: number,
+  symbology: FeatureSchemaSymbology
+) => {
+  const local_symbology: FeatureSchemaSymbology = {
+    ...symbology,
+    symbols: symbology.symbols.filter((s) => s.id !== symbolId),
+  };
+  return local_symbology;
+};
+
 export const favouriteSymbolForMap = (
   symbolId: number,
   mapId: number,
@@ -355,17 +381,6 @@ export const unfavouriteSymbolForMap = (
     };
   }
 
-  return local_symbology;
-};
-
-export const removeSymbolFromGroup = (
-  symbolId: number,
-  symbology: FeatureSchemaSymbology
-) => {
-  const local_symbology: FeatureSchemaSymbology = {
-    ...symbology,
-    symbols: symbology.symbols.filter((s) => s.id !== symbolId),
-  };
   return local_symbology;
 };
 

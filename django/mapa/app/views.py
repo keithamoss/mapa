@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.http import HttpResponseNotFound
 
 logger = make_logger(__name__)
@@ -136,6 +137,94 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    def can_delete(self, request, pk=None, format=None):
+        """
+        Checks if a schema is in use and can be deleted.
+        """
+        schema = self.get_object()
+        if schema.owner_id.id != request.user.id:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        features = Features.objects.filter(schema_id=schema.id, deleted_at=None)
+        featureCount = features.count()
+
+        return Response({
+            "deletable": featureCount == 0,
+            "count": featureCount,
+            "count_by_map": features.values("map_id").annotate(count=Count("map_id")),
+
+        })
+
+    def destroy(self, request, pk=None, format=None):
+        """
+        Mark this schema as deleted.
+        """
+        schema = self.get_object()
+        if schema.owner_id.id != request.user.id:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        if Features.objects.filter(schema_id=schema.id, deleted_at=None).count() == 0:
+            # Update any maps that have pointers to the schema
+            Maps.objects.filter(last_used_schema_id=schema.id).update(last_used_schema_id=None)
+
+            for map in Maps.objects.filter(available_schema_ids__contains=[schema.id]):
+                map.available_schema_ids = [id for id in map.available_schema_ids if id != schema.id]
+                map.save()
+
+            # Now we can safely delete the schema
+            schema.deleted_at = datetime.now(pytz.utc)
+            schema.save()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_412_PRECONDITION_FAILED)
+
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    def can_delete_symbol(self, request, pk=None, format=None):
+        """
+        Checks if a symbol on this schema is in use and can be deleted.
+        """
+        schema = self.get_object()
+        if schema.owner_id.id != request.user.id:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        symbolID = request.query_params.get("symbolID")
+        if symbolID is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        features = Features.objects.filter(schema_id=schema.id, deleted_at=None, symbol_id=symbolID)
+        featureCount = features.count()
+
+        return Response({
+            "deletable": featureCount == 0,
+            "count": featureCount,
+            "count_by_map": features.values("map_id").annotate(count=Count("map_id")),
+
+        })
+
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    def can_delete_field(self, request, pk=None, format=None):
+        """
+        Checks if a field on this schema is in use and can be deleted.
+        """
+        schema = self.get_object()
+        if schema.owner_id.id != request.user.id:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        fieldID = request.query_params.get("fieldID")
+        if fieldID is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        features = Features.objects.filter(schema_id=schema.id, deleted_at=None, data__contains=[{"schema_field_id": int(fieldID)}])
+        featureCount = features.count()
+
+        return Response({
+            "deletable": featureCount == 0,
+            "count": featureCount,
+            "count_by_map": features.values("map_id").annotate(count=Count("map_id")),
+
+        })
+
 
 class FeaturesViewSet(viewsets.ModelViewSet):
     """
@@ -155,6 +244,9 @@ class FeaturesViewSet(viewsets.ModelViewSet):
         Mark this feature as deleted.
         """
         feature = self.get_object()
+        if feature.map_id.owner_id.id != request.user.id:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
         feature.deleted_at = datetime.now(pytz.utc)
         feature.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

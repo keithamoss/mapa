@@ -24,6 +24,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { pink } from "@mui/material/colors";
+import { groupBy } from "lodash-es";
 import React, { useState } from "react";
 import {
   FeatureSchemaSymbology,
@@ -38,19 +39,21 @@ import {
   getFontAwesomeIconForSymbolPreview,
   getSymbolGroups,
   getSymbologyGroupById,
-  getSymbolsForGroup,
 } from "../symbology/symbologyHelpers";
+import SchemaSymbolDeleteManager from "./schemaSymbolDeleteManager";
 import SchemaSymbologyGroupChooserForRerranging from "./schemaSymbologyGroupChooserForRerranging";
 import SchemaSymbologyGroupEditor from "./schemaSymbologyGroupEditor";
 
 interface Props {
+  schemaId?: number;
   symbology: FeatureSchemaSymbology;
   mapId?: number;
   onAddGroup: (groupName: string) => void;
   onEditGroup: (groupId: number, groupName: string) => void;
+  onDeleteGroup: (groupId: number) => void;
   onAddObject: (symbol: SymbologyProps, groupId: number) => void;
   onEditObject: (symbol: FeatureSchemaSymbologySymbolsValue) => void;
-  onDeleteObject: (symbolId: number, groupId: number) => void;
+  onDeleteObject: (symbolId: number) => void;
   onFavouriteSymbol: (symbolId: number) => void;
   onUnfavouriteSymbol: (symbolId: number) => void;
   onRearrangeSymbolsToGroup: (symbolIds: number[], groupId: number) => void;
@@ -60,17 +63,21 @@ function SchemaSymbologyManager(props: Props) {
   console.log("### SchemaSymbologyManager ###");
 
   const {
+    schemaId,
     symbology,
     mapId,
     onAddGroup,
     onEditGroup,
+    onDeleteGroup,
     onAddObject,
     onEditObject,
-    // onDeleteObject,
+    onDeleteObject,
     onFavouriteSymbol,
     onUnfavouriteSymbol,
     onRearrangeSymbolsToGroup,
   } = props;
+
+  const symbolsByGroup = groupBy(symbology.symbols, "group_id");
 
   // ######################
   // Add Group
@@ -115,6 +122,16 @@ function SchemaSymbologyManager(props: Props) {
   };
   // ######################
   // Edit Group (End)
+  // ######################
+
+  // ######################
+  // Delete Group
+  // ######################
+  const onClickDeleteGroup = (groupId: number) => () => {
+    onDeleteGroup(groupId);
+  };
+  // ######################
+  // Delete Group (End)
   // ######################
 
   // ######################
@@ -246,20 +263,45 @@ function SchemaSymbologyManager(props: Props) {
   // (Un)favourite Symbols (End)
   // ######################
 
-  //   const onDeleteSymbol = (e: any) => {
-  //     // eslint-disable-next-line no-restricted-globals
-  //     if (confirm("Are you sure?") === true) {
-  //       const symbolId = parseInt(e.target.dataset.symbolId);
-  //       const groupId = parseInt(e.target.dataset.groupId);
+  // ######################
+  // Delete Symbol
+  // ######################
+  const [symbolIdToDelete, setSymbolIdToDelete] = useState<number | undefined>(
+    undefined
+  );
 
-  //       if (Number.isNaN(symbolId) === false && Number.isNaN(groupId) === false) {
-  //         onDeleteObject(symbolId, groupId);
-  //       }
-  //     }
-  //   };
+  const onClickDeleteSymbol = (symbolId: number) => () => {
+    if (schemaId === undefined) {
+      // Schema hasn't been created yet, so we're safe to delete w/o checking
+      onDeleteObject(symbolId);
+      setSymbolIdToDelete(undefined);
+    } else {
+      // SchemaSymbolDeleteManager checks the backend for us first to see if we're safe to delete
+      setSymbolIdToDelete(symbolId);
+    }
+  };
+
+  const onDeleteSymbol = (symbolId: number) => {
+    onDeleteObject(symbolId);
+    setSymbolIdToDelete(undefined);
+  };
+
+  const onCancelDeleteSymbol = () => setSymbolIdToDelete(undefined);
+  // ######################
+  // Delete Symbol (End)
+  // ######################
 
   return (
     <React.Fragment>
+      {schemaId !== undefined && symbolIdToDelete !== undefined && (
+        <SchemaSymbolDeleteManager
+          schemaId={schemaId}
+          symbolId={symbolIdToDelete}
+          onYes={onDeleteSymbol}
+          onNo={onCancelDeleteSymbol}
+        />
+      )}
+
       <Button
         variant="outlined"
         startIcon={<AddIcon />}
@@ -310,69 +352,89 @@ function SchemaSymbologyManager(props: Props) {
                     Edit
                   </Button>
 
-                  <Button startIcon={<DeleteIcon />} disabled={true}>
+                  <Button
+                    startIcon={<DeleteIcon />}
+                    onClick={onClickDeleteGroup(symbologyGroup.id)}
+                    disabled={symbolsByGroup[symbologyGroup.id] !== undefined}
+                  >
                     Delete
                   </Button>
                 </React.Fragment>
               )}
             </ButtonGroup>
 
-            {getSymbolsForGroup(symbologyGroup.id, symbology).map((symbol) =>
-              isRearrangingSymbols === false ? (
-                <ListItem
-                  key={symbol.id}
-                  secondaryAction={
-                    <IconButton edge="end" aria-label="delete" disabled={true}>
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  {mapId !== undefined &&
-                  symbol.favourited_map_ids.includes(mapId) === true ? (
-                    <ListItemIcon onClick={onClickUnfavouriteSymbol(symbol.id)}>
-                      <FavoriteIcon sx={{ color: pink[500] }} />
-                    </ListItemIcon>
-                  ) : (
-                    <ListItemIcon onClick={onClickFavouriteSymbol(symbol.id)}>
-                      <FavoriteBorderIcon />
-                    </ListItemIcon>
-                  )}
-
-                  <ListItemButton onClick={onEditSymbol(symbol)} disableGutters>
-                    {getFontAwesomeIconForSymbolPreview(symbol.props, {
-                      size: defaultSymbolSizeForFormFields,
-                    })}
-                    <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
-                  </ListItemButton>
-                </ListItem>
-              ) : (
-                <ListItem key={symbol.id}>
-                  <ListItemButton
-                    onClick={
-                      symbolsToRearrange.includes(symbol.id) === false
-                        ? onClickAddSymbolToRearrange(symbol.id)
-                        : onClickRemoveSymbolFromRearrange(symbol.id)
+            {symbolsByGroup[symbologyGroup.id] !== undefined &&
+              symbolsByGroup[symbologyGroup.id].map((symbol) =>
+                isRearrangingSymbols === false ? (
+                  <ListItem
+                    key={symbol.id}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={onClickDeleteSymbol(symbol.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     }
-                    disableGutters
                   >
-                    <ListItemIcon
-                      onClick={onClickAddSymbolToRearrange(symbol.id)}
-                    >
-                      {symbolsToRearrange.includes(symbol.id) === false ? (
-                        <CheckBoxOutlineBlankIcon color="info" />
-                      ) : (
-                        <CheckBoxIcon color="info" />
-                      )}
-                    </ListItemIcon>
+                    {mapId !== undefined &&
+                    symbol.favourited_map_ids.includes(mapId) === true ? (
+                      <ListItemIcon
+                        onClick={onClickUnfavouriteSymbol(symbol.id)}
+                      >
+                        <FavoriteIcon sx={{ color: pink[500] }} />
+                      </ListItemIcon>
+                    ) : (
+                      <ListItemIcon onClick={onClickFavouriteSymbol(symbol.id)}>
+                        <FavoriteBorderIcon />
+                      </ListItemIcon>
+                    )}
 
-                    {getFontAwesomeIconForSymbolPreview(symbol.props, {
-                      size: defaultSymbolSizeForFormFields,
-                    })}
-                    <ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
-                  </ListItemButton>
-                </ListItem>
-              )
-            )}
+                    <ListItemButton
+                      onClick={onEditSymbol(symbol)}
+                      disableGutters
+                    >
+                      {getFontAwesomeIconForSymbolPreview(symbol.props, {
+                        size: defaultSymbolSizeForFormFields,
+                      })}
+                      <ListItemText
+                        primary={symbol.props.name}
+                        sx={{ pl: 1 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ) : (
+                  <ListItem key={symbol.id}>
+                    <ListItemButton
+                      onClick={
+                        symbolsToRearrange.includes(symbol.id) === false
+                          ? onClickAddSymbolToRearrange(symbol.id)
+                          : onClickRemoveSymbolFromRearrange(symbol.id)
+                      }
+                      disableGutters
+                    >
+                      <ListItemIcon
+                        onClick={onClickAddSymbolToRearrange(symbol.id)}
+                      >
+                        {symbolsToRearrange.includes(symbol.id) === false ? (
+                          <CheckBoxOutlineBlankIcon color="info" />
+                        ) : (
+                          <CheckBoxIcon color="info" />
+                        )}
+                      </ListItemIcon>
+
+                      {getFontAwesomeIconForSymbolPreview(symbol.props, {
+                        size: defaultSymbolSizeForFormFields,
+                      })}
+                      <ListItemText
+                        primary={symbol.props.name}
+                        sx={{ pl: 1 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                )
+              )}
           </React.Fragment>
         ))}
       </List>

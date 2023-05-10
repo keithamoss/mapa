@@ -20,7 +20,12 @@ import {
   FeatureSchemaFieldDefinitionCollection,
   FeatureSchemaFieldTypeLabel,
 } from "../../app/services/schemas";
-import { moveFieldDown, moveFieldUp } from "../schemas/schemaHelpers";
+import SchemaFieldDeleteManager from "../schemas/schemaFieldDeleteManager";
+import {
+  moveFieldDown,
+  moveFieldUp,
+  removeField,
+} from "../schemas/schemaHelpers";
 import { getFieldFromSchemaById } from "../schemas/schemasSlice";
 import SchemaFieldCreatorAndEditor from "./schemaFieldCreatorAndEditor";
 
@@ -68,6 +73,7 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 interface Props {
+  schemaId?: number;
   schemaDefinition: FeatureSchemaFieldDefinitionCollection[];
   onSchemaDefinitionChange: (
     definition: FeatureSchemaFieldDefinitionCollection[]
@@ -77,7 +83,7 @@ interface Props {
 function SchemaFieldListManager(props: Props) {
   console.log("### SchemaFieldListManager ###");
 
-  const { schemaDefinition, onSchemaDefinitionChange } = props;
+  const { schemaId, schemaDefinition, onSchemaDefinitionChange } = props;
 
   const [fieldToEdit, setFieldToEdit] = useState<
     FeatureSchemaFieldDefinitionCollection | undefined
@@ -124,10 +130,17 @@ function SchemaFieldListManager(props: Props) {
       setFieldIdx(idx);
       setMenuAnchorEl(event.currentTarget);
     };
+
   const handleClose = () => {
     setMenuAnchorEl(null);
   };
+  // ######################
+  // Menu (End)
+  // ######################
 
+  // ######################
+  // Reorder Field
+  // ######################
   const onMoveFieldUp = () => {
     if (fieldIdForMenu !== null) {
       const local_definition = moveFieldUp(fieldIdForMenu, schemaDefinition);
@@ -145,24 +158,51 @@ function SchemaFieldListManager(props: Props) {
       }
     }
   };
-
-  // const onDeleteField = (e: any) => {
-  //   // eslint-disable-next-line no-restricted-globals
-  //   if (confirm("Are you sure?") === true) {
-  //     const fieldId = parseInt(e.target.dataset.fieldId);
-
-  //     const definition = (schemaDefinition || []).filter(
-  //       (f) => f.id !== fieldId
-  //     );
-  //     onSchemaDefinitionChange(definition);
-  //   }
-  // };
   // ######################
-  // Menu (End)
+  // Reorder Field (End)
+  // ######################
+
+  // ######################
+  // Delete Field
+  // ######################
+  const [fieldIdToDelete, setFieldIdToDelete] = useState<number | undefined>(
+    undefined
+  );
+
+  const onClickDeleteField = (fieldId: number) => () => {
+    if (schemaId === undefined) {
+      // Schema hasn't been created yet, so we're safe to delete w/o checking
+      onSchemaDefinitionChange(removeField(fieldId, schemaDefinition));
+      setFieldIdToDelete(undefined);
+    } else {
+      // SchemaFieldDeleteManager checks the backend for us first to see if we're safe to delete
+      setFieldIdToDelete(fieldId);
+    }
+
+    handleClose();
+  };
+
+  const onDeleteField = (fieldId: number) => {
+    onSchemaDefinitionChange(removeField(fieldId, schemaDefinition));
+    setFieldIdToDelete(undefined);
+  };
+
+  const onCancelDeleteField = () => setFieldIdToDelete(undefined);
+  // ######################
+  // Delete Field (End)
   // ######################
 
   return (
     <React.Fragment>
+      {schemaId !== undefined && fieldIdToDelete !== undefined && (
+        <SchemaFieldDeleteManager
+          schemaId={schemaId}
+          fieldId={fieldIdToDelete}
+          onYes={onDeleteField}
+          onNo={onCancelDeleteField}
+        />
+      )}
+
       <List>
         {schemaDefinition.map((field, idx) => (
           <ListItem
@@ -205,10 +245,15 @@ function SchemaFieldListManager(props: Props) {
           </MenuItem>
         )}
 
-        <MenuItem /*onClick={onDeleteField}*/ disabled disableRipple>
-          <DeleteIcon />
-          Delete
-        </MenuItem>
+        {fieldIdx !== null && (
+          <MenuItem
+            onClick={onClickDeleteField(schemaDefinition[fieldIdx].id)}
+            disableRipple
+          >
+            <DeleteIcon />
+            Delete
+          </MenuItem>
+        )}
       </StyledMenu>
 
       {fieldToEdit !== undefined && (

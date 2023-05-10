@@ -55,3 +55,8 @@ export const moveFieldDown = (
 
   return null;
 };
+
+export const removeField = (
+  fieldId: number,
+  definition: FeatureSchemaFieldDefinitionCollection[]
+) => definition.filter((d) => d.id !== fieldId);
