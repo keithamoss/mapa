@@ -1,13 +1,27 @@
-import { Feature } from "../../app/services/features";
+import { Feature, FeatureDataItem } from "../../app/services/features";
 import {
   FeatureSchema,
   FeatureSchemaFieldDefinitionCollection,
+  FeatureSchemaFieldType,
 } from "../../app/services/schemas";
 
 export const getSchemaForFeature = (
   feature: Feature,
   schemas: FeatureSchema[]
 ) => schemas.find((schema) => schema.id === feature.schema_id);
+
+export const isSchemaDataItemToBeUsed = (
+  fieldDefinition: FeatureSchemaFieldDefinitionCollection,
+  dataItem: FeatureDataItem | undefined
+) => {
+  if (dataItem !== undefined) {
+    if (fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean) {
+      return dataItem.value; // the value set in the field will decide if this data item is to be used or not
+    }
+  }
+
+  return false;
+};
 
 export const isFieldDefinitionSymbology = (
   fieldDefinition: FeatureSchemaFieldDefinitionCollection

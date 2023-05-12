@@ -1,6 +1,7 @@
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { Coordinate } from "ol/coordinate";
 import { api } from "./api";
+import { SymbologyProps } from "./schemas";
 
 export enum GeomType {
   Point = "Point",
@@ -46,6 +47,10 @@ export interface Feature {
   schema_id: number | null;
   symbol_id: number | null;
   data: FeatureDataItem[];
+  // These three are inserted by buildGeoJSONFromFeatures()
+  symbolCacheKey?: string;
+  symbol?: Partial<SymbologyProps>;
+  symbolCacheKeyWebGL?: string;
 }
 
 export type NewFeature = Omit<Feature, "id">;

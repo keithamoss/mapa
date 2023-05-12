@@ -7,3 +7,4 @@
 # app-specific
 supervisord.pid
 static/
+mapa/migration/*.json

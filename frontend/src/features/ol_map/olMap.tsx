@@ -1,16 +1,22 @@
 import { Map, MapEvent, View } from "ol";
 import { default as OLFeature } from "ol/Feature";
 import { Geometry, Point } from "ol/geom";
-import { Modify } from "ol/interaction.js";
-import { ModifyEvent } from "ol/interaction/Modify";
 import MapboxVector from "ol/layer/MapboxVector";
 import VectorLayer from "ol/layer/Vector";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 
+import { Modify } from "ol/interaction.js";
+import { ModifyEvent } from "ol/interaction/Modify";
 import { StyleFunction } from "ol/style/Style";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks/store";
 import { usePosition } from "../../app/hooks/usePosition";
@@ -30,6 +36,7 @@ import { selectMapById } from "../maps/mapsSlice";
 import { selectAllFeatureSchemas } from "../schemas/schemasSlice";
 import LocationFetchingIndicator from "./locationFetchingIndicator";
 import {
+  buildGeoJSONFromFeatures,
   createDataVectorLayer,
   createVectorLayerForUserPosition,
   getPointGeoJSONFromCoordinates,
@@ -129,11 +136,16 @@ function OLMap(props: Props) {
 
   // R1 when features are retrieved
   const { data: features } = useGetFeaturesForMapQuery(mapId);
-  const mapFeatures = getFeatures(filteredFeatureIds, features);
-
-  let vectorLayer = useRef<VectorLayer<VectorSource<Geometry>> | undefined>(
-    undefined
+  const mapFeatures = useMemo(
+    () => getFeatures(filteredFeatureIds, features),
+    [features, filteredFeatureIds]
   );
+
+  // @FIXME
+  // let vectorLayer = useRef<
+  //   VectorImageLayer<VectorSource<Geometry>> | undefined
+  // >(undefined);
+  let vectorLayer = useRef<any | undefined>(undefined);
 
   let vectorLayerUserPosition = useRef<
     VectorLayer<VectorSource<Geometry>> | undefined
@@ -281,21 +293,22 @@ function OLMap(props: Props) {
     // console.log("manage vector layer: start");
     if (
       olMapRef.current !== undefined &&
-      map !== undefined &&
-      features !== undefined
+      // map !== undefined &&
+      mapFeatures !== undefined
     ) {
       const styleFunction = (feature: OLFeature, resolution: number) =>
-        olStyleFunction(
-          feature,
-          resolution,
-          map.default_symbology,
-          featureSchemas
-        );
+        olStyleFunction(feature);
+
+      const geoJSONFeatures = buildGeoJSONFromFeatures(
+        mapFeatures,
+        map?.default_symbology || null,
+        featureSchemas
+      );
 
       if (vectorLayer.current === undefined) {
-        // console.log("manage vector layer: create");
+        console.log("manage vector layer: create");
         vectorLayer.current = createDataVectorLayer(
-          mapFeatures,
+          geoJSONFeatures,
           styleFunction as StyleFunction
         );
         olMapRef.current.addLayer(vectorLayer.current);
@@ -343,16 +356,18 @@ function OLMap(props: Props) {
 
         olMapRef.current.addInteraction(modify);
       } else {
-        // console.log("manage vector layer: update");
-        updateDataVectorLayer(mapFeatures, vectorLayer.current);
-        vectorLayer.current.setStyle(styleFunction as StyleFunction);
+        console.log("manage vector layer: update");
+        updateDataVectorLayer(geoJSONFeatures, vectorLayer.current);
+        if (vectorLayer.current.setStyle !== undefined) {
+          vectorLayer.current.setStyle(styleFunction as StyleFunction);
+        }
       }
     }
     // NOTE: React is complaining about olMapRef.current being unnecesary here because it won't re-render the component,
     // but that's OK because we don't need it to re - render the component when olMapRef.current changes - we just need
     // this to run as part of this re-rendering of the component and have it react to olMap now being set.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [olMapRef.current, map, features, featureSchemas, mapFeatures]);
+  }, [featureSchemas, map?.default_symbology, mapFeatures, updateFeature]);
 
   // R7
   // Manage the vector layer with the user's current position
