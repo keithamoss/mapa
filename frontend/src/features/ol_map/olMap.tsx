@@ -1,14 +1,15 @@
 import { Map, MapEvent, View } from "ol";
 import { default as OLFeature } from "ol/Feature";
 import { Geometry, Point } from "ol/geom";
+import { Modify } from "ol/interaction.js";
+import { ModifyEvent } from "ol/interaction/Modify";
 import MapboxVector from "ol/layer/MapboxVector";
 import VectorLayer from "ol/layer/Vector";
 import "ol/ol.css";
 import { fromLonLat } from "ol/proj";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 
-import { Modify } from "ol/interaction.js";
-import { ModifyEvent } from "ol/interaction/Modify";
+import BaseEvent from "ol/events/Event";
 import { StyleFunction } from "ol/style/Style";
 import React, {
   useCallback,
@@ -39,6 +40,8 @@ import {
   buildGeoJSONFromFeatures,
   createDataVectorLayer,
   createVectorLayerForUserPosition,
+  geoJSONFeatures,
+  getNextLayerVersion,
   getPointGeoJSONFromCoordinates,
   isDataVectorLayer,
   updateDataVectorLayer,
@@ -116,6 +119,12 @@ function OLMap(props: Props) {
 
   const [isFollowingGPS, setIsFollowingGPS] = useState(true);
 
+  const [layerVersions, setLayerVersions] = useState<number[]>([]);
+
+  const [layersReadyForRendering, setLayersReadyForRendering] = useState<{
+    [key: number]: boolean;
+  }>({});
+
   const onFollowGPSEnabled = useCallback(() => {
     setIsFollowingGPS(true);
   }, []);
@@ -133,6 +142,44 @@ function OLMap(props: Props) {
     // isLoading: isUpdatingFeatureLoading,
     // },
   ] = useUpdateFeatureMutation();
+
+  const onModifyInteractionStartEnd = useMemo(
+    () => (evt: BaseEvent | Event) => {
+      const target = document.getElementById(mapTargetElementId);
+
+      if (target !== null) {
+        const e = evt as ModifyEvent;
+        target.style.cursor = e.type === "modifystart" ? "grabbing" : "pointer";
+
+        if (e.type === "modifyend") {
+          e.features.forEach((feature) => {
+            const point = feature.getGeometry() as Point;
+            if (point.getType() === "Point") {
+              const { id, geom_type, map_id } =
+                feature.getProperties() as Feature;
+              updateFeature({
+                id,
+                geom: getPointGeoJSONFromCoordinates(point),
+                geom_type,
+                map_id,
+              });
+            }
+          });
+        }
+      }
+    },
+    [updateFeature]
+  );
+
+  const onModifyInteractionAddRemoveFeature = useMemo(
+    () => (evt: VectorSourceEvent) => {
+      const target = document.getElementById(mapTargetElementId);
+      if (target !== null) {
+        target.style.cursor = evt.type === "addfeature" ? "pointer" : "";
+      }
+    },
+    []
+  );
 
   // R1 when features are retrieved
   const { data: features } = useGetFeaturesForMapQuery(mapId);
@@ -288,86 +335,128 @@ function OLMap(props: Props) {
   }, [isFollowingGPS, latitude, longitude, onViewChangeAndUpdateMap]);
 
   // R6
-  // Manage the vector layer with the user's features
+  // Create the user's GeoJSON features and begin the sprite sheet generation process
   useEffect(() => {
-    // console.log("manage vector layer: start");
-    if (
-      olMapRef.current !== undefined &&
-      // map !== undefined &&
-      mapFeatures !== undefined
-    ) {
+    console.log("manage vector layer: start");
+
+    if (olMapRef.current !== undefined && mapFeatures !== undefined) {
+      console.log("manage vector layer: create features");
+
+      const layerVersion = getNextLayerVersion(layerVersions);
+      setLayerVersions((prevState) => [...prevState, layerVersion]);
+
+      geoJSONFeatures["features"] = buildGeoJSONFromFeatures(
+        mapFeatures,
+        map?.default_symbology || null,
+        featureSchemas,
+        setLayersReadyForRendering,
+        layerVersion
+      );
+    }
+    // layerVersions needs to stay out of here to avoid an endless loop of rendering
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [featureSchemas, map?.default_symbology, mapFeatures]);
+
+  // Handle updating the vector layer styles and features when the sprite sheet generation process has finished
+  useEffect(() => {
+    if (olMapRef.current !== undefined) {
+      const latestVersion = Math.max(...layerVersions);
+
       const styleFunction = (feature: OLFeature, resolution: number) =>
         olStyleFunction(feature);
 
-      const geoJSONFeatures = buildGeoJSONFromFeatures(
-        mapFeatures,
-        map?.default_symbology || null,
-        featureSchemas
-      );
+      if (layersReadyForRendering[latestVersion] === true) {
+        // Create the layer anew for the first time
+        if (vectorLayer.current === undefined) {
+          console.log("manage vector layer: create layer");
 
-      if (vectorLayer.current === undefined) {
-        console.log("manage vector layer: create");
-        vectorLayer.current = createDataVectorLayer(
-          geoJSONFeatures,
-          styleFunction as StyleFunction
-        );
-        olMapRef.current.addLayer(vectorLayer.current);
+          vectorLayer.current = createDataVectorLayer(
+            geoJSONFeatures["features"],
+            styleFunction as StyleFunction
+          );
+          olMapRef.current.addLayer(vectorLayer.current);
 
-        const modify = new Modify({
-          hitDetection: vectorLayer.current,
-          source: vectorLayer.current.getSource() || undefined,
-        });
+          const modify = new Modify({
+            hitDetection: vectorLayer.current,
+            source: vectorLayer.current.getSource() || undefined,
+          });
 
-        modify.on(["modifystart", "modifyend"], (evt) => {
-          const target = document.getElementById(mapTargetElementId);
-          if (target !== null) {
-            const e = evt as ModifyEvent;
-            target.style.cursor =
-              e.type === "modifystart" ? "grabbing" : "pointer";
+          modify.on(["modifystart", "modifyend"], onModifyInteractionStartEnd);
 
-            if (e.type === "modifyend") {
-              e.features.forEach((feature) => {
-                const point = feature.getGeometry() as Point;
-                if (point.getType() === "Point") {
-                  const { id, geom_type, map_id } =
-                    feature.getProperties() as Feature;
-                  updateFeature({
-                    id,
-                    geom: getPointGeoJSONFromCoordinates(point),
-                    geom_type,
-                    map_id,
-                  });
-                }
-              });
-            }
+          modify
+            .getOverlay()
+            .getSource()
+            .on(
+              ["addfeature", "removefeature"],
+              onModifyInteractionAddRemoveFeature
+            );
+
+          olMapRef.current.addInteraction(modify);
+        } else {
+          // Update the existing layer with new styles and force a re-render
+          console.log("manage vector layer: update layer");
+
+          if (vectorLayer.current.setStyle !== undefined) {
+            // For VectorLayer and VectorImageLayer
+
+            updateDataVectorLayer(
+              geoJSONFeatures["features"],
+              vectorLayer.current.getSource()
+            );
+
+            vectorLayer.current.setStyle(styleFunction as StyleFunction);
+          } else {
+            // For WebGLPointsLayer
+
+            // Remove and cleanup the current layer
+            olMapRef.current.getInteractions().forEach((interaction) => {
+              if (
+                interaction.constructor.name === "Modify" &&
+                olMapRef.current !== undefined
+              ) {
+                olMapRef.current.removeInteraction(interaction);
+              }
+            });
+
+            olMapRef.current.removeLayer(vectorLayer.current);
+            vectorLayer.current.dispose();
+
+            // Add the new layer
+            vectorLayer.current = createDataVectorLayer(
+              geoJSONFeatures["features"],
+              styleFunction as StyleFunction
+            );
+            olMapRef.current.addLayer(vectorLayer.current);
+
+            const modify = new Modify({
+              hitDetection: vectorLayer.current,
+              source: vectorLayer.current.getSource() || undefined,
+            });
+
+            modify.on(
+              ["modifystart", "modifyend"],
+              onModifyInteractionStartEnd
+            );
+
+            modify
+              .getOverlay()
+              .getSource()
+              .on(
+                ["addfeature", "removefeature"],
+                onModifyInteractionAddRemoveFeature
+              );
+
+            olMapRef.current.addInteraction(modify);
           }
-        });
-
-        const overlaySource = modify.getOverlay().getSource();
-        overlaySource.on(
-          ["addfeature", "removefeature"],
-          (evt: VectorSourceEvent) => {
-            const target = document.getElementById(mapTargetElementId);
-            if (target !== null) {
-              target.style.cursor = evt.type === "addfeature" ? "pointer" : "";
-            }
-          }
-        );
-
-        olMapRef.current.addInteraction(modify);
-      } else {
-        console.log("manage vector layer: update");
-        updateDataVectorLayer(geoJSONFeatures, vectorLayer.current);
-        if (vectorLayer.current.setStyle !== undefined) {
-          vectorLayer.current.setStyle(styleFunction as StyleFunction);
         }
       }
     }
-    // NOTE: React is complaining about olMapRef.current being unnecesary here because it won't re-render the component,
-    // but that's OK because we don't need it to re - render the component when olMapRef.current changes - we just need
-    // this to run as part of this re-rendering of the component and have it react to olMap now being set.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [featureSchemas, map?.default_symbology, mapFeatures, updateFeature]);
+  }, [
+    layerVersions,
+    layersReadyForRendering,
+    onModifyInteractionAddRemoveFeature,
+    onModifyInteractionStartEnd,
+  ]);
 
   // R7
   // Manage the vector layer with the user's current position

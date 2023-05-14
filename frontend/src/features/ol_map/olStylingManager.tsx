@@ -25,6 +25,24 @@ import {
 
 const styleCache: { [key: string]: Style } = {};
 
+export const getIconForSymbologyConfig = (
+  olFeature: OLFeature,
+  symbologyConfig: Partial<SymbologyProps>
+) => {
+  const icon = getFontAwesomeIconForSymbolAsSVGString(symbologyConfig);
+
+  if (icon === null) {
+    return null;
+  }
+
+  return new Style({
+    image: new Icon({
+      src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`,
+      color: "white",
+    }),
+  });
+};
+
 export const olStyleFunction = (olFeature: OLFeature) => {
   // Note this isn't strictly speaking one of our Features, because we don't have our 'geom' field (but we don't need it, so...)
   // @TODO Build the feature from the untyped props from scratch (so we can detect anything missing) or find a way to make OL geometry TypeScript typed.
@@ -118,22 +136,4 @@ export const determineSymbolForFeature = (
     symbolCacheKey: Object.values(symbologyConfig).join(""),
     symbol: symbologyConfig as Partial<SymbologyProps>,
   };
-};
-
-export const getIconForSymbologyConfig = (
-  olFeature: OLFeature,
-  symbologyConfig: Partial<SymbologyProps>
-) => {
-  const icon = getFontAwesomeIconForSymbolAsSVGString(symbologyConfig);
-
-  if (icon === null) {
-    return null;
-  }
-
-  return new Style({
-    image: new Icon({
-      src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`,
-      color: "white",
-    }),
-  });
 };

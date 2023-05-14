@@ -106,7 +106,8 @@ export const getFontAwesomeIconProps = (
 };
 
 export const getFontAwesomeIconForSymbolAsSVGString = (
-  symbol: Partial<SymbologyProps>
+  symbol: Partial<SymbologyProps>,
+  propOverrides?: Partial<SymbologyProps>
 ) => {
   const { icon, icon_family, icon_style, ...props } = symbol;
 
@@ -114,8 +115,13 @@ export const getFontAwesomeIconForSymbolAsSVGString = (
     return null;
   }
 
+  const local_symbol = {
+    ...props,
+    ...propOverrides,
+  };
+
   return getFontAwesomeIconFromLibrary(
-    getFontAwesomeIconProps(props),
+    getFontAwesomeIconProps(local_symbol),
     icon,
     icon_family as IconFamily,
     icon_style as IconStyle
