@@ -45,6 +45,11 @@ export let geoJSONFeatures: { features: GeoJSONFeatureCollection } = {
 
 export let webGLLayerStyle: any = {};
 
+const spriteSheetCanvas = document.createElement("canvas");
+spriteSheetCanvas.width = 0;
+spriteSheetCanvas.height = 0;
+const context = spriteSheetCanvas.getContext("2d");
+
 export const buildGeoJSONFromFeatures = (
   features: Feature[],
   defaultMapSymbology: SymbologyProps | null,
@@ -105,6 +110,7 @@ export const buildGeoJSONFromFeatures = (
   return geoJSON;
 };
 
+// https://stackoverflow.com/a/74026755
 const loadImage = (url: string, symbolCacheKey: string) => {
   const img = new Image();
   img.src = url;
@@ -114,12 +120,7 @@ const loadImage = (url: string, symbolCacheKey: string) => {
   });
 };
 
-const canvas = document.createElement("canvas");
-// canvas.className = "webGLPointsSpriteSheet";
-canvas.width = 0;
-canvas.height = 0;
-const context = canvas.getContext("2d");
-
+// https://davetayls.me/blog/2013-02-11-drawing-sprites-with-canvas
 const buildSpriteSheet = async (
   symbols: any,
   layerVersion: number,
@@ -131,7 +132,7 @@ const buildSpriteSheet = async (
   }
 
   // Before we can start using the canvas, clear everything already drawn on there
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.clearRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
 
   const imgPromises: any = [];
 
@@ -171,8 +172,8 @@ const buildSpriteSheet = async (
     imgs.push([img, symbolCacheKey]);
   });
 
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
+  spriteSheetCanvas.width = canvasWidth;
+  spriteSheetCanvas.height = canvasHeight;
 
   // canvas.style.zIndex = "20000";
   // canvas.style.position = "absolute";
@@ -205,10 +206,10 @@ const buildSpriteSheet = async (
 
     // tlx, tly, brx, bry
     localSpriteSheet.push([
-      topLeftX / canvas.width,
-      topLeftY / canvas.height,
-      (topLeftX + img.width) / canvas.width,
-      (topLeftY + img.height) / canvas.height,
+      topLeftX / spriteSheetCanvas.width,
+      topLeftY / spriteSheetCanvas.height,
+      (topLeftX + img.width) / spriteSheetCanvas.width,
+      (topLeftY + img.height) / spriteSheetCanvas.height,
     ]);
 
     localSpriteSheetSize.push(symbolCacheKey);
@@ -222,7 +223,7 @@ const buildSpriteSheet = async (
   localSpriteSheetSize.push(120);
 
   webGLLayerStyle = {
-    base64: canvas.toDataURL("image/png"),
+    base64: spriteSheetCanvas.toDataURL("image/png"),
     textureCoord: localSpriteSheet,
     size: localSpriteSheetSize,
   };
@@ -270,6 +271,11 @@ export const createDataVectorLayer = (
     });
   } else {
     console.log("Create WebGLPointsLayer");
+
+    // https://openlayers.org/en/latest/examples/webgl-points-layer.html
+    // https://openlayers.org/en/latest/examples/icon-sprite-webgl.html
+    // https://openlayers.org/workshop/en/webgl/animated.html
+    // Soruce: https://github.com/openlayers/workshop/blob/main/src/en/examples/webgl/animated.js
 
     return new WebGLPointsLayer({
       source: new VectorSource({

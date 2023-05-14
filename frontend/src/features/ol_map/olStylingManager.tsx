@@ -38,6 +38,9 @@ export const getIconForSymbologyConfig = (
   return new Style({
     image: new Icon({
       src: `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`,
+      // According to https://github.com/openlayers/openlayers/issues/11133#issuecomment-638987210, this forces the icon to be rendered to a canvas internally (whilst not changing the colour).
+      // This should result in a performance improvement.
+      // Untested, but it doesnt't appear to do any harm.
       color: "white",
     }),
   });

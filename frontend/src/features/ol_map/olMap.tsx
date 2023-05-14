@@ -408,6 +408,21 @@ function OLMap(props: Props) {
           } else {
             // For WebGLPointsLayer
 
+            // Workaround for the "Cannot read properties of null (reading 'hasRenderer')" bug
+            // that comes from modify interaction.
+            // Reproduce by moving a feature and keeping the cursor moving while this
+            // "tear down and recreate the layer" work is happening.
+            // It *seems* to all be about the new interaction that's added at the end.
+            // No amount of setActive(false) and early removing of the old interaction helped.
+            const workaroundModifyInteractionBugElement =
+              document.getElementById("workaround_modify_interaction_bug");
+            if (workaroundModifyInteractionBugElement !== null) {
+              workaroundModifyInteractionBugElement.style.setProperty(
+                "display",
+                "block"
+              );
+            }
+
             // Remove and cleanup the current layer
             olMapRef.current.getInteractions().forEach((interaction) => {
               if (
@@ -447,6 +462,18 @@ function OLMap(props: Props) {
               );
 
             olMapRef.current.addInteraction(modify);
+
+            if (workaroundModifyInteractionBugElement !== null) {
+              // Needs to be slightly after the interaction is added to actually work.
+              window.setTimeout(
+                () =>
+                  workaroundModifyInteractionBugElement.style.setProperty(
+                    "display",
+                    "none"
+                  ),
+                250
+              );
+            }
           }
         }
       }
@@ -492,6 +519,7 @@ function OLMap(props: Props) {
       {olMapRef.current !== undefined && (
         <React.Fragment>
           <div id="centre_of_the_map"></div>
+          <div id="workaround_modify_interaction_bug"></div>
 
           <SnapToGPSButton
             isFollowingGPS={isFollowingGPS}
