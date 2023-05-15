@@ -44,9 +44,7 @@ function SchemaDataEntryNumberField(props: Props) {
       type="number"
       inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
       onChange={onTextFieldChange}
-      defaultValue={
-        dataItem !== undefined ? dataItem.value : schemaField.default_value
-      }
+      defaultValue={dataItem !== undefined ? dataItem.value : undefined}
       label={schemaField.name}
       helperText={
         schemaField.default_value !== undefined

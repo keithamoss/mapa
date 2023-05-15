@@ -44,9 +44,7 @@ function SchemaDataEntryBooleanyTypeFields(props: Props) {
       control={
         <Checkbox
           defaultChecked={
-            dataItem !== undefined
-              ? (dataItem.value as boolean)
-              : schemaField.default_value
+            dataItem !== undefined ? (dataItem.value as boolean) : undefined
           }
           onChange={onCheckboxFieldChange}
         />

@@ -42,9 +42,7 @@ function SchemaDataEntryTextField(props: Props) {
     <TextField
       onChange={onTextFieldChange}
       required={schemaField.required_field}
-      defaultValue={
-        dataItem !== undefined ? dataItem.value : schemaField.default_value
-      }
+      defaultValue={dataItem !== undefined ? dataItem.value : undefined}
       label={schemaField.name}
       helperText={
         schemaField.default_value !== ""
