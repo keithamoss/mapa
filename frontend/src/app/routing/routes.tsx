@@ -10,6 +10,7 @@ import SchemaDeleteManager from "../../features/schemas/schemaDeleteManager";
 import SchemaEditor from "../../features/schemas/schemaEditor";
 import SchemaManager from "../../features/schemas/schemaManager";
 import SearchManager from "../../features/search/searchManager";
+import SettingsManager from "../../features/settings/settingsManager";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "SearchManager",
         element: <SearchManager />,
+      },
+      {
+        path: "SettingsManager",
+        element: <SettingsManager />,
       },
     ],
   },

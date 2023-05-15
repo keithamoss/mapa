@@ -3,6 +3,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MapIcon from "@mui/icons-material/Map";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { Badge, SpeedDialIcon, styled } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
@@ -69,6 +70,14 @@ const actions = [
       </Link>
     ),
     name: "Search",
+  },
+  {
+    icon: (
+      <Link to="/SettingsManager">
+        <SettingsIcon color="primary" />
+      </Link>
+    ),
+    name: "Settings",
   },
 ];
 

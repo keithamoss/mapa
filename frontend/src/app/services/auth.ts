@@ -1,7 +1,13 @@
 import { api } from "./api";
 
+export enum MapRenderer {
+  WebGLPointsLayer = "WebGLPointsLayer",
+  VectorImageLayer = "VectorImageLayer",
+}
+
 export interface UserProfileSettings {
   last_map_id?: number;
+  map_renderer?: MapRenderer;
 }
 
 export interface User {

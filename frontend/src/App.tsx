@@ -58,7 +58,9 @@ function App() {
 
   return (
     <div className="App">
-      {mapId !== undefined && <OLMap mapId={mapId} />}
+      {mapId !== undefined && (
+        <OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />
+      )}
 
       {location.pathname === "/" && (
         <React.Fragment>

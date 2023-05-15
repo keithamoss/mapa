@@ -1,20 +1,33 @@
 import omitBy from "lodash-es/omitBy";
 import { Coordinate } from "ol/coordinate";
+import BaseEvent from "ol/events/Event";
 import GeoJSON from "ol/format/GeoJSON";
 import { Geometry, Point } from "ol/geom";
+import { Modify } from "ol/interaction";
 import Layer from "ol/layer/Layer";
 import VectorLayer from "ol/layer/Vector";
-import VectorImageLayer from "ol/layer/VectorImage";
-import WebGLPointsLayer from "ol/layer/WebGLPoints";
 import { toLonLat } from "ol/proj";
-import VectorSource from "ol/source/Vector";
+import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { Circle, Stroke } from "ol/style";
 import Fill from "ol/style/Fill";
-import Style, { StyleFunction } from "ol/style/Style";
+import Style from "ol/style/Style";
+import { MapRenderer } from "../../app/services/auth";
 import { Feature } from "../../app/services/features";
 import { FeatureSchema, SymbologyProps } from "../../app/services/schemas";
-import { getFontAwesomeIconForSymbolAsSVGString } from "../symbology/symbologyHelpers";
 import { determineSymbolForFeature } from "./olStylingManager";
+import { buildSpriteSheet } from "./olWebGLPointsLayerManager";
+
+export const geoJSONFormat = new GeoJSON({
+  dataProjection: "EPSG:4326",
+  featureProjection: "EPSG:3857",
+});
+
+export let geoJSONFeatures: { features: GeoJSONFeatureCollection } = {
+  features: {
+    type: "FeatureCollection",
+    features: [],
+  },
+};
 
 export interface GeoJSONFeatureCollection {
   type: "FeatureCollection";
@@ -31,26 +44,7 @@ export interface GeoJSONFeatureCollection {
   }[];
 }
 
-const geoJSONFormat = new GeoJSON({
-  dataProjection: "EPSG:4326",
-  featureProjection: "EPSG:3857",
-});
-
-export let geoJSONFeatures: { features: GeoJSONFeatureCollection } = {
-  features: {
-    type: "FeatureCollection",
-    features: [],
-  },
-};
-
-export let webGLLayerStyle: any = {};
-
-const spriteSheetCanvas = document.createElement("canvas");
-spriteSheetCanvas.width = 0;
-spriteSheetCanvas.height = 0;
-const context = spriteSheetCanvas.getContext("2d");
-
-export const buildGeoJSONFromFeatures = (
+export const convertFeaturesToGeoJSON = (
   features: Feature[],
   defaultMapSymbology: SymbologyProps | null,
   featureSchemas: FeatureSchema[],
@@ -59,7 +53,8 @@ export const buildGeoJSONFromFeatures = (
       [key: number]: boolean;
     }>
   >,
-  layerVersion: number
+  layerVersion: number,
+  mapRenderer?: MapRenderer
 ): GeoJSONFeatureCollection => {
   if (features.length === 0) {
     return {
@@ -68,7 +63,8 @@ export const buildGeoJSONFromFeatures = (
     };
   }
 
-  const symbols: any = {};
+  const symbols: { [key: string]: Partial<SymbologyProps> } = {};
+
   const geoJSON: GeoJSONFeatureCollection = {
     type: "FeatureCollection",
     features:
@@ -105,207 +101,34 @@ export const buildGeoJSONFromFeatures = (
   // This is an async function due to the svg > img translation process.
   // So we use layersReadyForRendering to track when the sheet has
   // finished building and the layer can be re - rendered.
-  buildSpriteSheet(symbols, layerVersion, setLayersReadyForRendering);
+  if (
+    mapRenderer === MapRenderer.WebGLPointsLayer ||
+    mapRenderer === undefined
+  ) {
+    buildSpriteSheet(symbols, layerVersion, setLayersReadyForRendering);
+  }
 
   return geoJSON;
 };
 
-// https://stackoverflow.com/a/74026755
-const loadImage = (url: string, symbolCacheKey: string) => {
-  const img = new Image();
-  img.src = url;
-  return new Promise((resolve, reject) => {
-    img.onload = () => resolve([img, symbolCacheKey]);
-    img.onerror = reject;
-  });
-};
-
-// https://davetayls.me/blog/2013-02-11-drawing-sprites-with-canvas
-const buildSpriteSheet = async (
-  symbols: any,
-  layerVersion: number,
-  setLayersReadyForRendering: any
+export const setupModifyInteraction = (
+  vectorLayer: VectorLayer<VectorSource>,
+  onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
+  onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
 ) => {
-  if (context === null) {
-    // This should never happen, but it makes the linter happy.
-    return;
-  }
-
-  // Before we can start using the canvas, clear everything already drawn on there
-  context.clearRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
-
-  const imgPromises: any = [];
-
-  Object.keys(symbols).forEach((symbolCacheKey) => {
-    const symbol = symbols[symbolCacheKey];
-
-    const icon = getFontAwesomeIconForSymbolAsSVGString(symbol, {
-      // Retaina goodness
-      size: symbol.size * 2,
-    });
-
-    if (icon !== null) {
-      imgPromises.push(
-        loadImage(
-          `data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`,
-          symbolCacheKey
-        )
-      );
-    }
+  const modify = new Modify({
+    hitDetection: vectorLayer,
+    source: vectorLayer.getSource() || undefined,
   });
 
-  const loadedSVGImages = await Promise.all(imgPromises);
+  modify.on(["modifystart", "modifyend"], onModifyInteractionStartEnd);
 
-  let localSpriteSheet: any = ["match", ["get", "symbolCacheKey"]];
+  modify
+    .getOverlay()
+    .getSource()
+    .on(["addfeature", "removefeature"], onModifyInteractionAddRemoveFeature);
 
-  const padding = 10;
-
-  let canvasWidth = 0,
-    canvasHeight = padding;
-
-  const imgs: any = [];
-
-  loadedSVGImages.forEach(([img, symbolCacheKey]: any) => {
-    canvasWidth = Math.max(canvasWidth, img.width + padding + padding);
-    canvasHeight = canvasHeight + padding + img.height;
-
-    imgs.push([img, symbolCacheKey]);
-  });
-
-  spriteSheetCanvas.width = canvasWidth;
-  spriteSheetCanvas.height = canvasHeight;
-
-  // canvas.style.zIndex = "20000";
-  // canvas.style.position = "absolute";
-  // canvas.style.bottom = "0";
-  // context.fillStyle = "black";
-  // context.fillRect(0, 0, canvas.width, canvas.height);
-  // document.body.appendChild(canvas);
-
-  const localSpriteSheetSize = ["match", ["get", "symbolCacheKey"], "fake", 42];
-
-  let nextCanvasPositionY = padding;
-
-  imgs.forEach(([img, symbolCacheKey]: any) => {
-    context.drawImage(
-      img,
-      0, // X,Y coordination positions to start extracting image data from 'img'
-      0,
-      img.width,
-      img.height,
-      padding, // X,Y coordination positions to place the top left corner of the image data on the canvas
-      nextCanvasPositionY,
-      img.width,
-      img.height
-    );
-
-    localSpriteSheet.push(symbolCacheKey);
-
-    const topLeftX = padding;
-    const topLeftY = nextCanvasPositionY;
-
-    // tlx, tly, brx, bry
-    localSpriteSheet.push([
-      topLeftX / spriteSheetCanvas.width,
-      topLeftY / spriteSheetCanvas.height,
-      (topLeftX + img.width) / spriteSheetCanvas.width,
-      (topLeftY + img.height) / spriteSheetCanvas.height,
-    ]);
-
-    localSpriteSheetSize.push(symbolCacheKey);
-    localSpriteSheetSize.push(img.width / 2);
-
-    nextCanvasPositionY += img.height + padding;
-  });
-
-  // @TODO Add fallback icon
-  localSpriteSheet.push([0, 0, 1, 1]);
-  localSpriteSheetSize.push(120);
-
-  webGLLayerStyle = {
-    base64: spriteSheetCanvas.toDataURL("image/png"),
-    textureCoord: localSpriteSheet,
-    size: localSpriteSheetSize,
-  };
-
-  setLayersReadyForRendering((prevState: any) => ({
-    ...prevState,
-    [layerVersion]: true,
-  }));
-};
-
-export const getNextLayerVersion = (layerVersions: number[]) => {
-  if (layerVersions.length === 0) {
-    return 1;
-  }
-  return Math.max(...layerVersions) + 1;
-};
-
-export const createDataVectorLayer = (
-  geoJSONFeatures: GeoJSONFeatureCollection,
-  styleFunction: StyleFunction
-) => {
-  if (window.location.href.includes("mode=VectorImageLayer") === true) {
-    return new VectorImageLayer({
-      source: new VectorSource({
-        format: geoJSONFormat,
-        features: geoJSONFormat.readFeatures(geoJSONFeatures),
-      }),
-      style: styleFunction,
-      imageRatio:
-        window.location.href.includes("imageRatio15") === true ? 1.5 : 1,
-      properties: {
-        id: "data-layer",
-      },
-    });
-  } else if (window.location.href.includes("mode=VectorLayer") === true) {
-    return new VectorLayer({
-      source: new VectorSource({
-        format: geoJSONFormat,
-        features: geoJSONFormat.readFeatures(geoJSONFeatures),
-      }),
-      style: styleFunction,
-      properties: {
-        id: "data-layer",
-      },
-    });
-  } else {
-    console.log("Create WebGLPointsLayer");
-
-    // https://openlayers.org/en/latest/examples/webgl-points-layer.html
-    // https://openlayers.org/en/latest/examples/icon-sprite-webgl.html
-    // https://openlayers.org/workshop/en/webgl/animated.html
-    // Soruce: https://github.com/openlayers/workshop/blob/main/src/en/examples/webgl/animated.js
-
-    return new WebGLPointsLayer({
-      source: new VectorSource({
-        format: geoJSONFormat,
-        features: geoJSONFormat.readFeatures(geoJSONFeatures),
-      }) as any,
-      style: {
-        symbol: {
-          symbolType: "image",
-          rotateWithView: false,
-          src: webGLLayerStyle["base64"],
-          size: webGLLayerStyle["size"],
-          textureCoord: webGLLayerStyle["textureCoord"],
-        },
-      },
-      properties: {
-        id: "data-layer",
-      },
-    });
-  }
-};
-
-export const updateDataVectorLayer = async (
-  geoJSONFeatures: GeoJSONFeatureCollection,
-  vectorSource: VectorSource<Geometry> | null
-) => {
-  if (vectorSource !== null) {
-    vectorSource.clear(true);
-    vectorSource.addFeatures(geoJSONFormat.readFeatures(geoJSONFeatures));
-  }
+  return modify;
 };
 
 export const isDataVectorLayer = (layer: Layer) =>

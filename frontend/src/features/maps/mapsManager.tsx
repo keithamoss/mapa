@@ -1,6 +1,5 @@
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import BugReportIcon from "@mui/icons-material/BugReport";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import Divider from "@mui/material/Divider";
@@ -112,47 +111,6 @@ function MapManager(props: Props) {
             <Divider />
           </React.Fragment>
         ))}
-      </List>
-
-      <List>
-        <ListItem>
-          <ListItemText>
-            <BugReportIcon />
-            <Typography variant="h6" component="span">
-              Debugging
-            </Typography>
-          </ListItemText>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => (window.location.href = "/?mode=VectorLayer")}
-          >
-            <ListItemText>VectorLayer</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => (window.location.href = "/?mode=VectorImageLayer")}
-          >
-            <ListItemText>VectorImageLayer</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() =>
-              (window.location.href = "/?mode=VectorImageLayer&imageRatio15")
-            }
-          >
-            <ListItemText>VectorImageLayer (imageRatio 1.5)</ListItemText>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton
-            onClick={() => (window.location.href = "/?mode=WebGLPointsLayer")}
-          >
-            <ListItemText>WebGLPointsLayer</ListItemText>
-          </ListItemButton>
-        </ListItem>
       </List>
     </DialogWithTransition>
   );
