@@ -8,3 +8,4 @@
 supervisord.pid
 static/
 mapa/migration/*.json
+mapa/migration/*.csv

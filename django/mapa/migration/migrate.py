@@ -1,3 +1,4 @@
+import csv
 import json
 import random
 
@@ -36,8 +37,13 @@ def migrate():
         data = json.load(f)["data_content"]
         folders = data["folder"]
 
+        csv_out = []
+
         for feature in data["poi"]:
             # print(feature)
+
+            if feature["folder_id"] != FORAGING_FOLDER_ID:
+                continue
 
             serializer = FeatureSerializer(data={
                 "geom_type": GeomType.POINT,
@@ -54,8 +60,13 @@ def migrate():
                 "symbol_id": random.randint(1, 9)
             })
 
-            if feature["folder_id"] != FORAGING_FOLDER_ID:
-                continue
+            csv_out.append({
+                "id": feature["id"],
+                "title": feature["title"],
+                "description": feature["description"],
+                "folder_id": feature["folder_id"],
+                "icon_id": feature["extra_info"]["pin_icon_code"],
+            })
 
             # if feature["extra_info"]["custom_fields"] != []:
             #     print(feature["extra_info"]["custom_fields"])
@@ -68,7 +79,12 @@ def migrate():
                 print(serializer.data)
                 raise Exception("is not valid!")
 
-            # break
+    with open("contents.csv", "w") as f_csv:
+        contentsCSV = csv.DictWriter(f_csv, ["id", "title", "description", "folder_id", "icon_id"])
+        contentsCSV.writeheader()
+
+        for row in sorted(csv_out, key=lambda d: d["title"]):
+            contentsCSV.writerow(row)
 
 
 migrate()
