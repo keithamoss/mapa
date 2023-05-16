@@ -374,8 +374,9 @@ function OLMap(props: Props) {
       }
     }
     // layerVersions needs to stay out of here to avoid an endless loop of rendering
+    // olMapRef.current needs to be here so we actually create the map when the features API returns a response
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [featureSchemas, map?.default_symbology, mapFeatures]);
+  }, [olMapRef.current, featureSchemas, map?.default_symbology, mapFeatures]);
 
   // Handle updating the vector layer styles and features when the sprite sheet generation process has finished
   useEffect(() => {
