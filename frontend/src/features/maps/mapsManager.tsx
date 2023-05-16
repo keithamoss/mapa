@@ -18,10 +18,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../app/hooks/store";
+import { useAppDispatch, useAppSelector } from "../../app/hooks/store";
 import { useUpdateUserProfileMutation } from "../../app/services/auth";
 import { DialogWithTransition } from "../../app/ui/dialog";
-import { selectActiveMapId } from "../app/appSlice";
+import {
+  defaultSearchParameters,
+  selectActiveMapId,
+  setFilteredFeatures,
+  setSearchParameters,
+} from "../app/appSlice";
 import { selectAllMaps } from "./mapsSlice";
 
 interface Props {}
@@ -35,6 +40,8 @@ function MapManager(props: Props) {
 
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   const [
     updateUserProfile,
     {
@@ -44,6 +51,8 @@ function MapManager(props: Props) {
   ] = useUpdateUserProfileMutation();
 
   const onSwitchMap = (mapId: number) => () => {
+    dispatch(setSearchParameters(defaultSearchParameters));
+    dispatch(setFilteredFeatures([]));
     updateUserProfile({ last_map_id: mapId });
   };
 
