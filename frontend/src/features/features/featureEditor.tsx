@@ -277,7 +277,7 @@ function FeatureEditor(props: Props) {
             component="fieldset"
             variant="outlined"
           >
-            <FormLabel component="legend">Feature Info</FormLabel>
+            <FormLabel component="legend">Feature Summary</FormLabel>
 
             {localFeature.schema_id !== null && (
               <SchemaFieldSummaryPanel
