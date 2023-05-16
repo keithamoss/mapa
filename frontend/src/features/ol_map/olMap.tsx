@@ -33,6 +33,7 @@ import {
 } from "../app/appSlice";
 import { selectMapById } from "../maps/mapsSlice";
 import { selectAllFeatureSchemas } from "../schemas/schemasSlice";
+import FeatureMovementButton from "./featureMovementButton";
 import LocationFetchingIndicator from "./locationFetchingIndicator";
 import {
   convertFeaturesToGeoJSON,
@@ -118,6 +119,17 @@ function OLMap(props: Props) {
     },
     [onViewChange]
   );
+
+  const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] =
+    useState(false);
+
+  const onFeatureMovementEnabled = useCallback(() => {
+    setIsFeatureMovementAllowed(true);
+  }, []);
+
+  const onFeatureMovementDisabled = useCallback(() => {
+    setIsFeatureMovementAllowed(false);
+  }, []);
 
   const [isWatchingGPS] = useState(true);
 
@@ -367,7 +379,7 @@ function OLMap(props: Props) {
 
         vectorLayer.current = manageVectorImageLayerCreation(
           olMapRef.current,
-          mapRenderer,
+          isFeatureMovementAllowed,
           onModifyInteractionStartEnd,
           onModifyInteractionAddRemoveFeature
         );
@@ -375,6 +387,7 @@ function OLMap(props: Props) {
     }
     // layerVersions needs to stay out of here to avoid an endless loop of rendering
     // olMapRef.current needs to be here so we actually create the map when the features API returns a response
+    // isFeatureMovementAllowed isn't needed here because there's a separate useEffect for that
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [olMapRef.current, featureSchemas, map?.default_symbology, mapFeatures]);
 
@@ -394,6 +407,7 @@ function OLMap(props: Props) {
 
             vectorLayer.current = manageWebGLPointsLayerCreation(
               olMapRef.current,
+              isFeatureMovementAllowed,
               onModifyInteractionStartEnd,
               onModifyInteractionAddRemoveFeature
             );
@@ -403,6 +417,7 @@ function OLMap(props: Props) {
             vectorLayer.current = manageWebGLPointsLayerUpdate(
               vectorLayer.current,
               olMapRef.current,
+              isFeatureMovementAllowed,
               onModifyInteractionStartEnd,
               onModifyInteractionAddRemoveFeature
             );
@@ -410,6 +425,8 @@ function OLMap(props: Props) {
         }
       }
     }
+    // isFeatureMovementAllowed isn't needed here because there's a separate useEffect for that
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     layerVersions,
     layersReadyForRendering,
@@ -444,6 +461,18 @@ function OLMap(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [olMapRef.current, latitude, longitude]);
 
+  // R7=8
+  // Manage enabling/disabling the movement of features
+  useEffect(() => {
+    if (olMapRef.current !== undefined) {
+      olMapRef.current.getInteractions().forEach((interaction) => {
+        if (interaction.constructor.name === "Modify") {
+          interaction.setActive(isFeatureMovementAllowed);
+        }
+      });
+    }
+  }, [isFeatureMovementAllowed]);
+
   return (
     <div className="map-container">
       <div id={mapTargetElementId} />
@@ -458,6 +487,12 @@ function OLMap(props: Props) {
             isFollowingGPS={isFollowingGPS}
             onFollowGPSEnabled={onFollowGPSEnabled}
             onFollowGPSDisabled={onFollowGPSDisabled}
+          />
+
+          <FeatureMovementButton
+            isFeatureMovementAllowed={isFeatureMovementAllowed}
+            onFeatureMovementEnabled={onFeatureMovementEnabled}
+            onFeatureMovementDisabled={onFeatureMovementDisabled}
           />
         </React.Fragment>
       )}

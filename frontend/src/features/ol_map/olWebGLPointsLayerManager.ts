@@ -269,20 +269,21 @@ export const createWebGLPointsLayer = (
 
 export const manageWebGLPointsLayerCreation = (
   map: Map,
+  isFeatureMovementAllowed: boolean,
   onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
   onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
 ) => {
   const vectorLayer = createWebGLPointsLayer(geoJSONFeatures["features"]);
   map.addLayer(vectorLayer);
 
-  map.addInteraction(
-    setupModifyInteraction(
-      // Not sure why this was complaining
-      vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
-      onModifyInteractionStartEnd,
-      onModifyInteractionAddRemoveFeature
-    )
+  const modify = setupModifyInteraction(
+    // Not sure why this was complaining
+    vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
+    onModifyInteractionStartEnd,
+    onModifyInteractionAddRemoveFeature
   );
+  modify.setActive(isFeatureMovementAllowed);
+  map.addInteraction(modify);
 
   return vectorLayer;
 };
@@ -290,6 +291,7 @@ export const manageWebGLPointsLayerCreation = (
 export const manageWebGLPointsLayerUpdate = (
   vectorLayer: VectorLayer<VectorSource<Geometry>>,
   map: Map,
+  isFeatureMovementAllowed: boolean,
   onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
   onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
 ) => {
@@ -322,14 +324,14 @@ export const manageWebGLPointsLayerUpdate = (
   const newVectorLayer = createWebGLPointsLayer(geoJSONFeatures["features"]);
   map.addLayer(newVectorLayer);
 
-  map.addInteraction(
-    setupModifyInteraction(
-      // Not sure why this was complaining
-      newVectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
-      onModifyInteractionStartEnd,
-      onModifyInteractionAddRemoveFeature
-    )
+  const modify = setupModifyInteraction(
+    // Not sure why this was complaining
+    newVectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
+    onModifyInteractionStartEnd,
+    onModifyInteractionAddRemoveFeature
   );
+  modify.setActive(isFeatureMovementAllowed);
+  map.addInteraction(modify);
 
   if (workaroundModifyInteractionBugElement !== null) {
     // Needs to be slightly after the interaction is added to actually work.

@@ -6,7 +6,6 @@ import VectorLayer from "ol/layer/Vector";
 import VectorImageLayer from "ol/layer/VectorImage";
 import VectorSource, { VectorSourceEvent } from "ol/source/Vector";
 import { StyleFunction } from "ol/style/Style";
-import { MapRenderer } from "../../app/services/auth";
 import {
   GeoJSONFeatureCollection,
   geoJSONFeatures,
@@ -36,21 +35,21 @@ export const createVectorImageLayer = (
 
 export const manageVectorImageLayerCreation = (
   map: Map,
-  mapRenderer: MapRenderer,
+  isFeatureMovementAllowed: boolean,
   onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
   onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
 ) => {
   const vectorLayer = createVectorImageLayer(geoJSONFeatures["features"]);
   map.addLayer(vectorLayer);
 
-  map.addInteraction(
-    setupModifyInteraction(
-      // Not sure why this was complaining
-      vectorLayer as VectorLayer<VectorSource<Geometry>>,
-      onModifyInteractionStartEnd,
-      onModifyInteractionAddRemoveFeature
-    )
+  const modify = setupModifyInteraction(
+    // Not sure why this was complaining
+    vectorLayer as VectorLayer<VectorSource<Geometry>>,
+    onModifyInteractionStartEnd,
+    onModifyInteractionAddRemoveFeature
   );
+  modify.setActive(isFeatureMovementAllowed);
+  map.addInteraction(modify);
 
   return vectorLayer;
 };
