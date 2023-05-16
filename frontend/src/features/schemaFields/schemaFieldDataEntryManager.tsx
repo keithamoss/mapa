@@ -30,7 +30,7 @@ function SchemaFieldDataEntryManager(props: Props) {
   return (
     <FormControl fullWidth={true} component="fieldset" variant="outlined">
       <FormLabel component="legend" sx={{ mb: 2 }}>
-        Fields
+        Your Fields
       </FormLabel>
 
       <FormGroup>

@@ -407,7 +407,7 @@ function SchemaForm(props: Props) {
               variant="outlined"
             >
               <FormLabel component="legend" sx={{ mb: 1 }}>
-                Fields
+                Your Fields
               </FormLabel>
 
               <FormGroup>
