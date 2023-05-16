@@ -1,40 +1,25 @@
 import { Schema } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import MapIcon from "@mui/icons-material/Map";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Badge, SpeedDialIcon, styled } from "@mui/material";
+import { Avatar, SpeedDialIcon, styled } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialAction, {
-  SpeedDialActionProps,
-} from "@mui/material/SpeedDialAction";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import { grey } from "@mui/material/colors";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks/store";
 import { getCountOfFilteredFeatureIds } from "./appSlice";
 
-const SpeedDialActionWithOptionalBadge = (
-  props: SpeedDialActionProps & { badgeCount?: number }
-) => {
-  const { badgeCount, ...rest } = props;
-
-  return (
-    <SpeedDialAction
-      {...rest}
-      icon={
-        badgeCount !== undefined && badgeCount >= 1 ? (
-          <Badge badgeContent={badgeCount} color="primary">
-            {rest.icon}
-          </Badge>
-        ) : (
-          rest.icon
-        )
-      }
-    />
-  );
-};
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
+  position: "absolute",
+  top: "-12px",
+  right: "-6px",
+}));
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
   position: "absolute",
@@ -103,22 +88,32 @@ export default function SpeedDialNavigation(props: Props) {
   return (
     <React.Fragment>
       <Backdrop open={open} />
+
       <StyledSpeedDial
         ariaLabel="The primary navigation element for the app"
-        icon={<SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />}
+        icon={
+          searchResultCount >= 1 ? (
+            <div>
+              <StyledAvatar sx={{ bgcolor: grey[400], width: 26, height: 26 }}>
+                <FilterAltIcon fontSize="small" />
+              </StyledAvatar>
+
+              <SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />
+            </div>
+          ) : (
+            <SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />
+          )
+        }
         onClose={handleClose}
         onOpen={handleOpen}
         open={open}
       >
         {actions.map((action) => (
-          <SpeedDialActionWithOptionalBadge
+          <SpeedDialAction
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
             onClick={onActionClick(action.name)}
-            badgeCount={
-              action.name === "Search" ? searchResultCount : undefined
-            }
           />
         ))}
       </StyledSpeedDial>
