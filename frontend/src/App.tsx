@@ -36,6 +36,8 @@ function App() {
 		return null;
 	}
 
+	// noop
+
 	if (user === null) {
 		return (
 			<LoginContainer>
@@ -58,7 +60,9 @@ function App() {
 
 	return (
 		<div className="App">
-			{mapId !== undefined && <OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />}
+			{mapId !== undefined && (
+				<OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />
+			)}
 
 			{location.pathname === '/' && (
 				<React.Fragment>
