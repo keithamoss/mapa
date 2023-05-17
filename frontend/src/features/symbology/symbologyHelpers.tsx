@@ -210,17 +210,21 @@ export const addNewSymbologyGroup = (
   groupName: string,
   symbology: FeatureSchemaSymbology
 ) => {
+  const nextId = getNextSymbologyGroupId(symbology);
   const local_symbology: FeatureSchemaSymbology = {
     ...symbology,
     groups: [
       ...symbology.groups,
       {
-        id: getNextSymbologyGroupId(symbology),
+        id: nextId,
         name: groupName,
       },
     ],
   };
-  return local_symbology;
+  return {
+    id: nextId,
+    symbology: local_symbology,
+  };
 };
 
 export const editSymbologyGroup = (

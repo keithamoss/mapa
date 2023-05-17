@@ -127,8 +127,13 @@ function SchemaForm(props: Props) {
   // Symbology
   // ######################
   const onAddSymbolGroup = (groupName: string) => {
-    const local_symbology = addNewSymbologyGroup(groupName, symbology);
+    const { id, symbology: local_symbology } = addNewSymbologyGroup(
+      groupName,
+      symbology
+    );
     setValue("symbology", local_symbology, { shouldDirty: true });
+
+    return id;
   };
 
   const onEditSymbolGroup = (groupId: number, groupName: string) => {

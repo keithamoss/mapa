@@ -1,3 +1,5 @@
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
 import CloseIcon from "@mui/icons-material/Close";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -59,6 +61,7 @@ import { IconFamily, IconStyle } from "@fortawesome/fontawesome-svg-core";
 import React from "react";
 import { DialogWithTransition } from "../../app/ui/dialog";
 import DiscardChangesDialog from "../../app/ui/discardChangesDialog";
+import SchemaSymbologyGroupEditor from "../schemas/schemaSymbologyGroupEditor";
 import "./colourPicker.css";
 import {
   getDefaultFamilyByIconName,
@@ -182,6 +185,7 @@ interface Props {
   onDone: (symbolField: SymbologyProps, groupId: number) => void;
   onCancel: () => void;
   groups?: FeatureSchemaSymbologyGroup[];
+  onAddGroup?: (groupName: string) => number;
   currentGroupId?: number;
   nameFieldRequired: boolean;
   iconFieldRequired: boolean;
@@ -195,15 +199,15 @@ function SymbologyFieldEditor(props: Props) {
     onDone,
     onCancel,
     groups,
+    onAddGroup,
     currentGroupId,
     nameFieldRequired,
     iconFieldRequired,
   } = props;
 
-  const [selectedGroupId, setSelectedGroupId] = useState<number>(
-    currentGroupId || defaultSymbologyGroupId
-  );
-
+  // ######################
+  // Form
+  // ######################
   const {
     watch,
     register,
@@ -231,14 +235,6 @@ function SymbologyFieldEditor(props: Props) {
   } = watch();
 
   const textInput = useRef<HTMLInputElement>(null);
-
-  const onChooseGroupId = (e: SelectChangeEvent<number>) => {
-    const groupId = parseInt(`${e.target.value}`);
-
-    if (Number.isNaN(groupId) === false) {
-      setSelectedGroupId(groupId);
-    }
-  };
 
   const onDoneWithForm: SubmitHandler<SymbologyProps> = (data) => {
     const dataWithDefaultsRemoved = removeDefaultValuesFromForm(
@@ -279,6 +275,9 @@ function SymbologyFieldEditor(props: Props) {
 
   const onCancelDiscardChangesDialog = () =>
     setIsDiscardChangesDialogShown(false);
+  // ######################
+  // Form (End)
+  // ######################
 
   // ######################
   // Icon Chooser Dialog
@@ -325,6 +324,47 @@ function SymbologyFieldEditor(props: Props) {
     setIsIconFamilyAndStyleChooserOpen(false);
   // ######################
   // Icon Family and Style Choosing (End)
+  // ######################
+
+  // ######################
+  // Choose Group
+  // ######################
+  const [selectedGroupId, setSelectedGroupId] = useState<number>(
+    currentGroupId || defaultSymbologyGroupId
+  );
+
+  const onChooseGroupId = (e: SelectChangeEvent<number>) => {
+    const groupId = parseInt(`${e.target.value}`);
+
+    if (Number.isNaN(groupId) === false) {
+      setSelectedGroupId(groupId);
+    }
+  };
+  // ######################
+  // Choose Group (End)
+  // ######################
+
+  // ######################
+  // Add Group
+  // ######################
+  const [isAddingGroup, setIsAddingGroup] = useState(false);
+
+  const onClickAddNewGroup = () => {
+    setIsAddingGroup(true);
+  };
+
+  const onDoneAddingGroup = (groupName: string) => {
+    if (onAddGroup !== undefined) {
+      setSelectedGroupId(onAddGroup(groupName));
+      setIsAddingGroup(false);
+    }
+  };
+
+  const onCancelAddingGroup = () => {
+    setIsAddingGroup(false);
+  };
+  // ######################
+  // Add Group (End)
   // ######################
 
   return (
@@ -430,17 +470,41 @@ function SymbologyFieldEditor(props: Props) {
               >
                 <FormGroup>
                   <InputLabel>Group</InputLabel>
-                  <Select
-                    label="Group"
-                    defaultValue={currentGroupId || defaultSymbologyGroupId}
-                    onChange={onChooseGroupId}
-                  >
-                    {groups.map((group) => (
-                      <MenuItem key={group.id} value={group.id}>
-                        {group.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
+
+                  {onClickAddNewGroup !== undefined && (
+                    <Paper elevation={0} sx={{ display: "flex" }}>
+                      <Select
+                        label="Group"
+                        sx={{ flex: 1 }}
+                        value={selectedGroupId}
+                        onChange={onChooseGroupId}
+                      >
+                        {groups.map((group) => (
+                          <MenuItem key={group.id} value={group.id}>
+                            {group.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      <IconButton color="default" onClick={onClickAddNewGroup}>
+                        <AddCircleIcon />
+                      </IconButton>
+                    </Paper>
+                  )}
+
+                  {onClickAddNewGroup === undefined && (
+                    <Select
+                      label="Group"
+                      value={selectedGroupId}
+                      onChange={onChooseGroupId}
+                    >
+                      {groups.map((group) => (
+                        <MenuItem key={group.id} value={group.id}>
+                          {group.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
                 </FormGroup>
               </FormControl>
             )}
@@ -831,6 +895,13 @@ function SymbologyFieldEditor(props: Props) {
           </Paper>
         </form>
       </DialogWithTransition>
+
+      {isAddingGroup === true && (
+        <SchemaSymbologyGroupEditor
+          onDone={onDoneAddingGroup}
+          onCancel={onCancelAddingGroup}
+        />
+      )}
     </React.Fragment>
   );
 }

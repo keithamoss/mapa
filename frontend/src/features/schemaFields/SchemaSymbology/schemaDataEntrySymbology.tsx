@@ -8,11 +8,13 @@ import {
   TextField,
 } from "@mui/material";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
+import NotFound from "../../../NotFound";
 import { useAppSelector } from "../../../app/hooks/store";
 import { useGetFeaturesForMapQuery } from "../../../app/services/features";
 import {
+  FeatureSchema,
   FeatureSchemaSymbologySymbolsValue,
   SymbologyProps,
   useUpdateFeatureSchemaMutation,
@@ -20,6 +22,7 @@ import {
 import { selectFeatureSchemaById } from "../../schemas/schemasSlice";
 import SymbologyFieldEditor from "../../symbology/symbologyFieldEditor";
 import {
+  addNewSymbologyGroup,
   addSymbolToGroup,
   defaultSymbolSizeForFormFields,
   defaultSymbologyGroupId,
@@ -29,9 +32,31 @@ import {
 } from "../../symbology/symbologyHelpers";
 import SchemaSymbologyChooser from "./schemaSymbologyChooser";
 
-interface Props {
+interface EntryPointProps {
   mapId: number;
   schemaId: number;
+  symbolId: number | null;
+  onFieldChange: (symbolId: number) => void;
+  onFieldRemove: () => void;
+}
+
+function SchemaDataEntrySymbologyEntrypoint(props: EntryPointProps) {
+  const { schemaId, ...rest } = props;
+
+  const schema = useAppSelector((state) =>
+    selectFeatureSchemaById(state, schemaId)
+  );
+
+  if (schema === undefined) {
+    return <NotFound />;
+  }
+
+  return <SchemaDataEntrySymbology schema={schema} {...rest} />;
+}
+
+interface Props {
+  mapId: number;
+  schema: FeatureSchema;
   symbolId: number | null;
   onFieldChange: (symbolId: number) => void;
   onFieldRemove: () => void;
@@ -40,11 +65,7 @@ interface Props {
 function SchemaDataEntrySymbology(props: Props) {
   console.log("### SchemaDataEntrySymbology ###");
 
-  const { mapId, schemaId, symbolId, onFieldChange, onFieldRemove } = props;
-
-  const schema = useAppSelector((state) =>
-    selectFeatureSchemaById(state, schemaId)
-  );
+  const { mapId, schema, symbolId, onFieldChange, onFieldRemove } = props;
 
   const { data: features } = useGetFeaturesForMapQuery(mapId);
 
@@ -64,20 +85,7 @@ function SchemaDataEntrySymbology(props: Props) {
   // ######################
   const [isAddingSymbol, setIsAddingSymbol] = useState(false);
 
-  const [
-    updateSchema,
-    {
-      isSuccess: isUpdatingSchemaSuccessful,
-      // isLoading: isUpdatingSchemaLoading,
-    },
-  ] = useUpdateFeatureSchemaMutation();
-
-  // See note in MapEditor about usage of useEffect
-  useEffect(() => {
-    if (isUpdatingSchemaSuccessful === true) {
-      setIsAddingSymbol(false);
-    }
-  }, [isUpdatingSchemaSuccessful]);
+  const [updateSchema] = useUpdateFeatureSchemaMutation();
 
   const onAddSymbol = () => {
     setIsAddingSymbol(true);
@@ -87,20 +95,20 @@ function SchemaDataEntrySymbology(props: Props) {
     symbologyField: SymbologyProps,
     groupId: number
   ) => {
-    if (schema !== undefined) {
-      const [local_symbology, newSymbolId] = addSymbolToGroup(
-        symbologyField,
-        schema.symbology,
-        groupId
-      );
+    const [local_symbology, newSymbolId] = addSymbolToGroup(
+      symbologyField,
+      schema.symbology,
+      groupId
+    );
 
-      updateSchema({
-        ...schema,
-        symbology: local_symbology,
-      });
+    updateSchema({
+      ...schema,
+      symbology: local_symbology,
+    });
 
-      onFieldChange(newSymbolId);
-    }
+    onFieldChange(newSymbolId);
+
+    setIsAddingSymbol(false);
   };
 
   const onCancelAddingSymbol = () => {
@@ -132,14 +140,12 @@ function SchemaDataEntrySymbology(props: Props) {
         group_id: groupId,
       };
 
-      if (schema !== undefined) {
-        updateSchema({
-          ...schema,
-          symbology: modifySymbolInGroup(local_symbol, schema.symbology),
-        });
+      updateSchema({
+        ...schema,
+        symbology: modifySymbolInGroup(local_symbol, schema.symbology),
+      });
 
-        setIsEditingSymbol(false);
-      }
+      setIsEditingSymbol(false);
     }
   };
   // ######################
@@ -159,9 +165,25 @@ function SchemaDataEntrySymbology(props: Props) {
   // Symbol Chooser Dialog (End)
   // ######################
 
-  if (schema === undefined) {
-    return null;
-  }
+  // ######################
+  // Add Group
+  // ######################
+  const onAddSymbolGroup = (groupName: string) => {
+    const { id, symbology: local_symbology } = addNewSymbologyGroup(
+      groupName,
+      schema.symbology
+    );
+
+    updateSchema({
+      ...schema,
+      symbology: local_symbology,
+    });
+
+    return id;
+  };
+  // ######################
+  // Add Group (End)
+  // ######################
 
   const selectedSymbol =
     symbolId !== null
@@ -239,6 +261,7 @@ function SchemaDataEntrySymbology(props: Props) {
           onDone={onDoneAddingSymbol}
           onCancel={onCancelAddingSymbol}
           groups={schema.symbology.groups}
+          onAddGroup={onAddSymbolGroup}
           currentGroupId={defaultSymbologyGroupId}
           nameFieldRequired={true}
           iconFieldRequired={true}
@@ -251,6 +274,7 @@ function SchemaDataEntrySymbology(props: Props) {
           onDone={onDoneEditingSymbol}
           onCancel={onCancelEditingSymbol}
           groups={schema.symbology.groups}
+          onAddGroup={onAddSymbolGroup}
           currentGroupId={selectedSymbol.group_id}
           nameFieldRequired={true}
           iconFieldRequired={true}
@@ -260,4 +284,4 @@ function SchemaDataEntrySymbology(props: Props) {
   );
 }
 
-export default SchemaDataEntrySymbology;
+export default SchemaDataEntrySymbologyEntrypoint;

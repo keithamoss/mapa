@@ -48,7 +48,7 @@ interface Props {
   schemaId?: number;
   symbology: FeatureSchemaSymbology;
   mapId?: number;
-  onAddGroup: (groupName: string) => void;
+  onAddGroup: (groupName: string) => number;
   onEditGroup: (groupId: number, groupName: string) => void;
   onDeleteGroup: (groupId: number) => void;
   onAddObject: (symbol: SymbologyProps, groupId: number) => void;
@@ -467,6 +467,7 @@ function SchemaSymbologyManager(props: Props) {
           onDone={onDoneAddingSymbol}
           onCancel={onCancelAddingSymbol}
           groups={symbology.groups}
+          onAddGroup={onAddGroup}
           currentGroupId={groupIdForNewSymbologyField}
           nameFieldRequired={true}
           iconFieldRequired={true}
@@ -479,6 +480,7 @@ function SchemaSymbologyManager(props: Props) {
           onDone={onDoneEditingSymbol}
           onCancel={onCancelEditingSymbol}
           groups={symbology.groups}
+          onAddGroup={onAddGroup}
           currentGroupId={symbolFieldForEditor.group_id}
           nameFieldRequired={true}
           iconFieldRequired={true}
