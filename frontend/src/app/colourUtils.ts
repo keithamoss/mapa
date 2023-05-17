@@ -29,38 +29,38 @@
 // };
 
 export const hextoRGBACSS = (
-  h: string | undefined,
-  opacity_override?: number,
-  default_colour = "rgba(0, 0, 0, 0.01)"
+	h: string | undefined,
+	opacity_override?: number,
+	default_colour = 'rgba(0, 0, 0, 0.01)'
 ) => {
-  if (h === undefined) {
-    return default_colour;
-  }
+	if (h === undefined) {
+		return default_colour;
+	}
 
-  let r: any = 0,
-    g: any = 0,
-    b: any = 0,
-    a: any = (opacity_override || 1) * 255;
+	let r: any = 0,
+		g: any = 0,
+		b: any = 0,
+		a: any = (opacity_override || 1) * 255;
 
-  // #FFF0
-  if (h.length === 5) {
-    r = "0x" + h[1] + h[1];
-    g = "0x" + h[2] + h[2];
-    b = "0x" + h[3] + h[3];
-    a = "0x" + h[4] + h[4];
-    // #FFFFFF (default to opacity=1 aka 255)
-  } else if (h.length === 7) {
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
-    // #FFFFFF00
-  } else if (h.length === 9) {
-    r = "0x" + h[1] + h[2];
-    g = "0x" + h[3] + h[4];
-    b = "0x" + h[5] + h[6];
-    a = "0x" + h[7] + h[8];
-  }
-  a = +(a / 255).toFixed(3);
+	// #FFF0
+	if (h.length === 5) {
+		r = '0x' + h[1] + h[1];
+		g = '0x' + h[2] + h[2];
+		b = '0x' + h[3] + h[3];
+		a = '0x' + h[4] + h[4];
+		// #FFFFFF (default to opacity=1 aka 255)
+	} else if (h.length === 7) {
+		r = '0x' + h[1] + h[2];
+		g = '0x' + h[3] + h[4];
+		b = '0x' + h[5] + h[6];
+		// #FFFFFF00
+	} else if (h.length === 9) {
+		r = '0x' + h[1] + h[2];
+		g = '0x' + h[3] + h[4];
+		b = '0x' + h[5] + h[6];
+		a = '0x' + h[7] + h[8];
+	}
+	a = +(a / 255).toFixed(3);
 
-  return "rgba(" + +r + "," + +g + "," + +b + "," + a + ")";
+	return 'rgba(' + +r + ',' + +g + ',' + +b + ',' + a + ')';
 };

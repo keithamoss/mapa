@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { Slider, SliderProps } from "@mui/material";
-import { forwardRef, useEffect } from "react";
+import styled from '@emotion/styled';
+import { Slider, SliderProps } from '@mui/material';
+import { forwardRef, useEffect } from 'react';
 
 // MUI issue tracking this:
 // https://github.com/mui/material-ui/issues/20990
@@ -18,33 +18,33 @@ import { forwardRef, useEffect } from "react";
 // This restricts slider adjustment to only when the slider is moved via the thumb, rather than single clicking on the track.
 
 const StyledSlider = styled(Slider)`
-  /* touch-action: none; */
-  pointer-events: none;
+	/* touch-action: none; */
+	pointer-events: none;
 
-  & .MuiSlider-thumb {
-    /* touch-action: auto; */
-    pointer-events: auto;
-  }
+	& .MuiSlider-thumb {
+		/* touch-action: auto; */
+		pointer-events: auto;
+	}
 `;
 
 function SliderFixed(props: SliderProps, ref: any) {
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.addEventListener(
-        "touchstart",
-        (e: any) => {
-          const isThumb = e.target.dataset.index;
+	useEffect(() => {
+		if (ref.current) {
+			ref.current.addEventListener(
+				'touchstart',
+				(e: any) => {
+					const isThumb = e.target.dataset.index;
 
-          if (!isThumb) {
-            e.stopPropagation();
-          }
-        },
-        { capture: true }
-      );
-    }
-  });
+					if (!isThumb) {
+						e.stopPropagation();
+					}
+				},
+				{ capture: true }
+			);
+		}
+	});
 
-  return <StyledSlider ref={ref} {...props} />;
+	return <StyledSlider ref={ref} {...props} />;
 }
 
 // This works, but the trade-off is that you can't drag the slider normally any more

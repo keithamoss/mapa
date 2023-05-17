@@ -1,20 +1,20 @@
-import "./App.css";
+import './App.css';
 
 function NotFound() {
-  console.log("### NotFound ###");
+	console.log('### NotFound ###');
 
-  return (
-    <div
-      style={{
-        position: "relative",
-        zIndex: 30,
-        backgroundColor: "red",
-        height: "10dvh",
-      }}
-    >
-      Not Found
-    </div>
-  );
+	return (
+		<div
+			style={{
+				position: 'relative',
+				zIndex: 30,
+				backgroundColor: 'red',
+				height: '10dvh',
+			}}
+		>
+			Not Found
+		</div>
+	);
 }
 
 export default NotFound;

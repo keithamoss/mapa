@@ -1,30 +1,30 @@
-import * as Sentry from "@sentry/react";
-import { BrowserTracing } from "@sentry/tracing";
+import * as Sentry from '@sentry/react';
+import { BrowserTracing } from '@sentry/tracing';
 
-if ("REACT_APP_SENTRY_DSN" in process.env === false) {
-  throw new Error("REACT_APP_SENTRY_DSN not found");
+if ('REACT_APP_SENTRY_DSN' in process.env === false) {
+	throw new Error('REACT_APP_SENTRY_DSN not found');
 }
 
 export const sentryInit = () => {
-  Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    environment: `${process.env.REACT_APP_ENVIRONMENT}-PUBLIC`.toUpperCase(),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    site: process.env.REACT_APP_SENTRY_SITE_NAME,
-    attachStacktrace: true,
-    integrations: [new BrowserTracing()],
+	Sentry.init({
+		dsn: process.env.REACT_APP_SENTRY_DSN,
+		environment: `${process.env.REACT_APP_ENVIRONMENT}-PUBLIC`.toUpperCase(),
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		site: process.env.REACT_APP_SENTRY_SITE_NAME,
+		attachStacktrace: true,
+		integrations: [new BrowserTracing()],
 
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
+		// Set tracesSampleRate to 1.0 to capture 100%
+		// of transactions for performance monitoring.
+		// We recommend adjusting this value in production
+		tracesSampleRate: 1.0,
 
-    // Or however deep you want your Redux state context to be
-    normalizeDepth: 10,
-  });
+		// Or however deep you want your Redux state context to be
+		normalizeDepth: 10,
+	});
 
-  return Sentry.createReduxEnhancer({
-    // Optionally pass options listed below
-  });
+	return Sentry.createReduxEnhancer({
+		// Optionally pass options listed below
+	});
 };

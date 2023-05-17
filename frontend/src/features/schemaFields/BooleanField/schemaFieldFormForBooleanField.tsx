@@ -1,131 +1,107 @@
-import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
-  Button,
-  Checkbox,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  TextField,
-} from "@mui/material";
-import { isEmpty } from "lodash-es";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { stopPropagate } from "../../../app/forms/formUtils";
-import { schemaBooleanFieldFormValidationSchema } from "../../../app/forms/schemaFieldsForms";
-import { getStringOrEmptyStringForSchemasFieldsFormField } from "../../../app/forms/schemaForm";
+	Button,
+	Checkbox,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	FormControl,
+	FormControlLabel,
+	FormGroup,
+	FormHelperText,
+	TextField,
+} from '@mui/material';
+import { isEmpty } from 'lodash-es';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { stopPropagate } from '../../../app/forms/formUtils';
+import { schemaBooleanFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
+import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
 import {
-  FeatureSchemaFieldDefinitionBooleanField,
-  FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
-  FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
-} from "../../../app/services/schemas";
-import { DialogWithTransition } from "../../../app/ui/dialog";
+	FeatureSchemaFieldDefinitionBooleanField,
+	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
+	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
+} from '../../../app/services/schemas';
+import { DialogWithTransition } from '../../../app/ui/dialog';
 
 interface Props {
-  field: FeatureSchemaFieldDefinitionBooleanField | undefined;
-  onDone: (
-    fieldFormProps: FeatureSchemaFieldDefinitionFormModifiablePropsCollection
-  ) => void;
-  onCancel: () => void;
+	field: FeatureSchemaFieldDefinitionBooleanField | undefined;
+	onDone: (fieldFormProps: FeatureSchemaFieldDefinitionFormModifiablePropsCollection) => void;
+	onCancel: () => void;
 }
 
 function SchemaFieldFormForBooleanField(props: Props) {
-  console.log("### SchemaFieldFormForBooleanField ###");
+	console.log('### SchemaFieldFormForBooleanField ###');
 
-  const { field, onDone, onCancel } = props;
+	const { field, onDone, onCancel } = props;
 
-  const defaultValues = {
-    name: getStringOrEmptyStringForSchemasFieldsFormField(field, "name"),
-    default_value: field?.default_value || false,
-  };
+	const defaultValues = {
+		name: getStringOrEmptyStringForSchemasFieldsFormField(field, 'name'),
+		default_value: field?.default_value || false,
+	};
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps>({
-    resolver: yupResolver(schemaBooleanFieldFormValidationSchema),
-    defaultValues,
-  });
+	const {
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm<FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps>({
+		resolver: yupResolver(schemaBooleanFieldFormValidationSchema),
+		defaultValues,
+	});
 
-  const onClickSave = () => {
-    handleSubmit(onDoneWithForm)();
-  };
+	const onClickSave = () => {
+		handleSubmit(onDoneWithForm)();
+	};
 
-  const onDoneWithForm: SubmitHandler<
-    FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps
-  > = (data) => {
-    if (isEmpty(data) === false) {
-      onDone(data);
-    }
-  };
+	const onDoneWithForm: SubmitHandler<FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps> = (data) => {
+		if (isEmpty(data) === false) {
+			onDone(data);
+		}
+	};
 
-  return (
-    <DialogWithTransition
-      onClose={onCancel}
-      dialogProps={{ fullScreen: false, fullWidth: true }}
-    >
-      <DialogTitle>Boolean Field</DialogTitle>
-      <DialogContent>
-        <form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
-          <FormControl
-            fullWidth={true}
-            sx={{ mb: 3, mt: 1 }}
-            component="fieldset"
-            variant="outlined"
-          >
-            <FormGroup>
-              <Controller
-                name="name"
-                control={control}
-                render={({ field }) => (
-                  <TextField {...field} label="Field label" />
-                )}
-              />
-            </FormGroup>
+	return (
+		<DialogWithTransition onClose={onCancel} dialogProps={{ fullScreen: false, fullWidth: true }}>
+			<DialogTitle>Boolean Field</DialogTitle>
+			<DialogContent>
+				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
+					<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
+						<FormGroup>
+							<Controller
+								name="name"
+								control={control}
+								render={({ field }) => <TextField {...field} label="Field label" />}
+							/>
+						</FormGroup>
 
-            {errors.name && (
-              <FormHelperText error>{errors.name.message}</FormHelperText>
-            )}
-          </FormControl>
+						{errors.name && <FormHelperText error>{errors.name.message}</FormHelperText>}
+					</FormControl>
 
-          <FormControl fullWidth={true} component="fieldset" variant="outlined">
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="default_value"
-                    control={control}
-                    defaultValue={defaultValues.default_value}
-                    render={({ field }) => (
-                      <Checkbox {...field} checked={field.value} />
-                    )}
-                  />
-                }
-                label="Default value"
-              />
+					<FormControl fullWidth={true} component="fieldset" variant="outlined">
+						<FormGroup>
+							<FormControlLabel
+								control={
+									<Controller
+										name="default_value"
+										control={control}
+										defaultValue={defaultValues.default_value}
+										render={({ field }) => <Checkbox {...field} checked={field.value} />}
+									/>
+								}
+								label="Default value"
+							/>
 
-              <FormHelperText>
-                Will be used if you don't enter anything when creating a feature
-              </FormHelperText>
-            </FormGroup>
+							<FormHelperText>Will be used if you don't enter anything when creating a feature</FormHelperText>
+						</FormGroup>
 
-            {errors.default_value && (
-              <FormHelperText error>
-                {errors.default_value.message}
-              </FormHelperText>
-            )}
-          </FormControl>
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onCancel}>Cancel</Button>
-        <Button onClick={onClickSave}>Save</Button>
-      </DialogActions>
-    </DialogWithTransition>
-  );
+						{errors.default_value && <FormHelperText error>{errors.default_value.message}</FormHelperText>}
+					</FormControl>
+				</form>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={onCancel}>Cancel</Button>
+				<Button onClick={onClickSave}>Save</Button>
+			</DialogActions>
+		</DialogWithTransition>
+	);
 }
 
 export default SchemaFieldFormForBooleanField;
