@@ -36,8 +36,6 @@ function App() {
 		return null;
 	}
 
-	// noop 6
-
 	if (user === null) {
 		return (
 			<LoginContainer>
