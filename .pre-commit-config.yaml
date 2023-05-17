@@ -4,6 +4,6 @@ repos:
       - id: eslint
         language: system
         name: eslint
-        entry: yarn run --cwd=frontend lint
+        entry: npm run --cwd=frontend lint
         pass_filenames: false
         types_or: [javascript, jsx, ts, tsx]

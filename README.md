@@ -27,3 +27,7 @@ CREATE SCHEMA mapa;
 Add yourself to the app_allowedusers table before trying to login.
 
 https://mapa.test.keithmoss.me/api/login/google-oauth2/
+
+# Development setup
+
+- [Set Up ESLint and Prettier in a React TypeScript App (2023)](https://dev.to/eshankvaish/set-up-eslint-and-prettier-in-a-react-typescript-app-2022-29c9)

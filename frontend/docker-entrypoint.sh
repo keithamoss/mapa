@@ -5,10 +5,10 @@ cd /app
 
 if [ "$REACT_APP_ENVIRONMENT" = "DEVELOPMENT" ]; then
   if [ ! -d "node_modules" ]; then
-    yarn
+    npm
   fi
 
-  yarn run start
+  npm run start
   exit
 fi
 
