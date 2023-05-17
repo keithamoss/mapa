@@ -1,0 +1,13 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+  - repo: local
+    hooks:
+      - id: eslint
+        language: system
+        name: eslint
+        entry: yarn run --cwd=frontend lint
+        pass_filenames: false
+        types_or: [javascript, jsx, ts, tsx]
