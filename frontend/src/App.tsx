@@ -36,7 +36,7 @@ function App() {
 		return null;
 	}
 
-	// noop
+	// noop 2
 
 	if (user === null) {
 		return (

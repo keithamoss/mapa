@@ -2,8 +2,6 @@
 
 For H, with ❤️
 
-2
-
 # Create self-signed SSL certs for local development
 
 Install [mkcert](https://github.com/FiloSottile/mkcert) and generate self-signed certs for local dev.
