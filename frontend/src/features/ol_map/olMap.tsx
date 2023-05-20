@@ -220,7 +220,7 @@ function OLMap(props: Props) {
 				layers: [
 					new MapboxVector({
 						styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
-						accessToken: process.env.REACT_APP_MAPBOX_API_KEY,
+						accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 					}),
 				],
 				view: new View(view),

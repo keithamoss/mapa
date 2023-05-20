@@ -3,12 +3,14 @@
 command="$1"
 cd /app
 
-if [ "$REACT_APP_ENVIRONMENT" = "DEVELOPMENT" ]; then
-  if [ ! -d "node_modules" ]; then
-    npm
-  fi
+if [ ! -d ".yarn" ]; then
+  rm -f .yarn*
+  yarn set version stable
+  yarn install
+fi
 
-  npm run start
+if [ "$VITE_ENVIRONMENT" = "DEVELOPMENT" ]; then
+  yarn run start
   exit
 fi
 

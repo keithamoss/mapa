@@ -1,21 +1,20 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {
 	DEVELOPMENT = 1,
-	STAGING = 2,
+	TEST = 2,
 	PRODUCTION = 3,
 }
 
 export function getEnvironment(): eAppEnv {
-	switch (process.env.NODE_ENV) {
-		case 'development':
+	switch (import.meta.env.VITE_ENVIRONMENT) {
+		case 'DEVELOPMENT':
 			return eAppEnv.DEVELOPMENT;
-		case 'test':
-			return eAppEnv.STAGING;
-		case 'production':
+		case 'TEST':
+			return eAppEnv.TEST;
+		case 'PRODUCTION':
 			return eAppEnv.PRODUCTION;
 		default:
-			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-			throw Error(`Invalid NODE_ENV '${process.env.NODE_ENV}' encountered`);
+			throw Error(`Invalid VITE_ENVIRONMENT '${import.meta.env.VITE_ENVIRONMENT}' encountered`);
 	}
 }
 
@@ -24,9 +23,9 @@ export function isDevelopment(): boolean {
 }
 
 export function getAPIBaseURL(): string {
-	return process.env.REACT_APP_API_BASE_URL;
+	return import.meta.env.VITE_API_BASE_URL;
 }
 
 export function getBaseURL(): string {
-	return process.env.REACT_APP_SITE_BASE_URL;
+	return import.meta.env.VITE_SITE_BASE_URL;
 }

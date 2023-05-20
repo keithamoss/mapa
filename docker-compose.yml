@@ -1,10 +1,10 @@
-version: "3.8"
+version: '3.8'
 services:
   db:
     image: postgis/postgis:15-3.3-alpine
     command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     ports:
-      - "5432:5432"
+      - '5432:5432'
     env_file:
       - secrets/dev/db.dev.env
     volumes:
@@ -24,22 +24,19 @@ services:
     volumes:
       - ./django/:/app:delegated
     ports:
-      - "8000:8000"
+      - '8000:8000'
     env_file:
       - secrets/dev/web.dev.env
       - secrets/dev/web-db.dev.env
     depends_on:
       - db
   frontend:
-    image: node:16-alpine3.14
+    image: node:20-alpine3.16
     entrypoint: /app/docker-entrypoint.sh
     volumes:
       - ./frontend:/app:delegated
     env_file:
       - secrets/dev/frontend.dev.env
-    environment:
-      # Fixes bug where websocket connection is fixed to default port 3000
-      - WDS_SOCKET_PORT=0
   nginx:
     build: nginx/
     volumes:
@@ -50,5 +47,5 @@ services:
       - django
       - frontend
     ports:
-      - "443:443"
-      - "8001:8001"
+      - '443:443'
+      - '8001:8001'

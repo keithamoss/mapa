@@ -1,17 +1,17 @@
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
-if ('REACT_APP_SENTRY_DSN' in process.env === false) {
-	throw new Error('REACT_APP_SENTRY_DSN not found');
+if ('VITE_SENTRY_DSN' in import.meta.env === false) {
+	throw new Error('VITE_SENTRY_DSN not found');
 }
 
 export const sentryInit = () => {
 	Sentry.init({
-		dsn: process.env.REACT_APP_SENTRY_DSN,
-		environment: `${process.env.REACT_APP_ENVIRONMENT}-PUBLIC`.toUpperCase(),
+		dsn: import.meta.env.VITE_SENTRY_DSN,
+		environment: `${import.meta.env.VITE_ENVIRONMENT}-PUBLIC`.toUpperCase(),
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		site: process.env.REACT_APP_SENTRY_SITE_NAME,
+		site: import.meta.env.VITE_SENTRY_SITE_NAME,
 		attachStacktrace: true,
 		integrations: [new BrowserTracing()],
 

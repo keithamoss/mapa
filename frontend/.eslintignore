@@ -1,1 +1,6 @@
-build
+node_modules/
+.yarn/
+build/
+.prettierrc.js
+.eslintrc.js
+vite-env.d.ts

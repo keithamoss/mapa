@@ -2,11 +2,12 @@ import { Action, autoBatchEnhancer, configureStore, StoreEnhancer, ThunkAction }
 import appReducer from '../features/app/appSlice';
 import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';
+import { eAppEnv, getEnvironment } from './utils';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const Middleware: Array<StoreEnhancer> = [];
 
-if (process.env.NODE_ENV !== 'development') {
+if (getEnvironment() !== eAppEnv.DEVELOPMENT) {
 	// This should be run as soon as possible
 	Middleware.push(sentryInit() as StoreEnhancer);
 }
