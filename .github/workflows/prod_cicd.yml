@@ -37,9 +37,6 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-
       - name: Frontend - Build
         run: docker compose --file build_production.yml run frontend
 
