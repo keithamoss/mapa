@@ -10,5 +10,7 @@ fi
 
 npm run lint
 
+chown -R node:node /app/build/app-icon
 npm run build
+
 cd ./build && tar czvf /build/frontend.tgz .
