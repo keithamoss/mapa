@@ -51,7 +51,7 @@ function MapEditor(props: Props) {
 		(map: Map) => {
 			updateMap(map);
 		},
-		[updateMap]
+		[updateMap],
 	);
 
 	// Just in case the user loads the page directly via the URL and the UI renders before we get the API response

@@ -6,7 +6,7 @@ import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 
 const getDataItemAsString = (
 	schemaFieldDefinition: FeatureSchemaFieldDefinitionCollection,
-	dataItem: FeatureDataItem
+	dataItem: FeatureDataItem,
 ) => {
 	if (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.TextField ||
@@ -41,7 +41,7 @@ function SchemaFieldSummaryPanel(props: Props) {
 		<List dense disablePadding>
 			{schema.definition.map((schemaFieldDefinition) => {
 				const dataItem = feature.data.find(
-					(featureDataItem) => featureDataItem.schema_field_id === schemaFieldDefinition.id
+					(featureDataItem) => featureDataItem.schema_field_id === schemaFieldDefinition.id,
 				);
 
 				return dataItem !== undefined ? (

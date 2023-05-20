@@ -7,10 +7,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import {
-    Feature,
-    FeatureDataItem,
-    useDeleteFeatureMutation,
-    useUpdateFeatureMutation
+	Feature,
+	FeatureDataItem,
+	useDeleteFeatureMutation,
+	useUpdateFeatureMutation,
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';

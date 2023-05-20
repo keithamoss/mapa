@@ -34,7 +34,7 @@ export const usePosition = (watch = false, userSettings = defaultUserSettings): 
 			...defaultSettings,
 			...userSettings,
 		}),
-		[userSettings]
+		[userSettings],
 	);
 
 	const [position, setPosition] = useState({});

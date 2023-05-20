@@ -44,7 +44,7 @@ function SliderFixed(props: SliderProps, ref: any) {
 						e.stopPropagation();
 					}
 				},
-				{ capture: true }
+				{ capture: true },
 			);
 		}
 	});

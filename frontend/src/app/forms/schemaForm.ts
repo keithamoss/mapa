@@ -13,7 +13,7 @@ export const schemaFormValidationSchema = yup
 
 export const getStringOrEmptyStringForSchemasFieldsFormField = (
 	schemaField: Partial<FeatureSchemaFieldDefinitionCollection> | null | undefined,
-	fieldName: keyof FeatureSchemaFieldDefinitionCollection
+	fieldName: keyof FeatureSchemaFieldDefinitionCollection,
 ) =>
 	schemaField === undefined || schemaField === null || schemaField[fieldName] === undefined
 		? ''
@@ -22,7 +22,7 @@ export const getStringOrEmptyStringForSchemasFieldsFormField = (
 
 export const getNumberOrZeroForSchemasFieldsFormField = (
 	schemaField: Partial<FeatureSchemaFieldDefinitionCollection> | null | undefined,
-	fieldName: keyof FeatureSchemaFieldDefinitionCollection
+	fieldName: keyof FeatureSchemaFieldDefinitionCollection,
 ) =>
 	schemaField === undefined || schemaField === null || schemaField[fieldName] === undefined
 		? 0

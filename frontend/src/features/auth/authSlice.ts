@@ -7,5 +7,5 @@ export const selectUser = createSelector(selectCheckLoginStateResult, (result) =
 
 export const isUserLoggedIn = createSelector(
 	selectCheckLoginStateResult,
-	(result) => result?.data?.is_logged_in ?? undefined
+	(result) => result?.data?.is_logged_in ?? undefined,
 );

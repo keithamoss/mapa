@@ -18,7 +18,7 @@ import {
 	ListItemText,
 	OutlinedInput,
 	Paper,
-	Typography
+	Typography,
 } from '@mui/material';
 
 import React, { startTransition, useRef, useState } from 'react';

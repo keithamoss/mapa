@@ -10,7 +10,7 @@ export const getDataItemFieldDefinitionFromSchema = (dataItem: FeatureDataItem, 
 
 export const getSymbolValueForFeatureDataItem = (
 	dataItem: FeatureDataItem,
-	fieldDefinition: FeatureSchemaFieldDefinitionCollection
+	fieldDefinition: FeatureSchemaFieldDefinitionCollection,
 ) => {
 	if (fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean) {
 		return fieldDefinition.symbol;
@@ -19,5 +19,5 @@ export const getSymbolValueForFeatureDataItem = (
 
 export const getFeatureDataItemForSchemaField = (
 	fieldDefinition: FeatureSchemaFieldDefinitionCollection,
-	feature: Feature
+	feature: Feature,
 ) => feature.data.find((featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id);

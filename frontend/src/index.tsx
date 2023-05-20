@@ -24,5 +24,5 @@ root.render(
 				<RouterProvider router={router} />
 			</ThemeProvider>
 		</Provider>
-	</React.StrictMode>
+	</React.StrictMode>,
 );

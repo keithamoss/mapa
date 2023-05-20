@@ -13,8 +13,6 @@ export function getEnvironment(): eAppEnv {
 			return eAppEnv.TEST;
 		case 'PRODUCTION':
 			return eAppEnv.PRODUCTION;
-		default:
-			throw Error(`Invalid VITE_ENVIRONMENT '${import.meta.env.VITE_ENVIRONMENT}' encountered`);
 	}
 }
 

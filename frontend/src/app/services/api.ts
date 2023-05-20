@@ -42,12 +42,12 @@ export const rtkQueryErrorLogger: Middleware = (_api: MiddlewareAPI) => (next) =
 			console.error(
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
 				`${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`,
-				action
+				action,
 			);
 		} else {
 			Sentry.captureException(
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access
-				`${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`
+				`${action.error.message} [${action.payload.originalStatus}: ${action.payload.status}] for ${action.type}`,
 			);
 			Sentry.captureException(action);
 			Sentry.showReportDialog();

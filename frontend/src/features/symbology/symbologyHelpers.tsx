@@ -53,7 +53,7 @@ export const getFontAwesomeIconFromLibrary = (
 	iconProps: FontAwesomeIconSVGProps,
 	iconName: string,
 	iconFamily?: IconFamily,
-	iconStyle?: IconStyle
+	iconStyle?: IconStyle,
 ) => {
 	let svg = defaultSymbolIconSVG;
 
@@ -65,7 +65,7 @@ export const getFontAwesomeIconFromLibrary = (
 	svg = svg
 		.replace(
 			'<svg',
-			`<svg aria-hidden="true" focusable="false" role="img" style="background-color: ${iconProps.backgroundColour}; transform: rotate(${iconProps.rotation}deg);" color="${iconProps.colour}" width="${iconProps.width}" height="${iconProps.height}"`
+			`<svg aria-hidden="true" focusable="false" role="img" style="background-color: ${iconProps.backgroundColour}; transform: rotate(${iconProps.rotation}deg);" color="${iconProps.colour}" width="${iconProps.width}" height="${iconProps.height}"`,
 		)
 		.replace('<path', '<path fill="currentColor"');
 
@@ -92,7 +92,7 @@ export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAw
 
 export const getFontAwesomeIconForSymbolAsSVGString = (
 	symbol: Partial<SymbologyProps>,
-	propOverrides?: Partial<SymbologyProps>
+	propOverrides?: Partial<SymbologyProps>,
 ) => {
 	const { icon, icon_family, icon_style, ...props } = symbol;
 
@@ -109,7 +109,7 @@ export const getFontAwesomeIconForSymbolAsSVGString = (
 		getFontAwesomeIconProps(local_symbol),
 		icon,
 		icon_family as IconFamily,
-		icon_style as IconStyle
+		icon_style as IconStyle,
 	);
 };
 
@@ -117,7 +117,7 @@ export const getFontAwesomeIconFromLibraryAsSVGImage = (
 	iconName: string,
 	iconFamily?: string,
 	iconStyle?: string,
-	propOverrides?: Partial<SymbologyProps>
+	propOverrides?: Partial<SymbologyProps>,
 ) => (
 	<img
 		alt={iconName}
@@ -125,14 +125,14 @@ export const getFontAwesomeIconFromLibraryAsSVGImage = (
 			getFontAwesomeIconProps(propOverrides || {}),
 			iconName,
 			iconFamily as IconFamily,
-			iconStyle as IconStyle
+			iconStyle as IconStyle,
 		)}`}
 	/>
 );
 
 export const getFontAwesomeIconForSymbolPreview = (
 	symbol: Partial<SymbologyProps>,
-	propOverrides?: Partial<SymbologyProps>
+	propOverrides?: Partial<SymbologyProps>,
 ) => {
 	const { icon, icon_family, icon_style, ...props } = symbol;
 
@@ -149,7 +149,7 @@ export const getFontAwesomeIconForSymbolPreview = (
 		getFontAwesomeIconProps(local_symbol),
 		icon,
 		icon_family as IconFamily,
-		icon_style as IconStyle
+		icon_style as IconStyle,
 	);
 
 	if (svg === null) {
@@ -228,7 +228,7 @@ export const deleteSymbologyGroup = (groupId: number, symbology: FeatureSchemaSy
 export const addSymbolToGroup = (
 	symbol: SymbologyProps,
 	symbology: FeatureSchemaSymbology,
-	groupId: number
+	groupId: number,
 ): [FeatureSchemaSymbology, number] => {
 	const newSymbolId = getNextSymbologySymbolId(symbology);
 	return [
@@ -264,7 +264,7 @@ export const modifySymbolInGroup = (symbol: FeatureSchemaSymbologySymbolsValue, 
 export const moveSymbolsToGroup = (symbolIds: number[], groupId: number, symbology: FeatureSchemaSymbology) => ({
 	...symbology,
 	symbols: symbology.symbols.map((symbol) =>
-		symbolIds.includes(symbol.id) === true ? { ...symbol, group_id: groupId } : symbol
+		symbolIds.includes(symbol.id) === true ? { ...symbol, group_id: groupId } : symbol,
 	),
 });
 

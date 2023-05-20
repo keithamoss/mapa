@@ -29,14 +29,14 @@ import {
 	geoJSONFeatures,
 	getPointGeoJSONFromCoordinates,
 	isDataVectorLayer,
-	updateVectorLayerForUserPosition
+	updateVectorLayerForUserPosition,
 } from './olLayerManager';
 import './olMap.css';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import {
 	getNextLayerVersion,
 	manageWebGLPointsLayerCreation,
-	manageWebGLPointsLayerUpdate
+	manageWebGLPointsLayerUpdate,
 } from './olWebGLPointsLayerManager';
 import SnapToGPSButton from './snapToGPSButton';
 

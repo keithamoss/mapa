@@ -22,7 +22,7 @@ import {
 	Paper,
 	TextField,
 	Toolbar,
-	Typography
+	Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
@@ -39,7 +39,7 @@ import {
 	FeatureSchemaSymbologySymbolsValue,
 	NewFeatureSchema,
 	NewFeatureSchemaFieldDefinitionCollection,
-	SymbologyProps
+	SymbologyProps,
 } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
@@ -57,7 +57,7 @@ import {
 	modifySymbolInGroup,
 	moveSymbolsToGroup,
 	removeSymbol,
-	unfavouriteSymbolForMap
+	unfavouriteSymbolForMap,
 } from '../symbology/symbologyHelpers';
 import { getNextSchemaFieldId } from './schemasSlice';
 import SchemaSymbologyManager from './schemaSymbologyManager';

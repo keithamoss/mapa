@@ -13,16 +13,16 @@ export const selectFeatureSchemasResult = featureSchemasApi.endpoints.getFeature
 
 const selectFeatureSchemasData = createSelector(
 	selectFeatureSchemasResult,
-	(featureSchemasResult) => featureSchemasResult.data
+	(featureSchemasResult) => featureSchemasResult.data,
 );
 
 export const { selectAll: selectAllFeatureSchemas, selectById: selectFeatureSchemaById } =
 	featureSchemasAdapter.getSelectors(
-		(state: RootState) => selectFeatureSchemasData(state) ?? initialFeatureSchemasState
+		(state: RootState) => selectFeatureSchemasData(state) ?? initialFeatureSchemasState,
 	);
 
 export const getSchemasAvailableForMap = createSelector(selectAllFeatureSchemas, selectMapById, (schemas, map) =>
-	schemas.filter((s) => map?.available_schema_ids.includes(s.id) === true)
+	schemas.filter((s) => map?.available_schema_ids.includes(s.id) === true),
 );
 
 export const getNextSchemaFieldId = (schemaDefinition: FeatureSchemaFieldDefinitionCollection[] | undefined) => {

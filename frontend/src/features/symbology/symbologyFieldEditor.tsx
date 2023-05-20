@@ -4,22 +4,22 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-    AppBar,
-    Button,
-    FormControl,
-    FormGroup,
-    FormHelperText,
-    FormLabel,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    SelectChangeEvent,
-    TextField,
-    Toolbar,
-    Typography
+	AppBar,
+	Button,
+	FormControl,
+	FormGroup,
+	FormHelperText,
+	FormLabel,
+	IconButton,
+	InputAdornment,
+	InputLabel,
+	MenuItem,
+	Paper,
+	Select,
+	SelectChangeEvent,
+	TextField,
+	Toolbar,
+	Typography,
 } from '@mui/material';
 
 import { isEmpty, pickBy } from 'lodash-es';
@@ -27,28 +27,31 @@ import React, { useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import {
-    getNumberOrDefaultForSymbologyField,
-    getStringOrDefaultForSymbologyField,
-    getStringOrEmptyStringForSymbologyField,
-    symbolMaximumOpacity,
-    symbolMaximumRotation,
-    symbolMaximumSize,
-    symbolMinimumOpacity,
-    symbolMinimumRotation,
-    symbolMinimumSize,
-    symbologyFormValidationSchema
+	getNumberOrDefaultForSymbologyField,
+	getStringOrDefaultForSymbologyField,
+	getStringOrEmptyStringForSymbologyField,
+	symbolMaximumOpacity,
+	symbolMaximumRotation,
+	symbolMaximumSize,
+	symbolMinimumOpacity,
+	symbolMinimumRotation,
+	symbolMinimumSize,
+	symbologyFormValidationSchema,
 } from '../../app/forms/symbologyForm';
 import { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/schemas';
 import {
-    defaultSymbolColour,
-    defaultSymbolIcon, defaultSymbologyGroupId, defaultSymbolOpacity,
-    defaultSymbolRotation,
-    defaultSymbolSecondaryColour,
-    defaultSymbolSecondaryOpacity,
-    defaultSymbolSize,
-    defaultSymbolSizeForFormFields, getAppDefaultSymbologyConfig,
-    getFontAwesomeIconForSymbolPreview,
-    getFontAwesomeIconFromLibraryAsSVGImage
+	defaultSymbolColour,
+	defaultSymbolIcon,
+	defaultSymbologyGroupId,
+	defaultSymbolOpacity,
+	defaultSymbolRotation,
+	defaultSymbolSecondaryColour,
+	defaultSymbolSecondaryOpacity,
+	defaultSymbolSize,
+	defaultSymbolSizeForFormFields,
+	getAppDefaultSymbologyConfig,
+	getFontAwesomeIconForSymbolPreview,
+	getFontAwesomeIconFromLibraryAsSVGImage,
 } from './symbologyHelpers';
 
 // eslint-disable-next-line import/named
@@ -58,10 +61,10 @@ import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
 import {
-    getDefaultFamilyByIconName,
-    getDefaultStyleByIconName,
-    getIconFamilyAndStyleName,
-    getIconLabelByName
+	getDefaultFamilyByIconName,
+	getDefaultStyleByIconName,
+	getIconFamilyAndStyleName,
+	getIconLabelByName,
 } from './font-awesome/fontAwesome';
 import SliderFixed from './sliderFixed';
 import SymbologyIconChooser from './symbologyIconChooser';

@@ -12,7 +12,7 @@ export const symbolMaximumOpacity = 1;
 
 export const symbologyFormValidationSchema = (
 	nameFieldRequired: boolean,
-	iconFieldRequired: boolean
+	iconFieldRequired: boolean,
 ): ObjectSchema<SymbologyProps> =>
 	yup
 		.object({
@@ -34,7 +34,7 @@ export const symbologyFormValidationSchema = (
 export const getNumberOrDefaultForSymbologyField = (
 	symbol: Partial<SymbologyProps> | null | undefined,
 	fieldName: keyof SymbologyProps,
-	defaultValue: number
+	defaultValue: number,
 ) => {
 	const value =
 		symbol === undefined || symbol === null || symbol[fieldName] === undefined ? undefined : symbol[fieldName];
@@ -49,7 +49,7 @@ export const getNumberOrDefaultForSymbologyField = (
 
 export const getNumberOrUndefinedForSymbologyField = (
 	symbol: Partial<SymbologyProps> | null | undefined,
-	fieldName: keyof SymbologyProps
+	fieldName: keyof SymbologyProps,
 ) => {
 	const value =
 		symbol === undefined || symbol === null || symbol[fieldName] === undefined ? undefined : symbol[fieldName];
@@ -64,20 +64,20 @@ export const getNumberOrUndefinedForSymbologyField = (
 
 export const getStringOrUndefinedForSymbologyField = (
 	symbol: Partial<SymbologyProps> | null | undefined,
-	fieldName: keyof SymbologyProps
+	fieldName: keyof SymbologyProps,
 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 ) => (symbol === undefined || symbol === null || symbol[fieldName] === undefined ? undefined : `${symbol[fieldName]}`);
 
 export const getStringOrEmptyStringForSymbologyField = (
 	symbol: Partial<SymbologyProps> | null | undefined,
-	fieldName: keyof SymbologyProps
+	fieldName: keyof SymbologyProps,
 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 ) => (symbol === undefined || symbol === null || symbol[fieldName] === undefined ? '' : `${symbol[fieldName]}`);
 
 export const getStringOrDefaultForSymbologyField = (
 	symbol: Partial<SymbologyProps> | null | undefined,
 	fieldName: keyof SymbologyProps,
-	defaultValue: string
+	defaultValue: string,
 ) =>
 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 	symbol === undefined || symbol === null || symbol[fieldName] === undefined ? defaultValue : `${symbol[fieldName]}`;

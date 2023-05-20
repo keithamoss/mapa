@@ -29,7 +29,7 @@ export const manageVectorImageLayerCreation = (
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
-	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
+	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,
 ) => {
 	const vectorLayer = createVectorImageLayer(geoJSONFeatures.features);
 	map.addLayer(vectorLayer);
@@ -38,7 +38,7 @@ export const manageVectorImageLayerCreation = (
 		// Not sure why this was complaining
 		vectorLayer as VectorLayer<VectorSource<Geometry>>,
 		onModifyInteractionStartEnd,
-		onModifyInteractionAddRemoveFeature
+		onModifyInteractionAddRemoveFeature,
 	);
 	modify.setActive(isFeatureMovementAllowed);
 	map.addInteraction(modify);

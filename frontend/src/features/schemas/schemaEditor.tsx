@@ -69,7 +69,7 @@ export function SchemaEditor(props: Props) {
 		(schema: FeatureSchema) => {
 			updateSchema(schema);
 		},
-		[updateSchema]
+		[updateSchema],
 	);
 
 	// Just in case the user loads the page directly via the URL and the UI renders before we get the API response

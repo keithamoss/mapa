@@ -10,7 +10,7 @@ export const getSchemaForFeature = (feature: Feature, schemas: FeatureSchema[]) 
 
 export const isSchemaDataItemToBeUsed = (
 	fieldDefinition: FeatureSchemaFieldDefinitionCollection,
-	dataItem: FeatureDataItem | undefined
+	dataItem: FeatureDataItem | undefined,
 ) => {
 	if (dataItem !== undefined) {
 		if (fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean) {

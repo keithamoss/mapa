@@ -11,5 +11,5 @@ export const selectMapsResult = mapsApi.endpoints.getMaps.select();
 const selectMapsData = createSelector(selectMapsResult, (mapsResult) => mapsResult.data);
 
 export const { selectAll: selectAllMaps, selectById: selectMapById } = mapsAdapter.getSelectors(
-	(state: RootState) => selectMapsData(state) ?? initialMapsState
+	(state: RootState) => selectMapsData(state) ?? initialMapsState,
 );

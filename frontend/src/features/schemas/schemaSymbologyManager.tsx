@@ -21,7 +21,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	ListSubheader,
-	Toolbar
+	Toolbar,
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
 import { groupBy } from 'lodash-es';
@@ -30,7 +30,7 @@ import {
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologyGroup,
 	FeatureSchemaSymbologySymbolsValue,
-	SymbologyProps
+	SymbologyProps,
 } from '../../app/services/schemas';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import {
@@ -38,7 +38,7 @@ import {
 	defaultSymbolSizeForFormFields,
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolGroups,
-	getSymbologyGroupById
+	getSymbologyGroupById,
 } from '../symbology/symbologyHelpers';
 import SchemaSymbolDeleteManager from './schemaSymbolDeleteManager';
 import SchemaSymbologyGroupChooserForRerranging from './schemaSymbologyGroupChooserForRerranging';

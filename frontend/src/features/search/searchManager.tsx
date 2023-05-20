@@ -2,28 +2,28 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import {
-    AppBar,
-    Box,
-    Button,
-    Checkbox,
-    Chip,
-    FormControl,
-    FormGroup,
-    FormHelperText,
-    FormLabel,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    List,
-    ListItem,
-    ListItemText,
-    MenuItem,
-    OutlinedInput,
-    Paper,
-    Select,
-    TextField,
-    Toolbar,
-    Typography
+	AppBar,
+	Box,
+	Button,
+	Checkbox,
+	Chip,
+	FormControl,
+	FormGroup,
+	FormHelperText,
+	FormLabel,
+	IconButton,
+	InputAdornment,
+	InputLabel,
+	List,
+	ListItem,
+	ListItemText,
+	MenuItem,
+	OutlinedInput,
+	Paper,
+	Select,
+	TextField,
+	Toolbar,
+	Typography,
 } from '@mui/material';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -34,12 +34,14 @@ import { Feature, useGetFeaturesForMapQuery } from '../../app/services/features'
 import { DialogWithTransition } from '../../app/ui/dialog';
 import NotFound from '../../NotFound';
 import {
-    defaultSearchParameters,
-    getSearchParameters, SearchField,
-    SearchFieldLabel,
-    SearchParameters, selectActiveMapId,
-    setFilteredFeatures,
-    setSearchParameters
+	defaultSearchParameters,
+	getSearchParameters,
+	SearchField,
+	SearchFieldLabel,
+	SearchParameters,
+	selectActiveMapId,
+	setFilteredFeatures,
+	setSearchParameters,
 } from '../app/appSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import { isSearchingYet, searchFeatures } from './searchHelpers';

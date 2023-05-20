@@ -28,7 +28,7 @@ export const searchFeatures = (
 	features: Feature[],
 	schemas: FeatureSchema[],
 	search_term: string,
-	search_fields: SearchField[]
+	search_fields: SearchField[],
 ) => {
 	if (isSearchingYet(search_term) === false) {
 		return [];

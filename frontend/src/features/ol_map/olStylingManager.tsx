@@ -58,7 +58,7 @@ export const olStyleFunction = (olFeature: OLFeature) => {
 export const determineSymbolForFeature = (
 	feature: Feature,
 	defaultMapSymbology: SymbologyProps | null,
-	featureSchemas: FeatureSchema[]
+	featureSchemas: FeatureSchema[],
 ) => {
 	let symbologyConfig = {
 		...getAppDefaultSymbologyConfig(),

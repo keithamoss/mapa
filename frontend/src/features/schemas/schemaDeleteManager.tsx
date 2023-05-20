@@ -2,18 +2,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import CloseIcon from '@mui/icons-material/Close';
 import {
-    Alert,
-    AlertTitle,
-    AppBar,
-    Button,
-    FormControl,
-    IconButton,
-    List,
-    ListItem,
-    ListItemText,
-    Paper,
-    Toolbar,
-    Typography
+	Alert,
+	AlertTitle,
+	AppBar,
+	Button,
+	FormControl,
+	IconButton,
+	List,
+	ListItem,
+	ListItemText,
+	Paper,
+	Toolbar,
+	Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

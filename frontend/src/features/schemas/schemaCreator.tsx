@@ -40,7 +40,7 @@ function SchemaCreator() {
 				});
 			}
 		},
-		[addSchema, map, mapId, patchMap]
+		[addSchema, map, mapId, patchMap],
 	);
 
 	return <SchemaForm onDoneAdding={onDoneAdding} />;

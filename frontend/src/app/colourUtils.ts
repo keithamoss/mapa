@@ -31,7 +31,7 @@
 export const hextoRGBACSS = (
 	h: string | undefined,
 	opacity_override?: number,
-	default_colour = 'rgba(0, 0, 0, 0.01)'
+	default_colour = 'rgba(0, 0, 0, 0.01)',
 ) => {
 	if (h === undefined) {
 		return default_colour;

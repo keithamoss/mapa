@@ -37,7 +37,7 @@ export const buildSpriteSheet = async (
 		React.SetStateAction<{
 			[key: number]: boolean;
 		}>
-	>
+	>,
 ) => {
 	if (spriteSheetCanvasContext === null) {
 		// This should never happen, but it makes the linter happy.
@@ -66,12 +66,12 @@ export const buildSpriteSheet = async (
 
 		const icon = getFontAwesomeIconForSymbolAsSVGString(
 			symbol,
-			symbol.size !== undefined ? { size: symbol.size * 2 } : undefined
+			symbol.size !== undefined ? { size: symbol.size * 2 } : undefined,
 		);
 
 		if (icon !== null) {
 			imgPromises.push(
-				loadImage(`data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`, symbolCacheKey)
+				loadImage(`data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`, symbolCacheKey),
 			);
 		}
 	});
@@ -123,7 +123,7 @@ export const buildSpriteSheet = async (
 				padding, // X,Y coordination positions to place the top left corner of the image data on the canvas
 				nextCanvasPositionY,
 				img.width,
-				img.height
+				img.height,
 			);
 		}
 
@@ -240,7 +240,7 @@ export const manageWebGLPointsLayerCreation = (
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
-	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
+	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,
 ) => {
 	const vectorLayer = createWebGLPointsLayer(geoJSONFeatures.features);
 	map.addLayer(vectorLayer);
@@ -249,7 +249,7 @@ export const manageWebGLPointsLayerCreation = (
 		// Not sure why this was complaining
 		vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
 		onModifyInteractionStartEnd,
-		onModifyInteractionAddRemoveFeature
+		onModifyInteractionAddRemoveFeature,
 	);
 	modify.setActive(isFeatureMovementAllowed);
 	map.addInteraction(modify);
@@ -262,7 +262,7 @@ export const manageWebGLPointsLayerUpdate = (
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
-	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
+	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,
 ) => {
 	// Update the existing layer with new styles and force a re-render
 
@@ -295,7 +295,7 @@ export const manageWebGLPointsLayerUpdate = (
 		// Not sure why this was complaining
 		newVectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
 		onModifyInteractionStartEnd,
-		onModifyInteractionAddRemoveFeature
+		onModifyInteractionAddRemoveFeature,
 	);
 	modify.setActive(isFeatureMovementAllowed);
 	map.addInteraction(modify);

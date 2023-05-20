@@ -44,7 +44,7 @@ function MapCreator() {
 			// Presumably, if you've just made a map you probably want to switch to using it right away
 			updateUserProfile({ last_map_id: newMap.id });
 		},
-		[addMap, updateUserProfile]
+		[addMap, updateUserProfile],
 	);
 
 	return <MapForm onDoneAdding={onDoneAdding} />;

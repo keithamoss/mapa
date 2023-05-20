@@ -35,7 +35,7 @@ interface SymbologyAutocompleteOption {
 const getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema = (
 	schemaId: number,
 	symbology: FeatureSchemaSymbology,
-	features: Feature[]
+	features: Feature[],
 ) => {
 	if (features === undefined) {
 		return [];
@@ -44,8 +44,8 @@ const getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema = (
 	const featuresGroupedBySymbol = Object.values(
 		groupBy(
 			Object.values(features).filter((feature) => feature.schema_id === schemaId),
-			(f) => f.symbol_id
-		)
+			(f) => f.symbol_id,
+		),
 	);
 
 	const featuresGroupedWithCountOfSymbols = featuresGroupedBySymbol
@@ -72,7 +72,7 @@ const getSymbolOptions = (mapId: number, schemaId: number, symbology: FeatureSch
 	const mostCommonlyUsedOnThisMap = getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema(
 		schemaId,
 		symbology,
-		features !== undefined ? Object.values(features) : []
+		features !== undefined ? Object.values(features) : [],
 	).map((symbol) => ({
 		symbol,
 		option_group: 'Frequently used on this map',
@@ -88,7 +88,7 @@ const getSymbolOptions = (mapId: number, schemaId: number, symbology: FeatureSch
 
 const createSymbolListItem = (
 	option: SymbologyAutocompleteOption,
-	onClickSymbol: (symbol: FeatureSchemaSymbologySymbolsValue) => () => void
+	onClickSymbol: (symbol: FeatureSchemaSymbologySymbolsValue) => () => void,
 ) => (
 	<ListItem key={`${option.symbol.group_id}-${option.symbol.id}`} disablePadding>
 		<ListItemButton onClick={onClickSymbol(option.symbol)}>
@@ -189,7 +189,7 @@ function SchemaSymbologyChooser(props: Props) {
 								</ListSubheader>
 
 								{optionsGrouped['Frequently used on this map'].map((option) =>
-									createSymbolListItem(option, onClickSymbol)
+									createSymbolListItem(option, onClickSymbol),
 								)}
 							</React.Fragment>
 						)}

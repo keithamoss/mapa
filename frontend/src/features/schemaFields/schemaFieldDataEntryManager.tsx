@@ -32,7 +32,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 			<FormGroup>
 				{schema.definition.map((fieldDefinition) => {
 					const featureDataItemForSchemaField = feature.data.find(
-						(featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id
+						(featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id,
 					);
 
 					switch (fieldDefinition.type) {

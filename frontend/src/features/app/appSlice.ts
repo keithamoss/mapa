@@ -133,7 +133,7 @@ export const getFilteredFeatureIds = (state: RootState) => state.app.filteredFea
 export const getCountOfFilteredFeatureIds = (state: RootState) => state.app.filteredFeatures.length;
 
 export const selectActiveMap = createSelector(selectActiveMapId, selectMapsResult, (mapId, maps) =>
-	mapId !== undefined ? maps.data?.entities[mapId] : undefined
+	mapId !== undefined ? maps.data?.entities[mapId] : undefined,
 );
 
 // We can also write thunks by hand, which may contain both sync and async logic.
