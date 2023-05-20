@@ -18,9 +18,7 @@ def translate_folder_to_map(folderId, folders):
     if folder is not None:
         if folder["name"] == "Foraging":
             return FORAGING_MAP_ID
-        elif folder["name"] == "Interesting Perth":
-            return -1
-        elif folder["name"] == "Interesting Sydney":
+        elif folder["name"] == "Interesting Perth" or folder["name"] == "Interesting Sydney":
             return -1
 
     raise Exception("Unknown folder")
