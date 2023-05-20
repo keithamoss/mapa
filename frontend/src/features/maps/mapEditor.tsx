@@ -23,8 +23,6 @@ interface Props {
 }
 
 function MapEditor(props: Props) {
-	console.log('### MapEditor ###');
-
 	const { mapId } = props;
 
 	const navigate = useNavigate();

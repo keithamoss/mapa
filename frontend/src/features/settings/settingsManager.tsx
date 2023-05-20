@@ -18,11 +18,7 @@ import { MapRenderer, useUpdateUserProfileMutation } from '../../app/services/au
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { selectUser } from '../auth/authSlice';
 
-interface Props {}
-
-function SettingsManager(props: Props) {
-	console.log('### SettingsManager ###');
-
+function SettingsManager() {
 	const user = useAppSelector(selectUser);
 
 	const navigate = useNavigate();

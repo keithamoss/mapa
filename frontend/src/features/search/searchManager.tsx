@@ -72,8 +72,6 @@ interface Props {
 }
 
 function SearchManager(props: Props) {
-	console.log('### SearchManager ###');
-
 	const {
 		// mapId,
 		features,
@@ -102,7 +100,7 @@ function SearchManager(props: Props) {
 
 	const searchResults = searchFeatures(features, schemas, search_term, search_fields);
 
-	const onDoneWithForm: SubmitHandler<SearchParameters> = (data) => {};
+	const onDoneWithForm: SubmitHandler<SearchParameters> = () => {};
 
 	const onClose = () => navigate('/');
 

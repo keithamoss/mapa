@@ -31,8 +31,6 @@ interface Props {
 }
 
 function SchemaFieldFormForTextField(props: Props) {
-	console.log('### SchemaFieldFormForTextField ###');
-
 	const { field, onDone, onCancel } = props;
 
 	const {

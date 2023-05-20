@@ -27,8 +27,6 @@ interface Props {
 }
 
 function SchemaSymbologyGroupChooserForRerranging(props: Props) {
-	console.log('### SchemaSymbologyGroupChooserForRerranging ###');
-
 	const { groups, onDone, onCancel } = props;
 
 	const {

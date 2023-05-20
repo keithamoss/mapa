@@ -70,8 +70,6 @@ interface Props {
 }
 
 function SchemaForm(props: Props) {
-	console.log('### SchemaForm ###');
-
 	const navigate = useNavigate();
 
 	const mapId = useAppSelector(selectActiveMapId);
@@ -303,8 +301,8 @@ function SchemaForm(props: Props) {
 
 							<FormGroup>
 								<Typography variant="body2">
-									You can set symbology defaults for this schema that replace the map's defaults. These will themselves
-									be replaced by any symbology set by individual features.
+									You can set symbology defaults for this schema that replace the map&apos;s defaults. These will
+									themselves be replaced by any symbology set by individual features.
 								</Typography>
 
 								<Button

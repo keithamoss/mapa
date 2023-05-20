@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, DialogActions, DialogContent, DialogTitle, FormHelperText, TextField } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import React from 'react';
+import { useRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import { symbologyGroupFormValidationSchema } from '../../app/forms/symbologyGroupForm';
@@ -15,8 +15,6 @@ interface Props {
 }
 
 function SchemaSymbologyGroupEditor(props: Props) {
-	console.log('### SchemaSymbologyGroupEditor ###');
-
 	const { group, onDone, onCancel } = props;
 
 	const {
@@ -40,7 +38,7 @@ function SchemaSymbologyGroupEditor(props: Props) {
 		handleSubmit(onDoneWithForm)();
 	};
 
-	const textInput = React.useRef<HTMLInputElement>(null);
+	const textInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<DialogWithTransition

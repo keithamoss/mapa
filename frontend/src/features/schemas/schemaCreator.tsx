@@ -7,11 +7,7 @@ import { selectActiveMapId } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import SchemaForm from './schemaForm';
 
-interface Props {}
-
-function SchemaCreator(props: Props) {
-	console.log('### SchemaCreator ###');
-
+function SchemaCreator() {
 	const navigate = useNavigate();
 
 	const mapId = useAppSelector(selectActiveMapId);

@@ -30,8 +30,6 @@ interface Props {
 }
 
 function SchemaFieldFormForBooleanField(props: Props) {
-	console.log('### SchemaFieldFormForBooleanField ###');
-
 	const { field, onDone, onCancel } = props;
 
 	const defaultValues = {
@@ -89,7 +87,7 @@ function SchemaFieldFormForBooleanField(props: Props) {
 								label="Default value"
 							/>
 
-							<FormHelperText>Will be used if you don't enter anything when creating a feature</FormHelperText>
+							<FormHelperText>Will be used if you don&apos;t enter anything when creating a feature</FormHelperText>
 						</FormGroup>
 
 						{errors.default_value && <FormHelperText error>{errors.default_value.message}</FormHelperText>}

@@ -1,10 +1,11 @@
 import { Dialog, DialogProps, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import React, { useEffect, useRef } from 'react';
+import React, { forwardRef, useEffect, useRef } from 'react';
 import { useUnmount } from '../hooks/useUnmount';
 import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour, getThemeColour, setThemeColour } from './theme';
 
-const Transition = React.forwardRef(function Transition(
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const Transition = forwardRef(function Transition(
 	props: TransitionProps & {
 		children: React.ReactElement;
 	},
@@ -21,6 +22,7 @@ interface Props {
 	themeColour?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const DialogWithTransition = ({
 	onClose,
 	children,

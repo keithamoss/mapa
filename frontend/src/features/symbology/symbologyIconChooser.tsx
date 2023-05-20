@@ -21,7 +21,7 @@ import {
 	Typography,
 } from '@mui/material';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 
 import { grey } from '@mui/material/colors';
@@ -41,8 +41,6 @@ interface Props {
 }
 
 function SymbologyIconChooser(props: Props) {
-	console.log('### SymbologyIconChooser ###');
-
 	const {
 		// selectedIcon,
 		onChoose,
@@ -70,7 +68,7 @@ function SymbologyIconChooser(props: Props) {
 		debouncedOnIconSearchInputChange.cancel();
 	});
 
-	const textInput = React.useRef<HTMLInputElement>(null);
+	const textInput = useRef<HTMLInputElement>(null);
 
 	const onClearIconSearchInput = () => {
 		if (textInput.current !== null) {
@@ -101,8 +99,8 @@ function SymbologyIconChooser(props: Props) {
 	// ######################
 	const [iconName, setIconName] = useState<string | undefined>(undefined);
 
-	const onChooseIcon = (iconName: string) => () => {
-		setIconName(iconName);
+	const onChooseIcon = (name: string) => () => {
+		setIconName(name);
 		setIsIconFamilyAndStyleChooserOpen(true);
 	};
 	// ######################
@@ -171,14 +169,14 @@ function SymbologyIconChooser(props: Props) {
 						<InputLabel>
 							{chosenIconCategory === undefined
 								? 'Search for an icon'
-								: `Search for an icon in ${getCategoryLabelByName(chosenIconCategory)}`}
+								: `Search for an icon in ${getCategoryLabelByName(chosenIconCategory) || 'Unknown'}`}
 						</InputLabel>
 						<OutlinedInput
 							inputRef={textInput}
 							label={
 								chosenIconCategory === undefined
 									? 'Search for an icon'
-									: `Search for an icon in ${getCategoryLabelByName(chosenIconCategory)}`
+									: `Search for an icon in ${getCategoryLabelByName(chosenIconCategory) || 'Unknown'}`
 							}
 							onChange={debouncedOnIconSearchInputChange}
 							endAdornment={

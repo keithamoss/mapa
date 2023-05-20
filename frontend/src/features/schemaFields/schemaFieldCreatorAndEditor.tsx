@@ -23,8 +23,6 @@ interface Props {
 }
 
 function SchemaFieldCreatorAndEditor(props: Props) {
-	console.log('### SchemaFieldCreatorAndEditor ###');
-
 	const { fieldTypeToAdd, fieldToEdit, onDoneAdding, onDoneEditing, onCancel } = props;
 
 	const onDone = (fieldFormProps: FeatureSchemaFieldDefinitionFormModifiablePropsCollection) => {

@@ -15,8 +15,6 @@ interface Props {
 }
 
 function SchemaFieldDataEntryManager(props: Props) {
-	console.log('### SchemaFieldDataEntryManager ###');
-
 	const { schemaId, feature, onFieldChange, onFieldRemove } = props;
 
 	const schema = useAppSelector((state) => selectFeatureSchemaById(state, schemaId));
@@ -32,7 +30,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 			</FormLabel>
 
 			<FormGroup>
-				{schema.definition.map((fieldDefinition, idx) => {
+				{schema.definition.map((fieldDefinition) => {
 					const featureDataItemForSchemaField = feature.data.find(
 						(featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id
 					);

@@ -11,8 +11,6 @@ interface Props {
 }
 
 function SchemaDataEntryTextField(props: Props) {
-	console.log('### SchemaDataEntryTextField ###');
-
 	const { schemaField, dataItem, onFieldChange, onFieldRemove } = props;
 
 	const onTextFieldChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {

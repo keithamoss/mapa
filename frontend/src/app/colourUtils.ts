@@ -37,10 +37,10 @@ export const hextoRGBACSS = (
 		return default_colour;
 	}
 
-	let r: any = 0,
-		g: any = 0,
-		b: any = 0,
-		a: any = (opacity_override || 1) * 255;
+	let r: number | string = 0,
+		g: number | string = 0,
+		b: number | string = 0,
+		a: number | string = (opacity_override || 1) * 255;
 
 	// #FFF0
 	if (h.length === 5) {
@@ -60,7 +60,8 @@ export const hextoRGBACSS = (
 		b = '0x' + h[5] + h[6];
 		a = '0x' + h[7] + h[8];
 	}
-	a = +(a / 255).toFixed(3);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	a = +((a as any) / 255).toFixed(3);
 
-	return 'rgba(' + +r + ',' + +g + ',' + +b + ',' + a + ')';
+	return `rgba(${+r}, ${+g}, ${+b}, ${a})`;
 };

@@ -17,11 +17,7 @@ import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultSearchParameters, selectActiveMapId, setFilteredFeatures, setSearchParameters } from '../app/appSlice';
 import { selectAllMaps } from './mapsSlice';
 
-interface Props {}
-
-function MapManager(props: Props) {
-	console.log('### MapManager ###');
-
+function MapManager() {
 	const mapId = useAppSelector(selectActiveMapId);
 
 	const maps = useAppSelector(selectAllMaps);

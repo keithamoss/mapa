@@ -17,8 +17,6 @@ interface Props {
 }
 
 function SchemaSelectFormControls(props: Props) {
-	console.log('### SchemaSelectFormControls ###');
-
 	const navigate = useNavigate();
 
 	const { mapId, selectedSchemaId, onChooseSchema, onClickEditSchema } = props;

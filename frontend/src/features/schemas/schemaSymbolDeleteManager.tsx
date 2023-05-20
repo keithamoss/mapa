@@ -12,8 +12,6 @@ interface Props {
 }
 
 function SchemaSymbolDeleteManager(props: Props) {
-	console.log('### SchemaSymbolDeleteManager ###');
-
 	const { schemaId, symbolId, onYes, onNo } = props;
 
 	const maps = useAppSelector((state) => selectAllMaps(state));

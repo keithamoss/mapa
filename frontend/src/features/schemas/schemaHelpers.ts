@@ -1,76 +1,63 @@
-import { Feature, FeatureDataItem } from "../../app/services/features";
+import { Feature, FeatureDataItem } from '../../app/services/features';
 import {
-  FeatureSchema,
-  FeatureSchemaFieldDefinitionCollection,
-  FeatureSchemaFieldType,
-} from "../../app/services/schemas";
+	FeatureSchema,
+	FeatureSchemaFieldDefinitionCollection,
+	FeatureSchemaFieldType,
+} from '../../app/services/schemas';
 
-export const getSchemaForFeature = (
-  feature: Feature,
-  schemas: FeatureSchema[]
-) => schemas.find((schema) => schema.id === feature.schema_id);
+export const getSchemaForFeature = (feature: Feature, schemas: FeatureSchema[]) =>
+	schemas.find((schema) => schema.id === feature.schema_id);
 
 export const isSchemaDataItemToBeUsed = (
-  fieldDefinition: FeatureSchemaFieldDefinitionCollection,
-  dataItem: FeatureDataItem | undefined
+	fieldDefinition: FeatureSchemaFieldDefinitionCollection,
+	dataItem: FeatureDataItem | undefined
 ) => {
-  if (dataItem !== undefined) {
-    if (fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean) {
-      return dataItem.value; // the value set in the field will decide if this data item is to be used or not
-    }
-  }
+	if (dataItem !== undefined) {
+		if (fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean) {
+			return dataItem.value; // the value set in the field will decide if this data item is to be used or not
+		}
+	}
 
-  return false;
+	return false;
 };
 
-export const isFieldDefinitionSymbology = (
-  fieldDefinition: FeatureSchemaFieldDefinitionCollection
-) => ["symbology_field_boolean"].includes(fieldDefinition.type);
+export const isFieldDefinitionSymbology = (fieldDefinition: FeatureSchemaFieldDefinitionCollection) =>
+	['symbology_field_boolean'].includes(fieldDefinition.type);
 
-export const getFieldFromSchemaDefinitionById = (
-  schema: FeatureSchema,
-  schemaFieldId: number
-) => schema.definition.find((f) => f.id === schemaFieldId);
+export const getFieldFromSchemaDefinitionById = (schema: FeatureSchema, schemaFieldId: number) =>
+	schema.definition.find((f) => f.id === schemaFieldId);
 
-export const moveFieldUp = (
-  fieldId: number,
-  definition: FeatureSchemaFieldDefinitionCollection[]
-) => {
-  const fieldIdx = definition.findIndex((f) => f.id === fieldId);
+export const moveFieldUp = (fieldId: number, definition: FeatureSchemaFieldDefinitionCollection[]) => {
+	const fieldIdx = definition.findIndex((f) => f.id === fieldId);
 
-  if (fieldIdx !== -1 && fieldIdx > 0) {
-    const local_definition = [...(definition || [])];
-    const field = local_definition.splice(fieldIdx, 1)[0];
-    const toFieldIdx = fieldIdx - 1;
+	if (fieldIdx !== -1 && fieldIdx > 0) {
+		const local_definition = [...(definition || [])];
+		const field = local_definition.splice(fieldIdx, 1)[0];
+		const toFieldIdx = fieldIdx - 1;
 
-    local_definition.splice(toFieldIdx, 0, field);
+		local_definition.splice(toFieldIdx, 0, field);
 
-    return local_definition;
-  }
+		return local_definition;
+	}
 
-  return null;
+	return null;
 };
 
-export const moveFieldDown = (
-  fieldId: number,
-  definition: FeatureSchemaFieldDefinitionCollection[]
-) => {
-  const fieldIdx = definition.findIndex((f) => f.id === fieldId);
+export const moveFieldDown = (fieldId: number, definition: FeatureSchemaFieldDefinitionCollection[]) => {
+	const fieldIdx = definition.findIndex((f) => f.id === fieldId);
 
-  if (fieldIdx !== -1 && fieldIdx < definition.length - 1) {
-    const local_definition = [...(definition || [])];
-    const field = local_definition.splice(fieldIdx, 1)[0];
-    const toFieldIdx = fieldIdx + 1;
+	if (fieldIdx !== -1 && fieldIdx < definition.length - 1) {
+		const local_definition = [...(definition || [])];
+		const field = local_definition.splice(fieldIdx, 1)[0];
+		const toFieldIdx = fieldIdx + 1;
 
-    local_definition.splice(toFieldIdx, 0, field);
+		local_definition.splice(toFieldIdx, 0, field);
 
-    return local_definition;
-  }
+		return local_definition;
+	}
 
-  return null;
+	return null;
 };
 
-export const removeField = (
-  fieldId: number,
-  definition: FeatureSchemaFieldDefinitionCollection[]
-) => definition.filter((d) => d.id !== fieldId);
+export const removeField = (fieldId: number, definition: FeatureSchemaFieldDefinitionCollection[]) =>
+	definition.filter((d) => d.id !== fieldId);

@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
 // export const stringOrUndefined = yup
 //   .string()
@@ -12,9 +12,9 @@ import * as yup from "yup";
 //   .notRequired();
 
 export const colourOptional = yup
-  .string()
-  .matches(/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i)
-  .optional();
+	.string()
+	.matches(/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i)
+	.optional();
 
 // export const colourRequired = yup
 //   .string()
@@ -36,10 +36,10 @@ export const colourOptional = yup
 //   .required();
 
 export const positiveIntegerOptional = yup
-  .number()
-  .positive("Must be a positive number")
-  .integer("Must be a whole number")
-  .optional();
+	.number()
+	.positive('Must be a positive number')
+	.integer('Must be a whole number')
+	.optional();
 
 // export const positiveFloatOrUndefined = yup
 //   .number()
@@ -54,7 +54,4 @@ export const positiveIntegerOptional = yup
 //   .positive("Must be a positive number")
 //   .required();
 
-export const positiveFloatOptional = yup
-  .number()
-  .positive("Must be a positive number")
-  .optional();
+export const positiveFloatOptional = yup.number().positive('Must be a positive number').optional();

@@ -49,7 +49,7 @@ const getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema = (
 	);
 
 	const featuresGroupedWithCountOfSymbols = featuresGroupedBySymbol
-		.map((v, i) => ({
+		.map((v) => ({
 			symbolId: v[0].symbol_id,
 			count: v.length,
 		}))
@@ -122,8 +122,6 @@ interface Props {
 }
 
 function SchemaSymbologyChooser(props: Props) {
-	console.log('### SchemaSymbologyChooser ###');
-
 	const {
 		mapId,
 		schemaId,
@@ -174,7 +172,7 @@ function SchemaSymbologyChooser(props: Props) {
 									Favourites
 								</ListSubheader>
 
-								{optionsGrouped.Favourites.map((option, index) => createSymbolListItem(option, onClickSymbol))}
+								{optionsGrouped.Favourites.map((option) => createSymbolListItem(option, onClickSymbol))}
 							</React.Fragment>
 						)}
 
@@ -190,13 +188,13 @@ function SchemaSymbologyChooser(props: Props) {
 									Frequently used on this map
 								</ListSubheader>
 
-								{optionsGrouped['Frequently used on this map'].map((option, index) =>
+								{optionsGrouped['Frequently used on this map'].map((option) =>
 									createSymbolListItem(option, onClickSymbol)
 								)}
 							</React.Fragment>
 						)}
 
-						{getSymbolGroups(symbology).map((symbologyGroup, idx) => (
+						{getSymbolGroups(symbology).map((symbologyGroup) => (
 							<React.Fragment key={symbologyGroup.id}>
 								{optionsGrouped[symbologyGroup.name] !== undefined && (
 									<React.Fragment key={symbologyGroup.id}>
@@ -215,9 +213,7 @@ function SchemaSymbologyChooser(props: Props) {
 											{symbologyGroup.name}
 										</ListSubheader>
 
-										{optionsGrouped[symbologyGroup.name].map((option, index) =>
-											createSymbolListItem(option, onClickSymbol)
-										)}
+										{optionsGrouped[symbologyGroup.name].map((option) => createSymbolListItem(option, onClickSymbol))}
 									</React.Fragment>
 								)}
 							</React.Fragment>

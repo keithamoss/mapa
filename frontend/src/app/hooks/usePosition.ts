@@ -1,19 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
 export interface UsePosition {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-  speed: number;
-  heading: string;
-  timestamp: any;
-  error: any;
+	latitude: number;
+	longitude: number;
+	accuracy: number;
+	speed: number;
+	heading: string;
+	timestamp: number;
+	error: string;
 }
 
 const defaultSettings = {
-  enableHighAccuracy: true,
-  timeout: Infinity,
-  maximumAge: 0,
+	enableHighAccuracy: true,
+	timeout: Infinity,
+	maximumAge: 0,
 };
 
 const defaultUserSettings = {};
@@ -28,53 +28,46 @@ const defaultUserSettings = {};
 // https://openlayers.org/en/latest/examples/geolocation-orientation.html
 // https://github.com/openlayers/openlayers/blob/main/examples/geolocation-orientation.js
 
-export const usePosition = (
-  watch = false,
-  userSettings = defaultUserSettings
-): UsePosition => {
-  const settings = useMemo(
-    () => ({
-      ...defaultSettings,
-      ...userSettings,
-    }),
-    [userSettings]
-  );
+export const usePosition = (watch = false, userSettings = defaultUserSettings): UsePosition => {
+	const settings = useMemo(
+		() => ({
+			...defaultSettings,
+			...userSettings,
+		}),
+		[userSettings]
+	);
 
-  const [position, setPosition] = useState({});
-  const [error, setError] = useState(null);
+	const [position, setPosition] = useState({});
+	const [error, setError] = useState<string | null>(null);
 
-  const onChange = ({ coords, timestamp }: any) => {
-    setPosition({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      accuracy: coords.accuracy,
-      speed: coords.speed,
-      heading: coords.heading,
-      timestamp,
-    });
-  };
+	const onChange: PositionCallback = ({ coords, timestamp }) => {
+		setPosition({
+			latitude: coords.latitude,
+			longitude: coords.longitude,
+			accuracy: coords.accuracy,
+			speed: coords.speed,
+			heading: coords.heading,
+			timestamp,
+		});
+	};
 
-  const onError = (error: any) => {
-    setError(error.message);
-  };
+	const onError: PositionErrorCallback = (error) => {
+		setError(error.message);
+	};
 
-  useEffect(() => {
-    if (!navigator || !navigator.geolocation) {
-      setError("Geolocation is not supported" as any);
-      return;
-    }
+	useEffect(() => {
+		if (!navigator || !navigator.geolocation) {
+			setError('Geolocation is not supported');
+			return;
+		}
 
-    if (watch) {
-      const watcher = navigator.geolocation.watchPosition(
-        onChange,
-        onError,
-        settings
-      );
-      return () => navigator.geolocation.clearWatch(watcher);
-    }
+		if (watch) {
+			const watcher = navigator.geolocation.watchPosition(onChange, onError, settings);
+			return () => navigator.geolocation.clearWatch(watcher);
+		}
 
-    navigator.geolocation.getCurrentPosition(onChange, onError, settings);
-  }, [settings, watch]);
+		navigator.geolocation.getCurrentPosition(onChange, onError, settings);
+	}, [settings, watch]);
 
-  return { ...position, error } as UsePosition;
+	return { ...position, error } as UsePosition;
 };

@@ -19,11 +19,7 @@ import { useDeleteFeatureMutation } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { getSelectedFeatureIds, setSelectedFeatures } from '../app/appSlice';
 
-interface Props {}
-
-function FeatureManager(props: Props) {
-	console.log('### FeatureManager ###');
-
+function FeatureManager() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();

@@ -54,6 +54,7 @@ import {
 	getFontAwesomeIconFromLibraryAsSVGImage,
 } from './symbologyHelpers';
 
+// eslint-disable-next-line import/named
 import { IconFamily, IconStyle } from '@fortawesome/fontawesome-svg-core';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
@@ -137,8 +138,6 @@ interface Props {
 }
 
 function SymbologyFieldEditor(props: Props) {
-	console.log('### SymbologyFieldEditor ###');
-
 	const { symbol, onDone, onCancel, groups, onAddGroup, currentGroupId, nameFieldRequired, iconFieldRequired } = props;
 
 	// ######################
@@ -420,7 +419,7 @@ function SymbologyFieldEditor(props: Props) {
 									label="Style"
 									select
 									disabled={icon === undefined}
-									value={`${icon_family}_${icon_style}` || ''}
+									value={icon_family !== undefined && icon_style !== undefined ? `${icon_family}_${icon_style}` : ''}
 									SelectProps={{
 										open: false,
 										onClick: onOpenIconFamilyAndStyleChooser,

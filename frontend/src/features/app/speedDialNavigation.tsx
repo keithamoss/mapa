@@ -15,12 +15,14 @@ import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { getCountOfFilteredFeatureIds } from './appSlice';
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const StyledAvatar = styled(Avatar)(() => ({
 	position: 'absolute',
 	top: '-12px',
 	right: '-6px',
 }));
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 	position: 'absolute',
 	bottom: theme.spacing(11),
@@ -66,20 +68,14 @@ const actions = [
 	},
 ];
 
-interface Props {
-	mapId?: number;
-}
-
-export default function SpeedDialNavigation(props: Props) {
-	console.log('### SpeedDialNavigation ###');
-
+export default function SpeedDialNavigation() {
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => {
 		setOpen(false);
 	};
 
-	const onActionClick = (actionName: string) => () => {
+	const onActionClick = () => {
 		setOpen(false);
 	};
 
@@ -109,12 +105,7 @@ export default function SpeedDialNavigation(props: Props) {
 				open={open}
 			>
 				{actions.map((action) => (
-					<SpeedDialAction
-						key={action.name}
-						icon={action.icon}
-						tooltipTitle={action.name}
-						onClick={onActionClick(action.name)}
-					/>
+					<SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={onActionClick} />
 				))}
 			</StyledSpeedDial>
 		</React.Fragment>

@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import { FeatureSchema, useUpdateFeatureSchemaMutation } from '../../app/services/schemas';
-import NotFound from '../../NotFound';
 import SchemaForm from './schemaForm';
 import { selectFeatureSchemaById } from './schemasSlice';
 
@@ -29,8 +29,6 @@ interface Props {
 }
 
 export function SchemaEditor(props: Props) {
-	console.log('### SchemaEditor ###');
-
 	const { schemaId, onDoneEditingSchema, onCancelEditing } = props;
 
 	const navigate = useNavigate();

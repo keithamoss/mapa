@@ -21,8 +21,6 @@ interface Props {
 }
 
 function SymbologyIconFamilyAndStyleChooser(props: Props) {
-	console.log('### SymbologyIconFamilyAndStyleChooser ###');
-
 	const { selectedIcon, onChoose, onClose } = props;
 
 	const onChooseIconFamilyAndStyle = (familyStyle: IconFamilyStyle) => () => {

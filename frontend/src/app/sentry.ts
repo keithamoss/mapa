@@ -24,6 +24,7 @@ export const sentryInit = () => {
 		normalizeDepth: 10,
 	});
 
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	return Sentry.createReduxEnhancer({
 		// Optionally pass options listed below
 	});

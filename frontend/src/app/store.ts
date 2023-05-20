@@ -1,13 +1,14 @@
-import { Action, autoBatchEnhancer, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import { Action, autoBatchEnhancer, configureStore, StoreEnhancer, ThunkAction } from '@reduxjs/toolkit';
 import appReducer from '../features/app/appSlice';
 import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';
 
-const Middleware: Array<any> = [];
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const Middleware: Array<StoreEnhancer> = [];
 
 if (process.env.NODE_ENV !== 'development') {
 	// This should be run as soon as possible
-	Middleware.push(sentryInit());
+	Middleware.push(sentryInit() as StoreEnhancer);
 }
 
 export const store = configureStore({

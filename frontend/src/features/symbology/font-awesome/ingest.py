@@ -82,9 +82,14 @@ def processSVGs(icon):
     processed = {}
 
     for family_name, styles in icon["svgs"].items():
-        processed[family_name] = {}
         for style_name, svg in icon["svgs"][family_name].items():
-            processed[family_name][style_name] = svg["raw"]
+            if style_name == "brands":
+                processed["brands"] = {}
+                processed["brands"]["brands"] = svg["raw"]
+            else:
+                if family_name not in processed:
+                    processed[family_name] = {}
+                processed[family_name][style_name] = svg["raw"]
 
     return processed
 

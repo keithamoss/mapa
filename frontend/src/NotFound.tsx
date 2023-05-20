@@ -1,8 +1,6 @@
 import './App.css';
 
 function NotFound() {
-	console.log('### NotFound ###');
-
 	return (
 		<div
 			style={{

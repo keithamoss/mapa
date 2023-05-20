@@ -39,6 +39,7 @@ function FeatureEditorEntrypoint() {
 	const feature = selectFeatureById(mapId, featureId);
 
 	if (feature !== undefined) {
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
 		return <FeatureEditor mapId={mapId} feature={feature} />;
 	}
 
@@ -73,8 +74,6 @@ interface Props {
 }
 
 function FeatureEditor(props: Props) {
-	console.log('### FeatureEditor ###');
-
 	const navigate = useNavigate();
 
 	const location = useLocation();

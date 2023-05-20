@@ -6,11 +6,7 @@ import { NewMap, useAddMapMutation } from '../../app/services/maps';
 import MapForm from './mapForm';
 import { selectAllMaps } from './mapsSlice';
 
-interface Props {}
-
-function MapCreator(props: Props) {
-	console.log('### MapCreator ###');
-
+function MapCreator() {
 	const navigate = useNavigate();
 
 	const maps = useAppSelector(selectAllMaps);

@@ -2,8 +2,9 @@ import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import GpsOffIcon from '@mui/icons-material/GpsOff';
 import { Avatar, IconButton, styled } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import React from 'react';
+import { memo } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',
 	top: theme.spacing(2),
@@ -17,11 +18,9 @@ interface Props {
 }
 
 function SnapToGPSButton(props: Props) {
-	console.log('### SnapToGPSButton ###');
-
 	const { isFollowingGPS, onFollowGPSEnabled, onFollowGPSDisabled } = props;
 
-	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+	const handleClick = () => {
 		if (isFollowingGPS === true) {
 			onFollowGPSDisabled();
 		} else if (isFollowingGPS === false) {
@@ -36,4 +35,4 @@ function SnapToGPSButton(props: Props) {
 	);
 }
 
-export default React.memo(SnapToGPSButton);
+export default memo(SnapToGPSButton);

@@ -1,16 +1,15 @@
-import * as yup from "yup";
-import { ObjectSchema } from "yup";
-import { FeatureSchemaSymbologyGroupModifiableProps } from "../services/schemas";
+import * as yup from 'yup';
+import { ObjectSchema } from 'yup';
+import { FeatureSchemaSymbologyGroupModifiableProps } from '../services/schemas';
 
-export const symbologyGroupFormValidationSchema: ObjectSchema<FeatureSchemaSymbologyGroupModifiableProps> =
-  yup
-    .object({
-      name: yup.string().required(),
-    })
-    .required();
+export const symbologyGroupFormValidationSchema: ObjectSchema<FeatureSchemaSymbologyGroupModifiableProps> = yup
+	.object({
+		name: yup.string().required(),
+	})
+	.required();
 
 export const symbologyGroupFormValidationSchemaIDOnly = yup
-  .object({
-    id: yup.number().required(),
-  })
-  .required();
+	.object({
+		id: yup.number().required(),
+	})
+	.required();

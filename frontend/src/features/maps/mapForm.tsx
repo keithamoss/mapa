@@ -44,8 +44,6 @@ interface Props {
 }
 
 function MapForm(props: Props) {
-	console.log('### MapForm ###');
-
 	const { map, onDoneAdding, onDoneEditing } = props;
 
 	const navigate = useNavigate();

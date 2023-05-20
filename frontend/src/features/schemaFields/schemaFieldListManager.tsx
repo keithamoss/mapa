@@ -22,6 +22,7 @@ import { moveFieldDown, moveFieldUp, removeField } from '../schemas/schemaHelper
 import { getFieldFromSchemaById } from '../schemas/schemasSlice';
 import SchemaFieldCreatorAndEditor from './schemaFieldCreatorAndEditor';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledMenu = styled((props: MenuProps) => (
 	<Menu
 		elevation={0}
@@ -66,8 +67,6 @@ interface Props {
 }
 
 function SchemaFieldListManager(props: Props) {
-	console.log('### SchemaFieldListManager ###');
-
 	const { schemaId, schemaDefinition, onSchemaDefinitionChange } = props;
 
 	const [fieldToEdit, setFieldToEdit] = useState<FeatureSchemaFieldDefinitionCollection | undefined>();
@@ -94,10 +93,10 @@ function SchemaFieldListManager(props: Props) {
 	// ######################
 	// Menu
 	// ######################
-	const [fieldIdForMenu, setFieldIdForMenu] = React.useState<number | null>(null);
-	const [fieldIdx, setFieldIdx] = React.useState<number | null>(null);
+	const [fieldIdForMenu, setFieldIdForMenu] = useState<number | null>(null);
+	const [fieldIdx, setFieldIdx] = useState<number | null>(null);
 
-	const [menuAnchorEl, setMenuAnchorEl] = React.useState<HTMLElement | null>(null);
+	const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 	const isMenuOpen = Boolean(menuAnchorEl);
 
 	const handleOpenMenuClick = (fieldId: number, idx: number) => (event: React.MouseEvent<HTMLElement>) => {

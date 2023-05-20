@@ -2,8 +2,9 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Avatar, IconButton, styled } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import React from 'react';
+import { memo } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',
 	top: theme.spacing(8),
@@ -17,11 +18,9 @@ interface Props {
 }
 
 function FeatureMovementButton(props: Props) {
-	console.log('### FeatureMovementButton ###');
-
 	const { isFeatureMovementAllowed, onFeatureMovementEnabled, onFeatureMovementDisabled } = props;
 
-	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+	const handleClick = () => {
 		if (isFeatureMovementAllowed === true) {
 			onFeatureMovementDisabled();
 		} else if (isFeatureMovementAllowed === false) {
@@ -48,4 +47,4 @@ function FeatureMovementButton(props: Props) {
 	);
 }
 
-export default React.memo(FeatureMovementButton);
+export default memo(FeatureMovementButton);

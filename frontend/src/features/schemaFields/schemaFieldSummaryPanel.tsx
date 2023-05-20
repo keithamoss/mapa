@@ -29,8 +29,6 @@ interface Props {
 }
 
 function SchemaFieldSummaryPanel(props: Props) {
-	console.log('### SchemaFieldSummaryPanel ###');
-
 	const { schemaId, feature } = props;
 
 	const schema = useAppSelector((state) => selectFeatureSchemaById(state, schemaId));

@@ -40,8 +40,6 @@ interface Props {
 }
 
 function SchemaDeleteManager(props: Props) {
-	console.log('### SchemaDeleteManager ###');
-
 	const { schemaId } = props;
 
 	const navigate = useNavigate();
@@ -93,7 +91,7 @@ function SchemaDeleteManager(props: Props) {
 						<React.Fragment>
 							<Alert severity="info">
 								<AlertTitle>Schema not in use</AlertTitle>
-								This schema is not used by any features, so you're safe to delete it.
+								This schema is not used by any features, so you&apos;re safe to delete it.
 							</Alert>
 
 							<FormControl sx={{ mt: 3 }} component="fieldset" variant="outlined">

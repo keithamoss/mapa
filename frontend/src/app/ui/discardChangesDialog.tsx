@@ -9,8 +9,6 @@ interface Props {
 }
 
 export default function DiscardChangesDialog(props: Props) {
-	console.log('### DiscardChangesDialog ###');
-
 	const { onNo, onYes } = props;
 
 	return (

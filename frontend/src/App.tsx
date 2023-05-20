@@ -14,6 +14,7 @@ import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const LoginContainer = styled('div')`
 	height: 100dvh;
 	display: flex;
@@ -22,8 +23,6 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
-	console.log('### App ###');
-
 	const location = useLocation();
 
 	const mapId = useAppSelector(selectActiveMapId);
@@ -35,8 +34,6 @@ function App() {
 	if (isLoggedIn === undefined) {
 		return null;
 	}
-
-	// noop 3
 
 	if (user === null) {
 		return (
@@ -54,15 +51,13 @@ function App() {
 	}
 
 	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
-	// Important: We're pre-fetching after we have a user object to avoid 403s
-	store.dispatch(mapsApi.endpoints.getMaps.initiate());
-	store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
+	// Important: We're pre-fetching *after* we have a user object to avoid 403s
+	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
+	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
 
 	return (
 		<div className="App">
-			{mapId !== undefined && (
-				<OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />
-			)}
+			{mapId !== undefined && <OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />}
 
 			{location.pathname === '/' && (
 				<React.Fragment>
@@ -70,7 +65,7 @@ function App() {
 
 					<AddFeatureButton mapId={mapId} />
 
-					<SpeedDialNavigation mapId={mapId} />
+					<SpeedDialNavigation />
 				</React.Fragment>
 			)}
 

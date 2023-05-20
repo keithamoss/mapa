@@ -37,20 +37,22 @@ export const olStyleFunction = (olFeature: OLFeature) => {
 	// @TODO Build the feature from the untyped props from scratch (so we can detect anything missing) or find a way to make OL geometry TypeScript typed.
 	const feature = olFeature.getProperties() as Feature;
 
-	if (styleCache[feature.symbolCacheKey!] !== undefined) {
+	if (feature.symbolCacheKey !== undefined && styleCache[feature.symbolCacheKey] !== undefined) {
 		// console.log("cache hit");
-		return styleCache[feature.symbolCacheKey!];
+		return styleCache[feature.symbolCacheKey];
 	} else {
 		// console.log("cache miss");
 	}
 
-	const symbol = getIconForSymbologyConfig(olFeature, feature.symbol!);
+	if (feature.symbol !== undefined) {
+		const symbol = getIconForSymbologyConfig(olFeature, feature.symbol);
 
-	if (symbol !== null) {
-		styleCache[feature.symbolCacheKey!] = symbol;
+		if (feature.symbolCacheKey !== undefined && symbol !== null) {
+			styleCache[feature.symbolCacheKey] = symbol;
+		}
+
+		return symbol;
 	}
-
-	return symbol;
 };
 
 export const determineSymbolForFeature = (

@@ -12,8 +12,6 @@ interface Props {
 }
 
 function SchemaFieldDeleteManager(props: Props) {
-	console.log('### SchemaFieldDeleteManager ###');
-
 	const { schemaId, fieldId, onYes, onNo } = props;
 
 	const maps = useAppSelector((state) => selectAllMaps(state));

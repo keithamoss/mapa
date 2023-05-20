@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export enum eAppEnv {
 	DEVELOPMENT = 1,
 	STAGING = 2,
@@ -13,6 +14,7 @@ export function getEnvironment(): eAppEnv {
 		case 'production':
 			return eAppEnv.PRODUCTION;
 		default:
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			throw Error(`Invalid NODE_ENV '${process.env.NODE_ENV}' encountered`);
 	}
 }
@@ -22,9 +24,9 @@ export function isDevelopment(): boolean {
 }
 
 export function getAPIBaseURL(): string {
-	return process.env.REACT_APP_API_BASE_URL!;
+	return process.env.REACT_APP_API_BASE_URL;
 }
 
 export function getBaseURL(): string {
-	return process.env.REACT_APP_SITE_BASE_URL!;
+	return process.env.REACT_APP_SITE_BASE_URL;
 }

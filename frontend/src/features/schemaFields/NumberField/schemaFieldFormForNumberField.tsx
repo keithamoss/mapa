@@ -32,8 +32,6 @@ interface Props {
 }
 
 function SchemaFieldFormForNumberField(props: Props) {
-	console.log('### SchemaFieldFormForNumberField ###');
-
 	const { field, onDone, onCancel } = props;
 
 	const {

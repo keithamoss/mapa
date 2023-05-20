@@ -14,8 +14,6 @@ interface Props {
 }
 
 function SchemaDataEntryBooleanyTypeFields(props: Props) {
-	console.log('### SchemaDataEntryBooleanyTypeFields ###');
-
 	const { schemaField, dataItem, onFieldChange } = props;
 
 	const onCheckboxFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {

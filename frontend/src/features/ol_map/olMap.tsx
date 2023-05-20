@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Map, MapEvent, View } from 'ol';
 import { Geometry, Point } from 'ol/geom';
 import { ModifyEvent } from 'ol/interaction/Modify';
@@ -8,6 +9,8 @@ import { fromLonLat } from 'ol/proj';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 
 import BaseEvent from 'ol/events/Event';
+import VectorImageLayer from 'ol/layer/VectorImage';
+import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
@@ -67,8 +70,6 @@ const getFeatures = (
 };
 
 function OLMap(props: Props) {
-	console.log('### OLMap ###');
-
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
@@ -179,11 +180,9 @@ function OLMap(props: Props) {
 	const { data: features } = useGetFeaturesForMapQuery(mapId);
 	const mapFeatures = useMemo(() => getFeatures(filteredFeatureIds, features), [features, filteredFeatureIds]);
 
-	// @FIXME
-	// let vectorLayer = useRef<
-	//   VectorImageLayer<VectorSource<Geometry>> | undefined
-	// >(undefined);
-	const vectorLayer = useRef<any | undefined>(undefined);
+	const vectorLayer = useRef<
+		VectorImageLayer<VectorSource<Geometry>> | WebGLPointsLayer<VectorSource<Point>> | undefined
+	>(undefined);
 
 	const vectorLayerUserPosition = useRef<VectorLayer<VectorSource<Geometry>> | undefined>(undefined);
 
@@ -256,7 +255,9 @@ function OLMap(props: Props) {
 					// because isWatchingGPS is stuck on the value it
 					// had when this function was created.
 					// We could maybe fixed it put putting isWatchingGPS
-					// into a useRef() as well, but meh.
+					// into a useRef() as well, but meh because React handles
+					// dealing with multiple of the same setFoobar() calls
+					// in a row.
 					setIsFollowingGPS(false);
 				}
 			};
@@ -266,7 +267,7 @@ function OLMap(props: Props) {
 				const features: Feature[] = [];
 				initialMap.forEachFeatureAtPixel(
 					evt.pixel,
-					(feature, layer) => {
+					(feature) => {
 						features.push(feature.getProperties() as Feature);
 					},
 					{
@@ -360,7 +361,7 @@ function OLMap(props: Props) {
 			if (mapRenderer === MapRenderer.VectorImageLayer) {
 				console.log('manage vector layer: update VectorImageLayer layer');
 
-				manageVectorImageLayerUpdate(vectorLayer.current);
+				manageVectorImageLayerUpdate(vectorLayer.current as VectorImageLayer<VectorSource<Geometry>>);
 			} else {
 				const latestVersion = Math.max(...layerVersions);
 
@@ -378,7 +379,7 @@ function OLMap(props: Props) {
 						console.log('manage vector layer: update WebGLPointsLayer');
 
 						vectorLayer.current = manageWebGLPointsLayerUpdate(
-							vectorLayer.current,
+							vectorLayer.current as WebGLPointsLayer<VectorSource<Point>>,
 							olMapRef.current,
 							isFeatureMovementAllowed,
 							onModifyInteractionStartEnd,

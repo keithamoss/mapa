@@ -22,11 +22,7 @@ import { selectActiveMapId } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import { selectAllFeatureSchemas } from './schemasSlice';
 
-interface Props {}
-
-function SchemaManager(props: Props) {
-	console.log('### SchemaManager ###');
-
+function SchemaManager() {
 	const schemas = useAppSelector(selectAllFeatureSchemas);
 
 	const navigate = useNavigate();

@@ -55,8 +55,6 @@ interface Props {
 }
 
 function SchemaDataEntrySymbology(props: Props) {
-	console.log('### SchemaDataEntrySymbology ###');
-
 	const { mapId, schema, symbolId, onFieldChange, onFieldRemove } = props;
 
 	const { data: features } = useGetFeaturesForMapQuery(mapId);

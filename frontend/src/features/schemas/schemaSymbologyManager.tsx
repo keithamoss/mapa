@@ -60,8 +60,6 @@ interface Props {
 }
 
 function SchemaSymbologyManager(props: Props) {
-	console.log('### SchemaSymbologyManager ###');
-
 	const {
 		schemaId,
 		symbology,
