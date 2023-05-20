@@ -5,7 +5,7 @@ mkdir -p ./build
 
 # For GitHub actions
 if [ ! -d "node_modules" ]; then
-    npm
+    npm install
 fi
 
 npm run lint
