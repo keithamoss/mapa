@@ -81,7 +81,8 @@ jobs:
 
   build-nginx:
     runs-on: ubuntu-latest
-    options: --user root
+    container:
+      options: --user root
     environment: PRODUCTION
     needs: [build-frontend, build-django-static]
     steps:
