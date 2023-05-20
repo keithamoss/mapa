@@ -1,12 +1,12 @@
 #!/bin/bash
 
-rm -rf ./build
-mkdir -p ./build
+# rm -rf ./build
+# mkdir -p ./build
 
-# For GitHub actions
-if [ ! -d "node_modules" ]; then
-    npm install
-fi
+# # For GitHub actions
+# if [ ! -d "node_modules" ]; then
+#     npm install
+# fi
 
 # npm run lint
 
