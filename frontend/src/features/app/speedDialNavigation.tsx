@@ -9,10 +9,10 @@ import { Avatar, SpeedDialIcon, styled } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import { grey } from '@mui/material/colors';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
+import { mapaThemeWarningPurple } from '../../app/ui/theme';
 import { getCountOfFilteredFeatureIds } from './appSlice';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -90,10 +90,9 @@ export default function SpeedDialNavigation() {
 				icon={
 					searchResultCount >= 1 ? (
 						<div>
-							<StyledAvatar sx={{ bgcolor: grey[400], width: 26, height: 26 }}>
+							<StyledAvatar sx={{ bgcolor: mapaThemeWarningPurple, width: 26, height: 26 }}>
 								<FilterAltIcon fontSize="small" />
 							</StyledAvatar>
-
 							<SpeedDialIcon icon={<MenuIcon />} openIcon={<CloseIcon />} />
 						</div>
 					) : (

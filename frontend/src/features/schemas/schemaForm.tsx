@@ -22,7 +22,7 @@ import {
 	Paper,
 	TextField,
 	Toolbar,
-	Typography,
+	Typography
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
@@ -39,7 +39,7 @@ import {
 	FeatureSchemaSymbologySymbolsValue,
 	NewFeatureSchema,
 	NewFeatureSchemaFieldDefinitionCollection,
-	SymbologyProps,
+	SymbologyProps
 } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
@@ -57,10 +57,10 @@ import {
 	modifySymbolInGroup,
 	moveSymbolsToGroup,
 	removeSymbol,
-	unfavouriteSymbolForMap,
+	unfavouriteSymbolForMap
 } from '../symbology/symbologyHelpers';
-import SchemaSymbologyManager from './schemaSymbologyManager';
 import { getNextSchemaFieldId } from './schemasSlice';
+import SchemaSymbologyManager from './schemaSymbologyManager';
 
 interface Props {
 	schema?: FeatureSchema;
@@ -205,7 +205,7 @@ function SchemaForm(props: Props) {
 					id: getNextSchemaFieldId(definition),
 				} as FeatureSchemaFieldDefinitionCollection,
 			],
-			{ shouldDirty: true }
+			{ shouldDirty: true },
 		);
 
 		setFieldTypeToAdd(undefined);
@@ -266,7 +266,7 @@ function SchemaForm(props: Props) {
 			)}
 
 			<DialogWithTransition onClose={onCancelForm}>
-				<AppBar sx={{ position: 'sticky' }}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
 					<Toolbar>
 						<IconButton edge="start" color="inherit" onClick={onCancelForm}>
 							<CloseIcon />

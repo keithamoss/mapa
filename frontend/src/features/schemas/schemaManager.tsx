@@ -10,7 +10,7 @@ import {
 	ListItemButton,
 	ListItemText,
 	Toolbar,
-	Typography,
+	Typography
 } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -66,7 +66,7 @@ function SchemaManager() {
 
 	return (
 		<DialogWithTransition onClose={onClose}>
-			<AppBar sx={{ position: 'sticky' }}>
+			<AppBar color="secondary" sx={{ position: 'sticky' }}>
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={onClose}>
 						<CloseIcon />
@@ -92,7 +92,7 @@ function SchemaManager() {
 							disablePadding
 						>
 							<ListItemButton onClick={onClickSchema(schema.id)}>
-								<ListItemText primary={schema.name} inset />
+								<ListItemText primary={schema.name} />
 							</ListItemButton>
 						</ListItem>
 

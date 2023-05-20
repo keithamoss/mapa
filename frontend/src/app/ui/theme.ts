@@ -1,22 +1,28 @@
 import { createTheme } from '@mui/material';
 
+export const mapaThemePrimaryGreen = '#699222';
+export const mapaThemeSecondaryBlue = '#226992';
+export const mapaThemeSecondaryBlueRGB = '34, 105, 146';
+export const mapaThemeWarningPurple = '#922269';
+
 export const defaultAppMapColour = '#f7f7f7';
 
-export const defaultAppBarColour = '#1876d2';
+export const defaultAppBarColour = mapaThemePrimaryGreen;
 
 export const defaultNakedDialogColour = '#FFFFFF';
 
-export const defaultNakedNonFullScreenDialogColour = '#083d70';
-
-export const demSausagePurple = '#6740b4';
+export const defaultNakedNonFullScreenDialogColour = mapaThemePrimaryGreen;
 
 export const theme = createTheme({
 	palette: {
-		// primary: {
-		//   main: purple[500],
-		// },
+		primary: {
+			main: mapaThemeSecondaryBlue,
+		},
 		secondary: {
-			main: demSausagePurple,
+			main: mapaThemePrimaryGreen,
+		},
+		error: {
+			main: mapaThemeWarningPurple,
 		},
 	},
 });

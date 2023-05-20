@@ -21,7 +21,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	ListSubheader,
-	Toolbar,
+	Toolbar
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
 import { groupBy } from 'lodash-es';
@@ -30,15 +30,15 @@ import {
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologyGroup,
 	FeatureSchemaSymbologySymbolsValue,
-	SymbologyProps,
+	SymbologyProps
 } from '../../app/services/schemas';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import {
-	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,
+	defaultSymbolSizeForFormFields,
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolGroups,
-	getSymbologyGroupById,
+	getSymbologyGroupById
 } from '../symbology/symbologyHelpers';
 import SchemaSymbolDeleteManager from './schemaSymbolDeleteManager';
 import SchemaSymbologyGroupChooserForRerranging from './schemaSymbologyGroupChooserForRerranging';
@@ -300,7 +300,7 @@ function SchemaSymbologyManager(props: Props) {
 			<List>
 				{getSymbolGroups(symbology).map((symbologyGroup, idx) => (
 					<React.Fragment key={symbologyGroup.id}>
-						<ListSubheader sx={{ mt: idx > 0 ? 3 : 0 }} color="primary" disableGutters>
+						<ListSubheader sx={{ mt: idx > 0 ? 3 : 0 }} disableGutters>
 							{symbologyGroup.name}
 						</ListSubheader>
 
@@ -366,9 +366,9 @@ function SchemaSymbologyManager(props: Props) {
 										>
 											<ListItemIcon onClick={onClickAddSymbolToRearrange(symbol.id)}>
 												{symbolsToRearrange.includes(symbol.id) === false ? (
-													<CheckBoxOutlineBlankIcon color="info" />
+													<CheckBoxOutlineBlankIcon color="primary" />
 												) : (
-													<CheckBoxIcon color="info" />
+													<CheckBoxIcon color="primary" />
 												)}
 											</ListItemIcon>
 
@@ -378,7 +378,7 @@ function SchemaSymbologyManager(props: Props) {
 											<ListItemText primary={symbol.props.name} sx={{ pl: 1 }} />
 										</ListItemButton>
 									</ListItem>
-								)
+								),
 							)}
 					</React.Fragment>
 				))}

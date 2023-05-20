@@ -1,15 +1,15 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
-	AppBar,
-	FormControl,
-	FormControlLabel,
-	FormLabel,
-	IconButton,
-	Paper,
-	Radio,
-	RadioGroup,
-	Toolbar,
-	Typography,
+    AppBar,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    IconButton,
+    Paper,
+    Radio,
+    RadioGroup,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ function SettingsManager() {
 	return (
 		<React.Fragment>
 			<DialogWithTransition onClose={onClose}>
-				<AppBar sx={{ position: 'sticky' }}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
 					<Toolbar>
 						<IconButton edge="start" color="inherit" onClick={onClose}>
 							<CloseIcon />

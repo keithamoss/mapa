@@ -66,7 +66,7 @@ function MapManager() {
 
 	return (
 		<DialogWithTransition onClose={onClose}>
-			<AppBar sx={{ position: 'sticky' }}>
+			<AppBar color="secondary" sx={{ position: 'sticky' }}>
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={onClose}>
 						<CloseIcon />

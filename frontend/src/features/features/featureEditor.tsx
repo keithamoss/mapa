@@ -4,22 +4,22 @@ import FlightIcon from '@mui/icons-material/Flight';
 import { AppBar, Button, FormControl, FormLabel, Grid, IconButton, Paper, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import {
-	Feature,
-	FeatureDataItem,
-	useDeleteFeatureMutation,
-	useUpdateFeatureMutation,
+    Feature,
+    FeatureDataItem,
+    useDeleteFeatureMutation,
+    useUpdateFeatureMutation
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import NotFound from '../../NotFound';
 import { selectActiveMapId } from '../app/appSlice';
-import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import SchemaFieldDataEntryManager from '../schemaFields/schemaFieldDataEntryManager';
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
+import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import { SchemaEditor } from '../schemas/schemaEditor';
 import SchemaSelectFormControls from '../schemas/schemaSelectFormControls';
 import { getSchemasAvailableForMap } from '../schemas/schemasSlice';
@@ -173,7 +173,7 @@ function FeatureEditor(props: Props) {
 		if (
 			areAllRequiredFieldsFilled(
 				localFeature,
-				availableSchemas.find((s) => s.id === localFeature.schema_id)
+				availableSchemas.find((s) => s.id === localFeature.schema_id),
 			) === true
 		) {
 			updateFeature(localFeature);
@@ -223,7 +223,7 @@ function FeatureEditor(props: Props) {
 		// For some reason this was causing the dialog to close as soon as it opened when the feature had no schema selected
 		// onClose={onCancelForEditor}
 		>
-			<AppBar sx={{ position: 'sticky' }}>
+			<AppBar color="secondary" sx={{ position: 'sticky' }}>
 				<Toolbar>
 					<IconButton edge="start" color="inherit" onClick={onCancelForEditor}>
 						<CloseIcon />

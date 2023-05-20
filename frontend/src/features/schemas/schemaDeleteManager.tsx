@@ -2,26 +2,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import CloseIcon from '@mui/icons-material/Close';
 import {
-	Alert,
-	AlertTitle,
-	AppBar,
-	Button,
-	FormControl,
-	IconButton,
-	List,
-	ListItem,
-	ListItemText,
-	Paper,
-	Toolbar,
-	Typography,
+    Alert,
+    AlertTitle,
+    AppBar,
+    Button,
+    FormControl,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import { useCheckCanDeleteQuery, useDeleteSchemaMutation } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import NotFound from '../../NotFound';
 import { selectAllMaps } from '../maps/mapsSlice';
 
 function SchemaDeleteManagerEntrypoint() {
@@ -68,7 +68,7 @@ function SchemaDeleteManager(props: Props) {
 	return (
 		<React.Fragment>
 			<DialogWithTransition onClose={onClose}>
-				<AppBar sx={{ position: 'sticky' }}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
 					<Toolbar>
 						<IconButton edge="start" color="inherit" onClick={onClose}>
 							<CloseIcon />

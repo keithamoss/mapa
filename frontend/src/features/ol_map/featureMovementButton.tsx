@@ -1,8 +1,8 @@
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Avatar, IconButton, styled } from '@mui/material';
-import { blue } from '@mui/material/colors';
 import { memo } from 'react';
+import { mapaThemeWarningPurple } from '../../app/ui/theme';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
@@ -33,7 +33,7 @@ function FeatureMovementButton(props: Props) {
 			{isFeatureMovementAllowed === true ? (
 				<Avatar
 					sx={{
-						bgcolor: blue[400],
+						bgcolor: mapaThemeWarningPurple,
 					}}
 				>
 					<LockOpenIcon />

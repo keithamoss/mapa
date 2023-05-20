@@ -4,25 +4,25 @@ import TuneIcon from '@mui/icons-material/Tune';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
-	AppBar,
-	Box,
-	Button,
-	Checkbox,
-	Chip,
-	FormControl,
-	FormGroup,
-	FormHelperText,
-	FormLabel,
-	IconButton,
-	InputLabel,
-	ListItemText,
-	MenuItem,
-	OutlinedInput,
-	Paper,
-	Select,
-	TextField,
-	Toolbar,
-	Typography,
+    AppBar,
+    Box,
+    Button,
+    Checkbox,
+    Chip,
+    FormControl,
+    FormGroup,
+    FormHelperText,
+    FormLabel,
+    IconButton,
+    InputLabel,
+    ListItemText,
+    MenuItem,
+    OutlinedInput,
+    Paper,
+    Select,
+    TextField,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
@@ -125,7 +125,7 @@ function MapForm(props: Props) {
 			)}
 
 			<DialogWithTransition onClose={onCancelForm}>
-				<AppBar sx={{ position: 'sticky' }}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
 					<Toolbar>
 						<IconButton edge="start" color="inherit" onClick={onCancelForm}>
 							<CloseIcon />

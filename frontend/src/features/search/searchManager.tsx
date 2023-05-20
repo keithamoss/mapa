@@ -2,46 +2,44 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import {
-	AppBar,
-	Box,
-	Button,
-	Checkbox,
-	Chip,
-	FormControl,
-	FormGroup,
-	FormHelperText,
-	FormLabel,
-	IconButton,
-	InputAdornment,
-	InputLabel,
-	List,
-	ListItem,
-	ListItemText,
-	MenuItem,
-	OutlinedInput,
-	Paper,
-	Select,
-	TextField,
-	Toolbar,
-	Typography,
+    AppBar,
+    Box,
+    Button,
+    Checkbox,
+    Chip,
+    FormControl,
+    FormGroup,
+    FormHelperText,
+    FormLabel,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    List,
+    ListItem,
+    ListItemText,
+    MenuItem,
+    OutlinedInput,
+    Paper,
+    Select,
+    TextField,
+    Toolbar,
+    Typography
 } from '@mui/material';
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import NotFound from '../../NotFound';
 import { searchFormValidationSchema } from '../../app/forms/searchForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Feature, useGetFeaturesForMapQuery } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import NotFound from '../../NotFound';
 import {
-	SearchField,
-	SearchFieldLabel,
-	SearchParameters,
-	defaultSearchParameters,
-	getSearchParameters,
-	selectActiveMapId,
-	setFilteredFeatures,
-	setSearchParameters,
+    defaultSearchParameters,
+    getSearchParameters, SearchField,
+    SearchFieldLabel,
+    SearchParameters, selectActiveMapId,
+    setFilteredFeatures,
+    setSearchParameters
 } from '../app/appSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import { isSearchingYet, searchFeatures } from './searchHelpers';
@@ -119,7 +117,7 @@ function SearchManager(props: Props) {
 	return (
 		<React.Fragment>
 			<DialogWithTransition onClose={onClose}>
-				<AppBar sx={{ position: 'sticky' }}>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
 					<Toolbar>
 						<IconButton edge="start" color="inherit" onClick={onClose}>
 							<CloseIcon />

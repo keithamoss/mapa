@@ -14,6 +14,7 @@ import Style from 'ol/style/Style';
 import { MapRenderer } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
+import { mapaThemeSecondaryBlueRGB } from '../../app/ui/theme';
 import { determineSymbolForFeature } from './olStylingManager';
 import { buildSpriteSheet } from './olWebGLPointsLayerManager';
 
@@ -54,7 +55,7 @@ export const convertFeaturesToGeoJSON = (
 		}>
 	>,
 	layerVersion: number,
-	mapRenderer?: MapRenderer
+	mapRenderer?: MapRenderer,
 ): GeoJSONFeatureCollection => {
 	if (features.length === 0) {
 		return {
@@ -105,7 +106,7 @@ export const convertFeaturesToGeoJSON = (
 export const setupModifyInteraction = (
 	vectorLayer: VectorLayer<VectorSource>,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
-	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void
+	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,
 ) => {
 	const modify = new Modify({
 		hitDetection: vectorLayer,
@@ -150,14 +151,14 @@ export const createVectorLayerForUserPosition = (latitude: number, longitude: nu
 		style: [
 			new Style({
 				image: new Circle({
-					fill: new Fill({ color: 'rgba(67, 133, 244, 0.5)' }),
-					// stroke: new Stroke({ color: "rgba(67, 133, 244, 1)", width: 0.5 }),
+					fill: new Fill({ color: `rgba(${mapaThemeSecondaryBlueRGB}, 0.5)` }),
+					// stroke: new Stroke({ color: "rgba(${mapaThemeSecondaryBlueRGB}, 1)", width: 0.5 }),
 					radius: 20,
 				}),
 			}),
 			new Style({
 				image: new Circle({
-					fill: new Fill({ color: 'rgb(67, 133, 244)' }),
+					fill: new Fill({ color: `rgb(${mapaThemeSecondaryBlueRGB})` }),
 					stroke: new Stroke({ color: 'white', width: 1.5 }),
 					radius: 10,
 				}),
@@ -172,7 +173,7 @@ export const createVectorLayerForUserPosition = (latitude: number, longitude: nu
 export const updateVectorLayerForUserPosition = (
 	latitude: number,
 	longitude: number,
-	vectorLayer: VectorLayer<VectorSource<Geometry>>
+	vectorLayer: VectorLayer<VectorSource<Geometry>>,
 ) => {
 	const vectorSource = vectorLayer.getSource();
 	if (vectorSource !== null) {
