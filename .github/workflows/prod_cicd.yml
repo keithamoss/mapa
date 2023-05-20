@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: '16.x'
 
       - name: Setup Env Vars
         run: |
@@ -54,7 +54,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: '16.x'
 
       - name: Setup Env Vars
         run: |
@@ -81,6 +81,7 @@ jobs:
 
   build-nginx:
     runs-on: ubuntu-latest
+    options: --user root
     environment: PRODUCTION
     needs: [build-frontend, build-django-static]
     steps:
