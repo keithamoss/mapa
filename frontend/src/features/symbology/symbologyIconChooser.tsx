@@ -18,17 +18,15 @@ import {
 	ListItemText,
 	OutlinedInput,
 	Paper,
-	Typography,
+	Typography
 } from '@mui/material';
 
-import React, { useMemo, useRef, useState } from 'react';
+import React, { startTransition, useRef, useState } from 'react';
 import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 
 import { grey } from '@mui/material/colors';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import { debounce } from 'lodash-es';
-import { useUnmount } from '../../app/hooks/useUnmount';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
 import { getCategories, getCategoryLabelByName, getIconsForCategory, searchIcons } from './font-awesome/fontAwesome';
@@ -53,20 +51,14 @@ function SymbologyIconChooser(props: Props) {
 	const [iconSearchTerm, setIconSearchTerm] = useState('');
 
 	const onIconSearchInputChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-		if (event.target.value.length >= 3) {
-			setIconSearchTerm(event.target.value);
-		} else if (event.target.value.length === 0) {
-			setIconSearchTerm('');
-		}
+		startTransition(() => {
+			if (event.target.value.length >= 3) {
+				setIconSearchTerm(event.target.value);
+			} else if (event.target.value.length === 0) {
+				setIconSearchTerm('');
+			}
+		});
 	};
-
-	// https://dmitripavlutin.com/react-throttle-debounce/
-	const debouncedOnIconSearchInputChange = useMemo(() => debounce(onIconSearchInputChange, 250, { maxWait: 750 }), []);
-
-	// Stop the invocation of the debounced function after unmounting
-	useUnmount(() => {
-		debouncedOnIconSearchInputChange.cancel();
-	});
 
 	const textInput = useRef<HTMLInputElement>(null);
 
@@ -178,7 +170,7 @@ function SymbologyIconChooser(props: Props) {
 									? 'Search for an icon'
 									: `Search for an icon in ${getCategoryLabelByName(chosenIconCategory) || 'Unknown'}`
 							}
-							onChange={debouncedOnIconSearchInputChange}
+							onChange={onIconSearchInputChange}
 							endAdornment={
 								iconSearchTerm.length > 0 ? (
 									<ClearIcon sx={{ color: grey[500] }} onClick={onClearIconSearchInput} />
