@@ -5,5 +5,5 @@ module.exports = {
   "tabWidth": 2,
   "indentStyle": "space",
   "useTabs": true,
-  "trailingComma": "es5"
+  "trailingComma": "all"
 }
