@@ -18,7 +18,7 @@ import { usePosition } from '../../app/hooks/usePosition';
 import { useUnmount } from '../../app/hooks/useUnmount';
 import { MapRenderer } from '../../app/services/auth';
 import { Feature, useGetFeaturesForMapQuery, useUpdateFeatureMutation } from '../../app/services/features';
-import { OLMapView, getFilteredFeatureIds, setMapView, setSelectedFeatures } from '../app/appSlice';
+import { getFilteredFeatureIds, OLMapView, setMapView, setSelectedFeatures } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import FeatureMovementButton from './featureMovementButton';
@@ -29,14 +29,14 @@ import {
 	geoJSONFeatures,
 	getPointGeoJSONFromCoordinates,
 	isDataVectorLayer,
-	updateVectorLayerForUserPosition,
+	updateVectorLayerForUserPosition
 } from './olLayerManager';
 import './olMap.css';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import {
 	getNextLayerVersion,
 	manageWebGLPointsLayerCreation,
-	manageWebGLPointsLayerUpdate,
+	manageWebGLPointsLayerUpdate
 } from './olWebGLPointsLayerManager';
 import SnapToGPSButton from './snapToGPSButton';
 
@@ -56,7 +56,7 @@ const getFeatures = (
 	filteredFeatureIds: number[],
 	features?: {
 		[key: number]: Feature;
-	}
+	},
 ) => {
 	if (features === undefined) {
 		return [];
@@ -87,7 +87,7 @@ function OLMap(props: Props) {
 			setView(newview);
 			dispatch(setMapView(newview));
 		},
-		[setView, dispatch]
+		[setView, dispatch],
 	);
 
 	const onViewChangeAndUpdateMap = useCallback(
@@ -98,7 +98,7 @@ function OLMap(props: Props) {
 				olMapRef.current.setView(new View(newview));
 			}
 		},
-		[onViewChange]
+		[onViewChange],
 	);
 
 	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
@@ -163,7 +163,7 @@ function OLMap(props: Props) {
 				}
 			}
 		},
-		[updateFeature]
+		[updateFeature],
 	);
 
 	const onModifyInteractionAddRemoveFeature = useMemo(
@@ -173,7 +173,7 @@ function OLMap(props: Props) {
 				target.style.cursor = evt.type === 'addfeature' ? 'pointer' : '';
 			}
 		},
-		[]
+		[],
 	);
 
 	// R1 when features are retrieved
@@ -265,15 +265,16 @@ function OLMap(props: Props) {
 
 			initialMap.on('click', (evt) => {
 				const features: Feature[] = [];
-				initialMap.forEachFeatureAtPixel(
+				evt.map.forEachFeatureAtPixel(
 					evt.pixel,
 					(feature) => {
+						console.log('feature', feature.getProperties());
 						features.push(feature.getProperties() as Feature);
 					},
 					{
 						layerFilter: (layer) => isDataVectorLayer(layer),
 						hitTolerance: 5,
-					}
+					},
 				);
 
 				dispatch(setSelectedFeatures(features.map((f) => f.id)));
@@ -334,7 +335,7 @@ function OLMap(props: Props) {
 				featureSchemas,
 				setLayersReadyForRendering,
 				layerVersion,
-				mapRenderer
+				mapRenderer,
 			);
 
 			// We can create VectorImageLayers straight away
@@ -345,7 +346,7 @@ function OLMap(props: Props) {
 					olMapRef.current,
 					isFeatureMovementAllowed,
 					onModifyInteractionStartEnd,
-					onModifyInteractionAddRemoveFeature
+					onModifyInteractionAddRemoveFeature,
 				);
 			}
 		}
@@ -373,7 +374,7 @@ function OLMap(props: Props) {
 							olMapRef.current,
 							isFeatureMovementAllowed,
 							onModifyInteractionStartEnd,
-							onModifyInteractionAddRemoveFeature
+							onModifyInteractionAddRemoveFeature,
 						);
 					} else {
 						console.log('manage vector layer: update WebGLPointsLayer');
@@ -383,7 +384,7 @@ function OLMap(props: Props) {
 							olMapRef.current,
 							isFeatureMovementAllowed,
 							onModifyInteractionStartEnd,
-							onModifyInteractionAddRemoveFeature
+							onModifyInteractionAddRemoveFeature,
 						);
 					}
 				}
