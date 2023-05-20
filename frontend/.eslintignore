@@ -3,4 +3,3 @@ node_modules/
 build/
 .prettierrc.js
 .eslintrc.js
-vite-env.d.ts
