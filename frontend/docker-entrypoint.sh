@@ -7,6 +7,8 @@ if [ ! -d ".yarn" ]; then
   rm -f .yarn*
   yarn set version stable
   yarn install
+else
+  yarn install
 fi
 
 if [ "$VITE_ENVIRONMENT" = "DEVELOPMENT" ]; then
