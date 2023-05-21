@@ -103,7 +103,7 @@ function OLMap(props: Props) {
 		[onViewChange],
 	);
 
-	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
+	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(true);
 
 	const onFeatureMovementEnabled = useCallback(() => {
 		setIsFeatureMovementAllowed(true);
@@ -420,7 +420,7 @@ function OLMap(props: Props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [olMapRef.current, latitude, longitude]);
 
-	// R7=8
+	// R8
 	// Manage enabling/disabling the movement of features
 	useEffect(() => {
 		if (olMapRef.current !== undefined) {
