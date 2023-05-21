@@ -103,7 +103,7 @@ function OLMap(props: Props) {
 		[onViewChange],
 	);
 
-	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(true);
+	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
 
 	const onFeatureMovementEnabled = useCallback(() => {
 		setIsFeatureMovementAllowed(true);
@@ -423,13 +423,9 @@ function OLMap(props: Props) {
 	// R8
 	// Manage enabling/disabling the movement of features
 	useEffect(() => {
-		console.log('isFeatureMovementAllowed', isFeatureMovementAllowed);
 		if (olMapRef.current !== undefined) {
-			console.log('isFeatureMovementAllowed: Map is good');
 			olMapRef.current.getInteractions().forEach((interaction) => {
-				console.log('isFeatureMovementAllowed: Interaction', interaction);
-				if (interaction.constructor.name === 'Modify') {
-					console.log('isFeatureMovementAllowed: Set Modify interaction to', isFeatureMovementAllowed);
+				if (interaction.getProperties().is_modify === true) {
 					interaction.setActive(isFeatureMovementAllowed);
 				}
 			});

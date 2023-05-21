@@ -165,6 +165,8 @@ export const setupModifyInteraction = (
 		source: vectorLayer.getSource() || undefined,
 	});
 
+	modify.setProperties({ is_modify: true });
+
 	modify.on(['modifystart', 'modifyend'], onModifyInteractionStartEnd);
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call

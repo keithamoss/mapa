@@ -279,7 +279,7 @@ export const manageWebGLPointsLayerUpdate = (
 
 	// Remove and cleanup the current layer
 	map.getInteractions().forEach((interaction) => {
-		if (interaction.constructor.name === 'Modify' && map !== undefined) {
+		if (interaction.getProperties().is_modify && map !== undefined) {
 			map.removeInteraction(interaction);
 		}
 	});
