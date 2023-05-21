@@ -78,7 +78,7 @@ export const getWMTSTileLayer = () => {
 	};
 
 	return new TileLayer({
-		opacity: 1,
+		preload: Infinity,
 		source: new WMTS({
 			urls: [
 				`https://api.mapbox.com/styles/v1/keithmoss/clgu2ornp001j01r76h3o6j3g/tiles/{TileMatrix}/{TileCol}/{TileRow}?access_token=${

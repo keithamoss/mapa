@@ -225,6 +225,7 @@ function OLMap(props: Props) {
 						: new MapboxVector({
 								styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
 								accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
+								preload: Infinity,
 						  }),
 				],
 				view: new View(view),
