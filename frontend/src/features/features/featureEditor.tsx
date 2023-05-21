@@ -1,7 +1,20 @@
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FlightIcon from '@mui/icons-material/Flight';
-import { AppBar, Button, FormControl, FormLabel, Grid, IconButton, Paper, Toolbar, Typography } from '@mui/material';
+import {
+	AppBar,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogTitle,
+	FormControl,
+	FormLabel,
+	Grid,
+	IconButton,
+	Paper,
+	Toolbar,
+	Typography
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
@@ -10,7 +23,7 @@ import {
 	Feature,
 	FeatureDataItem,
 	useDeleteFeatureMutation,
-	useUpdateFeatureMutation,
+	useUpdateFeatureMutation
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
@@ -141,6 +154,9 @@ function FeatureEditor(props: Props) {
 		});
 	};
 
+	// ######################
+	// Manage Fields
+	// ######################
 	// Adding or updating the value of a data field defined on the schema
 	const onChangeField = (featureDataItem: FeatureDataItem) => {
 		const data = [...(localFeature.data || [])];
@@ -168,7 +184,49 @@ function FeatureEditor(props: Props) {
 			data,
 		});
 	};
+	// ######################
+	// Manage Fields (End)
+	// ######################
 
+	// ######################
+	// Manage Symbols
+	// ######################
+	const onSymbolChange = (symbolId: number) => {
+		setLocalFeature({
+			...localFeature,
+			symbol_id: symbolId,
+		});
+	};
+
+	const onSymbolRemove = () => {
+		setLocalFeature({
+			...localFeature,
+			symbol_id: null,
+		});
+	};
+	// ######################
+	// Manage Symbols (End)
+	// ######################
+
+	// ######################
+	// Delete Feature
+	// ######################
+	const [isDeletingFeature, setIsDeletingFeature] = useState(false);
+
+	const onClickDeleteFeature = () => setIsDeletingFeature(true);
+
+	const onDeleteFeature = () => {
+		deleteFeature(feature.id);
+	};
+
+	const onCancelDeleteFeature = () => setIsDeletingFeature(false);
+	// ######################
+	// Delete Feature (End)
+	// ######################
+
+	// ######################
+	// Overall Component
+	// ######################
 	const onDoneForEditor = () => {
 		if (
 			areAllRequiredFieldsFilled(
@@ -196,137 +254,131 @@ function FeatureEditor(props: Props) {
 			navigate(-1);
 		}
 	};
-
-	const onSymbolChange = (symbolId: number) => {
-		setLocalFeature({
-			...localFeature,
-			symbol_id: symbolId,
-		});
-	};
-
-	const onSymbolRemove = () => {
-		setLocalFeature({
-			...localFeature,
-			symbol_id: null,
-		});
-	};
-
-	const onDeleteFeature = () => {
-		// eslint-disable-next-line no-restricted-globals
-		if (confirm('Are you sure?') === true) {
-			deleteFeature(feature.id);
-		}
-	};
+	// ######################
+	// Overall Component (End)
+	// ######################
 
 	return (
-		<DialogWithTransition
-		// For some reason this was causing the dialog to close as soon as it opened when the feature had no schema selected
-		// onClose={onCancelForEditor}
-		>
-			<AppBar color="secondary" sx={{ position: 'sticky' }}>
-				<Toolbar>
-					<IconButton edge="start" color="inherit" onClick={onCancelForEditor}>
-						<CloseIcon />
-					</IconButton>
-					<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-						Edit Feature
-					</Typography>
-					<Button color="inherit" onClick={onDoneForEditor}>
-						Save
-					</Button>
-				</Toolbar>
-			</AppBar>
+		<React.Fragment>
+			{isDeletingFeature === true && (
+				<Dialog open={true} onClose={onCancelDeleteFeature} fullWidth>
+					<DialogTitle>Delete feature?</DialogTitle>
+					<DialogActions>
+						<Button onClick={onCancelDeleteFeature}>No</Button>
+						<Button onClick={onDeleteFeature}>Yes</Button>
+					</DialogActions>
+				</Dialog>
+			)}
 
-			<Paper elevation={0} sx={{ m: 3, mt: 2 }}>
-				{localFeature.data.length >= 1 && (
-					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
-						<FormLabel component="legend">Feature Summary</FormLabel>
+			<DialogWithTransition
+			// For some reason this was causing the dialog to close as soon as it opened when the feature had no schema selected
+			// onClose={onCancelForEditor}
+			>
+				<AppBar color="secondary" sx={{ position: 'sticky' }}>
+					<Toolbar>
+						<IconButton edge="start" color="inherit" onClick={onCancelForEditor}>
+							<CloseIcon />
+						</IconButton>
+						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+							Edit Feature
+						</Typography>
+						<Button color="inherit" onClick={onDoneForEditor}>
+							Save
+						</Button>
+					</Toolbar>
+				</AppBar>
 
-						{localFeature.schema_id !== null && (
-							<SchemaFieldSummaryPanel schemaId={localFeature.schema_id} feature={localFeature} />
-						)}
-					</FormControl>
-				)}
+				<Paper elevation={0} sx={{ m: 3, mt: 2 }}>
+					{localFeature.data.length >= 1 && (
+						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+							<FormLabel component="legend">Feature Summary</FormLabel>
 
-				<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-					<FormLabel component="legend" sx={{ mb: 2 }}>
-						Schema
-					</FormLabel>
-
-					<SchemaSelectFormControls
-						mapId={mapId}
-						selectedSchemaId={localFeature.schema_id || undefined}
-						onChooseSchema={onChooseSchema}
-						onClickEditSchema={onEditSchema}
-					/>
-				</FormControl>
-
-				{localFeature.schema_id !== null && (
-					<React.Fragment>
-						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend" sx={{ mb: 2 }}>
-								Symbology
-							</FormLabel>
-
-							<SchemaDataEntrySymbology
-								mapId={mapId}
-								schemaId={localFeature.schema_id}
-								symbolId={localFeature.symbol_id}
-								onFieldChange={onSymbolChange}
-								onFieldRemove={onSymbolRemove}
-							/>
+							{localFeature.schema_id !== null && (
+								<SchemaFieldSummaryPanel schemaId={localFeature.schema_id} feature={localFeature} />
+							)}
 						</FormControl>
+					)}
 
-						<SchemaFieldDataEntryManager
-							schemaId={localFeature.schema_id}
-							feature={localFeature}
-							onFieldChange={onChangeField}
-							onFieldRemove={onRemoveField}
+					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<FormLabel component="legend" sx={{ mb: 2 }}>
+							Schema
+						</FormLabel>
+
+						<SchemaSelectFormControls
+							mapId={mapId}
+							selectedSchemaId={localFeature.schema_id || undefined}
+							onChooseSchema={onChooseSchema}
+							onClickEditSchema={onEditSchema}
 						/>
-					</React.Fragment>
-				)}
+					</FormControl>
 
-				<FormControl sx={{ mb: 3 }} component="fieldset" variant="outlined">
-					<Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
-						<Grid container direction="row" alignItems="center">
-							<Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
-								<FormLabel component="legend">Danger Zone</FormLabel>
-							</Grid>
-							<Grid item>
-								<FlightIcon
-									sx={{
-										verticalAlign: 'middle',
-										color: 'rgb(0, 0, 0)',
-										opacity: 0.5,
-										fontSize: '16px',
-									}}
+					{localFeature.schema_id !== null && (
+						<React.Fragment>
+							<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+								<FormLabel component="legend" sx={{ mb: 2 }}>
+									Symbology
+								</FormLabel>
+
+								<SchemaDataEntrySymbology
+									mapId={mapId}
+									schemaId={localFeature.schema_id}
+									symbolId={localFeature.symbol_id}
+									onFieldChange={onSymbolChange}
+									onFieldRemove={onSymbolRemove}
 								/>
+							</FormControl>
+
+							<SchemaFieldDataEntryManager
+								schemaId={localFeature.schema_id}
+								feature={localFeature}
+								onFieldChange={onChangeField}
+								onFieldRemove={onRemoveField}
+							/>
+						</React.Fragment>
+					)}
+
+					<FormControl sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
+							<Grid container direction="row" alignItems="center">
+								<Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
+									<FormLabel component="legend">Danger Zone</FormLabel>
+								</Grid>
+								<Grid item>
+									<FlightIcon
+										sx={{
+											verticalAlign: 'middle',
+											color: 'rgb(0, 0, 0)',
+											opacity: 0.5,
+											fontSize: '16px',
+										}}
+									/>
+								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
 
-					<Button
-						variant="outlined"
-						color="error"
-						startIcon={<DeleteIcon color="error" />}
-						onClick={onDeleteFeature}
-						sx={{ maxWidth: 350 }}
-					>
-						Delete
-					</Button>
-				</FormControl>
-			</Paper>
+						<Button
+							variant="outlined"
+							color="error"
+							startIcon={<DeleteIcon color="error" />}
+							onClick={onClickDeleteFeature}
+							sx={{ maxWidth: 350 }}
+						>
+							Delete
+						</Button>
+					</FormControl>
+				</Paper>
 
-			{schemaIdForEditing !== undefined && (
-				<DialogWithTransition onClose={onCancelForEditor}>
-					<SchemaEditor
-						schemaId={schemaIdForEditing}
-						onDoneEditingSchema={onDoneEditingSchema}
-						onCancelEditing={onDoneEditingSchema}
-					/>
-				</DialogWithTransition>
-			)}
-		</DialogWithTransition>
+				{schemaIdForEditing !== undefined && (
+					<DialogWithTransition onClose={onCancelForEditor}>
+						<SchemaEditor
+							schemaId={schemaIdForEditing}
+							onDoneEditingSchema={onDoneEditingSchema}
+							onCancelEditing={onDoneEditingSchema}
+						/>
+					</DialogWithTransition>
+				)}
+			</DialogWithTransition>
+		</React.Fragment>
 	);
 }
 
