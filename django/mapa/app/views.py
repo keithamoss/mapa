@@ -4,6 +4,7 @@ from http.client import BAD_REQUEST
 
 import pytz
 from mapa.app.models import Features, FeatureSchemas, Maps
+from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
                                   MapSerializer, UserSerializer)
 from mapa.util import make_logger
@@ -102,15 +103,11 @@ class MapsViewSet(viewsets.ModelViewSet):
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,), serializer_class=FeatureSerializer)
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,), serializer_class=FeatureSerializer)
     def features(self, request, pk=None, format=None):
         """
         Retrieve a list of all of the features for this map.
         """
-        map = self.get_object()
-        if map.owner_id.id != request.user.id:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
-
         serializer = FeatureSerializer(Features.objects.filter(deleted_at=None, map_id=pk), many=True)
         return Response(serializer.data)
 
@@ -137,15 +134,12 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,))
     def can_delete(self, request, pk=None, format=None):
         """
         Checks if a schema is in use and can be deleted.
         """
         schema = self.get_object()
-        if schema.owner_id.id != request.user.id:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
-
         features = Features.objects.filter(schema_id=schema.id, deleted_at=None)
         featureCount = features.count()
 
@@ -156,13 +150,11 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
 
         })
 
-    def destroy(self, request, pk=None, format=None):
+    def destroy(self, request, pk=None, format=None, permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,)):
         """
         Mark this schema as deleted.
         """
         schema = self.get_object()
-        if schema.owner_id.id != request.user.id:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
 
         if Features.objects.filter(schema_id=schema.id, deleted_at=None).count() == 0:
             # Update any maps that have pointers to the schema
@@ -179,19 +171,16 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_412_PRECONDITION_FAILED)
 
-    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,))
     def can_delete_symbol(self, request, pk=None, format=None):
         """
         Checks if a symbol on this schema is in use and can be deleted.
         """
-        schema = self.get_object()
-        if schema.owner_id.id != request.user.id:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
-
         symbolID = request.query_params.get("symbolID")
         if symbolID is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        schema = self.get_object()
         features = Features.objects.filter(schema_id=schema.id, deleted_at=None, symbol_id=symbolID)
         featureCount = features.count()
 
@@ -202,19 +191,16 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
 
         })
 
-    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticated,))
+    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,))
     def can_delete_field(self, request, pk=None, format=None):
         """
         Checks if a field on this schema is in use and can be deleted.
         """
-        schema = self.get_object()
-        if schema.owner_id.id != request.user.id:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
-
         fieldID = request.query_params.get("fieldID")
         if fieldID is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        schema = self.get_object()
         features = Features.objects.filter(schema_id=schema.id, deleted_at=None, data__contains=[{"schema_field_id": int(fieldID)}])
         featureCount = features.count()
 
