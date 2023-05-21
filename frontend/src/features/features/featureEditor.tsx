@@ -13,7 +13,7 @@ import {
 	IconButton,
 	Paper,
 	Toolbar,
-	Typography
+	Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ import {
 	Feature,
 	FeatureDataItem,
 	useDeleteFeatureMutation,
-	useUpdateFeatureMutation
+	useUpdateFeatureMutation,
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
