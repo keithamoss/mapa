@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { usePosition } from '../../app/hooks/usePosition';
 import { useUnmount } from '../../app/hooks/useUnmount';
-import { MapRenderer } from '../../app/services/auth';
+import { Basemap, MapRenderer } from '../../app/services/auth';
 import { Feature, useGetFeaturesForMapQuery, useUpdateFeatureMutation } from '../../app/services/features';
 import { getFilteredFeatureIds, OLMapView, setMapView, setSelectedFeatures } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
@@ -28,6 +28,7 @@ import {
 	createVectorLayerForUserPosition,
 	geoJSONFeatures,
 	getPointGeoJSONFromCoordinates,
+	getWMTSTileLayer,
 	isDataVectorLayer,
 	updateVectorLayerForUserPosition,
 } from './olLayerManager';
@@ -47,6 +48,7 @@ import SnapToGPSButton from './snapToGPSButton';
 interface Props {
 	mapId: number;
 	mapRenderer?: MapRenderer;
+	basemap?: Basemap;
 }
 
 const defaultZoomLevel = 18;
@@ -76,7 +78,7 @@ function OLMap(props: Props) {
 
 	const filteredFeatureIds = useAppSelector(getFilteredFeatureIds);
 
-	const { mapId, mapRenderer } = props;
+	const { mapId, mapRenderer, basemap } = props;
 
 	const map = useAppSelector((state) => selectMapById(state, mapId));
 
@@ -218,10 +220,12 @@ function OLMap(props: Props) {
 			const initialMap = new Map({
 				target: mapTargetElementId,
 				layers: [
-					new MapboxVector({
-						styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
-						accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
-					}),
+					basemap === Basemap.MapboxWMTS
+						? getWMTSTileLayer()
+						: new MapboxVector({
+								styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
+								accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
+						  }),
 				],
 				view: new View(view),
 				controls: [],
@@ -268,7 +272,6 @@ function OLMap(props: Props) {
 				evt.map.forEachFeatureAtPixel(
 					evt.pixel,
 					(feature) => {
-						console.log('feature', feature.getProperties());
 						features.push(feature.getProperties() as Feature);
 					},
 					{
@@ -303,6 +306,8 @@ function OLMap(props: Props) {
 		// Note: It's seems to be OK to ignore other
 		// props here because we deliberately only want
 		// this to run once to init the map.
+		// It's also OK to ignore basemap, because changing
+		// settings causes a few page reload.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [onViewChange, view]);
 

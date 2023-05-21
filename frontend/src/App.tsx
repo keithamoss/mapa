@@ -3,7 +3,6 @@ import { Button, styled } from '@mui/material';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
-import WelcomeUser from './WelcomeUser';
 import { useAppSelector } from './app/hooks/store';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
@@ -13,6 +12,7 @@ import { selectActiveMapId } from './features/app/appSlice';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
+import WelcomeUser from './WelcomeUser';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const LoginContainer = styled('div')`
@@ -57,7 +57,9 @@ function App() {
 
 	return (
 		<div className="App">
-			{mapId !== undefined && <OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} />}
+			{mapId !== undefined && (
+				<OLMap mapId={mapId} mapRenderer={user.settings.map_renderer} basemap={user.settings.basemap} />
+			)}
 
 			{location.pathname === '/' && (
 				<React.Fragment>

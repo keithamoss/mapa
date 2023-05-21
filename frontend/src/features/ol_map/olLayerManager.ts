@@ -1,16 +1,22 @@
 import omitBy from 'lodash-es/omitBy';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
+import { getTopLeft, getWidth } from 'ol/extent.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Geometry, Point } from 'ol/geom';
 import { Modify } from 'ol/interaction';
-import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
-import { toLonLat } from 'ol/proj';
+import TileLayer from 'ol/layer/WebGLTile';
+import 'ol/ol.css';
+import { get as getProjection, Projection, toLonLat } from 'ol/proj';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
+import WMTS from 'ol/source/WMTS.js';
+
+import Layer from 'ol/layer/Layer';
 import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
+import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
 import { MapRenderer } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
@@ -45,6 +51,52 @@ export interface GeoJSONFeatureCollection {
 	}[];
 }
 
+export const getWMTSTileLayer = () => {
+	const projection = getProjection('EPSG:3857');
+
+	const getWMTSTileGrid = (projection: Projection | null) => {
+		if (projection === null) {
+			return new WMTSTileGrid({ resolutions: [], matrixIds: [] });
+		}
+
+		// Generate resolutions and matrixIds arrays
+		const projectionExtent = projection.getExtent();
+		const size = getWidth(projectionExtent) / 256;
+
+		const resolutions = new Array(23);
+		const matrixIds = new Array(23);
+		for (let z = 0; z < 23; ++z) {
+			resolutions[z] = size / Math.pow(2, z);
+			matrixIds[z] = z;
+		}
+
+		return new WMTSTileGrid({
+			origin: getTopLeft(projectionExtent),
+			resolutions,
+			matrixIds,
+		});
+	};
+
+	return new TileLayer({
+		opacity: 1,
+		source: new WMTS({
+			urls: [
+				`https://api.mapbox.com/styles/v1/keithmoss/clgu2ornp001j01r76h3o6j3g/tiles/{TileMatrix}/{TileCol}/{TileRow}?access_token=${
+					import.meta.env.VITE_MAPBOX_API_KEY
+				}`,
+			],
+			layer: 'clgu2ornp001j01r76h3o6j3g',
+			matrixSet: 'GoogleMapsCompatible',
+			format: 'image/png',
+			projection: projection || undefined,
+			requestEncoding: 'REST',
+			tileGrid: getWMTSTileGrid(projection),
+			style: 'default',
+			dimensions: {},
+			wrapX: false,
+		}),
+	});
+};
 export const convertFeaturesToGeoJSON = (
 	features: Feature[],
 	defaultMapSymbology: SymbologyProps | null,

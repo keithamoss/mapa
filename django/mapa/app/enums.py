@@ -10,6 +10,7 @@ class EnumBase(Enum):
 class ProfileSettings(str, EnumBase):
     LastMapId = "last_map_id"
     MapRenderer = "map_renderer"
+    Basemap = "basemap"
 
 
 class GeomType(str, EnumBase):

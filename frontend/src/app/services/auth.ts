@@ -5,9 +5,15 @@ export enum MapRenderer {
 	VectorImageLayer = 'VectorImageLayer',
 }
 
+export enum Basemap {
+	MapboxVectorTile = 'MapboxVectorTile',
+	MapboxWMTS = 'MapboxWMTS',
+}
+
 export interface UserProfileSettings {
 	last_map_id?: number;
 	map_renderer?: MapRenderer;
+	basemap?: Basemap;
 }
 
 export interface User {

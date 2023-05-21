@@ -14,7 +14,7 @@ import {
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { MapRenderer, useUpdateUserProfileMutation } from '../../app/services/auth';
+import { Basemap, MapRenderer, useUpdateUserProfileMutation } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { selectUser } from '../auth/authSlice';
 
@@ -44,6 +44,12 @@ function SettingsManager() {
 		}
 	};
 
+	const onBasemapChange = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+		if (value in Basemap) {
+			updateUserProfile({ basemap: value as Basemap });
+		}
+	};
+
 	const onClose = () => navigate('/');
 
 	return (
@@ -61,16 +67,29 @@ function SettingsManager() {
 				</AppBar>
 
 				<Paper elevation={0} sx={{ m: 3 }}>
-					<FormControl>
-						<FormLabel id="radio-buttons-group-label">Map Renderer</FormLabel>
+					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<FormLabel id="radio-buttons-group-map-renderer-label">Map Renderer</FormLabel>
 						<RadioGroup
-							aria-labelledby="radio-buttons-group-label"
-							defaultValue={user?.settings.map_renderer || 'WebGLPointsLayer'}
+							aria-labelledby="radio-buttons-group-map-renderer-label"
+							defaultValue={user?.settings.map_renderer || MapRenderer.WebGLPointsLayer}
 							name="radio-buttons-group"
 							onChange={onMapRendererChange}
 						>
-							<FormControlLabel value="WebGLPointsLayer" control={<Radio />} label="WebGLPointsLayer" />
-							<FormControlLabel value="VectorImageLayer" control={<Radio />} label="VectorImageLayer" />
+							<FormControlLabel value="WebGLPointsLayer" control={<Radio />} label="GPU" />
+							<FormControlLabel value="VectorImageLayer" control={<Radio />} label="Canvas" />
+						</RadioGroup>
+					</FormControl>
+
+					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<FormLabel id="radio-buttons-group-basemap-label">Basemap</FormLabel>
+						<RadioGroup
+							aria-labelledby="radio-buttons-group-basemap-label"
+							defaultValue={user?.settings.basemap || Basemap.MapboxVectorTile}
+							name="radio-buttons-group"
+							onChange={onBasemapChange}
+						>
+							<FormControlLabel value="MapboxVectorTile" control={<Radio />} label="Vector" />
+							<FormControlLabel value="MapboxWMTS" control={<Radio />} label="Image" />
 						</RadioGroup>
 					</FormControl>
 				</Paper>
