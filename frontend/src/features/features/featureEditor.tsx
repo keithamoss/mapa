@@ -15,7 +15,8 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
@@ -26,17 +27,15 @@ import {
 	useUpdateFeatureMutation,
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import NotFound from '../../NotFound';
 import { selectActiveMapId } from '../app/appSlice';
-import SchemaFieldDataEntryManager from '../schemaFields/schemaFieldDataEntryManager';
+import SchemaFieldDataEntryManager, { SchemaFormFieldsFormValues } from '../schemaFields/schemaFieldDataEntryManager';
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import { SchemaEditor } from '../schemas/schemaEditor';
 import SchemaSelectFormControls from '../schemas/schemaSelectFormControls';
 import { getSchemasAvailableForMap } from '../schemas/schemasSlice';
-import { getFeatureDataItemForSchemaField } from './featureHelpers';
 import { selectFeatureById } from './featuresSlice';
 
 function FeatureEditorEntrypoint() {
@@ -52,30 +51,11 @@ function FeatureEditorEntrypoint() {
 	const feature = selectFeatureById(mapId, featureId);
 
 	if (feature !== undefined) {
-		// eslint-disable-next-line @typescript-eslint/no-use-before-define
 		return <FeatureEditor mapId={mapId} feature={feature} />;
 	}
 
 	return null;
 }
-
-const areAllRequiredFieldsFilled = (feature: Feature, schema?: FeatureSchema) => {
-	let isValid = true;
-
-	if (schema !== undefined) {
-		schema.definition.forEach((fieldDefinition) => {
-			if (fieldDefinition.type === FeatureSchemaFieldType.TextField && fieldDefinition.required_field === true) {
-				const dataItem = getFeatureDataItemForSchemaField(fieldDefinition, feature);
-
-				if (dataItem === undefined || dataItem.value === '') {
-					isValid = false;
-				}
-			}
-		});
-	}
-
-	return isValid;
-};
 
 interface LocationState {
 	isAdding?: boolean;
@@ -155,40 +135,6 @@ function FeatureEditor(props: Props) {
 	};
 
 	// ######################
-	// Manage Fields
-	// ######################
-	// Adding or updating the value of a data field defined on the schema
-	const onChangeField = (featureDataItem: FeatureDataItem) => {
-		const data = [...(localFeature.data || [])];
-		const idx = data.findIndex((f) => f.schema_field_id === featureDataItem.schema_field_id);
-
-		if (idx !== -1) {
-			data[idx] = featureDataItem;
-		} else {
-			data.push(featureDataItem);
-		}
-
-		setLocalFeature({
-			...localFeature,
-			data,
-		});
-	};
-
-	// Deleting a field defined on the schema, so we remove this item from the feature's data
-	// e.g. The user has set a text field to blank that previously had some text in it
-	const onRemoveField = (schemaFieldId: number) => {
-		const data = (localFeature.data || []).filter((f) => f.schema_field_id !== schemaFieldId);
-
-		setLocalFeature({
-			...localFeature,
-			data,
-		});
-	};
-	// ######################
-	// Manage Fields (End)
-	// ######################
-
-	// ######################
 	// Manage Symbols
 	// ######################
 	const onSymbolChange = (symbolId: number) => {
@@ -206,6 +152,86 @@ function FeatureEditor(props: Props) {
 	};
 	// ######################
 	// Manage Symbols (End)
+	// ######################
+
+	// ######################
+	// Schema Fields Form
+	// ######################
+	const handleSubmitRef = useRef<UseFormHandleSubmit<SchemaFormFieldsFormValues>>();
+	const touchedFieldsRef = useRef<
+		Partial<
+			Readonly<{
+				[x: string]: boolean;
+			}>
+		>
+	>();
+
+	const onSave = () => {
+		// The feature has a schema with some fields defined
+		if (handleSubmitRef.current !== undefined) {
+			handleSubmitRef.current(onDoneWithForm)();
+		} else {
+			// The feature has no schema, or has a schema with no
+			// fields, so we can disregard processing the schema form
+			onSaveAndUpdateFeature(localFeature);
+		}
+	};
+
+	const onDoneWithForm: SubmitHandler<SchemaFormFieldsFormValues> = (data) => {
+		const featureDataSchemaFieldNames = localFeature.data.map(
+			(featureDataItem) => `schema_field_${featureDataItem.schema_field_id}`,
+		);
+
+		// We want to filter out any fields with non-values so that
+		// we fallback to the default values stored on the schema.
+		// This largely means removing any fields that weren't touched
+		// on the form (unless they already had a value saved on the feature).
+		const dataFiltered: SchemaFormFieldsFormValues = {};
+
+		Object.entries(data).forEach(([fieldName, fieldValue]) => {
+			if (
+				touchedFieldsRef.current === undefined ||
+				touchedFieldsRef.current[fieldName] !== undefined ||
+				featureDataSchemaFieldNames.includes(fieldName)
+			) {
+				dataFiltered[fieldName] = fieldValue;
+			}
+		});
+
+		onSaveAndUpdateFeature(updateFeatureDataFromForm(localFeature, dataFiltered));
+	};
+
+	const updateFeatureDataFromForm = (feature: Feature, data: SchemaFormFieldsFormValues) => {
+		const featureData: FeatureDataItem[] = [];
+
+		// Rebuild the feature's data from the contents of the form.
+		// This neatly handles additions, modifications, and deletions
+		// whilst avoiding the need to manually handle those separately
+		// like we were before.
+		Object.entries(data).forEach(([schemaFieldName, schemaFieldValue]) => {
+			featureData.push({
+				value: schemaFieldValue,
+				schema_field_id: Number(schemaFieldName.replace('schema_field_', '')),
+			});
+		});
+		return {
+			...feature,
+			data: featureData,
+		};
+	};
+
+	const onSaveAndUpdateFeature = (feature: Feature) => {
+		updateFeature(feature);
+
+		if (feature.schema_id !== null) {
+			patchMap({
+				id: mapId,
+				last_used_schema_id: feature.schema_id,
+			});
+		}
+	};
+	// ######################
+	// Schema Fields Form (End)
 	// ######################
 
 	// ######################
@@ -227,26 +253,6 @@ function FeatureEditor(props: Props) {
 	// ######################
 	// Overall Component
 	// ######################
-	const onDoneForEditor = () => {
-		if (
-			areAllRequiredFieldsFilled(
-				localFeature,
-				availableSchemas.find((s) => s.id === localFeature.schema_id),
-			) === true
-		) {
-			updateFeature(localFeature);
-
-			if (localFeature.schema_id !== null) {
-				patchMap({
-					id: mapId,
-					last_used_schema_id: localFeature.schema_id,
-				});
-			}
-		} else {
-			alert('One or more required fields remain unfilled');
-		}
-	};
-
 	const onCancelForEditor = () => {
 		if (isAddingNewFeature === true) {
 			deleteFeature(feature.id);
@@ -282,7 +288,7 @@ function FeatureEditor(props: Props) {
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Edit Feature
 						</Typography>
-						<Button color="inherit" onClick={onDoneForEditor}>
+						<Button color="inherit" onClick={onSave}>
 							Save
 						</Button>
 					</Toolbar>
@@ -331,8 +337,8 @@ function FeatureEditor(props: Props) {
 							<SchemaFieldDataEntryManager
 								schemaId={localFeature.schema_id}
 								feature={localFeature}
-								onFieldChange={onChangeField}
-								onFieldRemove={onRemoveField}
+								handleSubmitRef={handleSubmitRef}
+								touchedFieldsRef={touchedFieldsRef}
 							/>
 						</React.Fragment>
 					)}

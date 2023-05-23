@@ -1,27 +1,21 @@
-import { Checkbox, FormControlLabel } from '@mui/material';
-import React from 'react';
-import { FeatureDataItem, FeatureDataItemBooleanField } from '../../../app/services/features';
+import { Checkbox, FormControlLabel, FormHelperText, Typography } from '@mui/material';
+import { Control, Controller } from 'react-hook-form';
+import { FeatureDataItem } from '../../../app/services/features';
 import {
 	FeatureSchemaFieldDefinitionBooleanField,
 	FeatureSchemaFieldDefinitionSymbologyBoolean,
 	FeatureSchemaFieldType,
 } from '../../../app/services/schemas';
+import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
+	control: Control<SchemaFormFieldsFormValues, unknown>;
 	schemaField: FeatureSchemaFieldDefinitionBooleanField | FeatureSchemaFieldDefinitionSymbologyBoolean;
 	dataItem: FeatureDataItem | undefined;
-	onFieldChange: (featureDataItem: FeatureDataItem) => void;
 }
 
 function SchemaDataEntryBooleanyTypeFields(props: Props) {
-	const { schemaField, dataItem, onFieldChange } = props;
-
-	const onCheckboxFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		onFieldChange({
-			schema_field_id: schemaField.id,
-			value: e.target.checked,
-		} as FeatureDataItemBooleanField);
-	};
+	const { control, schemaField, dataItem } = props;
 
 	if (
 		!(
@@ -35,12 +29,23 @@ function SchemaDataEntryBooleanyTypeFields(props: Props) {
 	return (
 		<FormControlLabel
 			control={
-				<Checkbox
-					defaultChecked={dataItem !== undefined ? (dataItem.value as boolean) : undefined}
-					onChange={onCheckboxFieldChange}
+				<Controller
+					name={`schema_field_${schemaField.id}`}
+					control={control}
+					defaultValue={dataItem !== undefined ? (dataItem.value as boolean) : undefined}
+					render={({ field }) => (
+						<Checkbox {...field} checked={field.value !== undefined ? (field.value as boolean) : undefined} />
+					)}
 				/>
 			}
-			label={schemaField.name}
+			label={
+				<Typography variant="body1">
+					{schemaField.name}
+					<FormHelperText component="span">
+						(Default: {schemaField.default_value === true ? 'Checked' : 'Unchecked'})
+					</FormHelperText>
+				</Typography>
+			}
 			sx={{ mt: -1, mb: 2 }}
 		/>
 	);
