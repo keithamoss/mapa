@@ -109,41 +109,40 @@ export const convertFeaturesToGeoJSON = (
 	layerVersion: number,
 	mapRenderer?: MapRenderer,
 ): GeoJSONFeatureCollection => {
-	if (features.length === 0) {
-		return {
-			type: 'FeatureCollection',
-			features: [],
-		};
-	}
-
 	const symbols: { [key: string]: Partial<SymbologyProps> } = {};
 
-	const geoJSON: GeoJSONFeatureCollection = {
-		type: 'FeatureCollection',
-		features:
-			features !== undefined
-				? features.map((feature) => {
-						const not_allowed = ['geom'];
-						const filteredFeature = omitBy(feature, (value, key) => not_allowed.includes(key));
+	const geoJSON: GeoJSONFeatureCollection =
+		features.length > 0
+			? {
+					type: 'FeatureCollection',
+					features:
+						features !== undefined
+							? features.map((feature) => {
+									const not_allowed = ['geom'];
+									const filteredFeature = omitBy(feature, (value, key) => not_allowed.includes(key));
 
-						const symbolProps = determineSymbolForFeature(feature, defaultMapSymbology, featureSchemas);
-						symbols[symbolProps.symbolCacheKey] = symbolProps.symbol;
+									const symbolProps = determineSymbolForFeature(feature, defaultMapSymbology, featureSchemas);
+									symbols[symbolProps.symbolCacheKey] = symbolProps.symbol;
 
-						return {
-							id: feature.id,
-							type: 'Feature',
-							properties: {
-								...filteredFeature,
-								...symbolProps,
-							},
-							geometry: {
-								type: 'Point',
-								coordinates: feature.geom.coordinates,
-							},
-						};
-				  })
-				: [],
-	};
+									return {
+										id: feature.id,
+										type: 'Feature',
+										properties: {
+											...filteredFeature,
+											...symbolProps,
+										},
+										geometry: {
+											type: 'Point',
+											coordinates: feature.geom.coordinates,
+										},
+									};
+							  })
+							: [],
+			  }
+			: {
+					type: 'FeatureCollection',
+					features: [],
+			  };
 
 	// This is an async function due to the svg > img translation process.
 	// So we use layersReadyForRendering to track when the sheet has
