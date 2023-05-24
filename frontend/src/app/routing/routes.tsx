@@ -1,4 +1,6 @@
+import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
+
 import App from '../../App';
 import FeatureEditor from '../../features/features/featureEditor';
 import FeatureManager from '../../features/features/featureManager';
@@ -13,7 +15,9 @@ import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
 import SettingsManager from '../../features/settings/settingsManager';
 
-export const router = createBrowserRouter([
+const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
+
+export const router = sentryCreateBrowserRouter([
 	{
 		path: '/',
 		element: <App />,

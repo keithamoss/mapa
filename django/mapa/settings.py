@@ -245,16 +245,17 @@ STATIC_URL = '/api/static/'
 
 # Sentry SDK
 
-sentry_sdk.init(
-    dsn=get_env("SENTRY_DSN"),
-    integrations=[DjangoIntegration()],
-    send_default_pii=True,
-    environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper()
-)
+if get_env("ENVIRONMENT") == "PRODUCTION" or get_env("ENVIRONMENT") == "STAGING":
+    sentry_sdk.init(
+        dsn=get_env("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+        environment=f"{get_env('ENVIRONMENT')}-BACKEND".upper()
+    )
 
-with sentry_sdk.configure_scope() as scope:
-    scope.level = "warning"
-    scope.set_extra("site", get_env("SENTRY_SITE_NAME"))
+    with sentry_sdk.configure_scope() as scope:
+        scope.level = "warning"
+        scope.set_extra("site", get_env("SENTRY_SITE_NAME"))
 
 
 # Project-specific settings

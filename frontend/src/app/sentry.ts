@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
+import { useEffect } from 'react';
+import { createRoutesFromChildren, matchRoutes, useLocation, useNavigationType } from 'react-router-dom';
 
 if ('VITE_SENTRY_DSN' in import.meta.env === false) {
 	throw new Error('VITE_SENTRY_DSN not found');
@@ -13,7 +14,17 @@ export const sentryInit = () => {
 		// @ts-ignore
 		site: import.meta.env.VITE_SENTRY_SITE_NAME,
 		attachStacktrace: true,
-		integrations: [new BrowserTracing()],
+		integrations: [
+			new Sentry.BrowserTracing({
+				routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+					useEffect,
+					useLocation,
+					useNavigationType,
+					createRoutesFromChildren,
+					matchRoutes,
+				),
+			}),
+		],
 
 		// Set tracesSampleRate to 1.0 to capture 100%
 		// of transactions for performance monitoring.
@@ -22,6 +33,13 @@ export const sentryInit = () => {
 
 		// Or however deep you want your Redux state context to be
 		normalizeDepth: 10,
+
+		beforeSend(event) {
+			if (event.exception) {
+				Sentry.showReportDialog({ eventId: event.event_id });
+			}
+			return event;
+		},
 	});
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
