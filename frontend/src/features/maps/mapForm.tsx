@@ -24,12 +24,14 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { mapFormValidationSchema } from '../../app/forms/mapForm';
 import { useAppSelector } from '../../app/hooks/store';
+import { useGetFeaturesForMapQuery } from '../../app/services/features';
 import { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
 import { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -86,6 +88,19 @@ function MapForm(props: Props) {
 	// Default Symbology (End)
 	// ######################
 
+	// ######################
+	// Schema Removal Guard
+	// ######################
+	const { data: features } = useGetFeaturesForMapQuery(map?.id ?? skipToken);
+
+	const schemasUsedOnMap = Array.from(new Set(Object.values(features || []).map((f) => f.schema_id)));
+	// ######################
+	// Schema Removal Guard (End)
+	// ######################
+
+	// ######################
+	// Form Management
+	// ######################
 	const onClickSave = () => {
 		handleSubmit(onDoneWithForm)();
 	};
@@ -111,6 +126,9 @@ function MapForm(props: Props) {
 			onClose();
 		}
 	};
+	// ######################
+	// Form Management (End)
+	// ######################
 
 	const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] = useState(false);
 
@@ -191,7 +209,10 @@ function MapForm(props: Props) {
 									Schemas
 								</FormLabel>
 
-								<Typography variant="body2">Choose the schemas you would like to use on this map.</Typography>
+								<Typography variant="body2">
+									Choose the schemas you would like to use on this map. If schemas are in use on the map, they will be
+									unable to be removed.
+								</Typography>
 							</FormGroup>
 						</FormControl>
 
@@ -218,7 +239,7 @@ function MapForm(props: Props) {
 											)}
 										>
 											{schemas.map((schema) => (
-												<MenuItem key={schema.id} value={schema.id}>
+												<MenuItem key={schema.id} value={schema.id} disabled={schemasUsedOnMap.includes(schema.id)}>
 													<Checkbox checked={available_schema_ids.includes(schema.id) === true} />
 													<ListItemText primary={schema.name} />
 												</MenuItem>

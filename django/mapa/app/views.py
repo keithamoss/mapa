@@ -103,6 +103,19 @@ class MapsViewSet(viewsets.ModelViewSet):
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, pk=None, format=None):
+        params = locals()
+        params.pop("self")
+
+        # Ensure the user isn't trying to remove a schema that's still used on the map.
+        # This is simply a backend protection against a check the UI already enforces.
+        schemasUsedOnMap = Features.objects.filter(map_id=pk, deleted_at=None, schema_id__isnull=False).values_list("schema_id", flat=True).distinct()
+
+        if set(schemasUsedOnMap).issubset(list(request.data["available_schema_ids"])) is False:
+            return Response({}, status=status.HTTP_412_PRECONDITION_FAILED)
+
+        return super().update(**params)
+
     @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,), serializer_class=FeatureSerializer)
     def features(self, request, pk=None, format=None):
         """
