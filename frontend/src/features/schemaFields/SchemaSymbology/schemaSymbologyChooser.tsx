@@ -14,15 +14,17 @@ import {
 import { grey } from '@mui/material/colors';
 import { groupBy, sortBy } from 'lodash-es';
 import React from 'react';
-import { Feature } from '../../../app/services/features';
-import { FeatureSchemaSymbology, FeatureSchemaSymbologySymbolsValue } from '../../../app/services/schemas';
+import {
+	FeatureSchema,
+	FeatureSchemaSymbology,
+	FeatureSchemaSymbologySymbolsValue,
+} from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../../app/ui/theme';
 import {
-	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,
+	defaultSymbolSizeForFormFields,
 	getFontAwesomeIconForSymbolPreview,
-	getSymbolFromSchemaSymbology,
 	getSymbolGroups,
 	getSymbologyGroupById,
 } from '../../symbology/symbologyHelpers';
@@ -32,58 +34,34 @@ interface SymbologyAutocompleteOption {
 	option_group: string;
 }
 
-const getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema = (
-	schemaId: number,
-	symbology: FeatureSchemaSymbology,
-	features: Feature[],
-) => {
-	if (features === undefined) {
-		return [];
-	}
-
-	const featuresGroupedBySymbol = Object.values(
-		groupBy(
-			Object.values(features).filter((feature) => feature.schema_id === schemaId),
-			(f) => f.symbol_id,
-		),
-	);
-
-	const featuresGroupedWithCountOfSymbols = featuresGroupedBySymbol
-		.map((v) => ({
-			symbolId: v[0].symbol_id,
-			count: v.length,
-		}))
-		.filter((i) => i.symbolId !== null);
-
-	const symbolIdsGroupedAndSorted = sortBy(featuresGroupedWithCountOfSymbols, (i) => i.count).reverse();
-
-	const symbolsGroupedAndSorted = symbolIdsGroupedAndSorted
-		.slice(0, 3)
-		.map((i) => (i.symbolId !== null ? getSymbolFromSchemaSymbology(i.symbolId, symbology) : null));
-
-	return symbolsGroupedAndSorted as FeatureSchemaSymbologySymbolsValue[];
-};
-
-const getSymbolOptions = (mapId: number, schemaId: number, symbology: FeatureSchemaSymbology, features: Feature[]) => {
+const getSymbolOptions = (mapId: number, schema: FeatureSchema, symbology: FeatureSchemaSymbology) => {
 	const favouritedSymbols = symbology.symbols
 		.filter((symbol) => symbol.favourited_map_ids.includes(mapId))
 		.map((symbol) => ({ symbol, option_group: 'Favourites' }));
 
-	const mostCommonlyUsedOnThisMap = getSymbolsMostlyCommonlyUsedOnThisMapForThisSchema(
-		schemaId,
-		symbology,
-		features !== undefined ? Object.values(features) : [],
-	).map((symbol) => ({
-		symbol,
-		option_group: 'Frequently used on this map',
-	}));
+	const mostRecentlyAdded =
+		schema.recently_used_symbols[mapId] !== undefined
+			? schema.recently_used_symbols[mapId]
+					.map((symbolId) => {
+						const symbol = symbology.symbols.find((symbol) => symbol.id === symbolId);
+
+						return symbol !== undefined
+							? {
+									symbol,
+									option_group: 'Most recently added',
+							  }
+							: undefined;
+					})
+					// Ref: https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
+					.filter((symbol): symbol is SymbologyAutocompleteOption => !!symbol)
+			: [];
 
 	const availableSymbols = sortBy([...symbology.symbols], (i) => i.group_id).map((symbol) => ({
 		symbol,
 		option_group: getSymbologyGroupById(symbol.group_id, symbology)?.name || '',
 	}));
 
-	return groupBy([...favouritedSymbols, ...mostCommonlyUsedOnThisMap, ...availableSymbols], 'option_group');
+	return groupBy([...favouritedSymbols, ...mostRecentlyAdded, ...availableSymbols], 'option_group');
 };
 
 const createSymbolListItem = (
@@ -113,26 +91,16 @@ const createSymbolListItem = (
 
 interface Props {
 	mapId: number;
-	schemaId: number;
+	schema: FeatureSchema;
 	symbology: FeatureSchemaSymbology;
-	symbolId: number | null;
-	features: Feature[];
 	onChoose: (symbol: FeatureSchemaSymbologySymbolsValue | null) => void;
 	onClose: () => void;
 }
 
 function SchemaSymbologyChooser(props: Props) {
-	const {
-		mapId,
-		schemaId,
-		symbology,
-		// symbolId,
-		features,
-		onChoose,
-		onClose,
-	} = props;
+	const { mapId, schema, symbology, onChoose, onClose } = props;
 
-	const optionsGrouped = getSymbolOptions(mapId, schemaId, symbology, features);
+	const optionsGrouped = getSymbolOptions(mapId, schema, symbology);
 
 	const onClickSymbol = (symbol: FeatureSchemaSymbologySymbolsValue) => () => onChoose(symbol);
 
@@ -176,7 +144,7 @@ function SchemaSymbologyChooser(props: Props) {
 							</React.Fragment>
 						)}
 
-						{optionsGrouped['Frequently used on this map'] !== undefined && (
+						{optionsGrouped['Most recently added'] !== undefined && (
 							<React.Fragment>
 								<ListSubheader
 									sx={{
@@ -185,12 +153,10 @@ function SchemaSymbologyChooser(props: Props) {
 									color="primary"
 									disableGutters
 								>
-									Frequently used on this map
+									Most recently added
 								</ListSubheader>
 
-								{optionsGrouped['Frequently used on this map'].map((option) =>
-									createSymbolListItem(option, onClickSymbol),
-								)}
+								{optionsGrouped['Most recently added'].map((option) => createSymbolListItem(option, onClickSymbol))}
 							</React.Fragment>
 						)}
 
@@ -202,7 +168,7 @@ function SchemaSymbologyChooser(props: Props) {
 											sx={{
 												mt:
 													(optionsGrouped.Favourites !== undefined ||
-														optionsGrouped['Frequently used on this map'] !== undefined) &&
+														optionsGrouped['Most recently added'] !== undefined) &&
 													symbologyGroup.id === defaultSymbologyGroupId
 														? 2
 														: 0,

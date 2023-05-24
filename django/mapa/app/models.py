@@ -59,6 +59,7 @@ class FeatureSchemas(models.Model):
     # definition = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=noms_schema)])
     symbology = JSONField(default=dict, blank=True)
     default_symbology = JSONField(null=True)
+    recently_used_symbols = JSONField(default=dict, blank=True)
     deleted_at = models.DateTimeField(null=True)
 
     history = HistoricalRecords()

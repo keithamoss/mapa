@@ -4,22 +4,21 @@ import { Button, FormGroup, InputAdornment, MenuItem, TextField } from '@mui/mat
 
 import React, { useState } from 'react';
 
-import NotFound from '../../../NotFound';
 import { useAppSelector } from '../../../app/hooks/store';
-import { useGetFeaturesForMapQuery } from '../../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaSymbologySymbolsValue,
 	SymbologyProps,
 	useUpdateFeatureSchemaMutation,
 } from '../../../app/services/schemas';
+import NotFound from '../../../NotFound';
 import { selectFeatureSchemaById } from '../../schemas/schemasSlice';
 import SymbologyFieldEditor from '../../symbology/symbologyFieldEditor';
 import {
 	addNewSymbologyGroup,
 	addSymbolToGroup,
-	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,
+	defaultSymbolSizeForFormFields,
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolFromSchemaSymbology,
 	modifySymbolInGroup,
@@ -56,8 +55,6 @@ interface Props {
 
 function SchemaDataEntrySymbology(props: Props) {
 	const { mapId, schema, symbolId, onFieldChange, onFieldRemove } = props;
-
-	const { data: features } = useGetFeaturesForMapQuery(mapId);
 
 	const onChooseSymbol = (symbol: FeatureSchemaSymbologySymbolsValue | null) => {
 		if (symbol !== null) {
@@ -166,10 +163,8 @@ function SchemaDataEntrySymbology(props: Props) {
 			{isSymbolChooserDialogOpen === true && (
 				<SchemaSymbologyChooser
 					mapId={mapId}
-					schemaId={schema.id}
+					schema={schema}
 					symbology={schema.symbology}
-					symbolId={symbolId}
-					features={features !== undefined ? Object.values(features) : []}
 					onChoose={onChooseSymbol}
 					onClose={onCloseSymbolChooserDialog}
 				/>

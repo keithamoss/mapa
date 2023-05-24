@@ -56,4 +56,4 @@ class FeatureSerializer(serializers.ModelSerializer):
 class FeatureSchemaSerializer(serializers.ModelSerializer):
     class Meta:
         model = FeatureSchemas
-        fields = ("id", "name", "owner_id", "definition", "symbology", "default_symbology")
+        fields = ("id", "name", "owner_id", "definition", "symbology", "default_symbology", "recently_used_symbols")

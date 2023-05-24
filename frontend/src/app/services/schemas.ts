@@ -48,6 +48,9 @@ export type NewFeatureSchema = FeatureSchemaModifiableProps;
 export interface FeatureSchema extends FeatureSchemaModifiableProps {
 	id: number;
 	owner_id: number;
+	recently_used_symbols: {
+		[key: number]: number[];
+	};
 }
 
 export enum FeatureSchemaFieldType {
@@ -174,6 +177,15 @@ export const featureSchemasApi = api.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, { id }) => [{ type: 'FeatureSchema', id }],
 		}),
+		patchFeatureSchema: builder.mutation<FeatureSchema, Partial<FeatureSchema>>({
+			query: (schema) => ({
+				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+				url: `schemas/${schema.id}/`,
+				method: 'PATCH',
+				body: schema,
+			}),
+			invalidatesTags: (result, error, { id }) => [{ type: 'FeatureSchema', id }],
+		}),
 		checkCanDelete: builder.query<CanDeleteSchemaThingResponse, number>({
 			query: (id) => `schemas/${id}/can_delete/`,
 		}),
@@ -206,6 +218,7 @@ export const {
 	useGetFeatureSchemasQuery,
 	useAddFeatureSchemaMutation,
 	useUpdateFeatureSchemaMutation,
+	usePatchFeatureSchemaMutation,
 	useCheckCanDeleteQuery,
 	useDeleteSchemaMutation,
 	useCheckCanDeleteSymbolQuery,

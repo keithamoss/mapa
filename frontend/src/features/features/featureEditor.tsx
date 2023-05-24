@@ -27,6 +27,7 @@ import {
 	useUpdateFeatureMutation,
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
+import { usePatchFeatureSchemaMutation } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import NotFound from '../../NotFound';
 import { selectActiveMapId } from '../app/appSlice';
@@ -35,7 +36,7 @@ import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import { SchemaEditor } from '../schemas/schemaEditor';
 import SchemaSelectFormControls from '../schemas/schemaSelectFormControls';
-import { getSchemasAvailableForMap } from '../schemas/schemasSlice';
+import { getSchemasAvailableForMap, selectFeatureSchemaById } from '../schemas/schemasSlice';
 import { selectFeatureById } from './featuresSlice';
 
 function FeatureEditorEntrypoint() {
@@ -126,6 +127,9 @@ function FeatureEditor(props: Props) {
 		}
 	}, [availableSchemas, localFeature]);
 
+	// ######################
+	// Schema Stuff
+	// ######################
 	const onChooseSchema = (schemaId: number | null) => {
 		setLocalFeature({
 			...localFeature,
@@ -133,6 +137,17 @@ function FeatureEditor(props: Props) {
 			data: [],
 		});
 	};
+
+	const [patchSchema] = usePatchFeatureSchemaMutation();
+
+	const schema = useAppSelector((state) => {
+		if (localFeature.schema_id !== null) {
+			return selectFeatureSchemaById(state, localFeature.schema_id);
+		}
+	});
+	// ######################
+	// Schema Stuff (End)
+	// ######################
 
 	// ######################
 	// Manage Symbols
@@ -227,6 +242,24 @@ function FeatureEditor(props: Props) {
 			patchMap({
 				id: mapId,
 				last_used_schema_id: feature.schema_id,
+			});
+		}
+
+		if (isAddingNewFeature === true && schema !== undefined && feature.symbol_id !== null) {
+			const recentlyUsedSymbols = { ...schema.recently_used_symbols };
+
+			if (recentlyUsedSymbols[mapId] === undefined) {
+				recentlyUsedSymbols[mapId] = [];
+			}
+
+			recentlyUsedSymbols[mapId] = [
+				feature.symbol_id,
+				...recentlyUsedSymbols[mapId].filter((id) => id != feature.symbol_id),
+			].slice(0, 3);
+
+			patchSchema({
+				id: schema.id,
+				recently_used_symbols: recentlyUsedSymbols,
 			});
 		}
 	};
