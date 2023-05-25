@@ -13,13 +13,13 @@ import {
 	ListItemText,
 	Paper,
 	Toolbar,
-	Typography,
+	Typography
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { useCheckCanDeleteQuery, useDeleteSchemaMutation } from '../../app/services/schemas';
+import { useDeleteSchemaMutation, useLazyCheckCanDeleteFeatureSchemaQuery } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import NotFound from '../../NotFound';
 import { selectAllMaps } from '../maps/mapsSlice';
@@ -46,7 +46,16 @@ function SchemaDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const { data: canDeleteCheck } = useCheckCanDeleteQuery(schemaId);
+	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteFeatureSchemaQuery()
+
+	if (isUninitialized === true) {
+		trigger(schemaId)
+	}
+
+	// Avoids a flash of the previous state showing while the refetching is happening
+	if (isFetching === true) {
+		return null
+	}
 
 	const [deleteSchema, { isSuccess: isDeleteSchemaSuccessful, error: deleteError }] = useDeleteSchemaMutation();
 

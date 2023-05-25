@@ -186,7 +186,7 @@ export const featureSchemasApi = api.injectEndpoints({
 			}),
 			invalidatesTags: (result, error, { id }) => [{ type: 'FeatureSchema', id }],
 		}),
-		checkCanDelete: builder.query<CanDeleteSchemaThingResponse, number>({
+		checkCanDeleteFeatureSchema: builder.query<CanDeleteSchemaThingResponse, number>({
 			query: (id) => `schemas/${id}/can_delete/`,
 		}),
 		deleteSchema: builder.mutation<FeatureSchema, number>({
@@ -219,8 +219,8 @@ export const {
 	useAddFeatureSchemaMutation,
 	useUpdateFeatureSchemaMutation,
 	usePatchFeatureSchemaMutation,
-	useCheckCanDeleteQuery,
+	useLazyCheckCanDeleteFeatureSchemaQuery,
 	useDeleteSchemaMutation,
-	useCheckCanDeleteSymbolQuery,
-	useCheckCanDeleteFieldQuery,
+	useLazyCheckCanDeleteSymbolQuery,
+	useLazyCheckCanDeleteFieldQuery,
 } = featureSchemasApi;

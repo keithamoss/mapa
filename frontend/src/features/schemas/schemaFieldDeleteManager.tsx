@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../app/hooks/store';
-import { useCheckCanDeleteFieldQuery } from '../../app/services/schemas';
+import { useLazyCheckCanDeleteFieldQuery } from '../../app/services/schemas';
 import { selectAllMaps } from '../maps/mapsSlice';
 
 interface Props {
@@ -16,10 +16,19 @@ function SchemaFieldDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const { data: canDeleteCheck } = useCheckCanDeleteFieldQuery({
-		schemaId,
-		fieldId,
-	});
+	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteFieldQuery()
+
+	if (isUninitialized === true) {
+		trigger({
+			schemaId,
+			fieldId,
+		})
+	}
+
+	// Avoids a flash of the previous state showing while the refetching is happening
+	if (isFetching === true) {
+		return null
+	}
 
 	const onDelete = (fieldId: number) => () => onYes(fieldId);
 

@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemText } from '@mui/material';
 import React from 'react';
 import { useAppSelector } from '../../app/hooks/store';
-import { useCheckCanDeleteSymbolQuery } from '../../app/services/schemas';
+import { useLazyCheckCanDeleteSymbolQuery } from '../../app/services/schemas';
 import { selectAllMaps } from '../maps/mapsSlice';
 
 interface Props {
@@ -16,10 +16,19 @@ function SchemaSymbolDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const { data: canDeleteCheck } = useCheckCanDeleteSymbolQuery({
-		schemaId,
-		symbolId,
-	});
+	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteSymbolQuery()
+
+	if (isUninitialized === true) {
+		trigger({
+			schemaId,
+			symbolId,
+		})
+	}
+
+	// Avoids a flash of the previous state showing while the refetching is happening
+	if (isFetching === true) {
+		return null
+	}
 
 	const onDelete = (symbolId: number) => () => onYes(symbolId);
 
