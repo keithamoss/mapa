@@ -86,11 +86,10 @@ function SchemaManager() {
 					<React.Fragment key={schema.id}>
 						<ListItem
 							secondaryAction={
-								<IconButton edge="end" onClick={onForkSchema(schema)}>
+								<IconButton edge="end" sx={{ mr: 1, backgroundColor: 'whitesmoke' }} onClick={onForkSchema(schema)}>
 									<ForkRightIcon />
 								</IconButton>
 							}
-							disablePadding
 						>
 							<ListItemButton onClick={onClickSchema(schema.id)}>
 								<ListItemText primary={schema.name} />

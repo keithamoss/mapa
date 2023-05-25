@@ -1,19 +1,18 @@
-import VisibilityIcon from '@mui/icons-material/Visibility';
-
 import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Divider from '@mui/material/Divider';
 
 import { AppBar, Button, IconButton, List, ListItemButton, Toolbar } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { useUpdateUserProfileMutation } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import { defaultSearchParameters, selectActiveMapId, setFilteredFeatures, setSearchParameters } from '../app/appSlice';
 import { selectAllMaps } from './mapsSlice';
 
@@ -60,6 +59,8 @@ function MapManager() {
 	//     // navigate("/");
 	//   }
 
+	const onClickMap = (mapId: number) => () => navigate(`/MapManager/Edit/${mapId}/`);
+
 	const onClose = () => navigate('/');
 
 	const onCreate = () => navigate('/MapManager/Create');
@@ -85,16 +86,16 @@ function MapManager() {
 					<React.Fragment key={map.id}>
 						<ListItem
 							secondaryAction={
-								<Link to={`/MapManager/Edit/${map.id}/`}>
-									<IconButton edge="end">
-										<EditIcon />
-									</IconButton>
-								</Link>
+								<IconButton
+									edge="end"
+									sx={{ mr: 1, backgroundColor: map.id === mapId ? mapaThemeSecondaryBlue : 'whitesmoke' }}
+									onClick={onSwitchMap(map.id)}
+								>
+									{map.id === mapId ? <VisibilityIcon sx={{ color: 'white' }} /> : <VisibilityOffIcon />}
+								</IconButton>
 							}
-							disablePadding
 						>
-							<ListItemButton onClick={onSwitchMap(map.id)}>
-								<ListItemIcon>{map.id === mapId && <VisibilityIcon color="primary" />}</ListItemIcon>
+							<ListItemButton onClick={onClickMap(map.id)}>
 								<ListItemText primary={map.name} />
 							</ListItemButton>
 						</ListItem>
