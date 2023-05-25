@@ -16,18 +16,18 @@ function SchemaSymbolDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteSymbolQuery()
+	const [trigger, { isUninitialized, isFetching, data: canDeleteCheck }] = useLazyCheckCanDeleteSymbolQuery();
 
 	if (isUninitialized === true) {
 		trigger({
 			schemaId,
 			symbolId,
-		})
+		});
 	}
 
 	// Avoids a flash of the previous state showing while the refetching is happening
 	if (isFetching === true) {
-		return null
+		return null;
 	}
 
 	const onDelete = (symbolId: number) => () => onYes(symbolId);

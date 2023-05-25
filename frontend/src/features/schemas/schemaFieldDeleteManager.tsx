@@ -16,18 +16,18 @@ function SchemaFieldDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteFieldQuery()
+	const [trigger, { isUninitialized, isFetching, data: canDeleteCheck }] = useLazyCheckCanDeleteFieldQuery();
 
 	if (isUninitialized === true) {
 		trigger({
 			schemaId,
 			fieldId,
-		})
+		});
 	}
 
 	// Avoids a flash of the previous state showing while the refetching is happening
 	if (isFetching === true) {
-		return null
+		return null;
 	}
 
 	const onDelete = (fieldId: number) => () => onYes(fieldId);

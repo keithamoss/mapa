@@ -13,7 +13,7 @@ import {
 	ListItemText,
 	Paper,
 	Toolbar,
-	Typography
+	Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -46,15 +46,10 @@ function SchemaDeleteManager(props: Props) {
 
 	const maps = useAppSelector((state) => selectAllMaps(state));
 
-	const [trigger, {isUninitialized, isFetching, data: canDeleteCheck}, lastPromiseInfo] = useLazyCheckCanDeleteFeatureSchemaQuery()
+	const [trigger, { isUninitialized, isFetching, data: canDeleteCheck }] = useLazyCheckCanDeleteFeatureSchemaQuery();
 
 	if (isUninitialized === true) {
-		trigger(schemaId)
-	}
-
-	// Avoids a flash of the previous state showing while the refetching is happening
-	if (isFetching === true) {
-		return null
+		trigger(schemaId);
 	}
 
 	const [deleteSchema, { isSuccess: isDeleteSchemaSuccessful, error: deleteError }] = useDeleteSchemaMutation();
@@ -69,6 +64,11 @@ function SchemaDeleteManager(props: Props) {
 	const onDelete = () => deleteSchema(schemaId);
 
 	const onClose = () => navigate(-1);
+
+	// Avoids a flash of the previous state showing while the refetching is happening
+	if (isFetching === true) {
+		return null;
+	}
 
 	if (canDeleteCheck === undefined) {
 		return null;
