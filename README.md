@@ -30,4 +30,5 @@ https://mapa.test.keithmoss.me/api/login/google-oauth2/
 
 # Development setup
 
+- Run `yarn dlx @yarnpkg/sdks vscode` in the root of the repo
 - [Set Up ESLint and Prettier in a React TypeScript App (2023)](https://dev.to/eshankvaish/set-up-eslint-and-prettier-in-a-react-typescript-app-2022-29c9)
