@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 
 export interface SymbologyProps {
@@ -159,6 +160,10 @@ export const featureSchemasApi = api.injectEndpoints({
 				{ type: 'FeatureSchema', id: 'LIST' },
 				...(result !== undefined ? result.ids.map((id) => ({ type: 'FeatureSchema' as const, id })) : []),
 			],
+			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+				await queryFulfilled;
+				dispatch(prepareFeaturesForMap());
+			},
 		}),
 		addFeatureSchema: builder.mutation<FeatureSchema, Partial<FeatureSchema>>({
 			query: (initialFeatureSchema) => ({

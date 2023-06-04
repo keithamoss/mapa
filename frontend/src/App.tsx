@@ -4,6 +4,7 @@ import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import { useAppSelector } from './app/hooks/store';
+import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
@@ -54,6 +55,10 @@ function App() {
 	// Important: We're pre-fetching *after* we have a user object to avoid 403s
 	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
+
+	if (mapId !== undefined) {
+		void store.dispatch(featuresApi.endpoints.getFeaturesForMap.initiate(mapId));
+	}
 
 	return (
 		<div className="App">

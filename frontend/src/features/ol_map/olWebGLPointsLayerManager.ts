@@ -13,16 +13,14 @@ import {
 	defaultSymbolSize,
 	getFontAwesomeIconForSymbolAsSVGString,
 } from '../symbology/symbologyHelpers';
-import { GeoJSONFeatureCollection, geoJSONFeatures, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
+import { GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
 
 // Types picked from LiteralSymbolStyle
-export let webGLLayerStyle:
-	| {
-			src: string;
-			textureCoord: (string | string[] | number[])[];
-			size: (string | string[] | number)[];
-	  }
-	| undefined = undefined;
+export interface WebGLLayerSpriteSheet {
+	src: string;
+	textureCoord: (string | string[] | number[])[];
+	size: (string | string[] | number)[];
+}
 
 const spriteSheetCanvas = document.createElement('canvas');
 spriteSheetCanvas.width = 0;
@@ -30,22 +28,13 @@ spriteSheetCanvas.height = 0;
 const spriteSheetCanvasContext = spriteSheetCanvas.getContext('2d');
 
 // https://davetayls.me/blog/2013-02-11-drawing-sprites-with-canvas
-export const buildSpriteSheet = async (
-	symbols: { [key: string]: Partial<SymbologyProps> },
-	layerVersion: number,
-	setLayersReadyForRendering: React.Dispatch<
-		React.SetStateAction<{
-			[key: number]: boolean;
-		}>
-	>,
-) => {
-	if (spriteSheetCanvasContext === null) {
-		// This should never happen, but it makes the linter happy.
-		return;
-	}
-
+export const buildSpriteSheet = async (symbols: {
+	[key: string]: Partial<SymbologyProps>;
+}): Promise<WebGLLayerSpriteSheet> => {
 	// Before we can start using the canvas, clear everything already drawn on there
-	spriteSheetCanvasContext.clearRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
+	if (spriteSheetCanvasContext !== null) {
+		spriteSheetCanvasContext.clearRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
+	}
 
 	// ######################
 	// Convert SVGs to Images
@@ -159,19 +148,6 @@ export const buildSpriteSheet = async (
 	// Draw SVG Images To Canvas (End)
 	// ######################
 
-	// Update the global style container
-	webGLLayerStyle = {
-		src: spriteSheetCanvas.toDataURL('image/png'),
-		textureCoord: spriteSheetTextureCoords,
-		size: spriteSheetSizes,
-	};
-
-	// Lets OLMap know that this version of the layer is ready for loading
-	setLayersReadyForRendering((prevState) => ({
-		...prevState,
-		[layerVersion]: true,
-	}));
-
 	// Only used for debugging
 	// spriteSheetCanvas.style.zIndex = "20000";
 	// spriteSheetCanvas.style.position = "absolute";
@@ -179,6 +155,12 @@ export const buildSpriteSheet = async (
 	// // context.fillStyle = "black";
 	// // context.fillRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
 	// document.body.appendChild(spriteSheetCanvas);
+
+	return {
+		src: spriteSheetCanvas.toDataURL('image/png'),
+		textureCoord: spriteSheetTextureCoords,
+		size: spriteSheetSizes,
+	};
 };
 
 export const getNextLayerVersion = (layerVersions: number[]) => {
@@ -199,7 +181,10 @@ const loadImage = (url: string, symbolCacheKey: string) => {
 	});
 };
 
-export const createWebGLPointsLayer = (geoJSONFeatures: GeoJSONFeatureCollection) => {
+export const createWebGLPointsLayer = (
+	features: GeoJSONFeatureCollection,
+	spriteSheet: WebGLLayerSpriteSheet | undefined,
+) => {
 	// Read more:
 	// https://openlayers.org/en/latest/examples/webgl-points-layer.html
 	// https://openlayers.org/en/latest/examples/icon-sprite-webgl.html
@@ -209,18 +194,18 @@ export const createWebGLPointsLayer = (geoJSONFeatures: GeoJSONFeatureCollection
 	return new WebGLPointsLayer({
 		source: new VectorSource({
 			format: geoJSONFormat,
-			features: geoJSONFormat.readFeatures(geoJSONFeatures),
+			features: geoJSONFormat.readFeatures(features),
 		}) as VectorSource<Point>,
 		// Something odd going on in the typings here, but this seems to work without issue anyway.
 		style:
-			webGLLayerStyle !== undefined
+			spriteSheet !== undefined
 				? {
 						symbol: {
 							symbolType: 'image',
 							rotateWithView: false,
-							src: webGLLayerStyle.src,
-							size: webGLLayerStyle.size,
-							textureCoord: webGLLayerStyle.textureCoord,
+							src: spriteSheet.src,
+							size: spriteSheet.size,
+							textureCoord: spriteSheet.textureCoord,
 						},
 				  }
 				: {
@@ -237,12 +222,14 @@ export const createWebGLPointsLayer = (geoJSONFeatures: GeoJSONFeatureCollection
 };
 
 export const manageWebGLPointsLayerCreation = (
+	features: GeoJSONFeatureCollection,
+	spriteSheet: WebGLLayerSpriteSheet | undefined,
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
 	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,
 ) => {
-	const vectorLayer = createWebGLPointsLayer(geoJSONFeatures.features);
+	const vectorLayer = createWebGLPointsLayer(features, spriteSheet);
 	map.addLayer(vectorLayer);
 
 	const modify = setupModifyInteraction(
@@ -258,6 +245,8 @@ export const manageWebGLPointsLayerCreation = (
 };
 
 export const manageWebGLPointsLayerUpdate = (
+	features: GeoJSONFeatureCollection,
+	spriteSheet: WebGLLayerSpriteSheet | undefined,
 	vectorLayer: WebGLPointsLayer<VectorSource<Point>>,
 	map: Map,
 	isFeatureMovementAllowed: boolean,
@@ -288,7 +277,7 @@ export const manageWebGLPointsLayerUpdate = (
 	vectorLayer.dispose();
 
 	// Add the new layer
-	const newVectorLayer = createWebGLPointsLayer(geoJSONFeatures.features);
+	const newVectorLayer = createWebGLPointsLayer(features, spriteSheet);
 	map.addLayer(newVectorLayer);
 
 	const modify = setupModifyInteraction(

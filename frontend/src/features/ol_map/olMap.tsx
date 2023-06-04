@@ -1,44 +1,46 @@
-/* eslint-disable no-console */
-import { Map, MapEvent, View } from 'ol';
+import { MapEvent, View } from 'ol';
+import Geolocation from 'ol/Geolocation';
 import { Geometry, Point } from 'ol/geom';
-import { ModifyEvent } from 'ol/interaction/Modify';
-import MapboxVector from 'ol/layer/MapboxVector';
-import VectorLayer from 'ol/layer/Vector';
-import 'ol/ol.css';
-import { fromLonLat } from 'ol/proj';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
-
-import BaseEvent from 'ol/events/Event';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Map from 'ol/Map';
+import { unByKey } from 'ol/Observable';
+import 'ol/ol.css';
+import { fromLonLat } from 'ol/proj';
+import VectorSource from 'ol/source/Vector';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { usePosition } from '../../app/hooks/usePosition';
-import { useUnmount } from '../../app/hooks/useUnmount';
 import { Basemap, MapRenderer } from '../../app/services/auth';
-import { Feature, useGetFeaturesForMapQuery, useUpdateFeatureMutation } from '../../app/services/features';
-import { getFilteredFeatureIds, OLMapView, setMapView, setSelectedFeatures } from '../app/appSlice';
-import { selectMapById } from '../maps/mapsSlice';
-import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
+import { Feature, useUpdateFeatureMutation } from '../../app/services/features';
+import {
+	eMapFeaturesLoadingStatus,
+	getMapFeatureLoadingStatus,
+	selectGeoJSONFeaturesAndSpriteSheet,
+	setFeaturesAvailableForEditing,
+	setMapView,
+} from '../app/appSlice';
 import FeatureMovementButton from './featureMovementButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
-import {
-	convertFeaturesToGeoJSON,
-	createVectorLayerForUserPosition,
-	geoJSONFeatures,
-	getPointGeoJSONFromCoordinates,
-	getWMTSTileLayer,
-	isDataVectorLayer,
-	updateVectorLayerForUserPosition,
-} from './olLayerManager';
 import './olMap.css';
-import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import {
-	getNextLayerVersion,
-	manageWebGLPointsLayerCreation,
-	manageWebGLPointsLayerUpdate,
-} from './olWebGLPointsLayerManager';
+	createGeolocationMarkerOverlay,
+	defaultZoomLevel,
+	geolocationMarkerOvelayerIdInner,
+	geolocationMarkerOvelayerIdOuter,
+	getBasemap,
+	mapTargetElementId,
+	onGeolocationChangePosition,
+	onGeolocationChangeTracking,
+	onGeolocationError,
+	onMapClick,
+	onMapDblClick,
+	onModifyInteractionAddRemoveFeature,
+	onModifyInteractionStartEnd,
+	setModifyInteractionStatus,
+} from './olMapHelpers';
+import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
+import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './olWebGLPointsLayerManager';
 import SnapToGPSButton from './snapToGPSButton';
 
 // Inspo:
@@ -51,396 +53,282 @@ interface Props {
 	basemap?: Basemap;
 }
 
-const defaultZoomLevel = 18;
-const mapTargetElementId = 'map';
-
-const getFeatures = (
-	filteredFeatureIds: number[],
-	features?: {
-		[key: number]: Feature;
-	},
-) => {
-	if (features === undefined) {
-		return [];
-	}
-
-	if (filteredFeatureIds.length === 0) {
-		return Object.values(features);
-	}
-
-	return Object.values(features).filter((f) => filteredFeatureIds.includes(f.id));
-};
-
 function OLMap(props: Props) {
-	const navigate = useNavigate();
+	// console.log('# olMap rendering');
 
 	const dispatch = useAppDispatch();
 
-	const filteredFeatureIds = useAppSelector(getFilteredFeatureIds);
+	const navigate = useNavigate();
 
+	// Note: We keep mapId here for now to force a full refresh of this
+	// component when the map changes/
 	const { mapId, mapRenderer, basemap } = props;
 
-	const map = useAppSelector((state) => selectMapById(state, mapId));
+	// Note: We useRef() for geolocationHasPosition and isFeatureMovementAllowed to
+	// avoid passing state to useEffect()
 
-	const [view, setView] = useState<Partial<OLMapView>>();
+	// ######################
+	// OpenLayers Map
+	// ######################
+	const [map, setMap] = useState<Map>();
 
-	const onViewChange = useCallback(
-		(newview: Partial<OLMapView>) => {
-			setView(newview);
-			dispatch(setMapView(newview));
-		},
-		[setView, dispatch],
-	);
+	// Create state ref that can be accessed in OpenLayers callback functions et cetera
+	// https://stackoverflow.com/a/60643670
+	const mapRef = useRef<Map>();
+	mapRef.current = map;
 
-	const onViewChangeAndUpdateMap = useCallback(
-		(newview: Partial<OLMapView>) => {
-			onViewChange(newview);
+	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatus);
 
-			if (olMapRef.current !== undefined) {
-				olMapRef.current.setView(new View(newview));
-			}
-		},
-		[onViewChange],
-	);
-
-	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
-
-	const onFeatureMovementEnabled = useCallback(() => {
-		setIsFeatureMovementAllowed(true);
-	}, []);
-
-	const onFeatureMovementDisabled = useCallback(() => {
-		setIsFeatureMovementAllowed(false);
-	}, []);
-
-	const [isWatchingGPS] = useState(true);
-
-	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
-
-	const [layerVersions, setLayerVersions] = useState<number[]>([]);
-
-	const [layersReadyForRendering, setLayersReadyForRendering] = useState<{
-		[key: number]: boolean;
-	}>({});
-
-	const onFollowGPSEnabled = useCallback(() => {
-		setIsFollowingGPS(true);
-	}, []);
-
-	const onFollowGPSDisabled = useCallback(() => {
-		setIsFollowingGPS(false);
-	}, []);
-
-	const olMapRef = useRef<Map>();
-
-	const [
-		updateFeature,
-		// {
-		// isSuccess: isUpdatingFeatureSuccessful,
-		// isLoading: isUpdatingFeatureLoading,
-		// },
-	] = useUpdateFeatureMutation();
-
-	const onModifyInteractionStartEnd = useMemo(
-		() => (evt: BaseEvent | Event) => {
-			const target = document.getElementById(mapTargetElementId);
-
-			if (target !== null) {
-				const e = evt as ModifyEvent;
-				target.style.cursor = e.type === 'modifystart' ? 'grabbing' : 'pointer';
-
-				if (e.type === 'modifyend') {
-					e.features.forEach((feature) => {
-						const point = feature.getGeometry() as Point;
-						if (point.getType() === 'Point') {
-							const { id, geom_type, map_id } = feature.getProperties() as Feature;
-							updateFeature({
-								id,
-								geom: getPointGeoJSONFromCoordinates(point),
-								geom_type,
-								map_id,
-							});
-						}
-					});
-				}
-			}
-		},
-		[updateFeature],
-	);
-
-	const onModifyInteractionAddRemoveFeature = useMemo(
-		() => (evt: VectorSourceEvent) => {
-			const target = document.getElementById(mapTargetElementId);
-			if (target !== null) {
-				target.style.cursor = evt.type === 'addfeature' ? 'pointer' : '';
-			}
-		},
-		[],
-	);
-
-	// R1 when features are retrieved
-	const { data: features } = useGetFeaturesForMapQuery(mapId);
-	const mapFeatures = useMemo(() => getFeatures(filteredFeatureIds, features), [features, filteredFeatureIds]);
+	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
 
 	const vectorLayer = useRef<
 		VectorImageLayer<VectorSource<Geometry>> | WebGLPointsLayer<VectorSource<Point>> | undefined
 	>(undefined);
+	// ######################
+	// OpenLayers Map (End)
+	// ######################
 
-	const vectorLayerUserPosition = useRef<VectorLayer<VectorSource<Geometry>> | undefined>(undefined);
+	// ######################
+	// Geolocation
+	// ######################
+	const geolocation = useRef<Geolocation>(
+		new Geolocation({
+			trackingOptions: {
+				enableHighAccuracy: true,
+				timeout: Infinity, // Always wait until the position is returned
+				// timeout: 2000,
+				maximumAge: 60000, // Use cached position for up to 10s
+			},
+		}),
+	);
 
-	// R2 when schemas load
-	const featureSchemas = useAppSelector(selectAllFeatureSchemas);
+	const [geolocationHasPosition, setGeolocationHasPosition] = useState<boolean>(false);
 
-	useUnmount(() => {
-		// console.log("useUnmount");
-		if (olMapRef.current !== undefined) {
-			// console.log("useUnmount: destroy");
-			olMapRef.current.setTarget(undefined);
-			olMapRef.current = undefined;
-			vectorLayer.current = undefined;
-			vectorLayerUserPosition.current = undefined;
-		}
-	});
+	const geolocationHasPositionRef = useRef<boolean>(false);
+	geolocationHasPositionRef.current = geolocationHasPosition;
 
-	// R3
-	// Handle fetching the user's position and keeping it up-to-date as they move
-	const { latitude, longitude /*, speed, timestamp, accuracy, heading, error*/ } = usePosition(isWatchingGPS);
+	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
 
-	// R4
-	// Handle creating the map when the component mounts for the first time
+	const onFollowGPSEnabled = useCallback(() => setIsFollowingGPS(true), []);
+	const onFollowGPSDisabled = useCallback(() => setIsFollowingGPS(false), []);
+
+	geolocation.current.setTracking(isFollowingGPS);
+	// ######################
+	// Geolocation (End)
+	// ######################
+
+	// ######################
+	// Feature Movement
+	// ######################
+	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
+
+	const isFeatureMovementAllowedRef = useRef<boolean>(false);
+	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
+
+	const onFeatureMovementEnabled = useCallback(() => {
+		setModifyInteractionStatus(mapRef.current, true);
+		setIsFeatureMovementAllowed(true);
+	}, []);
+
+	const onFeatureMovementDisabled = useCallback(() => {
+		setModifyInteractionStatus(mapRef.current, false);
+		setIsFeatureMovementAllowed(false);
+	}, []);
+
+	const [updateFeature] = useUpdateFeatureMutation();
+	// ######################
+	// Feature Movement (End)
+	// ######################
+
+	// ######################
+	// Initialise map on load
+	// ######################
 	useEffect(() => {
-		// console.log("map use effect: init");
+		// console.log('useEffect init');
 
-		if (view === undefined) {
-			return;
-		}
+		if (mapRef.current === undefined) {
+			// console.log('making a map');
 
-		if (olMapRef.current === undefined) {
-			// console.log("map use effect: create map", view);
+			geolocation.current.setTracking(true);
+			const curerentPosition = geolocation.current.getPosition();
+
 			const initialMap = new Map({
 				target: mapTargetElementId,
-				layers: [
-					basemap === Basemap.MapboxWMTS
-						? getWMTSTileLayer()
-						: new MapboxVector({
-								styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
-								accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
-								preload: Infinity,
-						  }),
-				],
-				view: new View(view),
+				layers: [getBasemap(basemap)],
 				controls: [],
+				view:
+					curerentPosition !== undefined
+						? new View({ zoom: defaultZoomLevel, center: fromLonLat(curerentPosition) })
+						: undefined,
 			});
 
+			// ######################
+			// Geolocation
+			// ######################
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerIdOuter));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerIdInner));
+
+			const geolocationEventKeys = [
+				geolocation.current.on(
+					'change:position',
+					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setGeolocationHasPosition),
+				),
+				geolocation.current.on('change:tracking', onGeolocationChangeTracking(initialMap)),
+				geolocation.current.on('error', onGeolocationError),
+			];
+			// ######################
+			// Geolocation (End)
+			// ######################
+
+			// ######################
+			// Drag Detection, Map View Updating, and Feature Clicking
+			// ######################
+			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move
+			// has been the result of a drag
 			// Ref: https://gis.stackexchange.com/a/378877
 			let isDragging = false;
 
-			const onPointerDrag = () => {
-				isDragging = true;
-			};
-			initialMap.on('pointerdrag', onPointerDrag);
-
-			const onMoveStart = () => {
+			initialMap.on('movestart', () => {
 				isDragging = false;
-			};
-			initialMap.on('movestart', onMoveStart);
+			});
 
-			const onMoveEnd = (e: MapEvent) => {
-				// @TODO This causes the component to re-render on map creation because it triggers a change to the view object for the shallow equality check that React does
-				const view = e.map.getView();
-				onViewChange({
-					center: view.getCenter(),
-					zoom: view.getZoom(),
-					resolution: view.getResolution(),
-				});
+			initialMap.on('pointerdrag', () => {
+				isDragging = true;
+			});
 
-				// User interaction to move the map needs to turn off GPS position tracking
-				if (isDragging === true) {
-					// @TODO This is called every time the user drags
-					// because isWatchingGPS is stuck on the value it
-					// had when this function was created.
-					// We could maybe fixed it put putting isWatchingGPS
-					// into a useRef() as well, but meh because React handles
-					// dealing with multiple of the same setFoobar() calls
-					// in a row.
+			initialMap.on('moveend', (evt: MapEvent) => {
+				if (isDragging === true && geolocation.current.getTracking() === true) {
 					setIsFollowingGPS(false);
 				}
-			};
-			initialMap.on('moveend', onMoveEnd);
 
-			initialMap.on('click', (evt) => {
-				const features: Feature[] = [];
-				evt.map.forEachFeatureAtPixel(
-					evt.pixel,
-					(feature) => {
-						features.push(feature.getProperties() as Feature);
-					},
-					{
-						layerFilter: (layer) => isDataVectorLayer(layer),
-						hitTolerance: 5,
-					},
+				// Update the Redux store version of the view for when
+				// we add new features.
+				const view = evt.map.getView();
+
+				dispatch(
+					setMapView({
+						center: view.getCenter(),
+						zoom: view.getZoom(),
+						resolution: view.getResolution(),
+					}),
 				);
-
-				dispatch(setSelectedFeatures(features.map((f) => f.id)));
-
-				if (features.length === 1) {
-					navigate(`/FeatureManager/Edit/${features[0].id}`);
-				} else if (features.length > 1) {
-					navigate('/FeatureManager');
-				}
 			});
 
-			initialMap.on('dblclick', (e) => {
-				e.preventDefault();
+			initialMap.on(
+				'click',
+				onMapClick((features: Feature[]) => {
+					dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
 
-				const view = e.map.getView();
-				onViewChangeAndUpdateMap({
-					center: e.coordinate,
-					zoom: view.getZoom(),
-				});
-
-				return false;
-			});
-
-			olMapRef.current = initialMap;
-		}
-		// Note: It's seems to be OK to ignore other
-		// props here because we deliberately only want
-		// this to run once to init the map.
-		// It's also OK to ignore basemap, because changing
-		// settings causes a few page reload.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [onViewChange, view]);
-
-	// R5
-	// When the user's GPS is set to watch, we need to
-	// update the map position whenever they move.
-	useEffect(() => {
-		if (isFollowingGPS === true && latitude !== undefined && longitude !== undefined) {
-			onViewChangeAndUpdateMap({
-				center: fromLonLat([longitude, latitude]),
-				zoom: defaultZoomLevel,
-			});
-		}
-	}, [isFollowingGPS, latitude, longitude, onViewChangeAndUpdateMap]);
-
-	// R6
-	// Create the user's GeoJSON features and begin the sprite sheet generation process
-	useEffect(() => {
-		console.log('manage vector layer: start');
-
-		if (olMapRef.current !== undefined && mapFeatures !== undefined) {
-			console.log('manage vector layer: create features');
-
-			const layerVersion = getNextLayerVersion(layerVersions);
-			setLayerVersions((prevState) => [...prevState, layerVersion]);
-
-			geoJSONFeatures.features = convertFeaturesToGeoJSON(
-				mapFeatures,
-				map?.default_symbology || null,
-				featureSchemas,
-				setLayersReadyForRendering,
-				layerVersion,
-				mapRenderer,
+					if (features.length === 1) {
+						navigate(`/FeatureManager/Edit/${features[0].id}`);
+					} else if (features.length > 1) {
+						navigate('/FeatureManager');
+					}
+				}),
 			);
 
-			// We can create VectorImageLayers straight away
-			if (mapRenderer === MapRenderer.VectorImageLayer && vectorLayer.current === undefined) {
-				console.log('manage vector layer: create VectorImageLayer');
+			initialMap.on('dblclick', onMapDblClick(initialMap));
+			// ######################
+			// Drag Detection, Map View Updating, and Feature Clicking (End)
+			// ######################
+
+			setMap(initialMap);
+			mapRef.current = initialMap;
+
+			return () => {
+				// console.log('Cleanup OLMap');
+
+				vectorLayer.current = undefined;
+
+				unByKey(geolocationEventKeys);
+
+				initialMap.setTarget(undefined);
+
+				if (mapRef.current !== undefined) {
+					mapRef.current.setTarget(undefined);
+					mapRef.current = undefined;
+				}
+
+				setMap(undefined);
+			};
+		}
+
+		// Note: basemap is not strictly needed in here because any changes to it from
+		// the settings panel are done via a full page reload.
+	}, [basemap, dispatch, navigate]);
+	// ######################
+	// Initialise map on load (End)
+	// ######################
+
+	// ######################
+	// Data Layer
+	// ######################
+	// Note: This will get a lot cleaner once OL supports defining
+	// styles for WebGL layers using a flat style object/function.
+	useEffect(() => {
+		if (mapRef.current !== undefined && mapRenderer === MapRenderer.VectorImageLayer) {
+			// Note: When switching map renderers via the Settings panel, vectorLayer.current
+			// will briefly point to the old layer while the page is refreshing.
+			// This will trigger an error briefly before the page gets to reloading, so no biggie.
+			if (vectorLayer.current === undefined) {
+				// console.log('> manage vector layer: create VectorImageLayer');
 
 				vectorLayer.current = manageVectorImageLayerCreation(
-					olMapRef.current,
-					isFeatureMovementAllowed,
-					onModifyInteractionStartEnd,
+					featuresAndSpriteSheet.geoJSON,
+					mapRef.current,
+					isFeatureMovementAllowedRef.current,
+					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionAddRemoveFeature,
+				);
+			} else {
+				// console.log('> manage vector layer: update VectorImageLayer layer');
+
+				manageVectorImageLayerUpdate(
+					featuresAndSpriteSheet.geoJSON,
+					vectorLayer.current as VectorImageLayer<VectorSource<Geometry>>,
+				);
+			}
+		} else if (mapRef.current !== undefined && mapRenderer === MapRenderer.WebGLPointsLayer) {
+			if (vectorLayer.current === undefined) {
+				// console.log('> manage vector layer: create WebGLPointsLayer');
+
+				vectorLayer.current = manageWebGLPointsLayerCreation(
+					featuresAndSpriteSheet.geoJSON,
+					featuresAndSpriteSheet.spriteSheet,
+					mapRef.current,
+					isFeatureMovementAllowedRef.current,
+					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionAddRemoveFeature,
+				);
+			} else {
+				// console.log('> manage vector layer: update WebGLPointsLayer layer');
+
+				vectorLayer.current = manageWebGLPointsLayerUpdate(
+					featuresAndSpriteSheet.geoJSON,
+					featuresAndSpriteSheet.spriteSheet,
+					vectorLayer.current as WebGLPointsLayer<VectorSource<Point>>,
+					mapRef.current,
+					isFeatureMovementAllowedRef.current,
+					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			}
 		}
-		// layerVersions needs to stay out of here to avoid an endless loop of rendering
-		// olMapRef.current needs to be here so we actually create the map when the features API returns a response
-		// isFeatureMovementAllowed isn't needed here because there's a separate useEffect for that
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [olMapRef.current, featureSchemas, map?.default_symbology, mapFeatures]);
-
-	// Handle updating the vector layer styles and features when the sprite sheet generation process has finished
-	useEffect(() => {
-		if (olMapRef.current !== undefined) {
-			if (mapRenderer === MapRenderer.VectorImageLayer) {
-				console.log('manage vector layer: update VectorImageLayer layer');
-
-				manageVectorImageLayerUpdate(vectorLayer.current as VectorImageLayer<VectorSource<Geometry>>);
-			} else {
-				const latestVersion = Math.max(...layerVersions);
-
-				if (layersReadyForRendering[latestVersion] === true) {
-					if (vectorLayer.current === undefined) {
-						console.log('manage vector layer: create WebGLPointsLayer');
-
-						vectorLayer.current = manageWebGLPointsLayerCreation(
-							olMapRef.current,
-							isFeatureMovementAllowed,
-							onModifyInteractionStartEnd,
-							onModifyInteractionAddRemoveFeature,
-						);
-					} else {
-						console.log('manage vector layer: update WebGLPointsLayer');
-
-						vectorLayer.current = manageWebGLPointsLayerUpdate(
-							vectorLayer.current as WebGLPointsLayer<VectorSource<Point>>,
-							olMapRef.current,
-							isFeatureMovementAllowed,
-							onModifyInteractionStartEnd,
-							onModifyInteractionAddRemoveFeature,
-						);
-					}
-				}
-			}
-		}
-		// isFeatureMovementAllowed isn't needed here because there's a separate useEffect for that
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		layerVersions,
-		layersReadyForRendering,
-		mapRenderer,
-		onModifyInteractionAddRemoveFeature,
-		onModifyInteractionStartEnd,
-	]);
-
-	// R7
-	// Manage the vector layer with the user's current position
-	useEffect(() => {
-		if (olMapRef.current !== undefined && latitude !== undefined && longitude !== undefined) {
-			if (vectorLayerUserPosition.current === undefined) {
-				vectorLayerUserPosition.current = createVectorLayerForUserPosition(latitude, longitude);
-				olMapRef.current.addLayer(vectorLayerUserPosition.current);
-			} else {
-				updateVectorLayerForUserPosition(latitude, longitude, vectorLayerUserPosition.current);
-			}
-		}
-		// See notes in above hook
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [olMapRef.current, latitude, longitude]);
-
-	// R8
-	// Manage enabling/disabling the movement of features
-	useEffect(() => {
-		if (olMapRef.current !== undefined) {
-			olMapRef.current.getInteractions().forEach((interaction) => {
-				if (interaction.getProperties().is_modify === true) {
-					interaction.setActive(isFeatureMovementAllowed);
-				}
-			});
-		}
-	}, [isFeatureMovementAllowed]);
+	}, [featuresAndSpriteSheet.geoJSON, featuresAndSpriteSheet.spriteSheet, mapRenderer, updateFeature]);
+	// ######################
+	// Data Layer (End)
+	// ######################
 
 	return (
 		<div className="map-container">
 			<div id={mapTargetElementId} />
-			{olMapRef.current === undefined && <LocationFetchingIndicator />}
 
-			{olMapRef.current !== undefined && (
+			{geolocationHasPosition === false ? (
+				<LocationFetchingIndicator />
+			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
 				<React.Fragment>
 					<div id="centre_of_the_map"></div>
+
 					<div id="workaround_modify_interaction_bug"></div>
 
 					<SnapToGPSButton
@@ -455,6 +343,8 @@ function OLMap(props: Props) {
 						onFeatureMovementDisabled={onFeatureMovementDisabled}
 					/>
 				</React.Fragment>
+			) : (
+				<React.Fragment></React.Fragment>
 			)}
 		</div>
 	);

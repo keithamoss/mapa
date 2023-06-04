@@ -1,5 +1,6 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
+import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
 
@@ -72,6 +73,10 @@ export const featuresApi = api.injectEndpoints({
 				{ type: 'Feature', id: 'LIST' },
 				...(result !== undefined ? Object.keys(result).map((id) => ({ type: 'Feature', id } as const)) : []),
 			],
+			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+				await queryFulfilled;
+				dispatch(prepareFeaturesForMap());
+			},
 		}),
 		addFeatureToMap: builder.mutation<Feature, NewFeature>({
 			query: (initialFeature) => ({

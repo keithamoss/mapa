@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
 
@@ -44,6 +45,10 @@ export const mapsApi = api.injectEndpoints({
 				{ type: 'Map', id: 'LIST' },
 				...(result !== undefined ? result.ids.map((id) => ({ type: 'Map' as const, id })) : []),
 			],
+			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+				await queryFulfilled;
+				dispatch(prepareFeaturesForMap());
+			},
 		}),
 		addMap: builder.mutation<Map, Partial<Map>>({
 			query: (initialMap) => ({

@@ -13,19 +13,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import { getSelectedFeatureIds, setSelectedFeatures } from '../app/appSlice';
+import { getFeaturesAvailableForEditing, setFeaturesAvailableForEditing } from '../app/appSlice';
 
 function FeatureManager() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 
-	const featureIds = useAppSelector(getSelectedFeatureIds);
+	const featureIds = useAppSelector(getFeaturesAvailableForEditing);
 
 	const onClickFeature = (featureId: number) => () => navigate(`/FeatureManager/Edit/${featureId}/`);
 
 	const onClose = () => {
-		dispatch(setSelectedFeatures([]));
+		dispatch(setFeaturesAvailableForEditing([]));
 		navigate('/');
 	};
 

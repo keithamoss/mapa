@@ -17,24 +17,16 @@ import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
-import { MapRenderer } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
 import { mapaThemeSecondaryBlueRGB } from '../../app/ui/theme';
 import { determineSymbolForFeature } from './olStylingManager';
-import { buildSpriteSheet } from './olWebGLPointsLayerManager';
+import { buildSpriteSheet, WebGLLayerSpriteSheet } from './olWebGLPointsLayerManager';
 
 export const geoJSONFormat = new GeoJSON({
 	dataProjection: 'EPSG:4326',
 	featureProjection: 'EPSG:3857',
 });
-
-export const geoJSONFeatures: { features: GeoJSONFeatureCollection } = {
-	features: {
-		type: 'FeatureCollection',
-		features: [],
-	},
-};
 
 export interface GeoJSONFeatureCollection {
 	type: 'FeatureCollection';
@@ -97,18 +89,15 @@ export const getWMTSTileLayer = () => {
 		}),
 	});
 };
-export const convertFeaturesToGeoJSON = (
+
+export const convertFeaturesToGeoJSON = async (
 	features: Feature[],
 	defaultMapSymbology: SymbologyProps | null,
 	featureSchemas: FeatureSchema[],
-	setLayersReadyForRendering: React.Dispatch<
-		React.SetStateAction<{
-			[key: number]: boolean;
-		}>
-	>,
-	layerVersion: number,
-	mapRenderer?: MapRenderer,
-): GeoJSONFeatureCollection => {
+): Promise<{
+	geoJSON: GeoJSONFeatureCollection;
+	spriteSheet: WebGLLayerSpriteSheet;
+}> => {
 	const symbols: { [key: string]: Partial<SymbologyProps> } = {};
 
 	const geoJSON: GeoJSONFeatureCollection =
@@ -144,14 +133,13 @@ export const convertFeaturesToGeoJSON = (
 					features: [],
 			  };
 
-	// This is an async function due to the svg > img translation process.
-	// So we use layersReadyForRendering to track when the sheet has
-	// finished building and the layer can be re - rendered.
-	if (mapRenderer === MapRenderer.WebGLPointsLayer || mapRenderer === undefined) {
-		buildSpriteSheet(symbols, layerVersion, setLayersReadyForRendering);
-	}
-
-	return geoJSON;
+	return {
+		geoJSON,
+		// This is an async function due to the svg > img translation process.
+		// So we use layersReadyForRendering to track when the sheet has
+		// finished building and the layer can be re - rendered.
+		spriteSheet: await buildSpriteSheet(symbols),
+	};
 };
 
 export const setupModifyInteraction = (
