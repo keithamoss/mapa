@@ -1,5 +1,7 @@
 import json
 
+# This was last run on @fortawesome/fontawesome-svg-core@6.4.0
+
 CATEGORY_HERO_ICONS = {
     "accessibility": "universal-access",
     "alert": "bell-on",
