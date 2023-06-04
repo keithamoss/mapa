@@ -1,5 +1,5 @@
 import { MapBrowserEvent, Overlay } from 'ol';
-import Geolocation, { GeolocationError } from 'ol/Geolocation';
+import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
 import { Coordinate } from 'ol/coordinate';
@@ -14,6 +14,7 @@ import { Feature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 18;
+export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
 export const geolocationMarkerOvelayerIdOuter = 'geolocation_marker_outer';
 export const geolocationMarkerOvelayerIdInner = 'geolocation_marker_inner';
@@ -58,13 +59,13 @@ export const onGeolocationChangePosition =
 	(
 		map: Map,
 		geolocationHasPositionRef: React.MutableRefObject<boolean>,
-		setGeolocationHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
+		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 	) =>
 	(evt: BaseEvent) => {
 		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition());
 
 		if (geolocationHasPositionRef.current === false) {
-			setGeolocationHasPosition(true);
+			setMapHasPosition(true);
 		}
 	};
 
@@ -74,9 +75,21 @@ export const onGeolocationChangeTracking = (map: Map) => (evt: BaseEvent) => {
 	}
 };
 
-export const onGeolocationError = (evt: GeolocationError) => {
-	throw Error(`[${evt.code}] ${evt.message}`);
-};
+export const onGeolocationError =
+	(
+		map: Map,
+		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
+		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
+	) =>
+	(/*evt: GeolocationError*/) => {
+		const view = map.getView();
+		view.setCenter(fromLonLat(defaultMapStartingPoint));
+		view.setZoom(defaultZoomLevel);
+		map.setView(view);
+
+		setMapHasPosition(true);
+		setIsFollowingGPS(false);
+	};
 
 export const onMapClick = (callback: (features: Feature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
 	const features: Feature[] = [];

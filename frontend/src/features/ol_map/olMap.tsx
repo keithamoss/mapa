@@ -61,8 +61,7 @@ function OLMap(props: Props) {
 
 	const { mapRenderer, basemap } = props;
 
-	// Note: We useRef() for geolocationHasPosition and isFeatureMovementAllowed to
-	// avoid passing state to useEffect()
+	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
 	// ######################
 	// OpenLayers Map
@@ -100,10 +99,10 @@ function OLMap(props: Props) {
 		}),
 	);
 
-	const [geolocationHasPosition, setGeolocationHasPosition] = useState<boolean>(false);
+	const [mapHasPosition, setMapHasPosition] = useState<boolean>(false);
 
 	const geolocationHasPositionRef = useRef<boolean>(false);
-	geolocationHasPositionRef.current = geolocationHasPosition;
+	geolocationHasPositionRef.current = mapHasPosition;
 
 	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
 
@@ -170,10 +169,10 @@ function OLMap(props: Props) {
 			const geolocationEventKeys = [
 				geolocation.current.on(
 					'change:position',
-					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setGeolocationHasPosition),
+					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setMapHasPosition),
 				),
 				geolocation.current.on('change:tracking', onGeolocationChangeTracking(initialMap)),
-				geolocation.current.on('error', onGeolocationError),
+				geolocation.current.on('error', onGeolocationError(initialMap, setMapHasPosition, setIsFollowingGPS)),
 			];
 			// ######################
 			// Geolocation (End)
@@ -337,7 +336,7 @@ function OLMap(props: Props) {
 		<div className="map-container">
 			<div id={mapTargetElementId} />
 
-			{geolocationHasPosition === false ? (
+			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
 			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
 				<React.Fragment>
