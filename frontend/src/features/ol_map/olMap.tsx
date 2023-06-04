@@ -48,7 +48,6 @@ import SnapToGPSButton from './snapToGPSButton';
 // https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 interface Props {
-	mapId: number;
 	mapRenderer?: MapRenderer;
 	basemap?: Basemap;
 }
@@ -60,10 +59,7 @@ function OLMap(props: Props) {
 
 	const navigate = useNavigate();
 
-	// Note: We keep mapId here for now to force a full refresh of this
-	// component when the map changes/
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { mapId, mapRenderer, basemap } = props;
+	const { mapRenderer, basemap } = props;
 
 	// Note: We useRef() for geolocationHasPosition and isFeatureMovementAllowed to
 	// avoid passing state to useEffect()
@@ -81,6 +77,7 @@ function OLMap(props: Props) {
 	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatus);
 
 	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
+	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
 
 	const vectorLayer = useRef<
 		VectorImageLayer<VectorSource<Geometry>> | WebGLPointsLayer<VectorSource<Point>> | undefined
@@ -267,6 +264,8 @@ function OLMap(props: Props) {
 	// Note: This will get a lot cleaner once OL supports defining
 	// styles for WebGL layers using a flat style object/function.
 	useEffect(() => {
+		// console.log('create/update data layer');
+
 		if (mapRef.current !== undefined && mapRenderer === MapRenderer.VectorImageLayer) {
 			// Note: When switching map renderers via the Settings panel, vectorLayer.current
 			// will briefly point to the old layer while the page is refreshing.
