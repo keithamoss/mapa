@@ -1,12 +1,12 @@
 import { MapBrowserEvent, Overlay } from 'ol';
+import Geolocation, { GeolocationError } from 'ol/Geolocation';
+import Map from 'ol/Map';
+import { ObjectEvent } from 'ol/Object';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
-import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import { Point } from 'ol/geom';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import MapboxVector from 'ol/layer/MapboxVector';
-import Map from 'ol/Map';
-import { ObjectEvent } from 'ol/Object';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap } from '../../app/services/auth';
@@ -93,16 +93,6 @@ export const onMapClick = (callback: (features: Feature[]) => void) => (evt: Map
 	);
 
 	callback(features);
-};
-
-export const onMapDblClick = (map: Map) => (evt: MapBrowserEvent<UIEvent>) => {
-	evt.preventDefault();
-
-	const view = map.getView();
-	view.setCenter(evt.coordinate);
-	map.setView(view);
-
-	return false;
 };
 
 export const setModifyInteractionStatus = (map: Map | undefined, status: boolean) => {

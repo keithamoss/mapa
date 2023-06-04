@@ -1,10 +1,10 @@
-import { MapEvent, View } from 'ol';
+import { MapBrowserEvent, MapEvent, View } from 'ol';
 import Geolocation from 'ol/Geolocation';
+import Map from 'ol/Map';
+import { unByKey } from 'ol/Observable';
 import { Geometry, Point } from 'ol/geom';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
-import Map from 'ol/Map';
-import { unByKey } from 'ol/Observable';
 import 'ol/ol.css';
 import { fromLonLat } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
@@ -34,7 +34,6 @@ import {
 	onGeolocationChangeTracking,
 	onGeolocationError,
 	onMapClick,
-	onMapDblClick,
 	onModifyInteractionAddRemoveFeature,
 	onModifyInteractionStartEnd,
 	setModifyInteractionStatus,
@@ -181,10 +180,10 @@ function OLMap(props: Props) {
 			// ######################
 			// Drag Detection, Map View Updating, and Feature Clicking
 			// ######################
-			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move
-			// has been the result of a drag
+			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
 			// Ref: https://gis.stackexchange.com/a/378877
 			let isDragging = false;
+			let isDoubleClicking = false;
 
 			initialMap.on('movestart', () => {
 				isDragging = false;
@@ -195,9 +194,12 @@ function OLMap(props: Props) {
 			});
 
 			initialMap.on('moveend', (evt: MapEvent) => {
-				if (isDragging === true && geolocation.current.getTracking() === true) {
+				if ((isDragging === true || isDoubleClicking === true) && geolocation.current.getTracking() === true) {
 					setIsFollowingGPS(false);
 				}
+
+				isDragging = false;
+				isDoubleClicking = false;
 
 				// Update the Redux store version of the view for when
 				// we add new features.
@@ -225,7 +227,17 @@ function OLMap(props: Props) {
 				}),
 			);
 
-			initialMap.on('dblclick', onMapDblClick(initialMap));
+			initialMap.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
+				evt.preventDefault();
+
+				isDoubleClicking = true;
+
+				const view = initialMap.getView();
+				view.setCenter(evt.coordinate);
+				initialMap.setView(view);
+
+				return false;
+			});
 			// ######################
 			// Drag Detection, Map View Updating, and Feature Clicking (End)
 			// ######################
