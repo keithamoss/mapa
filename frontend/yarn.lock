@@ -4980,30 +4980,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol-mapbox-style@npm:^9.2.0":
-  version: 9.7.0
-  resolution: "ol-mapbox-style@npm:9.7.0"
-  dependencies:
-    "@mapbox/mapbox-gl-style-spec": ^13.23.1
-    mapbox-to-css-font: ^2.4.1
-  checksum: 0c03c997a1d76d8f8a4a7b73102400a086efb5e6f02ba7de1fbf3db8c99ae6ce7fc3beeb746451a08befb26fa6d516766cea6b975fad390abda03be1cf04ed11
-  languageName: node
-  linkType: hard
-
-"ol@npm:^7.3.0":
-  version: 7.3.0
-  resolution: "ol@npm:7.3.0"
-  dependencies:
-    earcut: ^2.2.3
-    geotiff: ^2.0.7
-    ol-mapbox-style: ^9.2.0
-    pbf: 3.2.1
-    rbush: ^3.0.1
-  checksum: 779141c1724e407b179adcffcb144e5f05e183cee62b72a516acd1acca2de86868c8f10c68d19ee30df3b4c68c32069f7da67b0d875424c2f0ae605f4bbe55ac
-  languageName: node
-  linkType: hard
-
-"ol@npm:^7.4.0":
+"ol@npm:^7.3.0, ol@npm:^7.4.0":
   version: 7.4.0
   resolution: "ol@npm:7.4.0"
   dependencies:
