@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from http.client import BAD_REQUEST
 
@@ -114,13 +113,22 @@ class MapsViewSet(viewsets.ModelViewSet):
 
         return super().update(request, pk, *args, **kwargs)
 
-    @action(detail=True, methods=["GET"], permission_classes=(IsAuthenticatedAndOwnsEntityPermissions,), serializer_class=FeatureSerializer)
-    def features(self, request, pk=None, format=None):
+    @action(detail=False, methods=["GET"], serializer_class=FeatureSerializer)
+    def features(self, request, format=None):
         """
-        Retrieve a list of all of the features for this map.
+        Retrieve a list of all of the features for the user's active map.
         """
-        serializer = FeatureSerializer(Features.objects.filter(deleted_at=None, map_id=pk), many=True)
-        return Response(serializer.data)
+        # Note: This will probably eventually allow for a list of active_map_ids on the profile, not just one.
+        # Requires a lot of UI rework to support it though.
+        # e.g. Some uses of useGetFeaturesQuery will need to think about filtering the result by map and whatnot.
+        
+        if request.user.profile.settings is not None and request.user.profile.settings["last_map_id"] is not None:
+            mapIds = Maps.objects.filter(deleted_at=None, owner_id=request.user.id, id=request.user.profile.settings["last_map_id"]).values_list("id", flat=True)
+
+            serializer = FeatureSerializer(Features.objects.filter(deleted_at=None, map_id__in=list(mapIds)), many=True)
+            return Response(serializer.data)
+
+        return Response([])
 
 
 class FeatureSchemasViewSet(viewsets.ModelViewSet):

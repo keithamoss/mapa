@@ -30,7 +30,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { searchFormValidationSchema } from '../../app/forms/searchForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { Feature, useGetFeaturesForMapQuery } from '../../app/services/features';
+import { Feature } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import NotFound from '../../NotFound';
 import {
@@ -43,6 +43,7 @@ import {
 	setFilteredFeatures,
 	setSearchParameters,
 } from '../app/appSlice';
+import { selectAllFeatures } from '../features/featuresSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import { isSearchingYet, searchFeatures } from './searchHelpers';
 
@@ -57,13 +58,9 @@ function SearchManagerEntrypoint() {
 }
 
 function SearchManagerEntrypointLayer2(props: { mapId: number }) {
-	const { data: features } = useGetFeaturesForMapQuery(props.mapId);
+	const features = useAppSelector(selectAllFeatures);
 
-	if (features === undefined) {
-		return <NotFound />;
-	}
-
-	return <SearchManager mapId={props.mapId} features={Object.values(features)} />;
+	return <SearchManager mapId={props.mapId} features={features} />;
 }
 
 interface Props {

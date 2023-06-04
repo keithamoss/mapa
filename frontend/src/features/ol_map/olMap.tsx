@@ -62,6 +62,7 @@ function OLMap(props: Props) {
 
 	// Note: We keep mapId here for now to force a full refresh of this
 	// component when the map changes/
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { mapId, mapRenderer, basemap } = props;
 
 	// Note: We useRef() for geolocationHasPosition and isFeatureMovementAllowed to

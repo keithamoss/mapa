@@ -55,10 +55,7 @@ function App() {
 	// Important: We're pre-fetching *after* we have a user object to avoid 403s
 	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
-
-	if (mapId !== undefined) {
-		void store.dispatch(featuresApi.endpoints.getFeaturesForMap.initiate(mapId));
-	}
+	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
 
 	return (
 		<div className="App">

@@ -49,7 +49,13 @@ function FeatureEditorEntrypoint() {
 		return <NotFound />;
 	}
 
-	const feature = selectFeatureById(mapId, featureId);
+	return <FeatureEditorEntrypointLayer2 mapId={mapId} featureId={featureId} />;
+}
+
+function FeatureEditorEntrypointLayer2(props: { mapId: number; featureId: number }) {
+	const { mapId, featureId } = props;
+
+	const feature = useAppSelector((state) => selectFeatureById(state, featureId));
 
 	if (feature !== undefined) {
 		return <FeatureEditor mapId={mapId} feature={feature} />;

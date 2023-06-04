@@ -24,18 +24,17 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-import { skipToken } from '@reduxjs/toolkit/dist/query';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { mapFormValidationSchema } from '../../app/forms/mapForm';
 import { useAppSelector } from '../../app/hooks/store';
-import { useGetFeaturesForMapQuery } from '../../app/services/features';
 import { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
 import { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import { selectAllFeatures } from '../features/featuresSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 
@@ -91,7 +90,7 @@ function MapForm(props: Props) {
 	// ######################
 	// Schema Removal Guard
 	// ######################
-	const { data: features } = useGetFeaturesForMapQuery(map?.id ?? skipToken);
+	const features = useAppSelector(selectAllFeatures);
 
 	const schemasUsedOnMap = Array.from(new Set(Object.values(features || []).map((f) => f.schema_id)));
 	// ######################

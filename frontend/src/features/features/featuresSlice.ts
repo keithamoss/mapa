@@ -1,10 +1,19 @@
+import { createSelector } from '@reduxjs/toolkit';
 import { Point } from 'ol/geom';
-import { featuresApi, GeomType } from '../../app/services/features';
+import { featuresAdapter, featuresApi, GeomType, initialFeaturesState } from '../../app/services/features';
 import { AppDispatch, RootState } from '../../app/store';
 import { selectMapView } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import { getPointGeoJSONFromCoordinates } from '../ol_map/olLayerManager';
 import { getSchemasAvailableForMap } from '../schemas/schemasSlice';
+
+export const selectGetFeaturesResult = featuresApi.endpoints.getFeatures.select();
+
+const selectFeaturesData = createSelector(selectGetFeaturesResult, (featuresResult) => featuresResult.data);
+
+export const { selectAll: selectAllFeatures, selectById: selectFeatureById } = featuresAdapter.getSelectors(
+	(state: RootState) => selectFeaturesData(state) ?? initialFeaturesState,
+);
 
 export const initFeatureFromMapCentre = (mapId: number) => {
 	return (_dispatch: AppDispatch, getState: () => RootState) => {
@@ -41,13 +50,4 @@ export const initFeatureFromMapCentre = (mapId: number) => {
 			};
 		}
 	};
-};
-
-export const selectFeatureById = (mapId: number, featureId: number) => {
-	const { feature } = featuresApi.useGetFeaturesForMapQuery(mapId, {
-		selectFromResult: ({ data }) => ({
-			feature: data !== undefined ? data[featureId] : undefined,
-		}),
-	});
-	return feature;
 };

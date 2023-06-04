@@ -1,4 +1,4 @@
-import { createEntityAdapter } from '@reduxjs/toolkit';
+import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
@@ -64,10 +64,10 @@ export { initialState as initialFeaturesState };
 
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeaturesForMap: builder.query<{ [key: number]: Feature }, number>({
-			query: (map_id) => `maps/${map_id}/features/`,
+		getFeatures: builder.query<EntityState<Feature>, void>({
+			query: () => `maps/features/`,
 			transformResponse: (res: FeaturesResponse) => {
-				return Object.fromEntries(res.map((feature) => [feature.id, feature]));
+				return featuresAdapter.setAll(initialState, res);
 			},
 			providesTags: (result) => [
 				{ type: 'Feature', id: 'LIST' },
@@ -105,9 +105,5 @@ export const featuresApi = api.injectEndpoints({
 	}),
 });
 
-export const {
-	useGetFeaturesForMapQuery,
-	useAddFeatureToMapMutation,
-	useUpdateFeatureMutation,
-	useDeleteFeatureMutation,
-} = featuresApi;
+export const { useGetFeaturesQuery, useAddFeatureToMapMutation, useUpdateFeatureMutation, useDeleteFeatureMutation } =
+	featuresApi;
