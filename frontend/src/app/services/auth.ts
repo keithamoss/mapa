@@ -48,7 +48,8 @@ export const authApi = api.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
-			invalidatesTags: ['User'],
+			// This is lazy, but ensures features are refreshed when the user's active map changes.
+			invalidatesTags: ['User', { type: 'Feature', id: 'LIST' }],
 		}),
 	}),
 });

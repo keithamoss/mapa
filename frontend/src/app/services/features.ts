@@ -71,7 +71,7 @@ export const featuresApi = api.injectEndpoints({
 			},
 			providesTags: (result) => [
 				{ type: 'Feature', id: 'LIST' },
-				...(result !== undefined ? Object.keys(result).map((id) => ({ type: 'Feature', id } as const)) : []),
+				...(result !== undefined ? result.ids.map((id) => ({ type: 'Feature' as const, id })) : []),
 			],
 			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
 				await queryFulfilled;
