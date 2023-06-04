@@ -3,6 +3,7 @@ import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import { Geometry, Point } from 'ol/geom';
+import { DblClickDragZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
@@ -151,6 +152,7 @@ function OLMap(props: Props) {
 
 			const initialMap = new Map({
 				target: mapTargetElementId,
+				interactions: defaultInteractions().extend([new DblClickDragZoom()]),
 				layers: [getBasemap(basemap)],
 				controls: [],
 				view:
