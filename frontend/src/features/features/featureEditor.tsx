@@ -35,6 +35,7 @@ import SchemaFieldDataEntryManager, { SchemaFormFieldsFormValues } from '../sche
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import { SchemaEditor } from '../schemas/schemaEditor';
+import { getFieldFromSchemaDefinitionById } from '../schemas/schemaHelpers';
 import SchemaSelectFormControls from '../schemas/schemaSelectFormControls';
 import { getSchemasAvailableForMap, selectFeatureSchemaById } from '../schemas/schemasSlice';
 import { selectFeatureById } from './featuresSlice';
@@ -210,12 +211,22 @@ function FeatureEditor(props: Props) {
 		const dataFiltered: SchemaFormFieldsFormValues = {};
 
 		Object.entries(data).forEach(([fieldName, fieldValue]) => {
-			if (
-				touchedFieldsRef.current === undefined ||
-				touchedFieldsRef.current[fieldName] !== undefined ||
-				featureDataSchemaFieldNames.includes(fieldName)
-			) {
+			// If the user hasn't touched any fields, or if the field already has a value defined, always include it in the data object.
+			if (touchedFieldsRef.current === undefined || featureDataSchemaFieldNames.includes(fieldName)) {
 				dataFiltered[fieldName] = fieldValue;
+			} else if (touchedFieldsRef.current[fieldName] !== undefined && schema !== undefined) {
+				// If the field wasn't previously set, has been touched, and we have a schema, check to see if the value
+				// in the field is different from the default value before including it in the data object.
+				// (This is how we filter out the default values.)
+				// Note: This does have the unfortunate side effect of meaning that the user can't enter the same
+				// value as the default value without having it filtered out here.
+				// Oh well 🤷‍♂️
+				const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
+				const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
+
+				if (schemaField !== undefined && fieldValue !== schemaField?.default_value) {
+					dataFiltered[fieldName] = fieldValue;
+				}
 			}
 		});
 

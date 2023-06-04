@@ -59,15 +59,13 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 			(featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id,
 		);
 
-		if (fieldDefinition.type === FeatureSchemaFieldType.TextField) {
-			values[schemaFieldName] = featureDataItemForSchemaField?.value || '';
-		} else if (
+		if (
+			fieldDefinition.type === FeatureSchemaFieldType.TextField ||
 			fieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
-			fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
+			fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean ||
+			fieldDefinition.type === FeatureSchemaFieldType.NumberField
 		) {
-			values[schemaFieldName] = featureDataItemForSchemaField?.value || false;
-		} else if (fieldDefinition.type === FeatureSchemaFieldType.NumberField) {
-			values[schemaFieldName] = featureDataItemForSchemaField?.value || '';
+			values[schemaFieldName] = featureDataItemForSchemaField?.value || fieldDefinition.default_value;
 		}
 	});
 
