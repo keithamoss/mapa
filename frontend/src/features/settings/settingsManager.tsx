@@ -52,6 +52,10 @@ function SettingsManager() {
 
 	const onClose = () => navigate('/');
 
+	if (user === null) {
+		return null;
+	}
+
 	return (
 		<React.Fragment>
 			<DialogWithTransition onClose={onClose}>
@@ -67,6 +71,22 @@ function SettingsManager() {
 				</AppBar>
 
 				<Paper elevation={0} sx={{ m: 3 }}>
+					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+						<FormLabel id="radio-buttons-group-map-renderer-label">Latest Google Drive Backup</FormLabel>
+
+						{user.last_gdrive_backup !== null
+							? new Date(user.last_gdrive_backup).toLocaleString('en-GB', {
+									weekday: 'long',
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric',
+									second: 'numeric',
+							  })
+							: 'Never backed up 😬'}
+					</FormControl>
+
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 						<FormLabel id="radio-buttons-group-map-renderer-label">Map Renderer</FormLabel>
 						<RadioGroup

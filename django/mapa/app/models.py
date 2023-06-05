@@ -28,6 +28,7 @@ class Profile(models.Model):
     profile_image_url = models.URLField(blank=False)
     is_approved = models.BooleanField(default=False)
     settings = JSONField(default=default_profile_settings, blank=True)
+    last_gdrive_backup = models.DateTimeField(null=True)
 
     tracker = FieldTracker()
 
@@ -53,6 +54,7 @@ class AllowedUsers(models.Model):
 
 
 class FeatureSchemas(models.Model):
+    last_updated_date = models.DateTimeField(auto_now=True)
     name = models.TextField(unique=False)
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column="owner_id")
     definition = JSONField(default=list, blank=True)
@@ -66,18 +68,19 @@ class FeatureSchemas(models.Model):
 
 
 class Maps(models.Model):
+    last_updated_date = models.DateTimeField(auto_now=True)
     name = models.TextField(unique=False)
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column="owner_id")
     default_symbology = JSONField(null=True)
     deleted_at = models.DateTimeField(null=True)
     available_schema_ids = JSONField(default=list, blank=True)
     last_used_schema_id = models.ForeignKey(FeatureSchemas, null=True, on_delete=models.CASCADE, db_column="last_used_schema_id")
-    # favourited_symbols = JSONField(default=list, blank=True)
 
     history = HistoricalRecords()
 
 
 class Features(models.Model):
+    last_updated_date = models.DateTimeField(auto_now=True)
     geom = models.PointField(geography=True)
     geom_type = models.TextField(choices=[(tag, tag.value) for tag in GeomType])
     map_id = models.ForeignKey(Maps, on_delete=models.CASCADE, db_column="map_id")

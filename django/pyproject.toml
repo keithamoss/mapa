@@ -23,6 +23,9 @@ djangorestframework-gis = "^1.0"
 django-filter = "23.2"
 djangorestframework-csv = "^2.1.1"
 pytz = "^2023.3"
+google-api-python-client = "^2.88.0"
+google-auth-httplib2 = "^0.1.0"
+google-auth-oauthlib = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 

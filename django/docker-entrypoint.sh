@@ -27,6 +27,28 @@ waitfordb()
 
 CMD="$1"
 
+# Cron entrypoint (development and production)
+if [ "$CMD" != "build" ]; then
+  waitfordb
+
+  >&2 echo "Starting crond in the background"
+  # Print environment variables for cron to utilise
+  # Source: https://stackoverflow.com/a/48651061
+  declare -p | grep -Ev 'BASH|BASHOPTS|BASH_VERSINFO|BASHPID|BASH_|EUID|PPID|SHELLOPTS|UID' > /app/mapa/app/cron/mapa.cron.env
+
+  # Add our cronjob
+  cat /app/mapa/app/cron/crontab.txt >> mapa_cron
+  crontab mapa_cron
+  rm mapa_cron
+
+  # Ensure we have a place to log to
+  mkdir -p /app/logs/cron
+
+  # Start crond service
+  chmod 755 /app/mapa/app/cron/cron.sh
+  service cron start
+fi
+
 # Supervisord entrypoint (production)
 if [ "$CMD" = "supervisord" ]; then
   waitfordb

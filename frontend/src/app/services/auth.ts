@@ -29,6 +29,7 @@ export interface User {
 	groups: string[];
 	is_approved: boolean;
 	settings: UserProfileSettings;
+	last_gdrive_backup: string | null;
 }
 
 type UserAuthStatusResponse = {

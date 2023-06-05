@@ -150,6 +150,12 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+# SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'access_type': 'offline'}
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    # https://developers.google.com/identity/protocols/oauth2/scopes
+    # See, edit, create, and delete only the specific Google Drive files you use with this app
+    'https://www.googleapis.com/auth/drive.file'
+]
 
 TEMPLATES = [
     {
