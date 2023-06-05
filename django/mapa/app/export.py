@@ -48,7 +48,6 @@ def export_to_google_drive(user, access_token, refresh_token):
     def get_latest_update_date(maps, schemas, features):
         return max([maps.latest("last_updated_date").last_updated_date, schemas.latest("last_updated_date").last_updated_date, features.latest("last_updated_date").last_updated_date])
     
-    print(f"User: {user}")
     print(f"Last Backup Date: {user.profile.last_gdrive_backup}")
 
     maps = Maps.objects.filter(deleted_at=None, owner_id=user.id)

@@ -11,6 +11,7 @@ from social_django.models import UserSocialAuth
 
 for socialAuthUser in UserSocialAuth.objects.all():
     try:
+        print(f"User: {socialAuthUser.user}")
         export_to_google_drive(socialAuthUser.user, socialAuthUser.extra_data["access_token"], socialAuthUser.extra_data["refresh_token"])
     except:
         traceback.print_exc()
