@@ -63,6 +63,7 @@ export const DialogWithTransition = ({
 			fullScreen
 			open={true}
 			onClose={onDialogClose}
+			transitionDuration={0}
 			TransitionComponent={Transition}
 			TransitionProps={{
 				...transitionProps,
