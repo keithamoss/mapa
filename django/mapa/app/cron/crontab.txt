@@ -2,4 +2,5 @@ SHELL=/bin/bash
 BASH_ENV=/app/mapa/app/cron/mapa.cron.env
 0 12 * * * /app/mapa/app/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
 0 0 * * * /app/mapa/app/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
+0 3 * * * /app/mapa/app/cron/cron.sh >> /app/logs/cron/cron_output.log 2>&1
 # Do not remove this new line, cron needs it
