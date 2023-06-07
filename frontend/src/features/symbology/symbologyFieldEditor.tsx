@@ -1,5 +1,5 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
+import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,6 +30,7 @@ import {
 	getNumberOrDefaultForSymbologyField,
 	getStringOrDefaultForSymbologyField,
 	getStringOrEmptyStringForSymbologyField,
+	getStringOrUndefinedForSymbologyField,
 	symbolMaximumOpacity,
 	symbolMaximumRotation,
 	symbolMaximumSize,
@@ -42,13 +43,13 @@ import { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/
 import {
 	defaultSymbolColour,
 	defaultSymbolIcon,
-	defaultSymbologyGroupId,
 	defaultSymbolOpacity,
 	defaultSymbolRotation,
 	defaultSymbolSecondaryColour,
 	defaultSymbolSecondaryOpacity,
 	defaultSymbolSize,
 	defaultSymbolSizeForFormFields,
+	defaultSymbologyGroupId,
 	getAppDefaultSymbologyConfig,
 	getFontAwesomeIconForSymbolPreview,
 	getFontAwesomeIconFromLibraryAsSVGImage,
@@ -78,12 +79,15 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 		icon,
 		icon_family: getStringOrDefaultForSymbologyField(symbol, 'icon_family', getDefaultFamilyByIconName(icon)),
 		icon_style: getStringOrDefaultForSymbologyField(symbol, 'icon_style', getDefaultStyleByIconName(icon)),
-		size: getNumberOrDefaultForSymbologyField(symbol, 'size', defaultSymbolSize),
-		rotation: getNumberOrDefaultForSymbologyField(symbol, 'rotation', defaultSymbolRotation),
 		colour: getStringOrDefaultForSymbologyField(symbol, 'colour', defaultSymbolColour),
 		opacity: getNumberOrDefaultForSymbologyField(symbol, 'opacity', defaultSymbolOpacity),
 		secondary_colour: getStringOrDefaultForSymbologyField(symbol, 'secondary_colour', defaultSymbolSecondaryColour),
 		secondary_opacity: getNumberOrDefaultForSymbologyField(symbol, 'secondary_opacity', defaultSymbolSecondaryOpacity),
+		modifier_icon: getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon'),
+		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolColour),
+		modifier_opacity: getNumberOrDefaultForSymbologyField(symbol, 'modifier_opacity', defaultSymbolOpacity),
+		size: getNumberOrDefaultForSymbologyField(symbol, 'size', defaultSymbolSize),
+		rotation: getNumberOrDefaultForSymbologyField(symbol, 'rotation', defaultSymbolRotation),
 	};
 
 	return pickBy(defaultValues, (v) => v !== undefined);
@@ -123,6 +127,13 @@ const removeDefaultValuesFromForm = (data: SymbologyProps, nameFieldRequired: bo
 		delete data.secondary_opacity;
 	}
 
+	if (data.modifier_icon === undefined) {
+		delete data.modifier_icon;
+		delete data.modifier_colour;
+		delete data.modifier_opacity;
+	}
+
+	console.log('🚀 ~ file: symbologyFieldEditor.tsx:138 ~ removeDefaultValuesFromForm ~ data:', data);
 	return data;
 };
 
@@ -155,8 +166,21 @@ function SymbologyFieldEditor(props: Props) {
 		defaultValues: getDefaultValues(symbol),
 	});
 
-	const { icon, icon_family, icon_style, size, rotation, colour, opacity, secondary_colour, secondary_opacity } =
-		watch();
+	const {
+		icon,
+		icon_family,
+		icon_style,
+		colour,
+		opacity,
+		secondary_colour,
+		secondary_opacity,
+		modifier_icon,
+		modifier_colour,
+		modifier_opacity,
+		size,
+		rotation,
+	} = watch();
+	console.log('🚀 ~ file: symbologyFieldEditor.tsx:184 ~ SymbologyFieldEditor ~ modifier_icon:', modifier_icon);
 
 	const textInput = useRef<HTMLInputElement>(null);
 
@@ -232,6 +256,27 @@ function SymbologyFieldEditor(props: Props) {
 	// ######################
 
 	// ######################
+	// Icon Modifier Choosing
+	// ######################
+	const [isIconModifierChooserOpen, setIsIconModifierChooserOpen] = useState(false);
+
+	const onOpenIconModifierChooser = () => setIsIconModifierChooserOpen(true);
+
+	const onChooseIconModifier = (icon: string) => {
+		setValue('modifier_icon', icon, { shouldDirty: true });
+		setIsIconModifierChooserOpen(false);
+	};
+
+	const onClearIconModifier = () => {
+		setValue('modifier_icon', undefined, { shouldDirty: true });
+	};
+
+	const onCloseIconModifierChooser = () => setIsIconModifierChooserOpen(false);
+	// ######################
+	// Icon Modifier Choosing (End)
+	// ######################
+
+	// ######################
 	// Choose Group
 	// ######################
 	const [selectedGroupId, setSelectedGroupId] = useState<number>(currentGroupId || defaultSymbologyGroupId);
@@ -277,11 +322,7 @@ function SymbologyFieldEditor(props: Props) {
 			)}
 
 			{isIconChooserOpen === true && (
-				<SymbologyIconChooser
-					selectedIcon={icon}
-					onChoose={onChooseIconFromIconChooser}
-					onClose={onCloseSymbologyIconChooser}
-				/>
+				<SymbologyIconChooser onChoose={onChooseIconFromIconChooser} onClose={onCloseSymbologyIconChooser} />
 			)}
 
 			{isIconFamilyAndStyleChooserOpen === true && icon !== undefined && (
@@ -289,6 +330,14 @@ function SymbologyFieldEditor(props: Props) {
 					selectedIcon={icon}
 					onChoose={onChooseIconFamilyAndStyle}
 					onClose={onCloseFamilyAndStyleChooser}
+				/>
+			)}
+
+			{isIconModifierChooserOpen === true && icon !== undefined && (
+				<SymbologyIconChooser
+					onlyShowModifiers={true}
+					onChoose={onChooseIconModifier}
+					onClose={onCloseIconModifierChooser}
 				/>
 			)}
 
@@ -317,11 +366,14 @@ function SymbologyFieldEditor(props: Props) {
 									icon_family,
 									icon_style,
 									colour,
+									opacity,
 									secondary_colour,
+									secondary_opacity,
+									modifier_icon,
+									modifier_colour,
+									modifier_opacity,
 									size: (size !== undefined ? size : defaultSymbolSizeForFormFields) * 2,
 									rotation,
-									opacity,
-									secondary_opacity,
 								})}
 						</Paper>
 
@@ -448,88 +500,6 @@ function SymbologyFieldEditor(props: Props) {
 							{errors.icon_style && <FormHelperText error>{errors.icon_style.message}</FormHelperText>}
 						</FormControl>
 
-						<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend">Size</FormLabel>
-
-							<FormGroup>
-								<Controller
-									name="size"
-									control={control}
-									render={({ field }) => (
-										<SliderFixed
-											{...field}
-											valueLabelDisplay="auto"
-											min={symbolMinimumSize}
-											max={symbolMaximumSize}
-											track={false}
-											step={1}
-											marks={[
-												{
-													value: 1,
-													label: '1',
-												},
-												{
-													value: 25,
-													label: '25',
-												},
-												{
-													value: 50,
-													label: '50',
-												},
-											]}
-										/>
-									)}
-								/>
-							</FormGroup>
-
-							{errors.size && <FormHelperText error>{errors.size.message}</FormHelperText>}
-						</FormControl>
-
-						<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend">Rotation</FormLabel>
-
-							<FormGroup>
-								<Controller
-									name="rotation"
-									control={control}
-									render={({ field }) => (
-										<SliderFixed
-											{...field}
-											valueLabelDisplay="auto"
-											min={symbolMinimumRotation}
-											max={symbolMaximumRotation}
-											track={false}
-											step={10}
-											marks={[
-												{
-													value: 0,
-													label: '0',
-												},
-												{
-													value: 90,
-													label: '90',
-												},
-												{
-													value: 180,
-													label: '180',
-												},
-												{
-													value: 270,
-													label: '270',
-												},
-												{
-													value: 360,
-													label: '360',
-												},
-											]}
-										/>
-									)}
-								/>
-							</FormGroup>
-
-							{errors.rotation && <FormHelperText error>{errors.rotation.message}</FormHelperText>}
-						</FormControl>
-
 						<FormControl fullWidth={true} component="fieldset" variant="outlined">
 							<FormLabel component="legend" sx={{ mb: 1 }}>
 								Colour and Opacity
@@ -542,7 +512,7 @@ function SymbologyFieldEditor(props: Props) {
 								flexDirection: 'row',
 								paddingLeft: '8px',
 								paddingRight: '8px',
-								marginBottom: icon_family === 'duotone' ? '24px' : '0px',
+								marginBottom: '24px',
 							}}
 						>
 							<FormControl
@@ -613,7 +583,7 @@ function SymbologyFieldEditor(props: Props) {
 
 						{icon_family === 'duotone' && (
 							<React.Fragment>
-								<FormControl fullWidth={true} component="fieldset" variant="outlined">
+								<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 									<FormLabel component="legend" sx={{ mb: 1 }}>
 										Secondary Colour and Opacity
 									</FormLabel>
@@ -697,6 +667,206 @@ function SymbologyFieldEditor(props: Props) {
 								</div>
 							</React.Fragment>
 						)}
+
+						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<Paper elevation={0} sx={{ display: 'flex' }}>
+									<TextField
+										label="Modifier Icon"
+										select
+										value={modifier_icon || ''}
+										SelectProps={{
+											open: false,
+											onClick: onOpenIconModifierChooser,
+										}}
+										InputProps={{
+											startAdornment:
+												modifier_icon !== undefined ? (
+													<InputAdornment position="start" sx={{ mr: 1 }}>
+														{getFontAwesomeIconFromLibraryAsSVGImage(modifier_icon, 'solid', 'classic')}
+													</InputAdornment>
+												) : undefined,
+										}}
+										sx={{ flex: 1 }}
+									>
+										{modifier_icon !== undefined ? (
+											<MenuItem value={modifier_icon}>{getIconLabelByName(modifier_icon)}</MenuItem>
+										) : (
+											<MenuItem />
+										)}
+									</TextField>
+
+									<IconButton color="default" onClick={onClearIconModifier}>
+										<ClearIcon />
+									</IconButton>
+								</Paper>
+							</FormGroup>
+
+							{errors.modifier_icon && <FormHelperText error>{errors.modifier_icon.message}</FormHelperText>}
+						</FormControl>
+
+						<FormControl fullWidth={true} component="fieldset" variant="outlined">
+							<FormLabel component="legend" sx={{ mb: 1 }}>
+								Modifier Colour and Opacity
+							</FormLabel>
+						</FormControl>
+
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								paddingLeft: '8px',
+								paddingRight: '8px',
+								marginBottom: '24px',
+							}}
+						>
+							<FormControl
+								fullWidth={true}
+								sx={{
+									width: 'calc(30%)',
+								}}
+								component="fieldset"
+								variant="outlined"
+							>
+								<FormGroup>
+									<input type="color" className="colourPicker" {...register('modifier_colour')} />
+								</FormGroup>
+
+								{errors.modifier_colour && <FormHelperText error>{errors.modifier_colour.message}</FormHelperText>}
+							</FormControl>
+
+							<FormControl
+								fullWidth={true}
+								sx={{
+									width: 'calc(70%)',
+								}}
+								component="fieldset"
+								variant="outlined"
+							>
+								<FormGroup>
+									<Controller
+										name="modifier_opacity"
+										control={control}
+										render={({ field }) => (
+											<SliderFixed
+												{...field}
+												valueLabelDisplay="auto"
+												min={symbolMinimumOpacity}
+												max={symbolMaximumOpacity}
+												track={false}
+												step={0.1}
+												marks={[
+													{
+														value: 0,
+														label: '0',
+													},
+													{
+														value: 0.25,
+														label: '0.25',
+													},
+													{
+														value: 0.5,
+														label: '0.5',
+													},
+													{
+														value: 0.75,
+														label: '0.75',
+													},
+													{
+														value: 1,
+														label: '1',
+													},
+												]}
+											/>
+										)}
+									/>
+								</FormGroup>
+
+								{errors.modifier_opacity && <FormHelperText error>{errors.modifier_opacity.message}</FormHelperText>}
+							</FormControl>
+						</div>
+
+						<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
+							<FormLabel component="legend">Size</FormLabel>
+
+							<FormGroup>
+								<Controller
+									name="size"
+									control={control}
+									render={({ field }) => (
+										<SliderFixed
+											{...field}
+											valueLabelDisplay="auto"
+											min={symbolMinimumSize}
+											max={symbolMaximumSize}
+											track={false}
+											step={1}
+											marks={[
+												{
+													value: 1,
+													label: '1',
+												},
+												{
+													value: 25,
+													label: '25',
+												},
+												{
+													value: 50,
+													label: '50',
+												},
+											]}
+										/>
+									)}
+								/>
+							</FormGroup>
+
+							{errors.size && <FormHelperText error>{errors.size.message}</FormHelperText>}
+						</FormControl>
+
+						<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
+							<FormLabel component="legend">Rotation</FormLabel>
+
+							<FormGroup>
+								<Controller
+									name="rotation"
+									control={control}
+									render={({ field }) => (
+										<SliderFixed
+											{...field}
+											valueLabelDisplay="auto"
+											min={symbolMinimumRotation}
+											max={symbolMaximumRotation}
+											track={false}
+											step={10}
+											marks={[
+												{
+													value: 0,
+													label: '0',
+												},
+												{
+													value: 90,
+													label: '90',
+												},
+												{
+													value: 180,
+													label: '180',
+												},
+												{
+													value: 270,
+													label: '270',
+												},
+												{
+													value: 360,
+													label: '360',
+												},
+											]}
+										/>
+									)}
+								/>
+							</FormGroup>
+
+							{errors.rotation && <FormHelperText error>{errors.rotation.message}</FormHelperText>}
+						</FormControl>
 					</Paper>
 				</form>
 			</DialogWithTransition>

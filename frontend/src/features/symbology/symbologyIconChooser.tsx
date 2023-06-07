@@ -29,21 +29,28 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
-import { getCategories, getCategoryLabelByName, getIconsForCategory, searchIcons } from './font-awesome/fontAwesome';
+import {
+	IFontAwesomeIcon,
+	getCategories,
+	getCategoryLabelByName,
+	getCategoryLabelsForIconNames,
+	getIconsForCategory,
+	getModifierIconNames,
+	searchIcons,
+} from './font-awesome/fontAwesome';
 import SymbologyIconFamilyAndStyleChooser from './symbologyIconFamilyAndStyleChooser';
 
 interface Props {
-	selectedIcon?: string;
+	onlyShowModifiers?: boolean;
 	onChoose: (icon: string, icon_family: string, icon_style: string) => void;
 	onClose: () => void;
 }
 
 function SymbologyIconChooser(props: Props) {
-	const {
-		// selectedIcon,
-		onChoose,
-		onClose,
-	} = props;
+	const { onlyShowModifiers, onChoose, onClose } = props;
+
+	const modifierIconNames = getModifierIconNames();
+	const modifierIconCategoryNames = getCategoryLabelsForIconNames(modifierIconNames);
 
 	// ######################
 	// Icon Searching
@@ -92,8 +99,13 @@ function SymbologyIconChooser(props: Props) {
 	const [iconName, setIconName] = useState<string | undefined>(undefined);
 
 	const onChooseIcon = (name: string) => () => {
-		setIconName(name);
-		setIsIconFamilyAndStyleChooserOpen(true);
+		// We don't allow choosing the family and style for modifiers - they're all 'classic solid' (and defined during icon creation, not here)
+		if (onlyShowModifiers === true) {
+			onChoose(name, 'classic', 'solid');
+		} else {
+			setIconName(name);
+			setIsIconFamilyAndStyleChooserOpen(true);
+		}
 	};
 	// ######################
 	// Icon Choosing (End)
@@ -119,7 +131,10 @@ function SymbologyIconChooser(props: Props) {
 	// Icon Family and Style Choosing (End)
 	// ######################
 
-	const iconSearchResults = iconSearchTerm !== '' ? searchIcons(iconSearchTerm, chosenIconCategory) : [];
+	const iconSearchResults =
+		iconSearchTerm !== ''
+			? searchIcons(iconSearchTerm, chosenIconCategory, onlyShowModifiers === true ? modifierIconNames : undefined)
+			: [];
 
 	return (
 		<React.Fragment>
@@ -256,25 +271,29 @@ function SymbologyIconChooser(props: Props) {
 								bgcolor: 'background.paper',
 							}}
 						>
-							{Object.values(getCategories()).map((category) => (
-								<ListItem key={category.name} disablePadding>
-									<ListItemButton onClick={onChooseIconCategory(category.name)}>
-										<ListItemAvatar>
-											<Avatar
-												sx={{
-													bgcolor: grey[50],
-													width: '45px',
-													height: '45px',
-													'& > img': { width: 25, height: 25 },
-												}}
-											>
-												{getFontAwesomeIconFromLibraryAsSVGImage(category.hero_icon, 'classic', 'solid')}
-											</Avatar>
-										</ListItemAvatar>
-										<ListItemText primary={category.label} />
-									</ListItemButton>
-								</ListItem>
-							))}
+							{Object.values(getCategories())
+								.filter((category) =>
+									onlyShowModifiers === true ? modifierIconCategoryNames.includes(category.label) : true,
+								)
+								.map((category) => (
+									<ListItem key={category.name} disablePadding>
+										<ListItemButton onClick={onChooseIconCategory(category.name)}>
+											<ListItemAvatar>
+												<Avatar
+													sx={{
+														bgcolor: grey[50],
+														width: '45px',
+														height: '45px',
+														'& > img': { width: 25, height: 25 },
+													}}
+												>
+													{getFontAwesomeIconFromLibraryAsSVGImage(category.hero_icon, 'classic', 'solid')}
+												</Avatar>
+											</ListItemAvatar>
+											<ListItemText primary={category.label} />
+										</ListItemButton>
+									</ListItem>
+								))}
 						</List>
 					)}
 
@@ -306,25 +325,31 @@ function SymbologyIconChooser(props: Props) {
 									bgcolor: 'background.paper',
 								}}
 							>
-								{getIconsForCategory(chosenIconCategory).map((icon) => (
-									<ListItem key={icon.name} disablePadding>
-										<ListItemButton onClick={onChooseIcon(icon.name)}>
-											<ListItemAvatar>
-												<Avatar
-													sx={{
-														bgcolor: grey[50],
-														width: '45px',
-														height: '45px',
-														'& > img': { width: 25, height: 25 },
-													}}
-												>
-													{getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
-												</Avatar>
-											</ListItemAvatar>
-											<ListItemText primary={icon.label} />
-										</ListItemButton>
-									</ListItem>
-								))}
+								{getIconsForCategory(chosenIconCategory)
+									.filter(
+										onlyShowModifiers === true
+											? (icon: IFontAwesomeIcon) => modifierIconNames.includes(icon.name)
+											: (icon: IFontAwesomeIcon) => true,
+									)
+									.map((icon) => (
+										<ListItem key={icon.name} disablePadding>
+											<ListItemButton onClick={onChooseIcon(icon.name)}>
+												<ListItemAvatar>
+													<Avatar
+														sx={{
+															bgcolor: grey[50],
+															width: '45px',
+															height: '45px',
+															'& > img': { width: 25, height: 25 },
+														}}
+													>
+														{getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
+													</Avatar>
+												</ListItemAvatar>
+												<ListItemText primary={icon.label} />
+											</ListItemButton>
+										</ListItem>
+									))}
 							</List>
 						</React.Fragment>
 					)}

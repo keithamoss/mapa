@@ -185,7 +185,7 @@ export interface IconSearchResult {
 	categories: string[];
 }
 
-export const searchIcons = (searchTerm: string, categoryName?: string) => {
+export const searchIcons = (searchTerm: string, categoryName?: string, iconNamesAvailableToSearch?: string[]) => {
 	const icons = categoryName === undefined ? getIcons() : getIconsForCategoryIndexedByIconName(categoryName);
 
 	const miniSearch = new MiniSearch({
@@ -205,8 +205,12 @@ export const searchIcons = (searchTerm: string, categoryName?: string) => {
 		extractField: (document, fieldName) => fieldName.split('.').reduce((doc, key) => doc && doc[key], document),
 	});
 
-	// Index all documents
-	miniSearch.addAll(Object.values(icons));
+	// Index documents
+	if (iconNamesAvailableToSearch === undefined) {
+		miniSearch.addAll(Object.values(icons));
+	} else {
+		miniSearch.addAll(Object.values(icons).filter((icon) => iconNamesAvailableToSearch.includes(icon.name)));
+	}
 
 	return miniSearch.search(searchTerm) as IconSearchResult[];
 };
@@ -286,3 +290,162 @@ export const getIconSVG = (icon: IFontAwesomeIcon, iconFamily?: IconFamily, icon
 
 export const getIconFamilyAndStyleName = (icon_family: IconFamily, icon_style: IconStyle) =>
 	icon_family === 'classic' ? upperFirst(icon_style) : `${upperFirst(icon_family)} ${upperFirst(icon_style)}`;
+
+export const getCategoryLabelsForIconNames = (iconNames: string[]) => {
+	let categories: string[] = [];
+
+	iconNames.forEach((iconName: string) => {
+		const icon = getIconByName(iconName);
+		if (icon !== null) {
+			categories = [...categories, ...icon.categories];
+		}
+	});
+
+	return Array.from(new Set(categories));
+};
+
+export const findIconsAvailableForUseAsModifiers = () => {
+	const icons = getIcons();
+	const modifiers: IFontAwesomeIcon[] = [];
+
+	const denyList = [
+		'circle-dollar-to-slot',
+		'circle-exclamation-check',
+		'circle-nodes',
+		'circle-parking',
+		'circle-quarter',
+		'circle-quarter-stroke',
+		'circle-quarters',
+		'circle-small',
+		'circle-three-quarters',
+		'circle-three-quarters-stroke',
+		'circle-radiation',
+		'circle-dashed',
+		'circle-half',
+		'circle-half-stroke',
+		'circle-notch',
+		'circles-overlap',
+	];
+
+	const allowList = ['circle', 'pen-circle'];
+
+	Object.keys(icons)
+		.filter(
+			(iconName) =>
+				(iconName.startsWith('circle') || allowList.includes(iconName)) && denyList.includes(iconName) === false,
+		)
+		.forEach((iconName) => {
+			const icon = getIconByName(iconName);
+			if (icon !== null) {
+				modifiers.push(icon);
+			}
+		});
+
+	return modifiers.map((icon) => icon.name);
+};
+
+// Created using findIconsAvailableForUseAsModifiers() and manual review
+export const getModifierIconNames = () => [
+	'circle',
+	'circle-0',
+	'circle-1',
+	'circle-2',
+	'circle-3',
+	'circle-4',
+	'circle-5',
+	'circle-6',
+	'circle-7',
+	'circle-8',
+	'circle-9',
+	'circle-a',
+	'circle-ampersand',
+	'circle-arrow-down',
+	'circle-arrow-down-left',
+	'circle-arrow-down-right',
+	'circle-arrow-left',
+	'circle-arrow-right',
+	'circle-arrow-up',
+	'circle-arrow-up-left',
+	'circle-arrow-up-right',
+	'circle-b',
+	'circle-bolt',
+	'circle-book-open',
+	'circle-bookmark',
+	'circle-c',
+	'circle-calendar',
+	'circle-camera',
+	'circle-caret-down',
+	'circle-caret-left',
+	'circle-caret-right',
+	'circle-caret-up',
+	'circle-check',
+	'circle-chevron-down',
+	'circle-chevron-left',
+	'circle-chevron-right',
+	'circle-chevron-up',
+	'circle-d',
+	'circle-divide',
+	'circle-dollar',
+	'circle-dot',
+	'circle-down',
+	'circle-down-left',
+	'circle-down-right',
+	'circle-e',
+	'circle-ellipsis',
+	'circle-ellipsis-vertical',
+	'circle-envelope',
+	'circle-euro',
+	'circle-exclamation',
+	'circle-f',
+	'circle-g',
+	'circle-h',
+	'circle-heart',
+	'circle-i',
+	'circle-info',
+	'circle-j',
+	'circle-k',
+	'circle-l',
+	'circle-left',
+	'circle-location-arrow',
+	'circle-m',
+	'circle-microphone',
+	'circle-microphone-lines',
+	'circle-minus',
+	'circle-n',
+	'circle-o',
+	'circle-p',
+	'circle-pause',
+	'circle-phone',
+	'circle-phone-flip',
+	'circle-phone-hangup',
+	'circle-play',
+	'circle-plus',
+	'circle-q',
+	'circle-question',
+	'circle-r',
+	'circle-right',
+	'circle-s',
+	'circle-sort',
+	'circle-sort-down',
+	'circle-sort-up',
+	'circle-star',
+	'circle-sterling',
+	'circle-stop',
+	'circle-t',
+	'circle-trash',
+	'circle-u',
+	'circle-up',
+	'circle-up-left',
+	'circle-up-right',
+	'circle-user',
+	'circle-v',
+	'circle-video',
+	'circle-w',
+	'circle-waveform-lines',
+	'circle-x',
+	'circle-xmark',
+	'circle-y',
+	'circle-yen',
+	'circle-z',
+	'pen-circle',
+];

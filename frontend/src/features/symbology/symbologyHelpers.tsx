@@ -15,6 +15,7 @@ export const defaultSymbolIconFamily = 'classic';
 export const defaultSymbolIconStyle = 'solid';
 export const defaultSymbolColour = '#183153';
 export const defaultSymbolSecondaryColour = '#A6A6A6';
+export const defaultSymbolModiferColour = '#183153';
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 15;
 // <input type="color" /> doesn't support opacity, so provide pure white for the form and very opaque black for the map
@@ -23,16 +24,20 @@ export const defaultSymbolFillColour = '#FFFFFF03'; // So the whole icon is drag
 export const defaultSymbolRotation = 0;
 export const defaultSymbolOpacity = 1;
 export const defaultSymbolSecondaryOpacity = 0.4;
+export const defaultSymbolModifierOpacity = 1;
 
 export const defaultSymbologyGroupId = 1;
 
 export interface FontAwesomeIconSVGProps {
-	width: number;
-	height: number;
-	rotation: number;
 	colour: string;
 	secondaryColour: string;
 	secondaryOpacity: number;
+	modifierIcon: string;
+	modifierColour: string;
+	modifierOpacity: number;
+	width: number;
+	height: number;
+	rotation: number;
 	backgroundColour: string;
 }
 
@@ -45,6 +50,9 @@ export const getAppDefaultSymbologyConfig = () =>
 		rotation: defaultSymbolRotation,
 		colour: defaultSymbolColour,
 		opacity: defaultSymbolOpacity,
+		modifier_icon: undefined,
+		modifier_colour: defaultSymbolModiferColour,
+		modifier_opacity: defaultSymbolModifierOpacity,
 		secondary_colour: defaultSymbolSecondaryColour,
 		secondary_opacity: defaultSymbolSecondaryOpacity,
 	} as SymbologyProps);
@@ -69,6 +77,41 @@ export const getFontAwesomeIconFromLibrary = (
 		)
 		.replace('<path', '<path fill="currentColor"');
 
+	if (iconProps.modifierIcon !== '') {
+		svg = svg.replace('<path fill="currentColor"', '<path fill="currentColor" style="scale: 80%;"');
+
+		const iconSecondary = getIconByName(iconProps.modifierIcon);
+
+		// Oh gods, this is hideous.
+		// Replace with proper DOM parsing code...later.
+		if (iconSecondary !== null) {
+			const svgSecondary = getIconSVG(iconSecondary, 'classic', 'solid') || defaultSymbolIconSVG;
+
+			const startOfFirstPathElement = svgSecondary.indexOf('<path');
+
+			const viewBox = svg
+				.substring(svg.indexOf('viewBox="'), svg.indexOf('"', svg.indexOf('viewBox="') + 'viewBox="'.length))
+				.replace('viewBox="', '')
+				.split(' ') as unknown as [number, number, number, number];
+
+			// 512 dims = 250px of translation to get the modifier to roughly the bottom right-hand corner
+			const translateX = 250 + (viewBox[2] - 512);
+			const translateY = 250 + (viewBox[3] - 512);
+
+			const internalPathElements = svgSecondary
+				.substring(startOfFirstPathElement)
+				.replace(
+					'<path',
+					`<path style="fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: 50%;"`,
+				)
+				.replace('</svg>', '');
+
+			const backgroundWhiteCircle = `<path style="fill: rgb(255, 255, 255); translate: ${translateX}px ${translateY}px; scale: 50%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`;
+
+			svg = svg.replace('</svg>', `${backgroundWhiteCircle}${internalPathElements}</svg>`);
+		}
+	}
+
 	if (iconFamily === 'duotone') {
 		svg = svg
 			.replace('<path class="fa-secondary"', `<path class="fa-secondary" fill="${iconProps.secondaryColour}"`)
@@ -80,12 +123,18 @@ export const getFontAwesomeIconFromLibrary = (
 
 export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAwesomeIconSVGProps => {
 	return {
-		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
-		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
-		rotation: symbol?.rotation || defaultSymbolRotation,
 		colour: hextoRGBACSS(symbol?.colour || defaultSymbolColour, symbol?.opacity || defaultSymbolOpacity),
 		secondaryColour: hextoRGBACSS(symbol?.secondary_colour || defaultSymbolSecondaryColour),
 		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of on colour
+		modifierIcon: symbol?.modifier_icon || '',
+		modifierColour: hextoRGBACSS(
+			symbol?.modifier_colour || defaultSymbolModiferColour,
+			symbol?.modifier_opacity || defaultSymbolModifierOpacity,
+		),
+		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of on colour
+		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
+		rotation: symbol?.rotation || defaultSymbolRotation,
 		backgroundColour: hextoRGBACSS(defaultSymbolFillColour), // Ensure transparent areas of the icon are draggable
 	};
 };

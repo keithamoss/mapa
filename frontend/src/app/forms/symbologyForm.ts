@@ -22,12 +22,15 @@ export const symbologyFormValidationSchema = (
 			// our own const(feeding the type and type array) of IconStyles, so meh for now.
 			icon_style: iconFieldRequired === true ? yup.string().required() : yup.string().optional(),
 			icon_family: iconFieldRequired === true ? yup.string().required() : yup.string().optional(),
-			size: positiveIntegerOptional.min(symbolMinimumSize).max(symbolMaximumSize),
-			rotation: positiveIntegerOptional.min(0, 'Must be 0 or larger').max(360, 'Must be 360 or smaller'),
 			colour: colourOptional,
 			opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
 			secondary_colour: colourOptional,
 			secondary_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
+			modifier_icon: yup.string().optional(),
+			modifier_colour: colourOptional,
+			modifier_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
+			size: positiveIntegerOptional.min(symbolMinimumSize).max(symbolMaximumSize),
+			rotation: positiveIntegerOptional.min(0, 'Must be 0 or larger').max(360, 'Must be 360 or smaller'),
 		})
 		.required();
 
