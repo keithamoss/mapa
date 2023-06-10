@@ -59,8 +59,8 @@ import {
 	removeSymbol,
 	unfavouriteSymbolForMap,
 } from '../symbology/symbologyHelpers';
-import { getNextSchemaFieldId } from './schemasSlice';
 import SchemaSymbologyManager from './schemaSymbologyManager';
+import { getNextSchemaFieldId } from './schemasSlice';
 
 interface Props {
 	schema?: FeatureSchema;
@@ -457,6 +457,7 @@ function SchemaForm(props: Props) {
 					dialogProps={{ fullScreen: false, fullWidth: true }}
 				>
 					<DialogTitle>Add Field</DialogTitle>
+
 					<DialogContent>
 						<ButtonGroup orientation="vertical" variant="outlined" fullWidth>
 							{Object.values(FeatureSchemaFieldType).map((value) => (
@@ -466,6 +467,7 @@ function SchemaForm(props: Props) {
 							))}
 						</ButtonGroup>
 					</DialogContent>
+
 					<DialogActions>
 						<Button onClick={onCancelChooseFieldTypeToAdd}>Cancel</Button>
 					</DialogActions>
