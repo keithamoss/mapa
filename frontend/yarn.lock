@@ -1121,17 +1121,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:2.2.0":
-  version: 2.2.0
-  resolution: "@sentry/bundler-plugin-core@npm:2.2.0"
+"@sentry/bundler-plugin-core@npm:2.2.1":
+  version: 2.2.1
+  resolution: "@sentry/bundler-plugin-core@npm:2.2.1"
   dependencies:
     "@sentry/cli": ^2.17.0
     "@sentry/node": 7.53.1
+    "@sentry/utils": 7.53.1
     find-up: 5.0.0
     glob: 9.3.2
     magic-string: 0.27.0
     unplugin: 1.0.1
-  checksum: 80a5f2ffce1daae419b3c950082de7b25a80ede962fdf8ecd9752a3b5ea8dfad4d640e0313351c553483074c48aacf2b7526fe81e26d14b0924ff68b0cc0aa45
+  checksum: 5e1358adbf0ff85e37d329908fc887a531be474ef4a2fd1b3bc94514fff4cf2730bdd7a418a2f3204d9e41f88c92b30b0b6cb7138ea457be84351a255c52c217
   languageName: node
   linkType: hard
 
@@ -1257,13 +1258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "@sentry/vite-plugin@npm:2.2.0"
+"@sentry/vite-plugin@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "@sentry/vite-plugin@npm:2.2.1"
   dependencies:
-    "@sentry/bundler-plugin-core": 2.2.0
+    "@sentry/bundler-plugin-core": 2.2.1
     unplugin: 1.0.1
-  checksum: 92c972b4b5860a20f7ca7300182b4f853ef54cf45a2312a8d8110366fb3619b06d7be38944619ec4c46578fe05a9dde36f854a6fa91ca7209499bc14da98f98e
+  checksum: 8ca67f8704455fccf9146020ba47acef765108c8418203ba63a62c018be23ed614159d77ad114a0afc524dc945d9bf97c1d31cb8ab11b03e19489af9dd73f37c
   languageName: node
   linkType: hard
 
@@ -3400,7 +3401,7 @@ __metadata:
     "@sentry/browser": ^7.54.0
     "@sentry/react": ^7.54.0
     "@sentry/tracing": ^7.54.0
-    "@sentry/vite-plugin": ^2.2.0
+    "@sentry/vite-plugin": ^2.2.1
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
