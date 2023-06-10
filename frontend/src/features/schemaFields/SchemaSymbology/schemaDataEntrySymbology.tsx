@@ -6,12 +6,14 @@ import React, { useState } from 'react';
 
 import NotFound from '../../../NotFound';
 import { useAppSelector } from '../../../app/hooks/store';
+import { Map } from '../../../app/services/maps';
 import {
 	FeatureSchema,
 	FeatureSchemaSymbologySymbolsValue,
 	SymbologyProps,
 	useUpdateFeatureSchemaMutation,
 } from '../../../app/services/schemas';
+import { selectMapById } from '../../maps/mapsSlice';
 import { selectFeatureSchemaById } from '../../schemas/schemasSlice';
 import SymbologyFieldEditor from '../../symbology/symbologyFieldEditor';
 import {
@@ -34,27 +36,26 @@ interface EntryPointProps {
 }
 
 function SchemaDataEntrySymbologyEntrypoint(props: EntryPointProps) {
-	const { schemaId, ...rest } = props;
+	const { schemaId, mapId, ...rest } = props;
+
+	const map = useAppSelector((state) => selectMapById(state, mapId));
 
 	const schema = useAppSelector((state) => selectFeatureSchemaById(state, schemaId));
 
-	if (schema === undefined) {
+	if (schema === undefined || map === undefined) {
 		return <NotFound />;
 	}
 
-	return <SchemaDataEntrySymbology schema={schema} {...rest} />;
+	return <SchemaDataEntrySymbology map={map} schema={schema} {...rest} />;
 }
 
-interface Props {
-	mapId: number;
+interface Props extends Omit<EntryPointProps, 'mapId' | 'schemaId'> {
+	map: Map;
 	schema: FeatureSchema;
-	symbolId: number | null;
-	onFieldChange: (symbolId: number) => void;
-	onFieldRemove: () => void;
 }
 
 function SchemaDataEntrySymbology(props: Props) {
-	const { mapId, schema, symbolId, onFieldChange, onFieldRemove } = props;
+	const { map, schema, symbolId, onFieldChange, onFieldRemove } = props;
 
 	const onChooseSymbol = (symbol: FeatureSchemaSymbologySymbolsValue | null) => {
 		if (symbol !== null) {
@@ -162,7 +163,7 @@ function SchemaDataEntrySymbology(props: Props) {
 		<React.Fragment>
 			{isSymbolChooserDialogOpen === true && (
 				<SchemaSymbologyChooser
-					mapId={mapId}
+					mapId={map.id}
 					schema={schema}
 					symbology={schema.symbology}
 					onChoose={onChooseSymbol}
@@ -183,9 +184,12 @@ function SchemaDataEntrySymbology(props: Props) {
 						startAdornment:
 							selectedSymbol !== undefined ? (
 								<InputAdornment position="start" sx={{ mr: 1 }}>
-									{getFontAwesomeIconForSymbolPreview(selectedSymbol.props, {
-										size: defaultSymbolSizeForFormFields,
-									})}
+									{getFontAwesomeIconForSymbolPreview(
+										{ ...map.default_symbology, ...schema.default_symbology, ...selectedSymbol.props },
+										{
+											size: defaultSymbolSizeForFormFields,
+										},
+									)}
 								</InputAdornment>
 							) : undefined,
 					}}
@@ -218,7 +222,7 @@ function SchemaDataEntrySymbology(props: Props) {
 			{isAddingSymbol === true && (
 				<SymbologyFieldEditor
 					schemaDefaultSymbology={schema.default_symbology}
-					mapId={mapId}
+					mapId={map.id}
 					onDone={onDoneAddingSymbol}
 					onCancel={onCancelAddingSymbol}
 					groups={schema.symbology.groups}
@@ -232,7 +236,7 @@ function SchemaDataEntrySymbology(props: Props) {
 			{isEditingSymbol === true && selectedSymbol !== undefined && (
 				<SymbologyFieldEditor
 					schemaDefaultSymbology={schema.default_symbology}
-					mapId={mapId}
+					mapId={map.id}
 					symbol={selectedSymbol.props}
 					onDone={onDoneEditingSymbol}
 					onCancel={onCancelEditingSymbol}
