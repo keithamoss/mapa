@@ -39,6 +39,7 @@ function SchemaFieldFormForSymbologyBoolean(props: Props) {
 	const { field, onDone, onCancel } = props;
 
 	const [isSettingSymbol, setIsSettingSymbol] = useState(false);
+
 	const onSetSymbolField = () => {
 		setIsSettingSymbol(true);
 	};
@@ -82,6 +83,7 @@ function SchemaFieldFormForSymbologyBoolean(props: Props) {
 		<React.Fragment>
 			<DialogWithTransition onClose={onCancel} dialogProps={{ fullScreen: false, fullWidth: true }}>
 				<DialogTitle>Boolean Symbology Field</DialogTitle>
+
 				<DialogContent>
 					<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
 						<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
@@ -148,6 +150,7 @@ function SchemaFieldFormForSymbologyBoolean(props: Props) {
 						</FormControl>
 					</form>
 				</DialogContent>
+
 				<DialogActions>
 					<Button onClick={onCancel}>Cancel</Button>
 					<Button onClick={onClickSave}>Save</Button>

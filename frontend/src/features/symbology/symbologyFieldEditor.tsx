@@ -62,8 +62,11 @@ import {
 
 // eslint-disable-next-line import/named
 import { IconFamily, IconStyle } from '@fortawesome/fontawesome-svg-core';
+import { useAppSelector } from '../../app/hooks/store';
+import { Map } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import { selectMapById } from '../maps/mapsSlice';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
 import {
@@ -98,8 +101,11 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 	return pickBy(defaultValues, (v) => v !== undefined);
 };
 
-export const getAppDefaultSymbologyConfigForForm = () => {
-	const defaults = getAppDefaultSymbologyConfig();
+export const getAppMapAndSchemaDefaultSymbologyConfigForForm = (
+	mapDefaultSymbology: SymbologyProps | null | undefined,
+	schemaDefaultSymbology: SymbologyProps | null | undefined,
+) => {
+	const defaults = { ...getAppDefaultSymbologyConfig(), ...mapDefaultSymbology, ...schemaDefaultSymbology };
 
 	// This UI is all about choosing an icon, so we don't want
 	// to delete any defaults props about the icon itself
@@ -107,12 +113,15 @@ export const getAppDefaultSymbologyConfigForForm = () => {
 	delete defaults.icon_family;
 	delete defaults.icon_style;
 
-	return defaults;
+	return defaults as Partial<SymbologyProps>;
 };
 
-const removeDefaultValuesFromForm = (data: SymbologyProps, nameFieldRequired: boolean, iconFieldRequired: boolean) => {
-	const defaults = getAppDefaultSymbologyConfigForForm();
-
+const removeDefaultValuesFromForm = (
+	data: SymbologyProps,
+	defaults: Partial<SymbologyProps>,
+	nameFieldRequired: boolean,
+	iconFieldRequired: boolean,
+) => {
 	Object.keys(data).forEach((propName) => {
 		if (data[propName as keyof SymbologyProps] === defaults[propName as keyof SymbologyProps]) {
 			delete data[propName as keyof SymbologyProps];
@@ -141,7 +150,9 @@ const removeDefaultValuesFromForm = (data: SymbologyProps, nameFieldRequired: bo
 	return data;
 };
 
-interface Props {
+interface EntrypointProps {
+	schemaDefaultSymbology?: SymbologyProps | null;
+	mapId?: number;
 	symbol?: SymbologyProps | null;
 	onDone: (symbolField: SymbologyProps, groupId: number) => void;
 	onCancel: () => void;
@@ -152,8 +163,49 @@ interface Props {
 	iconFieldRequired: boolean;
 }
 
+function SymbologyFieldEditorEntrypoint(props: EntrypointProps) {
+	const { mapId, ...rest } = props;
+
+	if (mapId === undefined) {
+		return <SymbologyFieldEditor {...rest} />;
+	}
+
+	return <SymbologyFieldEditorEntrypointLayer2 {...props} mapId={mapId} />;
+}
+
+interface EntrypointPropsLayer2 extends EntrypointProps {
+	mapId: number;
+}
+
+function SymbologyFieldEditorEntrypointLayer2(props: EntrypointPropsLayer2) {
+	const { mapId } = props;
+
+	const map = useAppSelector((state) => selectMapById(state, mapId));
+
+	if (map === undefined) {
+		return null;
+	}
+
+	return <SymbologyFieldEditor map={map} {...props} />;
+}
+
+interface Props extends Omit<EntrypointProps, 'mapId'> {
+	map?: Map;
+}
+
 function SymbologyFieldEditor(props: Props) {
-	const { symbol, onDone, onCancel, groups, onAddGroup, currentGroupId, nameFieldRequired, iconFieldRequired } = props;
+	const {
+		schemaDefaultSymbology,
+		map,
+		symbol,
+		onDone,
+		onCancel,
+		groups,
+		onAddGroup,
+		currentGroupId,
+		nameFieldRequired,
+		iconFieldRequired,
+	} = props;
 
 	// ######################
 	// Form
@@ -167,7 +219,11 @@ function SymbologyFieldEditor(props: Props) {
 		formState: { errors, isDirty },
 	} = useForm<SymbologyProps>({
 		resolver: yupResolver(symbologyFormValidationSchema(nameFieldRequired, iconFieldRequired)),
-		defaultValues: getDefaultValues(symbol),
+		defaultValues: getDefaultValues({
+			...map?.default_symbology,
+			...schemaDefaultSymbology,
+			...symbol,
+		}),
 	});
 
 	const {
@@ -188,7 +244,12 @@ function SymbologyFieldEditor(props: Props) {
 	const textInput = useRef<HTMLInputElement>(null);
 
 	const onDoneWithForm: SubmitHandler<SymbologyProps> = (data) => {
-		const dataWithDefaultsRemoved = removeDefaultValuesFromForm(data, nameFieldRequired, iconFieldRequired);
+		const dataWithDefaultsRemoved = removeDefaultValuesFromForm(
+			data,
+			getAppMapAndSchemaDefaultSymbologyConfigForForm(map?.default_symbology, schemaDefaultSymbology),
+			nameFieldRequired,
+			iconFieldRequired,
+		);
 
 		if (isEmpty(dataWithDefaultsRemoved) === false) {
 			onDone(dataWithDefaultsRemoved, selectedGroupId);
@@ -910,4 +971,4 @@ function SymbologyFieldEditor(props: Props) {
 	);
 }
 
-export default SymbologyFieldEditor;
+export default SymbologyFieldEditorEntrypoint;

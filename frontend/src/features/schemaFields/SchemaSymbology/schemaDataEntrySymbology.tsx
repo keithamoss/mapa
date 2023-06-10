@@ -4,6 +4,7 @@ import { Button, FormGroup, InputAdornment, MenuItem, TextField } from '@mui/mat
 
 import React, { useState } from 'react';
 
+import NotFound from '../../../NotFound';
 import { useAppSelector } from '../../../app/hooks/store';
 import {
 	FeatureSchema,
@@ -11,14 +12,13 @@ import {
 	SymbologyProps,
 	useUpdateFeatureSchemaMutation,
 } from '../../../app/services/schemas';
-import NotFound from '../../../NotFound';
 import { selectFeatureSchemaById } from '../../schemas/schemasSlice';
 import SymbologyFieldEditor from '../../symbology/symbologyFieldEditor';
 import {
 	addNewSymbologyGroup,
 	addSymbolToGroup,
-	defaultSymbologyGroupId,
 	defaultSymbolSizeForFormFields,
+	defaultSymbologyGroupId,
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolFromSchemaSymbology,
 	modifySymbolInGroup,
@@ -217,6 +217,8 @@ function SchemaDataEntrySymbology(props: Props) {
 
 			{isAddingSymbol === true && (
 				<SymbologyFieldEditor
+					schemaDefaultSymbology={schema.default_symbology}
+					mapId={mapId}
 					onDone={onDoneAddingSymbol}
 					onCancel={onCancelAddingSymbol}
 					groups={schema.symbology.groups}
@@ -229,6 +231,8 @@ function SchemaDataEntrySymbology(props: Props) {
 
 			{isEditingSymbol === true && selectedSymbol !== undefined && (
 				<SymbologyFieldEditor
+					schemaDefaultSymbology={schema.default_symbology}
+					mapId={mapId}
 					symbol={selectedSymbol.props}
 					onDone={onDoneEditingSymbol}
 					onCancel={onCancelEditingSymbol}
