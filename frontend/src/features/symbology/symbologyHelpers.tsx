@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import {
 	FeatureSchema,
 	FeatureSchemaSymbology,
@@ -7,10 +8,13 @@ import {
 
 import { hextoRGBACSS } from '../../app/colourUtils';
 import { IconFamily, IconStyle, getIconByName, getIconSVG } from './font-awesome/fontAwesome';
+import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';
 export const defaultSymbolIconSVG =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM105.8 133.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L216 232.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V218.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H158.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM160 320a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>';
+export const defaultSymbolIconSVGPreStyled =
+	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true" focusable="false" role="img" style="background-color: rgba(255, 255, 255, 0.012); transform: rotate(0deg);" color="rgba(229, 11, 11, 1)" width="27" height="27"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM105.8 133.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L216 232.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V218.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H158.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM160 320a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" fill="currentColor"/></svg>';
 export const defaultSymbolIconFamily = 'classic';
 export const defaultSymbolIconStyle = 'solid';
 export const defaultSymbolColour = '#183153';
@@ -70,55 +74,14 @@ export const getFontAwesomeIconFromLibrary = (
 		svg = getIconSVG(icon, iconFamily, iconStyle) || defaultSymbolIconSVG;
 	}
 
-	svg = svg
-		.replace(
-			'<svg',
-			`<svg aria-hidden="true" focusable="false" role="img" style="background-color: ${iconProps.backgroundColour}; transform: rotate(${iconProps.rotation}deg);" color="${iconProps.colour}" width="${iconProps.width}" height="${iconProps.height}"`,
-		)
-		.replace('<path', '<path fill="currentColor"');
-
-	if (iconProps.modifierIcon !== '') {
-		svg = svg.replace('<path fill="currentColor"', '<path fill="currentColor" style="scale: 80%;"');
-
-		const iconSecondary = getIconByName(iconProps.modifierIcon);
-
-		// Oh gods, this is hideous.
-		// Replace with proper DOM parsing code...later.
-		if (iconSecondary !== null) {
-			const svgSecondary = getIconSVG(iconSecondary, 'classic', 'solid') || defaultSymbolIconSVG;
-
-			const startOfFirstPathElement = svgSecondary.indexOf('<path');
-
-			const viewBox = svg
-				.substring(svg.indexOf('viewBox="'), svg.indexOf('"', svg.indexOf('viewBox="') + 'viewBox="'.length))
-				.replace('viewBox="', '')
-				.split(' ') as unknown as [number, number, number, number];
-
-			// 512 dims = 250px of translation to get the modifier to roughly the bottom right-hand corner
-			const translateX = 250 + (viewBox[2] - 512);
-			const translateY = 250 + (viewBox[3] - 512);
-
-			const internalPathElements = svgSecondary
-				.substring(startOfFirstPathElement)
-				.replace(
-					'<path',
-					`<path style="fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: 50%;"`,
-				)
-				.replace('</svg>', '');
-
-			const backgroundWhiteCircle = `<path style="fill: rgb(255, 255, 255); translate: ${translateX}px ${translateY}px; scale: 50%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`;
-
-			svg = svg.replace('</svg>', `${backgroundWhiteCircle}${internalPathElements}</svg>`);
-		}
+	try {
+		// Saves us having to do a lot of nested checking of undefineds from getElementsBy*() functions
+		return parseAndManipulateSVGIcon(svg, iconProps, iconFamily);
+	} catch (error) {
+		// Worst case scenario, we just display the default (?) icon
+		Sentry.captureException(error);
+		return defaultSymbolIconSVGPreStyled;
 	}
-
-	if (iconFamily === 'duotone') {
-		svg = svg
-			.replace('<path class="fa-secondary"', `<path class="fa-secondary" fill="${iconProps.secondaryColour}"`)
-			.replace('.fa-secondary{opacity:.4}', `.fa-secondary{opacity:${iconProps.secondaryOpacity}}`);
-	}
-
-	return svg;
 };
 
 export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAwesomeIconSVGProps => {
