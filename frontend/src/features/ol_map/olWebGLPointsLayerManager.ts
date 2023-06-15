@@ -8,7 +8,6 @@ import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { SymbologyProps } from '../../app/services/schemas';
 import {
 	defaultSymbolIcon,
-	defaultSymbolIconFamily,
 	defaultSymbolIconStyle,
 	defaultSymbolSize,
 	getFontAwesomeIconForSymbolAsSVGString,
@@ -44,7 +43,6 @@ export const buildSpriteSheet = async (symbols: {
 	// Add the default icon so we have something to specify as a fallback
 	symbols.default_icon = {
 		icon: defaultSymbolIcon,
-		icon_family: defaultSymbolIconFamily,
 		icon_style: defaultSymbolIconStyle,
 		size: defaultSymbolSize,
 	};

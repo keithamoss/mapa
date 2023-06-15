@@ -31,18 +31,19 @@ import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
 import {
 	IFontAwesomeIcon,
+	IconStyle,
 	getCategories,
 	getCategoryLabelByName,
 	getCategoryLabelsForIconNames,
 	getIconsForCategory,
 	getModifierIconNames,
 	searchIcons,
-} from './font-awesome/fontAwesome';
-import SymbologyIconFamilyAndStyleChooser from './symbologyIconFamilyAndStyleChooser';
+} from './iconsLibrary';
+import SymbologyIconStyleChooser from './symbologyIconStyleChooser';
 
 interface Props {
 	onlyShowModifiers?: boolean;
-	onChoose: (icon: string, icon_family: string, icon_style: string) => void;
+	onChoose: (icon: string, icon_style: IconStyle) => void;
 	onClose: () => void;
 }
 
@@ -99,12 +100,12 @@ function SymbologyIconChooser(props: Props) {
 	const [iconName, setIconName] = useState<string | undefined>(undefined);
 
 	const onChooseIcon = (name: string) => () => {
-		// We don't allow choosing the family and style for modifiers - they're all 'classic solid' (and defined during icon creation, not here)
+		// We don't allow choosing the style for modifiers - they're all 'classic solid' (and defined during icon creation, not here)
 		if (onlyShowModifiers === true) {
-			onChoose(name, 'classic', 'solid');
+			onChoose(name, 'solid');
 		} else {
 			setIconName(name);
-			setIsIconFamilyAndStyleChooserOpen(true);
+			setIsIconStyleChooserOpen(true);
 		}
 	};
 	// ######################
@@ -112,23 +113,23 @@ function SymbologyIconChooser(props: Props) {
 	// ######################
 
 	// ######################
-	// Icon Family and Style Choosing
+	// Icon Style Choosing
 	// ######################
-	const [isIconFamilyAndStyleChooserOpen, setIsIconFamilyAndStyleChooserOpen] = useState(false);
+	const [isIconStyleChooserOpen, setIsIconStyleChooserOpen] = useState(false);
 
-	const onChooseIconFamilyAndStyle = (icon_family: string, icon_style: string) => {
+	const onChooseIconStyle = (icon_style: IconStyle) => {
 		if (iconName !== undefined) {
 			setChosenIconCategory(undefined);
 			setIconSearchTerm('');
 			setIconName(undefined);
 
-			onChoose(iconName, icon_family, icon_style);
+			onChoose(iconName, icon_style);
 		}
 	};
 
-	const onCloseIconFamilyAndStyleChooser = () => setIsIconFamilyAndStyleChooserOpen(false);
+	const onCloseIconStyleChooser = () => setIsIconStyleChooserOpen(false);
 	// ######################
-	// Icon Family and Style Choosing (End)
+	// Icon Style Choosing (End)
 	// ######################
 
 	const iconSearchResults =
@@ -138,11 +139,11 @@ function SymbologyIconChooser(props: Props) {
 
 	return (
 		<React.Fragment>
-			{isIconFamilyAndStyleChooserOpen === true && iconName !== undefined && (
-				<SymbologyIconFamilyAndStyleChooser
+			{isIconStyleChooserOpen === true && iconName !== undefined && (
+				<SymbologyIconStyleChooser
 					selectedIcon={iconName}
-					onChoose={onChooseIconFamilyAndStyle}
-					onClose={onCloseIconFamilyAndStyleChooser}
+					onChoose={onChooseIconStyle}
+					onClose={onCloseIconStyleChooser}
 				/>
 			)}
 
@@ -287,7 +288,7 @@ function SymbologyIconChooser(props: Props) {
 														'& > img': { width: 25, height: 25 },
 													}}
 												>
-													{getFontAwesomeIconFromLibraryAsSVGImage(category.hero_icon, 'classic', 'solid')}
+													{getFontAwesomeIconFromLibraryAsSVGImage(category.hero_icon, 'solid')}
 												</Avatar>
 											</ListItemAvatar>
 											<ListItemText primary={category.label} />
@@ -329,7 +330,7 @@ function SymbologyIconChooser(props: Props) {
 									.filter(
 										onlyShowModifiers === true
 											? (icon: IFontAwesomeIcon) => modifierIconNames.includes(icon.name)
-											: (icon: IFontAwesomeIcon) => true,
+											: () => true,
 									)
 									.map((icon) => (
 										<ListItem key={icon.name} disablePadding>

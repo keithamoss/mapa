@@ -1,0 +1,66 @@
+{
+  "parsley": {
+    "name": "parsley",
+    "label": "Parsley",
+    "categories": [
+      "Herbs",
+      "Plants"
+    ],
+    "search": {
+      "terms": [
+        "herb",
+        "plant"
+      ]
+    },
+    "svgs": {
+      "solid": {
+        "has_coloured": false,
+        "svg": "parsley_solid.svg"
+      },
+      "regular": {
+        "has_coloured": false,
+        "svg": "parsley_regular.svg"
+      },
+      "duotone": {
+        "has_coloured": true,
+        "svg": "parsley_duotone.svg"
+      },
+      "tritone": {
+        "has_coloured": true,
+        "svg": "parsley_tritone.svg"
+      }
+    }
+  },
+  "fennel": {
+    "name": "fennel",
+    "label": "Fennel",
+    "categories": [
+      "Herbs",
+      "Plants"
+    ],
+    "search": {
+      "terms": [
+        "herb",
+        "plant"
+      ]
+    },
+    "svgs": {
+      "solid": {
+        "has_coloured": false,
+        "svg": "fennel_solid.svg"
+      },
+      "regular": {
+        "has_coloured": false,
+        "svg": "fennel_regular.svg"
+      },
+      "tritone": {
+        "has_coloured": true,
+        "svg": "fennel_tritone.svg"
+      },
+      "tritone-regular": {
+        "has_coloured": true,
+        "svg": "fennel_tritone_regular.svg"
+      }
+    }
+  }
+}

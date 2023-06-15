@@ -76,8 +76,8 @@ CATEGORY_HERO_ICONS = {
 ICON_CATEGORIES_JSON = "./pro/categories.json"
 ICON_FAMILIIES_JSON = "./pro/icon-families.json"
 
-ICON_CATEGORIES_OUTPUT_JSON = "./pro/categories-processed.json"
-ICON_FAMILIIES_OUTPUT_JSON = "./pro/icon-families-processed.json"
+ICON_CATEGORIES_OUTPUT_JSON = "./pro/categories-processed-v2.json"
+ICON_FAMILIIES_OUTPUT_JSON = "./pro/icon-families-processed-v2.json"
 
 
 def processSVGs(icon):
@@ -87,12 +87,34 @@ def processSVGs(icon):
         for style_name, svg in icon["svgs"][family_name].items():
             if style_name == "brands":
                 processed["brands"] = {}
-                processed["brands"]["brands"] = svg["raw"]
+                processed["brands"] = {
+                    "has_coloured": False,
+                    "svg": svg["raw"]
+                }
             else:
-                if family_name not in processed:
-                    processed[family_name] = {}
-                processed[family_name][style_name] = svg["raw"]
+                if family_name == "duotone":
+                    mapa_style_name = family_name
 
+                    if mapa_style_name not in processed:
+                        processed[mapa_style_name] = {}
+
+                    processed[mapa_style_name] = {
+                        "has_coloured": False,
+                        "svg": svg["raw"].replace("fa-primary", "primary").replace("fa-secondary", "secondary")
+                    }
+
+                else:
+                    mapa_style_name = f"{family_name}-{style_name}" if family_name == 'sharp' else style_name
+                    
+                    if mapa_style_name not in processed:
+                        processed[mapa_style_name] = {}
+                    
+                    processed[mapa_style_name] = {
+                        "has_coloured": False,
+                        "svg": svg["raw"]
+                    }
+
+    # print(processed)
     return processed
 
 
@@ -118,7 +140,7 @@ with open(ICON_CATEGORIES_OUTPUT_JSON, "w") as f:
     json.dump(categories, f)
 
 # ######################
-# Icons
+# Font Awesome Icons
 # ######################
 icons = {}
 with open(ICON_FAMILIIES_JSON, "r") as f:
@@ -129,7 +151,6 @@ with open(ICON_FAMILIIES_JSON, "r") as f:
             "categories": getCategoriesForIcon(icon_name, categories),
             "search": icon["search"],
             "svgs": processSVGs(icon),
-            "familyStyles": icon["familyStylesByLicense"]["pro"],
         }
 
 with open(ICON_FAMILIIES_OUTPUT_JSON, "w") as f:

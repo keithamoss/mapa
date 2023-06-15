@@ -1,5 +1,14 @@
+import * as Sentry from '@sentry/react';
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
+import {
+	IconColourLevels,
+	IconStyle,
+	getIconByName,
+	getIconSVG,
+	isIconStyleColoured,
+} from '../../features/symbology/iconsLibrary';
+import { defaultSymbolIconSVG } from '../../features/symbology/symbologyHelpers';
 import { SymbologyProps } from '../services/schemas';
 import { colourOptional, positiveFloatOptional, positiveIntegerOptional } from './yupValidation';
 
@@ -20,12 +29,13 @@ export const symbologyFormValidationSchema = (
 			icon: iconFieldRequired === true ? yup.string().required() : yup.string().optional(),
 			// We could strictly check IconStyle (and in schemas.ts), but we'd need to maintain
 			// our own const(feeding the type and type array) of IconStyles, so meh for now.
-			icon_style: iconFieldRequired === true ? yup.string().required() : yup.string().optional(),
-			icon_family: iconFieldRequired === true ? yup.string().required() : yup.string().optional(),
+			icon_style: iconFieldRequired === true ? yup.string<IconStyle>().required() : yup.string<IconStyle>().optional(),
 			colour: colourOptional,
 			opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
 			secondary_colour: colourOptional,
 			secondary_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
+			tertiary_colour: colourOptional,
+			tertiary_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
 			modifier_icon: yup.string().optional(),
 			modifier_colour: colourOptional,
 			modifier_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
@@ -84,3 +94,72 @@ export const getStringOrDefaultForSymbologyField = (
 ) =>
 	// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 	symbol === undefined || symbol === null || symbol[fieldName] === undefined ? defaultValue : `${symbol[fieldName]}`;
+
+export const getColourFromSVGOrDefaultForSymbologyField = (
+	symbol: Partial<SymbologyProps> | null | undefined,
+	fieldName: keyof SymbologyProps,
+	colourLevel: IconColourLevels,
+	iconName: string,
+	iconStyle: IconStyle,
+	defaultValue: string,
+) => {
+	// If we're not using the inbuilt colours, just grab the colour from the symbol.
+	if (isIconStyleColoured(iconStyle) !== true) {
+		return getStringOrDefaultForSymbologyField(symbol, fieldName, defaultValue);
+	}
+
+	// However, if we are using the inbuilt colours we need to parse the SVG to extract the hex code for the given colour level
+	return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
+};
+
+export const getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange = (
+	colourLevel: IconColourLevels,
+	iconName: string,
+	iconStyle: IconStyle,
+	defaultValue: string,
+) => {
+	// If we're not using the inbuilt colours, just grab the colour from the symbol.
+	if (isIconStyleColoured(iconStyle) !== true) {
+		return defaultValue;
+	}
+
+	// However, if we are using the inbuilt colours we need to parse the SVG to extract the hex code for the given colour level
+	return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
+};
+
+export const getColourFromSVGOrDefault = (
+	colourLevel: IconColourLevels,
+	iconName: string,
+	iconStyle: IconStyle,
+	defaultValue: string,
+) => {
+	let svg: string | undefined = undefined;
+
+	const icon = getIconByName(iconName);
+	if (icon !== null) {
+		svg = getIconSVG(icon, iconStyle) || defaultSymbolIconSVG;
+	}
+
+	if (svg !== undefined) {
+		try {
+			const svgDOMElement = new DOMParser().parseFromString(svg, 'image/svg+xml');
+
+			for (const pathElement of svgDOMElement.getElementsByTagName('path')) {
+				if (
+					(colourLevel === 'primary' &&
+						(pathElement.getAttribute('class') === 'primary' || pathElement.getAttribute('class') === null)) ||
+					(colourLevel === 'secondary' && pathElement.getAttribute('class') === 'secondary') ||
+					(colourLevel === 'tertiary' && pathElement.getAttribute('class') === 'tertiary')
+				) {
+					return pathElement.getAttribute('fill') || defaultValue;
+				}
+			}
+		} catch (error) {
+			// Worst case scenario, we just display the default (?) icon
+			Sentry.captureException(error);
+			return defaultValue;
+		}
+	}
+
+	return defaultValue;
+};

@@ -1,18 +1,18 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
+import { IconStyle } from '../../features/symbology/iconsLibrary';
 import { api } from './api';
 
 export interface SymbologyProps {
 	name?: string;
 	icon?: string;
-	// @NOTE: This could be strictly typed to IconStyle, rather than string, ...
-	// but it's bit of a pfaff: https://yidaotus.medium.com/using-yup-and-typescript-for-typesafe-select-validation-e9ee9d4bceec
-	icon_family?: string;
-	icon_style?: string;
+	icon_style?: IconStyle;
 	colour?: string;
 	opacity?: number;
 	secondary_colour?: string;
 	secondary_opacity?: number;
+	tertiary_colour?: string;
+	tertiary_opacity?: number;
 	modifier_icon?: string;
 	modifier_colour?: string;
 	modifier_opacity?: number;

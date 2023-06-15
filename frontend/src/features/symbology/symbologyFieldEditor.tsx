@@ -32,6 +32,8 @@ import React, { SyntheticEvent, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import {
+	getColourFromSVGOrDefaultForSymbologyField,
+	getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange,
 	getNumberOrDefaultForSymbologyField,
 	getStringOrDefaultForSymbologyField,
 	getStringOrEmptyStringForSymbologyField,
@@ -54,14 +56,14 @@ import {
 	defaultSymbolSecondaryOpacity,
 	defaultSymbolSize,
 	defaultSymbolSizeForFormFields,
+	defaultSymbolTertiaryColour,
+	defaultSymbolTertiaryOpacity,
 	defaultSymbologyGroupId,
 	getAppDefaultSymbologyConfig,
 	getFontAwesomeIconForSymbolPreview,
 	getFontAwesomeIconFromLibraryAsSVGImage,
 } from './symbologyHelpers';
 
-// eslint-disable-next-line import/named
-import { IconFamily, IconStyle } from '@fortawesome/fontawesome-svg-core';
 import { useAppSelector } from '../../app/hooks/store';
 import { Map } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -70,27 +72,52 @@ import { selectMapById } from '../maps/mapsSlice';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
 import {
-	getDefaultFamilyByIconName,
+	IconStyle,
 	getDefaultStyleByIconName,
-	getIconFamilyAndStyleName,
 	getIconLabelByName,
-} from './font-awesome/fontAwesome';
+	getIconStyleName,
+	isIconStyleDuotoneOrTritone,
+	isIconStyleTritone,
+} from './iconsLibrary';
 import SliderFixed from './sliderFixed';
 import SymbologyIconChooser from './symbologyIconChooser';
-import SymbologyIconFamilyAndStyleChooser from './symbologyIconFamilyAndStyleChooser';
+import SymbologyIconStyleChooser from './symbologyIconStyleChooser';
 
 const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 	const icon = getStringOrDefaultForSymbologyField(symbol, 'icon', defaultSymbolIcon);
+	const icon_style = getStringOrDefaultForSymbologyField(symbol, 'icon_style', getDefaultStyleByIconName(icon));
 
 	const defaultValues = {
 		name: getStringOrEmptyStringForSymbologyField(symbol, 'name'),
 		icon,
-		icon_family: getStringOrDefaultForSymbologyField(symbol, 'icon_family', getDefaultFamilyByIconName(icon)),
-		icon_style: getStringOrDefaultForSymbologyField(symbol, 'icon_style', getDefaultStyleByIconName(icon)),
-		colour: getStringOrDefaultForSymbologyField(symbol, 'colour', defaultSymbolColour),
+		icon_style,
+		colour: getColourFromSVGOrDefaultForSymbologyField(
+			symbol,
+			'colour',
+			'primary',
+			icon,
+			icon_style as IconStyle,
+			defaultSymbolColour,
+		),
 		opacity: getNumberOrDefaultForSymbologyField(symbol, 'opacity', defaultSymbolOpacity),
-		secondary_colour: getStringOrDefaultForSymbologyField(symbol, 'secondary_colour', defaultSymbolSecondaryColour),
+		secondary_colour: getColourFromSVGOrDefaultForSymbologyField(
+			symbol,
+			'secondary_colour',
+			'secondary',
+			icon,
+			icon_style as IconStyle,
+			defaultSymbolSecondaryColour,
+		),
 		secondary_opacity: getNumberOrDefaultForSymbologyField(symbol, 'secondary_opacity', defaultSymbolSecondaryOpacity),
+		tertiary_colour: getColourFromSVGOrDefaultForSymbologyField(
+			symbol,
+			'tertiary_colour',
+			'tertiary',
+			icon,
+			icon_style as IconStyle,
+			defaultSymbolTertiaryColour,
+		),
+		tertiary_opacity: getNumberOrDefaultForSymbologyField(symbol, 'tertiary_opacity', defaultSymbolTertiaryOpacity),
 		modifier_icon: getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon'),
 		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolColour),
 		modifier_opacity: getNumberOrDefaultForSymbologyField(symbol, 'modifier_opacity', defaultSymbolOpacity),
@@ -110,7 +137,6 @@ export const getAppMapAndSchemaDefaultSymbologyConfigForForm = (
 	// This UI is all about choosing an icon, so we don't want
 	// to delete any defaults props about the icon itself
 	delete defaults.icon;
-	delete defaults.icon_family;
 	delete defaults.icon_style;
 
 	return defaults as Partial<SymbologyProps>;
@@ -136,9 +162,14 @@ const removeDefaultValuesFromForm = (
 		}
 	});
 
-	if (data.icon_family !== 'duotone') {
+	if (isIconStyleDuotoneOrTritone(data.icon_style) === false) {
 		delete data.secondary_colour;
 		delete data.secondary_opacity;
+	}
+
+	if (isIconStyleTritone(data.icon_style) === false) {
+		delete data.tertiary_colour;
+		delete data.tertiary_opacity;
 	}
 
 	if (data.modifier_icon === undefined) {
@@ -228,12 +259,13 @@ function SymbologyFieldEditor(props: Props) {
 
 	const {
 		icon,
-		icon_family,
 		icon_style,
 		colour,
 		opacity,
 		secondary_colour,
 		secondary_opacity,
+		tertiary_colour,
+		tertiary_opacity,
 		modifier_icon,
 		modifier_colour,
 		modifier_opacity,
@@ -301,10 +333,45 @@ function SymbologyFieldEditor(props: Props) {
 
 	const onOpenIconChooser = () => setIsIconChooserOpen(true);
 
-	const onChooseIconFromIconChooser = (icon: string, icon_family: string, icon_style: string) => {
+	const onChooseIconFromIconChooser = (icon: string, icon_style: IconStyle) => {
 		setValue('icon', icon, { shouldDirty: true });
-		setValue('icon_family', icon_family, { shouldDirty: true });
 		setValue('icon_style', icon_style, { shouldDirty: true });
+
+		setValue(
+			'colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'primary',
+				icon,
+				icon_style,
+				defaultSymbolColour,
+			),
+			{
+				shouldDirty: true,
+			},
+		);
+
+		setValue(
+			'secondary_colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'secondary',
+				icon,
+				icon_style,
+				defaultSymbolSecondaryColour,
+			),
+			{ shouldDirty: true },
+		);
+
+		setValue(
+			'tertiary_colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'tertiary',
+				icon,
+				icon_style,
+				defaultSymbolTertiaryColour,
+			),
+			{ shouldDirty: true },
+		);
+
 		setIsIconChooserOpen(false);
 	};
 
@@ -314,21 +381,54 @@ function SymbologyFieldEditor(props: Props) {
 	// ######################
 
 	// ######################
-	// Icon Family and Style Choosing
+	// Icon Style Choosing
 	// ######################
-	const [isIconFamilyAndStyleChooserOpen, setIsIconFamilyAndStyleChooserOpen] = useState(false);
+	const [isIconStyleChooserOpen, setIsIconStyleChooserOpen] = useState(false);
 
-	const onOpenIconFamilyAndStyleChooser = () => setIsIconFamilyAndStyleChooserOpen(true);
+	const onOpenIconStyleChooser = () => setIsIconStyleChooserOpen(true);
 
-	const onChooseIconFamilyAndStyle = (icon_family: string, icon_style: string) => {
-		setValue('icon_family', icon_family, { shouldDirty: true });
+	const onChooseIconStyle = (icon_style: IconStyle) => {
 		setValue('icon_style', icon_style, { shouldDirty: true });
-		setIsIconFamilyAndStyleChooserOpen(false);
+
+		setValue(
+			'colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'primary',
+				icon || defaultSymbolIcon,
+				icon_style,
+				defaultSymbolColour,
+			),
+			{ shouldDirty: true },
+		);
+
+		setValue(
+			'secondary_colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'secondary',
+				icon || defaultSymbolIcon,
+				icon_style,
+				defaultSymbolSecondaryColour,
+			),
+			{ shouldDirty: true },
+		);
+
+		setValue(
+			'tertiary_colour',
+			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+				'tertiary',
+				icon || defaultSymbolIcon,
+				icon_style,
+				defaultSymbolTertiaryColour,
+			),
+			{ shouldDirty: true },
+		);
+
+		setIsIconStyleChooserOpen(false);
 	};
 
-	const onCloseFamilyAndStyleChooser = () => setIsIconFamilyAndStyleChooserOpen(false);
+	const onCloseStyleChooser = () => setIsIconStyleChooserOpen(false);
 	// ######################
-	// Icon Family and Style Choosing (End)
+	// Icon Style Choosing (End)
 	// ######################
 
 	// ######################
@@ -399,12 +499,8 @@ function SymbologyFieldEditor(props: Props) {
 			{isIconChooserOpen === true && (
 				<SymbologyIconChooser onChoose={onChooseIconFromIconChooser} onClose={onCloseSymbologyIconChooser} />
 			)}
-			{isIconFamilyAndStyleChooserOpen === true && icon !== undefined && (
-				<SymbologyIconFamilyAndStyleChooser
-					selectedIcon={icon}
-					onChoose={onChooseIconFamilyAndStyle}
-					onClose={onCloseFamilyAndStyleChooser}
-				/>
+			{isIconStyleChooserOpen === true && icon !== undefined && (
+				<SymbologyIconStyleChooser selectedIcon={icon} onChoose={onChooseIconStyle} onClose={onCloseStyleChooser} />
 			)}
 			{isIconModifierChooserOpen === true && icon !== undefined && (
 				<SymbologyIconChooser
@@ -437,12 +533,13 @@ function SymbologyFieldEditor(props: Props) {
 								getFontAwesomeIconForSymbolPreview({
 									...symbol,
 									icon,
-									icon_family,
 									icon_style,
 									colour,
 									opacity,
 									secondary_colour,
 									secondary_opacity,
+									tertiary_colour,
+									tertiary_opacity,
 									modifier_icon,
 									modifier_colour,
 									modifier_opacity,
@@ -628,33 +725,27 @@ function SymbologyFieldEditor(props: Props) {
 											label="Style"
 											select
 											disabled={icon === undefined}
-											value={
-												icon_family !== undefined && icon_style !== undefined ? `${icon_family}_${icon_style}` : ''
-											}
+											value={icon_style !== undefined ? icon_style : ''}
 											SelectProps={{
 												open: false,
-												onClick: onOpenIconFamilyAndStyleChooser,
+												onClick: onOpenIconStyleChooser,
 											}}
 											InputProps={{
 												startAdornment:
-													icon !== undefined && icon_family !== undefined && icon_style !== undefined ? (
+													icon !== undefined && icon_style !== undefined ? (
 														<InputAdornment position="start" sx={{ mr: 1 }}>
-															{getFontAwesomeIconFromLibraryAsSVGImage(icon, icon_family, icon_style)}
+															{getFontAwesomeIconFromLibraryAsSVGImage(icon, icon_style)}
 														</InputAdornment>
 													) : undefined,
 											}}
 										>
-											{icon_family !== undefined && icon_style !== undefined ? (
-												<MenuItem value={`${icon_family}_${icon_style}`}>
-													{getIconFamilyAndStyleName(icon_family as IconFamily, icon_style as IconStyle)}
-												</MenuItem>
+											{icon_style !== undefined ? (
+												<MenuItem value={icon_style}>{getIconStyleName(icon_style)}</MenuItem>
 											) : (
 												<MenuItem />
 											)}
 										</TextField>
 									</FormGroup>
-
-									{errors.icon_family && <FormHelperText error>{errors.icon_family.message}</FormHelperText>}
 
 									{errors.icon_style && <FormHelperText error>{errors.icon_style.message}</FormHelperText>}
 								</FormControl>
@@ -740,7 +831,7 @@ function SymbologyFieldEditor(props: Props) {
 									</FormControl>
 								</div>
 
-								{icon_family === 'duotone' && (
+								{isIconStyleDuotoneOrTritone(icon_style) && (
 									<React.Fragment>
 										<FormControl fullWidth={true} component="fieldset" variant="outlined">
 											<FormLabel component="legend" sx={{ mb: 1 }}>
@@ -828,6 +919,95 @@ function SymbologyFieldEditor(props: Props) {
 										</div>
 									</React.Fragment>
 								)}
+
+								{isIconStyleTritone(icon_style) && (
+									<React.Fragment>
+										<FormControl fullWidth={true} component="fieldset" variant="outlined">
+											<FormLabel component="legend" sx={{ mb: 1 }}>
+												Tertiary Colour and Opacity
+											</FormLabel>
+										</FormControl>
+
+										<div
+											style={{
+												display: 'flex',
+												flexDirection: 'row',
+												paddingLeft: '8px',
+												paddingRight: '8px',
+												marginBottom: '24px',
+											}}
+										>
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(30%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<input type="color" className="colourPicker" {...register('tertiary_colour')} />
+												</FormGroup>
+
+												{errors.tertiary_colour && (
+													<FormHelperText error>{errors.tertiary_colour.message}</FormHelperText>
+												)}
+											</FormControl>
+
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(70%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<Controller
+														name="tertiary_opacity"
+														control={control}
+														render={({ field }) => (
+															<SliderFixed
+																{...field}
+																valueLabelDisplay="auto"
+																min={symbolMinimumOpacity}
+																max={symbolMaximumOpacity}
+																track={false}
+																step={0.1}
+																marks={[
+																	{
+																		value: 0,
+																		label: '0',
+																	},
+																	{
+																		value: 0.25,
+																		label: '0.25',
+																	},
+																	{
+																		value: 0.5,
+																		label: '0.5',
+																	},
+																	{
+																		value: 0.75,
+																		label: '0.75',
+																	},
+																	{
+																		value: 1,
+																		label: '1',
+																	},
+																]}
+															/>
+														)}
+													/>
+												</FormGroup>
+
+												{errors.tertiary_opacity && (
+													<FormHelperText error>{errors.tertiary_opacity.message}</FormHelperText>
+												)}
+											</FormControl>
+										</div>
+									</React.Fragment>
+								)}
 							</React.Fragment>
 						)}
 
@@ -848,7 +1028,7 @@ function SymbologyFieldEditor(props: Props) {
 													startAdornment:
 														modifier_icon !== undefined ? (
 															<InputAdornment position="start" sx={{ mr: 1 }}>
-																{getFontAwesomeIconFromLibraryAsSVGImage(modifier_icon, 'classic', 'solid')}
+																{getFontAwesomeIconFromLibraryAsSVGImage(modifier_icon, 'solid')}
 															</InputAdornment>
 														) : undefined,
 												}}

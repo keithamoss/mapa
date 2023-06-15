@@ -7,7 +7,7 @@ import {
 } from '../../app/services/schemas';
 
 import { hextoRGBACSS } from '../../app/colourUtils';
-import { IconFamily, IconStyle, getIconByName, getIconSVG } from './font-awesome/fontAwesome';
+import { IconStyle, getIconByName, getIconSVG } from './iconsLibrary';
 import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';
@@ -15,10 +15,11 @@ export const defaultSymbolIconSVG =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM105.8 133.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L216 232.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V218.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H158.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM160 320a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg>';
 export const defaultSymbolIconSVGPreStyled =
 	'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" aria-hidden="true" focusable="false" role="img" style="background-color: rgba(255, 255, 255, 0.012); transform: rotate(0deg);" color="rgba(229, 11, 11, 1)" width="27" height="27"><path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM105.8 133.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L216 232.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V218.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H158.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM160 320a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" fill="currentColor"/></svg>';
-export const defaultSymbolIconFamily = 'classic';
 export const defaultSymbolIconStyle = 'solid';
+export const defaultSymbolDarkenColourByPercentage = 10;
 export const defaultSymbolColour = '#183153';
-export const defaultSymbolSecondaryColour = '#A6A6A6';
+export const defaultSymbolSecondaryColour = '#989696';
+export const defaultSymbolTertiaryColour = '#A6A6A6';
 export const defaultSymbolModiferColour = '#183153';
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 15;
@@ -28,14 +29,18 @@ export const defaultSymbolFillColour = '#FFFFFF03'; // So the whole icon is drag
 export const defaultSymbolRotation = 0;
 export const defaultSymbolOpacity = 1;
 export const defaultSymbolSecondaryOpacity = 0.4;
+export const defaultSymbolTertiaryOpacity = 1;
 export const defaultSymbolModifierOpacity = 1;
 
 export const defaultSymbologyGroupId = 1;
 
 export interface FontAwesomeIconSVGProps {
 	colour: string;
+	opacity: number;
 	secondaryColour: string;
 	secondaryOpacity: number;
+	tertiaryColour: string;
+	tertiaryOpacity: number;
 	modifierIcon: string;
 	modifierColour: string;
 	modifierOpacity: number;
@@ -48,7 +53,6 @@ export interface FontAwesomeIconSVGProps {
 export const getAppDefaultSymbologyConfig = () =>
 	({
 		icon: defaultSymbolIcon,
-		icon_family: defaultSymbolIconFamily,
 		icon_style: defaultSymbolIconStyle,
 		size: defaultSymbolSize,
 		rotation: defaultSymbolRotation,
@@ -59,24 +63,25 @@ export const getAppDefaultSymbologyConfig = () =>
 		modifier_opacity: defaultSymbolModifierOpacity,
 		secondary_colour: defaultSymbolSecondaryColour,
 		secondary_opacity: defaultSymbolSecondaryOpacity,
+		tertiary_colour: defaultSymbolTertiaryColour,
+		tertiary_opacity: defaultSymbolTertiaryOpacity,
 	} as SymbologyProps);
 
 export const getFontAwesomeIconFromLibrary = (
 	iconProps: FontAwesomeIconSVGProps,
 	iconName: string,
-	iconFamily?: IconFamily,
 	iconStyle?: IconStyle,
 ) => {
 	let svg = defaultSymbolIconSVG;
 
 	const icon = getIconByName(iconName);
 	if (icon !== null) {
-		svg = getIconSVG(icon, iconFamily, iconStyle) || defaultSymbolIconSVG;
+		svg = getIconSVG(icon, iconStyle || defaultSymbolIconStyle) || defaultSymbolIconSVG;
 	}
 
 	try {
 		// Saves us having to do a lot of nested checking of undefineds from getElementsBy*() functions
-		return parseAndManipulateSVGIcon(svg, iconProps, iconFamily);
+		return parseAndManipulateSVGIcon(svg, iconProps, iconStyle);
 	} catch (error) {
 		// Worst case scenario, we just display the default (?) icon
 		Sentry.captureException(error);
@@ -87,14 +92,17 @@ export const getFontAwesomeIconFromLibrary = (
 export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAwesomeIconSVGProps => {
 	return {
 		colour: hextoRGBACSS(symbol?.colour || defaultSymbolColour, symbol?.opacity || defaultSymbolOpacity),
+		opacity: symbol?.opacity || defaultSymbolOpacity,
 		secondaryColour: hextoRGBACSS(symbol?.secondary_colour || defaultSymbolSecondaryColour),
-		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of on colour
+		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of the
+		tertiaryColour: hextoRGBACSS(symbol?.tertiary_colour || defaultSymbolTertiaryColour),
+		tertiaryOpacity: symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity, // Opacity is taken care of the
 		modifierIcon: symbol?.modifier_icon || '',
 		modifierColour: hextoRGBACSS(
 			symbol?.modifier_colour || defaultSymbolModiferColour,
 			symbol?.modifier_opacity || defaultSymbolModifierOpacity,
 		),
-		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of on colour
+		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of the
 		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		rotation: symbol?.rotation || defaultSymbolRotation,
@@ -106,7 +114,7 @@ export const getFontAwesomeIconForSymbolAsSVGString = (
 	symbol: Partial<SymbologyProps>,
 	propOverrides?: Partial<SymbologyProps>,
 ) => {
-	const { icon, icon_family, icon_style, ...props } = symbol;
+	const { icon, icon_style, ...props } = symbol;
 
 	if (icon === undefined) {
 		return null;
@@ -117,17 +125,11 @@ export const getFontAwesomeIconForSymbolAsSVGString = (
 		...propOverrides,
 	};
 
-	return getFontAwesomeIconFromLibrary(
-		getFontAwesomeIconProps(local_symbol),
-		icon,
-		icon_family as IconFamily,
-		icon_style as IconStyle,
-	);
+	return getFontAwesomeIconFromLibrary(getFontAwesomeIconProps(local_symbol), icon, icon_style as IconStyle);
 };
 
 export const getFontAwesomeIconFromLibraryAsSVGImage = (
 	iconName: string,
-	iconFamily?: string,
 	iconStyle?: string,
 	propOverrides?: Partial<SymbologyProps>,
 ) => (
@@ -136,7 +138,6 @@ export const getFontAwesomeIconFromLibraryAsSVGImage = (
 		src={`data:image/svg+xml;utf8,${getFontAwesomeIconFromLibrary(
 			getFontAwesomeIconProps(propOverrides || {}),
 			iconName,
-			iconFamily as IconFamily,
 			iconStyle as IconStyle,
 		)}`}
 	/>
@@ -146,7 +147,7 @@ export const getFontAwesomeIconForSymbolPreview = (
 	symbol: Partial<SymbologyProps>,
 	propOverrides?: Partial<SymbologyProps>,
 ) => {
-	const { icon, icon_family, icon_style, ...props } = symbol;
+	const { icon, icon_style, ...props } = symbol;
 
 	if (icon === undefined) {
 		return null;
@@ -157,12 +158,7 @@ export const getFontAwesomeIconForSymbolPreview = (
 		...propOverrides,
 	};
 
-	const svg = getFontAwesomeIconFromLibrary(
-		getFontAwesomeIconProps(local_symbol),
-		icon,
-		icon_family as IconFamily,
-		icon_style as IconStyle,
-	);
+	const svg = getFontAwesomeIconFromLibrary(getFontAwesomeIconProps(local_symbol), icon, icon_style as IconStyle);
 
 	if (svg === null) {
 		return null;
