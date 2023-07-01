@@ -1232,18 +1232,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:2.3.0":
-  version: 2.3.0
-  resolution: "@sentry/bundler-plugin-core@npm:2.3.0"
+"@sentry/bundler-plugin-core@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@sentry/bundler-plugin-core@npm:2.4.0"
   dependencies:
     "@sentry/cli": ^2.17.0
     "@sentry/node": 7.53.1
     "@sentry/utils": 7.53.1
+    dotenv: ^16.3.1
     find-up: 5.0.0
     glob: 9.3.2
     magic-string: 0.27.0
     unplugin: 1.0.1
-  checksum: ff2c03bf59918241479dc63033c85eb49499222f69e50331ed8cc02e6d02d5ef941df2bef917b9f2ce3b14078cf6e72d46e1b1b107d2309a89066fac9d471721
+  checksum: 3aa82af3e0189eea9738b33733f4be03f1601c61f9ab7db8b02e4e7a2649227e0bf1ea5e654e730b0a373635c1f1125d8c153e7e46e240e9bddd1c3166d377b9
   languageName: node
   linkType: hard
 
@@ -1408,13 +1409,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^2.3.0":
-  version: 2.3.0
-  resolution: "@sentry/vite-plugin@npm:2.3.0"
+"@sentry/vite-plugin@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@sentry/vite-plugin@npm:2.4.0"
   dependencies:
-    "@sentry/bundler-plugin-core": 2.3.0
+    "@sentry/bundler-plugin-core": 2.4.0
     unplugin: 1.0.1
-  checksum: b161c52bd9dd82b64512b6ad5649460d59716b56417c37b4d13a7636c6af24e375a3382b3466578c45b949de2a5c9d4905e0d22782a90f5314d301356313ec58
+  checksum: 848279805252b6bfe71e0e8582bc2dc5164781571a8562329bfa8f580ca0ca91c158e5c34de7abe3d5a499ef3033af955d9141e56c5c37321d38b31ec14bdd0b
   languageName: node
   linkType: hard
 
@@ -2817,6 +2818,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv@npm:^16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: 15d75e7279018f4bafd0ee9706593dd14455ddb71b3bcba9c52574460b7ccaf67d5cf8b2c08a5af1a9da6db36c956a04a1192b101ee102a3e0cf8817bbcf3dfd
+  languageName: node
+  linkType: hard
+
 "earcut@npm:^2.2.3":
   version: 2.2.4
   resolution: "earcut@npm:2.2.4"
@@ -3579,7 +3587,7 @@ __metadata:
     "@sentry/browser": ^7.57.0
     "@sentry/react": ^7.56.0
     "@sentry/tracing": ^7.56.0
-    "@sentry/vite-plugin": ^2.3.0
+    "@sentry/vite-plugin": ^2.4.0
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.4.3
