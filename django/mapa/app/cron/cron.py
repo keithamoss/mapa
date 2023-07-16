@@ -22,12 +22,12 @@ for socialAuthUser in UserSocialAuth.objects.all():
         print(f"User: {socialAuthUser.user}")
 
         export_to_google_drive(socialAuthUser.user, socialAuthUser.extra_data["access_token"], socialAuthUser.extra_data["refresh_token"])
-
-        print("")
-        print("------------")
-        print("")
     except:
         traceback.print_exc()
+
+    print("")
+    print("------------")
+    print("")
 
 print("###########")
 print("Cron finished")
