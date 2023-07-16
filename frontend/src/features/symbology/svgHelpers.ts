@@ -55,47 +55,11 @@ export const parseAndManipulateSVGIcon = (
 		defsElement.remove();
 	}
 
-	if (isIconColourLocked === true) {
-		// for (const element of svgDOMElement.getElementsByTagName('*')) {
-		// 	const fill = element.getAttribute('fill');
-		// 	if (fill !== null && fill !== 'none') {
-		// 		element.setAttribute('fill', hextoRGBACSS(fill || defaultSymbolColour));
-		// 	} else {
-		// 		// Some icons have their fill set in the 'style' property, rather than directly on the 'fill' property
-		// 		if ('style' in element && element.style !== undefined) {
-		// 			const fillRGB = (element.style as CSSStyleDeclaration).fill;
-		// 			if (fillRGB !== undefined) {
-		// 				element.setAttribute('fill', fillRGB);
-		// 				element.style = '';
-		// 			}
-		// 		}
-		// 	}
-		// }
-	} else {
-		// @TODO Why did we need this to removeAttribute, again?
-		// for (const groupElement of svgDOMElement.getElementsByTagName('g')) {
-		// 	if (isIconStyleColoured(iconStyle)) {
-		// 		// groupElement.setAttribute('fill', hextoRGBACSS(groupElement.getAttribute('fill') || defaultSymbolColour));
-
-		// 		getSVGPathElementsByTagNameAndClassName(groupElement as SVGSVGElement, 'primary', true).forEach(
-		// 			(pathElement) => {
-		// 				if (isIconStyleColoured(iconStyle)) {
-		// 					pathElement.setAttribute('fill', hextoRGBACSS(groupElement.getAttribute('fill') || defaultSymbolColour));
-		// 				}
-		// 			},
-		// 		);
-		// 	}
-
-		// 	groupElement.removeAttribute('fill');
-		// }
-
+	if (isIconColourLocked === false) {
 		// Apply the primary colour to all path elements as a default
 		// Duotone and Tritone will come through afterwards and set their own colours
 		// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
 		getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
-			// if (isIconStyleColoured(iconStyle)) {
-			// 	pathElement.setAttribute('fill', hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolColour));
-			// } else {
 			// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
 			if (pathElement.getAttribute('class') === 'primary' || pathElement.getAttribute('class') === null) {
 				pathElement.setAttribute('fill', iconProps.colour);
@@ -104,7 +68,6 @@ export const parseAndManipulateSVGIcon = (
 				pathElement.setAttribute('fill', RGBACSSDarkenColour(iconProps.colour, defaultSymbolDarkenColourByPercentage));
 				pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
 			}
-			// }
 
 			pathElement.removeAttribute('data-original');
 		});
@@ -112,12 +75,6 @@ export const parseAndManipulateSVGIcon = (
 		// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
 		if (isIconStyleDuotoneOrTritone(iconStyle)) {
 			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
-				// if (isIconStyleColoured(iconStyle)) {
-				// 	pathElement.setAttribute(
-				// 		'fill',
-				// 		hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolSecondaryColour),
-				// 	);
-				// } else {
 				if (pathElement.getAttribute('class') === 'secondary') {
 					pathElement.setAttribute('fill', iconProps.secondaryColour);
 				} else if (pathElement.getAttribute('class') === 'secondary darker') {
@@ -128,7 +85,6 @@ export const parseAndManipulateSVGIcon = (
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.secondaryOpacity}`);
-				// }
 
 				pathElement.removeAttribute('data-original');
 			});
@@ -137,12 +93,6 @@ export const parseAndManipulateSVGIcon = (
 		// Tritone icons only: Apply the tertiary colour style properties to the tertiary path elements
 		if (isIconStyleTritone(iconStyle)) {
 			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
-				// if (isIconStyleColoured(iconStyle)) {
-				// 	pathElement.setAttribute(
-				// 		'fill',
-				// 		hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolTertiaryColour),
-				// 	);
-				// } else {
 				if (pathElement.getAttribute('class') === 'tertiary') {
 					pathElement.setAttribute('fill', iconProps.tertiaryColour);
 				} else if (pathElement.getAttribute('class') === 'tertiary darker') {
@@ -153,7 +103,6 @@ export const parseAndManipulateSVGIcon = (
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.tertiaryOpacity}`);
-				// }
 
 				pathElement.removeAttribute('data-original');
 			});
