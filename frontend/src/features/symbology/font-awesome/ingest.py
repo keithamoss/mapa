@@ -88,7 +88,6 @@ def processSVGs(icon):
             if style_name == "brands":
                 processed["brands"] = {}
                 processed["brands"] = {
-                    "has_coloured": False,
                     "svg": svg["raw"]
                 }
             else:
@@ -99,7 +98,6 @@ def processSVGs(icon):
                         processed[mapa_style_name] = {}
 
                     processed[mapa_style_name] = {
-                        "has_coloured": False,
                         "svg": svg["raw"].replace("fa-primary", "primary").replace("fa-secondary", "secondary")
                     }
 
@@ -110,7 +108,6 @@ def processSVGs(icon):
                         processed[mapa_style_name] = {}
                     
                     processed[mapa_style_name] = {
-                        "has_coloured": False,
                         "svg": svg["raw"]
                     }
 

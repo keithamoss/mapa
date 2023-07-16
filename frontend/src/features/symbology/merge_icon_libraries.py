@@ -23,7 +23,7 @@ for icon_file in [FONTAWESOME_ICONS, FLATICON_ICONS]:
       icons |= fileJSON
 
 with open(ICONS_OUTPUT_JSON, "w") as f:
-    json.dump(icons, f)
+    json.dump(icons, f, indent=4)
 
 # ######################
 # Categories
@@ -38,5 +38,8 @@ for category_file in [FONTAWESOME_CATEGORIES, FLATICON_CATEGORIES]:
           
       categories |= fileJSON
 
+for category_name, category in categories.items():
+    categories[category_name]["icons"] = sorted(categories[category_name]["icons"])
+
 with open(CATEGORIES_OUTPUT_JSON, "w") as f:
-    json.dump(dict(sorted(categories.items())), f)
+    json.dump(dict(sorted(categories.items())), f, indent=4)

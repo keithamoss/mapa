@@ -1,2 +1,3 @@
 *.svg
-/icons/working-space/
+/icons/working-space/_*/
+/icons/working-space/zips/
