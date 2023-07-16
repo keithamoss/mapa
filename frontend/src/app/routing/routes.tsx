@@ -10,6 +10,7 @@ import MapManager from '../../features/maps/mapsManager';
 import SchemaCreator from '../../features/schemas/schemaCreator';
 import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 // eslint-disable-next-line import/no-named-as-default
+import DebugView from '../../features/app/debugView';
 import SchemaEditor from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
@@ -22,6 +23,10 @@ export const router = sentryCreateBrowserRouter([
 		path: '/',
 		element: <App />,
 		children: [
+			{
+				path: 'DebugView',
+				element: <DebugView />,
+			},
 			{
 				path: 'MapManager',
 				element: <MapManager />,

@@ -35,6 +35,7 @@ import {
 	getCategories,
 	getCategoryLabelByName,
 	getCategoryLabelsForIconNames,
+	getDefaultStyleByIconName,
 	getIconsForCategory,
 	getModifierIconNames,
 	searchIcons,
@@ -288,7 +289,10 @@ function SymbologyIconChooser(props: Props) {
 														'& > img': { width: 25, height: 25 },
 													}}
 												>
-													{getFontAwesomeIconFromLibraryAsSVGImage(category.hero_icon, 'solid')}
+													{getFontAwesomeIconFromLibraryAsSVGImage(
+														category.hero_icon,
+														getDefaultStyleByIconName(category.hero_icon),
+													)}
 												</Avatar>
 											</ListItemAvatar>
 											<ListItemText primary={category.label} />
@@ -324,6 +328,7 @@ function SymbologyIconChooser(props: Props) {
 									width: '100%',
 									maxWidth: 360,
 									bgcolor: 'background.paper',
+									contentVisibility: 'auto',
 								}}
 							>
 								{getIconsForCategory(chosenIconCategory)
@@ -347,7 +352,7 @@ function SymbologyIconChooser(props: Props) {
 														{getFontAwesomeIconFromLibraryAsSVGImage(icon.name)}
 													</Avatar>
 												</ListItemAvatar>
-												<ListItemText primary={icon.label} />
+												<ListItemText primary={icon.label} /*secondary={icon.name}*/ />
 											</ListItemButton>
 										</ListItem>
 									))}

@@ -104,12 +104,17 @@ export const getColourFromSVGOrDefaultForSymbologyField = (
 	defaultValue: string,
 ) => {
 	// If we're not using the inbuilt colours, just grab the colour from the symbol.
-	if (isIconStyleColoured(iconStyle) !== true) {
+	if (isIconStyleColoured(iconStyle) === false) {
 		return getStringOrDefaultForSymbologyField(symbol, fieldName, defaultValue);
 	}
 
 	// However, if we are using the inbuilt colours we need to parse the SVG to extract the hex code for the given colour level
-	return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
+
+	// Again, let's revisit this when we get back around to allowing colour customisation. Maybe this is fine, but maybe we want
+	// it built into the icon library JSON.
+	// c.f. getAvailableStylesForIcon()
+	return defaultValue;
+	// return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
 };
 
 export const getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange = (
@@ -119,12 +124,17 @@ export const getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange =
 	defaultValue: string,
 ) => {
 	// If we're not using the inbuilt colours, just grab the colour from the symbol.
-	if (isIconStyleColoured(iconStyle) !== true) {
+	if (isIconStyleColoured(iconStyle) === false) {
 		return defaultValue;
 	}
 
 	// However, if we are using the inbuilt colours we need to parse the SVG to extract the hex code for the given colour level
-	return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
+
+	// Again, let's revisit this when we get back around to allowing colour customisation. Maybe this is fine, but maybe we want
+	// it built into the icon library JSON.
+	// c.f. getAvailableStylesForIcon()
+	return defaultValue;
+	// return getColourFromSVGOrDefault(colourLevel, iconName, iconStyle, defaultValue);
 };
 
 export const getColourFromSVGOrDefault = (

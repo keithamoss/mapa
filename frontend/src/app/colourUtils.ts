@@ -13,8 +13,13 @@ export const hextoRGBACSS = (
 		b: number | string = 0,
 		a: number | string = (opacity_override || 1) * 255;
 
-	// #FFF0
-	if (h.length === 5) {
+	// #FF0 (default to opacity=1 aka 255)
+	if (h.length == 4) {
+		r = '0x' + h[1] + h[1];
+		g = '0x' + h[2] + h[2];
+		b = '0x' + h[3] + h[3];
+		// #FFF0
+	} else if (h.length === 5) {
 		r = '0x' + h[1] + h[1];
 		g = '0x' + h[2] + h[2];
 		b = '0x' + h[3] + h[3];

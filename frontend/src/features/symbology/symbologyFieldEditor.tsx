@@ -1,13 +1,15 @@
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
+import ImageIcon from '@mui/icons-material/Image';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import AddIcon from '@mui/icons-material/Add';
-import PhotoIcon from '@mui/icons-material/Photo';
-import SettingsIcon from '@mui/icons-material/Settings';
 import {
+	Alert,
+	AlertTitle,
 	AppBar,
+	Badge,
 	BottomNavigation,
 	BottomNavigationAction,
 	Button,
@@ -76,6 +78,7 @@ import {
 	getDefaultStyleByIconName,
 	getIconLabelByName,
 	getIconStyleName,
+	isIconColourLockedByName,
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibrary';
@@ -607,93 +610,7 @@ function SymbologyFieldEditor(props: Props) {
 									</FormControl>
 								)}
 
-								<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
-									<FormLabel component="legend">Size</FormLabel>
-
-									<FormGroup>
-										<Controller
-											name="size"
-											control={control}
-											render={({ field }) => (
-												<SliderFixed
-													{...field}
-													valueLabelDisplay="auto"
-													min={symbolMinimumSize}
-													max={symbolMaximumSize}
-													track={false}
-													step={1}
-													marks={[
-														{
-															value: 1,
-															label: '1',
-														},
-														{
-															value: 25,
-															label: '25',
-														},
-														{
-															value: 50,
-															label: '50',
-														},
-													]}
-												/>
-											)}
-										/>
-									</FormGroup>
-
-									{errors.size && <FormHelperText error>{errors.size.message}</FormHelperText>}
-								</FormControl>
-
-								<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
-									<FormLabel component="legend">Rotation</FormLabel>
-
-									<FormGroup>
-										<Controller
-											name="rotation"
-											control={control}
-											render={({ field }) => (
-												<SliderFixed
-													{...field}
-													valueLabelDisplay="auto"
-													min={symbolMinimumRotation}
-													max={symbolMaximumRotation}
-													track={false}
-													step={10}
-													marks={[
-														{
-															value: 0,
-															label: '0',
-														},
-														{
-															value: 90,
-															label: '90',
-														},
-														{
-															value: 180,
-															label: '180',
-														},
-														{
-															value: 270,
-															label: '270',
-														},
-														{
-															value: 360,
-															label: '360',
-														},
-													]}
-												/>
-											)}
-										/>
-									</FormGroup>
-
-									{errors.rotation && <FormHelperText error>{errors.rotation.message}</FormHelperText>}
-								</FormControl>
-							</React.Fragment>
-						)}
-
-						{navigationValue === 1 && (
-							<React.Fragment>
-								<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
+								<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 									<FormGroup>
 										<TextField
 											label="Icon"
@@ -765,70 +682,82 @@ function SymbologyFieldEditor(props: Props) {
 										marginBottom: '24px',
 									}}
 								>
-									<FormControl
-										fullWidth={true}
-										sx={{
-											width: 'calc(30%)',
-										}}
-										component="fieldset"
-										variant="outlined"
-									>
-										<FormGroup>
-											<input type="color" className="colourPicker" {...register('colour')} />
-										</FormGroup>
+									{icon !== undefined && isIconColourLockedByName(icon, icon_style) === false && (
+										<React.Fragment>
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(30%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<input type="color" className="colourPicker" {...register('colour')} />
+												</FormGroup>
 
-										{errors.colour && <FormHelperText error>{errors.colour.message}</FormHelperText>}
-									</FormControl>
+												{errors.colour && <FormHelperText error>{errors.colour.message}</FormHelperText>}
+											</FormControl>
 
-									<FormControl
-										fullWidth={true}
-										sx={{
-											width: 'calc(70%)',
-										}}
-										component="fieldset"
-										variant="outlined"
-									>
-										<FormGroup>
-											<Controller
-												name="opacity"
-												control={control}
-												render={({ field }) => (
-													<SliderFixed
-														{...field}
-														valueLabelDisplay="auto"
-														min={symbolMinimumOpacity}
-														max={symbolMaximumOpacity}
-														track={false}
-														step={0.1}
-														marks={[
-															{
-																value: 0,
-																label: '0',
-															},
-															{
-																value: 0.25,
-																label: '0.25',
-															},
-															{
-																value: 0.5,
-																label: '0.5',
-															},
-															{
-																value: 0.75,
-																label: '0.75',
-															},
-															{
-																value: 1,
-																label: '1',
-															},
-														]}
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(70%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<Controller
+														name="opacity"
+														control={control}
+														render={({ field }) => (
+															<SliderFixed
+																{...field}
+																valueLabelDisplay="auto"
+																min={symbolMinimumOpacity}
+																max={symbolMaximumOpacity}
+																track={false}
+																step={0.1}
+																marks={[
+																	{
+																		value: 0,
+																		label: '0',
+																	},
+																	{
+																		value: 0.25,
+																		label: '0.25',
+																	},
+																	{
+																		value: 0.5,
+																		label: '0.5',
+																	},
+																	{
+																		value: 0.75,
+																		label: '0.75',
+																	},
+																	{
+																		value: 1,
+																		label: '1',
+																	},
+																]}
+															/>
+														)}
 													/>
-												)}
-											/>
-										</FormGroup>
+												</FormGroup>
 
-										{errors.opacity && <FormHelperText error>{errors.opacity.message}</FormHelperText>}
-									</FormControl>
+												{errors.opacity && <FormHelperText error>{errors.opacity.message}</FormHelperText>}
+											</FormControl>
+										</React.Fragment>
+									)}
+
+									{icon !== undefined && isIconColourLockedByName(icon, icon_style) === true && (
+										<Alert severity="info">
+											<AlertTitle>This icon&apos;s colours cannot currently be changed.</AlertTitle>
+											But anything is possible! If you would like to be able to customise the colour of the icon, please
+											message the developer.
+										</Alert>
+									)}
 								</div>
 
 								{isIconStyleDuotoneOrTritone(icon_style) && (
@@ -1008,10 +937,92 @@ function SymbologyFieldEditor(props: Props) {
 										</div>
 									</React.Fragment>
 								)}
+
+								<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
+									<FormLabel component="legend">Size</FormLabel>
+
+									<FormGroup>
+										<Controller
+											name="size"
+											control={control}
+											render={({ field }) => (
+												<SliderFixed
+													{...field}
+													valueLabelDisplay="auto"
+													min={symbolMinimumSize}
+													max={symbolMaximumSize}
+													track={false}
+													step={1}
+													marks={[
+														{
+															value: 1,
+															label: '1',
+														},
+														{
+															value: 25,
+															label: '25',
+														},
+														{
+															value: 50,
+															label: '50',
+														},
+													]}
+												/>
+											)}
+										/>
+									</FormGroup>
+
+									{errors.size && <FormHelperText error>{errors.size.message}</FormHelperText>}
+								</FormControl>
+
+								<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
+									<FormLabel component="legend">Rotation</FormLabel>
+
+									<FormGroup>
+										<Controller
+											name="rotation"
+											control={control}
+											render={({ field }) => (
+												<SliderFixed
+													{...field}
+													valueLabelDisplay="auto"
+													min={symbolMinimumRotation}
+													max={symbolMaximumRotation}
+													track={false}
+													step={10}
+													marks={[
+														{
+															value: 0,
+															label: '0',
+														},
+														{
+															value: 90,
+															label: '90',
+														},
+														{
+															value: 180,
+															label: '180',
+														},
+														{
+															value: 270,
+															label: '270',
+														},
+														{
+															value: 360,
+															label: '360',
+														},
+													]}
+												/>
+											)}
+										/>
+									</FormGroup>
+
+									{errors.rotation && <FormHelperText error>{errors.rotation.message}</FormHelperText>}
+								</FormControl>
 							</React.Fragment>
 						)}
 
-						{navigationValue === 2 && (
+						{navigationValue === 1 && (
 							<React.Fragment>
 								<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
 									<FormGroup>
@@ -1135,9 +1146,19 @@ function SymbologyFieldEditor(props: Props) {
 
 						<Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
 							<BottomNavigation showLabels value={navigationValue} onChange={onChangeBottomNavigation}>
-								<BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
-								<BottomNavigationAction label="Icon" icon={<PhotoIcon />} />
-								<BottomNavigationAction label="Modifier" icon={<AddIcon />} />
+								<BottomNavigationAction
+									label="Primary Icon"
+									icon={
+										Object.keys(errors).length === 0 ? (
+											<ImageIcon />
+										) : (
+											<Badge badgeContent={'!'} color="error">
+												<ImageIcon />
+											</Badge>
+										)
+									}
+								/>
+								<BottomNavigationAction label="Modifier Icon" icon={<AddPhotoAlternateIcon />} />
 							</BottomNavigation>
 						</Paper>
 					</Paper>

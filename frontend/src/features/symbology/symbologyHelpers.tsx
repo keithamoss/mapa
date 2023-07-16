@@ -7,7 +7,8 @@ import {
 } from '../../app/services/schemas';
 
 import { hextoRGBACSS } from '../../app/colourUtils';
-import { IconStyle, getIconByName, getIconSVG } from './iconsLibrary';
+import { isDevelopment } from '../../app/utils';
+import { IconStyle, getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibrary';
 import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';
@@ -72,19 +73,31 @@ export const getFontAwesomeIconFromLibrary = (
 	iconName: string,
 	iconStyle?: IconStyle,
 ) => {
-	let svg = defaultSymbolIconSVG;
-
+	let svg, isColourLocked;
 	const icon = getIconByName(iconName);
+
 	if (icon !== null) {
-		svg = getIconSVG(icon, iconStyle || defaultSymbolIconStyle) || defaultSymbolIconSVG;
+		iconStyle = iconStyle || getDefaultIconStyle(icon);
+		svg = getIconSVG(icon, iconStyle) || defaultSymbolIconSVG;
+		isColourLocked = isIconColourLocked(icon, iconStyle);
+	} else {
+		iconStyle = defaultSymbolIconStyle;
+		svg = defaultSymbolIconSVG;
+		isColourLocked = false;
 	}
 
 	try {
 		// Saves us having to do a lot of nested checking of undefineds from getElementsBy*() functions
-		return parseAndManipulateSVGIcon(svg, iconProps, iconStyle);
+		return parseAndManipulateSVGIcon(svg, iconProps, isColourLocked, iconStyle);
 	} catch (error) {
 		// Worst case scenario, we just display the default (?) icon
 		Sentry.captureException(error);
+
+		if (isDevelopment() === true) {
+			// eslint-disable-next-line no-console
+			console.error(error);
+		}
+
 		return defaultSymbolIconSVGPreStyled;
 	}
 };

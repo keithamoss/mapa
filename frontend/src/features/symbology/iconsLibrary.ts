@@ -11,20 +11,23 @@ import icons from './icons-library.json';
 export type IconColourLevels = 'primary' | 'secondary' | 'tertiary';
 
 export type IconStyle =
+	// # FontAwesome and FlatIcon
 	| 'solid'
+	// # FontAwesome Only
 	| 'regular'
 	| 'light'
 	| 'thin'
 	| 'duotone'
-	| 'duotone-coloured'
-	| 'tritone'
-	| 'tritone-coloured'
-	| 'tritone-regular'
-	| 'tritone-regular-coloured'
+	// | 'tritone'
+	// | 'tritone-regular'
 	| 'sharp-solid'
 	| 'sharp-regular'
 	| 'sharp-light'
-	| 'brands';
+	| 'brands'
+	// # FlatIcon Only
+	| 'coloured'
+	| 'coloured-outlined'
+	| 'outlined';
 
 export type FontAwesomeCategory =
 	| 'accessibility'
@@ -55,12 +58,14 @@ export type FontAwesomeCategory =
 	| 'files'
 	| 'film-video'
 	| 'food-beverage'
+	| 'fruits-(coloured)'
+	| 'vegetables-(coloured)'
 	| 'fruits-vegetables'
 	| 'gaming'
 	| 'gender'
 	| 'halloween'
 	| 'hands'
-	| 'herbs'
+	| 'herbs-and-spices-(coloured)'
 	| 'holidays'
 	| 'household'
 	| 'humanitarian'
@@ -75,9 +80,9 @@ export type FontAwesomeCategory =
 	| 'moving'
 	| 'music-audio'
 	| 'nature'
+	| 'nature-(coloured)'
 	| 'numbers'
 	| 'photos-images'
-	| 'plants'
 	| 'political'
 	| 'punctuation-symbols'
 	| 'religion'
@@ -131,7 +136,7 @@ export interface IFontAwesomeIcon {
 		Record<
 			IconStyle,
 			{
-				has_coloured: boolean;
+				colour_locked?: boolean;
 				svg: string;
 			}
 		>
@@ -237,18 +242,17 @@ export const getIconsForCategoryIndexedByIconName = (categoryName: string) => {
 export const isIconStyleDuotoneOrTritone = (iconStyle?: IconStyle) =>
 	[
 		'duotone',
-		'duotone-coloured',
-		'tritone',
-		'tritone-coloured',
-		'tritone-regular',
-		'tritone-regular-coloured',
+		// 'tritone',
+		// 'tritone-regular',
 	].includes(iconStyle || '');
 
-export const isIconStyleTritone = (iconStyle?: IconStyle) =>
-	['tritone', 'tritone-coloured', 'tritone-regular', 'tritone-regular-coloured'].includes(iconStyle || '');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const isIconStyleTritone = (iconStyle?: IconStyle) => false;
+// export const isIconStyleTritone = (iconStyle?: IconStyle) =>
+// 	['tritone', 'tritone-regular'].includes(iconStyle || '');
 
 export const isIconStyleColoured = (iconStyle?: IconStyle) =>
-	['duotone-coloured', 'tritone-coloured', 'tritone-regular-coloured'].includes(iconStyle || '');
+	['coloured', 'coloured-outlined'].includes(iconStyle || '');
 
 export const getAvailableStylesForIcon = (iconName?: string) => {
 	if (iconName !== undefined) {
@@ -257,12 +261,17 @@ export const getAvailableStylesForIcon = (iconName?: string) => {
 		if (icon !== null) {
 			const styles: IconStyle[] = [];
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			Object.entries(icon.svgs).forEach(([iconStyle, iconStyleDefinition]) => {
 				styles.push(iconStyle as IconStyle);
 
-				if (iconStyleDefinition.has_coloured === true) {
-					styles.push(`${iconStyle}-coloured` as IconStyle);
-				}
+				// This wasn't a great way of doing the differentiator between FontAwesome's duotone style and the FlatIcon icons that had two colours.
+				// When we come back to customising the colours on FlatIcon icons, reevisit the implementation and make it cleaner in a way that doesn't
+				// involve us hacking things into the style name.
+				// c.f. getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange()
+				// if (iconStyleDefinition.has_colours === true) {
+				// 	styles.push(`${iconStyle}-coloured` as IconStyle);
+				// }
 			});
 
 			return styles;
@@ -278,19 +287,28 @@ export const getDefaultStyleByIconName = (iconName: string) => {
 		return defaultSymbolIconStyle;
 	}
 
-	return getDefaultStyleForIcon(icon);
+	return getDefaultIconStyle(icon);
 };
 
-export const getDefaultStyleForIcon = (icon: IFontAwesomeIcon) => {
-	if (icon.svgs.solid !== undefined) {
-		return 'solid';
-	} else {
-		return Object.keys(Object.keys(icon.svgs)[0])[0];
+export const getDefaultIconStyle = (icon: IFontAwesomeIcon): IconStyle => {
+	if ('coloured' in icon.svgs) {
+		return 'coloured';
 	}
+
+	if ('coloured-outlined' in icon.svgs) {
+		return 'coloured-outlined';
+	}
+
+	if (defaultSymbolIconStyle in icon.svgs) {
+		return defaultSymbolIconStyle;
+	}
+
+	return Object.keys(icon.svgs)[0] as IconStyle;
 };
 
 export const getIconSVG = (icon: IFontAwesomeIcon, iconStyle?: IconStyle) => {
 	if (iconStyle !== undefined) {
+		// See note in getAvailableStylesForIcon()
 		const iconStyleSansColoured = iconStyle.replace('-coloured', '') as IconStyle;
 		if (icon.svgs[iconStyleSansColoured] !== undefined) {
 			const iconSVGDefinition = icon.svgs[iconStyleSansColoured];
@@ -301,6 +319,26 @@ export const getIconSVG = (icon: IFontAwesomeIcon, iconStyle?: IconStyle) => {
 	}
 
 	return undefined;
+};
+
+export const isIconColourLocked = (icon: IFontAwesomeIcon, iconStyle?: IconStyle) => {
+	if (iconStyle !== undefined) {
+		// See note in getAvailableStylesForIcon()
+		const iconStyleSansColoured = iconStyle.replace('-coloured', '') as IconStyle;
+		if (icon.svgs[iconStyleSansColoured] !== undefined) {
+			const iconSVGDefinition = icon.svgs[iconStyleSansColoured];
+			if (iconSVGDefinition !== undefined) {
+				return iconSVGDefinition.colour_locked || false;
+			}
+		}
+	}
+
+	return false;
+};
+
+export const isIconColourLockedByName = (iconName: string, iconStyle?: IconStyle) => {
+	const icon = getIconByName(iconName);
+	return icon !== null ? isIconColourLocked(icon, iconStyle) : false;
 };
 
 export const getIconStyleName = (icon_style: IconStyle) =>

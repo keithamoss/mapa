@@ -1,19 +1,9 @@
-import { RGBACSSDarkenColour, hextoRGBACSS } from '../../app/colourUtils';
-import {
-	IconStyle,
-	getIconByName,
-	getIconSVG,
-	isIconStyleColoured,
-	isIconStyleDuotoneOrTritone,
-	isIconStyleTritone,
-} from './iconsLibrary';
+import { RGBACSSDarkenColour } from '../../app/colourUtils';
+import { IconStyle, getIconByName, getIconSVG, isIconStyleDuotoneOrTritone, isIconStyleTritone } from './iconsLibrary';
 import {
 	FontAwesomeIconSVGProps,
-	defaultSymbolColour,
 	defaultSymbolDarkenColourByPercentage,
 	defaultSymbolIconSVG,
-	defaultSymbolSecondaryColour,
-	defaultSymbolTertiaryColour,
 } from './symbologyHelpers';
 
 export const getSVGPathElementsByTagNameAndClassName = (
@@ -40,7 +30,12 @@ export const setAttributesOnElement = (svg: Element, attributes: { [key: string]
 		svg.setAttribute(attributeName, attributeValue),
 	);
 
-export const parseAndManipulateSVGIcon = (svg: string, iconProps: FontAwesomeIconSVGProps, iconStyle?: IconStyle) => {
+export const parseAndManipulateSVGIcon = (
+	svg: string,
+	iconProps: FontAwesomeIconSVGProps,
+	isIconColourLocked: boolean,
+	iconStyle?: IconStyle,
+) => {
 	// Wrapping the SVG element in a <div> let's us easily convert the DOM to a string with `.documentElement.innerHTML` later on
 	const svgDOMElementWrapped = new DOMParser().parseFromString(`<div>${svg}</div>`, 'image/svg+xml');
 	const svgDOMElement = svgDOMElementWrapped.getElementsByTagName('svg')[0];
@@ -56,21 +51,51 @@ export const parseAndManipulateSVGIcon = (svg: string, iconProps: FontAwesomeIco
 	});
 
 	// We always write the style inline on the paths, so we can delete the <defs><style>...</style></defs> element(s), if they exist
-	for (const pathElement of svgDOMElement.getElementsByTagName('defs')) {
-		pathElement.remove();
+	for (const defsElement of svgDOMElement.getElementsByTagName('defs')) {
+		defsElement.remove();
 	}
 
-	for (const pathElement of svgDOMElement.getElementsByTagName('g')) {
-		pathElement.removeAttribute('fill');
-	}
+	if (isIconColourLocked === true) {
+		// for (const element of svgDOMElement.getElementsByTagName('*')) {
+		// 	const fill = element.getAttribute('fill');
+		// 	if (fill !== null && fill !== 'none') {
+		// 		element.setAttribute('fill', hextoRGBACSS(fill || defaultSymbolColour));
+		// 	} else {
+		// 		// Some icons have their fill set in the 'style' property, rather than directly on the 'fill' property
+		// 		if ('style' in element && element.style !== undefined) {
+		// 			const fillRGB = (element.style as CSSStyleDeclaration).fill;
+		// 			if (fillRGB !== undefined) {
+		// 				element.setAttribute('fill', fillRGB);
+		// 				element.style = '';
+		// 			}
+		// 		}
+		// 	}
+		// }
+	} else {
+		// @TODO Why did we need this to removeAttribute, again?
+		// for (const groupElement of svgDOMElement.getElementsByTagName('g')) {
+		// 	if (isIconStyleColoured(iconStyle)) {
+		// 		// groupElement.setAttribute('fill', hextoRGBACSS(groupElement.getAttribute('fill') || defaultSymbolColour));
 
-	// Apply the primary colour to all path elements as a default
-	// Duotone and Tritone will come through afterwards and set their own colours
-	// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
-	getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
-		if (isIconStyleColoured(iconStyle)) {
-			pathElement.setAttribute('fill', hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolColour));
-		} else {
+		// 		getSVGPathElementsByTagNameAndClassName(groupElement as SVGSVGElement, 'primary', true).forEach(
+		// 			(pathElement) => {
+		// 				if (isIconStyleColoured(iconStyle)) {
+		// 					pathElement.setAttribute('fill', hextoRGBACSS(groupElement.getAttribute('fill') || defaultSymbolColour));
+		// 				}
+		// 			},
+		// 		);
+		// 	}
+
+		// 	groupElement.removeAttribute('fill');
+		// }
+
+		// Apply the primary colour to all path elements as a default
+		// Duotone and Tritone will come through afterwards and set their own colours
+		// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
+		getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
+			// if (isIconStyleColoured(iconStyle)) {
+			// 	pathElement.setAttribute('fill', hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolColour));
+			// } else {
 			// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
 			if (pathElement.getAttribute('class') === 'primary' || pathElement.getAttribute('class') === null) {
 				pathElement.setAttribute('fill', iconProps.colour);
@@ -79,20 +104,20 @@ export const parseAndManipulateSVGIcon = (svg: string, iconProps: FontAwesomeIco
 				pathElement.setAttribute('fill', RGBACSSDarkenColour(iconProps.colour, defaultSymbolDarkenColourByPercentage));
 				pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
 			}
-		}
+			// }
 
-		pathElement.removeAttribute('data-original');
-	});
+			pathElement.removeAttribute('data-original');
+		});
 
-	// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
-	if (isIconStyleDuotoneOrTritone(iconStyle)) {
-		getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
-			if (isIconStyleColoured(iconStyle)) {
-				pathElement.setAttribute(
-					'fill',
-					hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolSecondaryColour),
-				);
-			} else {
+		// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
+		if (isIconStyleDuotoneOrTritone(iconStyle)) {
+			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
+				// if (isIconStyleColoured(iconStyle)) {
+				// 	pathElement.setAttribute(
+				// 		'fill',
+				// 		hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolSecondaryColour),
+				// 	);
+				// } else {
 				if (pathElement.getAttribute('class') === 'secondary') {
 					pathElement.setAttribute('fill', iconProps.secondaryColour);
 				} else if (pathElement.getAttribute('class') === 'secondary darker') {
@@ -103,18 +128,21 @@ export const parseAndManipulateSVGIcon = (svg: string, iconProps: FontAwesomeIco
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.secondaryOpacity}`);
-			}
+				// }
 
-			pathElement.removeAttribute('data-original');
-		});
-	}
+				pathElement.removeAttribute('data-original');
+			});
+		}
 
-	// Tritone icons only: Apply the tertiary colour style properties to the tertiary path elements
-	if (isIconStyleTritone(iconStyle)) {
-		getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
-			if (isIconStyleColoured(iconStyle)) {
-				pathElement.setAttribute('fill', hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolTertiaryColour));
-			} else {
+		// Tritone icons only: Apply the tertiary colour style properties to the tertiary path elements
+		if (isIconStyleTritone(iconStyle)) {
+			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
+				// if (isIconStyleColoured(iconStyle)) {
+				// 	pathElement.setAttribute(
+				// 		'fill',
+				// 		hextoRGBACSS(pathElement.getAttribute('fill') || defaultSymbolTertiaryColour),
+				// 	);
+				// } else {
 				if (pathElement.getAttribute('class') === 'tertiary') {
 					pathElement.setAttribute('fill', iconProps.tertiaryColour);
 				} else if (pathElement.getAttribute('class') === 'tertiary darker') {
@@ -125,10 +153,11 @@ export const parseAndManipulateSVGIcon = (svg: string, iconProps: FontAwesomeIco
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.tertiaryOpacity}`);
-			}
+				// }
 
-			pathElement.removeAttribute('data-original');
-		});
+				pathElement.removeAttribute('data-original');
+			});
+		}
 	}
 
 	// Modifier icons only
