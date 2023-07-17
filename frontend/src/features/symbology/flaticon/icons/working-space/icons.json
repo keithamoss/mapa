@@ -9397,12 +9397,14 @@
         "name": "garlic-vegetables3",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -9761,12 +9763,14 @@
         "name": "spring-onion-vegetables3",
         "label": "Spring Onion",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10047,12 +10051,11 @@
         "name": "tomato-vegetables3",
         "label": "Tomato",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -10073,12 +10076,14 @@
         "name": "chives-vegetables3",
         "label": "Chives",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10125,12 +10130,14 @@
         "name": "ginger-vegetables3",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10229,12 +10236,14 @@
         "name": "coriander-vegetables3",
         "label": "Coriander",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10515,12 +10524,14 @@
         "name": "coriander-vegetables2",
         "label": "Coriander",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10593,12 +10604,11 @@
         "name": "tomato-vegetables2",
         "label": "Tomato",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -10827,12 +10837,14 @@
         "name": "chilli-vegetables2",
         "label": "Chilli",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -10983,12 +10995,14 @@
         "name": "spring-onion-vegetables2",
         "label": "Spring Onion",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -11067,12 +11081,14 @@
         "name": "rosemary-vegetables1",
         "label": "Rosemary",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -11125,12 +11141,14 @@
         "name": "garlic-vegetables1",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -11154,12 +11172,14 @@
         "name": "black-pepper-vegetables1",
         "label": "Black Pepper",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -11531,12 +11551,11 @@
         "name": "tomato-vegetables1",
         "label": "Tomato",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -11589,12 +11608,11 @@
         "name": "lemon-vegetables1",
         "label": "Lemon",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -11618,12 +11636,14 @@
         "name": "basil-vegetables1",
         "label": "Basil",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -12082,12 +12102,11 @@
         "name": "coconut-vegetables6",
         "label": "Coconut",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -12111,12 +12130,11 @@
         "name": "lemon-vegetables6",
         "label": "Lemon",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -12372,12 +12390,14 @@
         "name": "chilli-vegetables6",
         "label": "Chilli",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -12430,12 +12450,14 @@
         "name": "ginger-vegetables6",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -12604,12 +12626,11 @@
         "name": "bananas-vegetables6",
         "label": "Bananas",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -12662,12 +12683,14 @@
         "name": "scallion-vegetables6",
         "label": "Scallion",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -12749,12 +12772,11 @@
         "name": "papaya-vegetables6",
         "label": "Papaya",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -12865,12 +12887,11 @@
         "name": "mango-vegetables6",
         "label": "Mango",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -12894,12 +12915,14 @@
         "name": "garlic-vegetables6",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -12923,12 +12946,11 @@
         "name": "tomato-vegetables6",
         "label": "Tomato",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -13822,12 +13844,11 @@
         "name": "banana-vegetables5",
         "label": "Banana",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -14033,12 +14054,14 @@
         "name": "shallot-vegetables4",
         "label": "Shallot",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -14241,12 +14264,14 @@
         "name": "ginger-vegetables4",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -14293,12 +14318,11 @@
         "name": "thistle-vegetables4",
         "label": "Thistle",
         "categories": [
-            "Vegetables (Coloured)"
+            "Nature (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "nature"
             ]
         },
         "svgs": {
@@ -14371,12 +14395,14 @@
         "name": "garlic-vegetables4",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -14423,12 +14449,14 @@
         "name": "basil-vegetables4",
         "label": "Basil",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -14735,12 +14763,14 @@
         "name": "dill-vegetables4",
         "label": "Dill",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -15151,12 +15181,14 @@
         "name": "basil-vegetables7",
         "label": "Basil",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -15267,12 +15299,11 @@
         "name": "tomato-vegetables7",
         "label": "Tomato",
         "categories": [
-            "Vegetables (Coloured)"
+            "Fruits (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "fruit"
             ]
         },
         "svgs": {
@@ -15437,45 +15468,18 @@
             }
         }
     },
-    "chili-vegetables7": {
-        "name": "chili-vegetables7",
-        "label": "Chili",
-        "categories": [
-            "Vegetables (Coloured)"
-        ],
-        "search": {
-            "terms": [
-                "vegetable",
-                "veggies"
-            ]
-        },
-        "svgs": {
-            "solid": {
-                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/solid/001-chili.svg"
-            },
-            "coloured-outlined": {
-                "colour_locked": true,
-                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/coloured-outlined/001-chili.svg"
-            },
-            "coloured": {
-                "colour_locked": true,
-                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/coloured/001-chili.svg"
-            },
-            "outlined": {
-                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/outlined/001-chili.svg"
-            }
-        }
-    },
     "ginger-vegetables7": {
         "name": "ginger-vegetables7",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -15702,12 +15706,14 @@
         "name": "rosemary-vegetables7",
         "label": "Rosemary",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -15818,12 +15824,11 @@
         "name": "fiddlehead-fern-vegetables7",
         "label": "Fiddlehead Fern",
         "categories": [
-            "Vegetables (Coloured)"
+            "Nature (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "nature"
             ]
         },
         "svgs": {
@@ -15930,16 +15935,49 @@
             }
         }
     },
+    "chilli-vegetables7": {
+        "name": "chilli-vegetables7",
+        "label": "Chilli",
+        "categories": [
+            "Herbs and Spices (Coloured)"
+        ],
+        "search": {
+            "terms": [
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
+            ]
+        },
+        "svgs": {
+            "solid": {
+                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/solid/001-chilli.svg"
+            },
+            "coloured-outlined": {
+                "colour_locked": true,
+                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/coloured-outlined/001-chilli.svg"
+            },
+            "coloured": {
+                "colour_locked": true,
+                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/coloured/001-chilli.svg"
+            },
+            "outlined": {
+                "svg": "/Users/keithmoss/Projects/GitHub/mapa/frontend/src/features/symbology/flaticon/icons/working-space/_vegetables/_processed/vegetables7/outlined/001-chilli.svg"
+            }
+        }
+    },
     "black-pepper-vegetables7": {
         "name": "black-pepper-vegetables7",
         "label": "Black Pepper",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -16021,12 +16059,14 @@
         "name": "garlic-vegetables7",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -16298,12 +16338,14 @@
         "name": "spring-onion-fruitsandveggies3",
         "label": "Spring Onion",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -16681,12 +16723,14 @@
         "name": "ginger-fruitsandveggies3",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -16965,12 +17009,14 @@
         "name": "garlic-fruitsandveggies3",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -18240,12 +18286,14 @@
         "name": "garlic-fruitsandveggies2",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -18411,12 +18459,14 @@
         "name": "ginger-fruitsandveggies2",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -19098,12 +19148,14 @@
         "name": "spring-onion-fruitsandveggies5",
         "label": "Spring Onion",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -19201,12 +19253,14 @@
         "name": "garlic-fruitsandveggies5",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -19381,12 +19435,14 @@
         "name": "ginger-fruitsandveggies5",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -19585,12 +19641,14 @@
         "name": "chilli-fruitsandveggies5",
         "label": "Chilli",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -19763,12 +19821,14 @@
         "name": "garlic-fruitsandveggies4",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -21596,12 +21656,14 @@
         "name": "garlic-fruitsandveggies6",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -21899,12 +21961,14 @@
         "name": "fennel-fruitsandveggies1",
         "label": "Fennel",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -22054,12 +22118,14 @@
         "name": "basil-fruitsandveggies1",
         "label": "Basil",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -22261,12 +22327,14 @@
         "name": "chives-fruitsandveggies1",
         "label": "Chives",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -22287,12 +22355,14 @@
         "name": "shallot-fruitsandveggies1",
         "label": "Shallot",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -22363,12 +22433,14 @@
         "name": "ginger-fruitsandveggies1",
         "label": "Ginger",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -22695,12 +22767,14 @@
         "name": "garlic-fruitsandveggies1",
         "label": "Garlic",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -23262,12 +23336,14 @@
         "name": "cinnamon-fruitsandveggies1",
         "label": "Cinnamon",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -23340,12 +23416,14 @@
         "name": "herb-fruitsandveggies1",
         "label": "Herb",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -23391,12 +23469,14 @@
         "name": "white-pepper-fruitsandveggies1",
         "label": "White Pepper",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {
@@ -23697,12 +23777,14 @@
         "name": "clove-fruitsandveggies1",
         "label": "Clove",
         "categories": [
-            "Vegetables (Coloured)"
+            "Herbs and Spices (Coloured)"
         ],
         "search": {
             "terms": [
-                "vegetable",
-                "veggies"
+                "herb",
+                "spice",
+                "weasel",
+                "bam!"
             ]
         },
         "svgs": {

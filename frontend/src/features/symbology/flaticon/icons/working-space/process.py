@@ -17,6 +17,9 @@ FOLDER_TO_CATEGORY_MAPPING = {
   "_miscellaneous": {"categories": None, "terms": None}
 }
 FRUITSANDVEG_TO_FRUITS_MAPPING = ["tomato","pineapple","kiwi","melon","strawberry","physalis","apple","lemon","pear","banana","peach","coconut","orange","cherry","cherries","pomegranate","rose apple","mango","papaya","date palm","quince","durian","lychee","starfruit","star fruit","dragon fruit","passionfruit","custard apple","berries","mangosteen","fruit","raspberry","goji","watermelon","grapes","fig","blackberry","plum","blueberry","melon-1","tomato-1","orange-1","grenade","watermelon-1","grape","bananas","rose apple"]
+VEGGIES_TO_HERBSANDSPICES_MAPPING = ["spring onion","chives","coriander","ginger","garlic","basil","shallot","dill","chilli","scallion","rosemary","black pepper","fennel","white pepper","herb","clove","cinnamon"]
+VEGGIES_TO_NATURE_MAPPING = ["thistle", "fiddlehead fern"]
+VEGGIES_TO_FRUITS_MAPPING = ["bananas", "mango", "papaya", "lemon"]
 MISCELLANEOUS_TO_FRUITS_MAPPING = ["berry", "sapote", "black sapote", "white sapote", "blood orange"]
 ICON_OUTPUT_JSON = "icons.json"
 ICONS = {}
@@ -68,9 +71,15 @@ for top_level_folder in FOLDERS:
         print(unique_icon_name)
 
         # Ensure fruits in the 'Fruits and Veggies' pack land in the 'Fruits (Coloured)' category
-        if top_level_folder == "_fruits-and-veggies" or top_level_folder == "_miscellaneous":
-          if icon_name.lower().replace("-", " ") in FRUITSANDVEG_TO_FRUITS_MAPPING or icon_name.lower().replace("-", " ") in MISCELLANEOUS_TO_FRUITS_MAPPING:
+        if top_level_folder == "_vegetables" or top_level_folder == "_fruits-and-veggies" or top_level_folder == "_miscellaneous":
+          icon_name_clean = icon_name.lower().replace("-", " ")
+
+          if icon_name_clean in VEGGIES_TO_FRUITS_MAPPING + FRUITSANDVEG_TO_FRUITS_MAPPING + MISCELLANEOUS_TO_FRUITS_MAPPING:
             metadata = FOLDER_TO_CATEGORY_MAPPING["_fruits"]
+          elif icon_name_clean in VEGGIES_TO_HERBSANDSPICES_MAPPING:
+            metadata = FOLDER_TO_CATEGORY_MAPPING["_herbs-and-spices"]
+          elif icon_name_clean in VEGGIES_TO_NATURE_MAPPING:
+            metadata = FOLDER_TO_CATEGORY_MAPPING["_nature"]
           else:
             # Technically some of these are nuts, but whatever
             metadata = FOLDER_TO_CATEGORY_MAPPING["_vegetables"]
