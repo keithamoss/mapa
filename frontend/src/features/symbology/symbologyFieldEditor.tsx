@@ -393,38 +393,43 @@ function SymbologyFieldEditor(props: Props) {
 	const onChooseIconStyle = (icon_style: IconStyle) => {
 		setValue('icon_style', icon_style, { shouldDirty: true });
 
-		setValue(
-			'colour',
-			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
-				'primary',
-				icon || defaultSymbolIcon,
-				icon_style,
-				defaultSymbolColour,
-			),
-			{ shouldDirty: true },
-		);
+		// See note in getAvailableStylesForIcon()
+		// This needs to be re-enabled when we return to icons that have default colours applied.
+		// The logic goes something like "If the icon has default colours, use those when we change styles.
+		// If not, use the existing colour - which itself has either been chosen by the user or is one of the
+		// default fallback colours defined by the application"
+		// setValue(
+		// 	'colour',
+		// 	getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+		// 		'primary',
+		// 		icon || defaultSymbolIcon,
+		// 		icon_style,
+		// 		defaultSymbolColour,
+		// 	),
+		// 	{ shouldDirty: true },
+		// );
 
-		setValue(
-			'secondary_colour',
-			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
-				'secondary',
-				icon || defaultSymbolIcon,
-				icon_style,
-				defaultSymbolSecondaryColour,
-			),
-			{ shouldDirty: true },
-		);
+		// setValue(
+		// 	'secondary_colour',
+		// 	getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+		// 		'secondary',
+		// 		icon || defaultSymbolIcon,
+		// 		icon_style,
+		// 		defaultSymbolSecondaryColour,
+		// 	),
+		// 	{ shouldDirty: true },
+		// );
 
-		setValue(
-			'tertiary_colour',
-			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
-				'tertiary',
-				icon || defaultSymbolIcon,
-				icon_style,
-				defaultSymbolTertiaryColour,
-			),
-			{ shouldDirty: true },
-		);
+		// setValue(
+		// 	'tertiary_colour',
+		// 	getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+		// 		'tertiary',
+		// 		icon || defaultSymbolIcon,
+		// 		icon_style,
+		// 		defaultSymbolTertiaryColour,
+		// 	),
+		// 	{ shouldDirty: true },
+		// );
 
 		setIsIconStyleChooserOpen(false);
 	};

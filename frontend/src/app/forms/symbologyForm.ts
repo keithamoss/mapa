@@ -104,7 +104,9 @@ export const getColourFromSVGOrDefaultForSymbologyField = (
 	defaultValue: string,
 ) => {
 	// If we're not using the inbuilt colours, just grab the colour from the symbol.
-	if (isIconStyleColoured(iconStyle) === false) {
+	// Using !== true because we only include has_coloured if there are colours, not
+	// in the absence of colours.
+	if (isIconStyleColoured(iconStyle) !== true) {
 		return getStringOrDefaultForSymbologyField(symbol, fieldName, defaultValue);
 	}
 
@@ -124,7 +126,9 @@ export const getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange =
 	defaultValue: string,
 ) => {
 	// If we're not using the inbuilt colours, just grab the colour from the symbol.
-	if (isIconStyleColoured(iconStyle) === false) {
+	// Using !== true because we only include has_coloured if there are colours, not
+	// in the absence of colours.
+	if (isIconStyleColoured(iconStyle) !== true) {
 		return defaultValue;
 	}
 

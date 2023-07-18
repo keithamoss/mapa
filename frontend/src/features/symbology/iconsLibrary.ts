@@ -254,6 +254,10 @@ export const isIconStyleTritone = (iconStyle?: IconStyle) => false;
 export const isIconStyleColoured = (iconStyle?: IconStyle) =>
 	['coloured', 'coloured-outlined'].includes(iconStyle || '');
 
+// When we return to allowing the user to change colours on coloured icons, there's
+// a bunch of code to uncomment and revisit.
+// See all comments that say:
+// "See note in getAvailableStylesForIcon()"
 export const getAvailableStylesForIcon = (iconName?: string) => {
 	if (iconName !== undefined) {
 		const icon = getIconByName(iconName);
