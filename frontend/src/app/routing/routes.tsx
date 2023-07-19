@@ -11,7 +11,7 @@ import SchemaCreator from '../../features/schemas/schemaCreator';
 import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 // eslint-disable-next-line import/no-named-as-default
 import DebugView from '../../features/app/debugView';
-import SchemaEditor from '../../features/schemas/schemaEditor';
+import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
 import SettingsManager from '../../features/settings/settingsManager';
@@ -49,7 +49,7 @@ export const router = sentryCreateBrowserRouter([
 			},
 			{
 				path: 'SchemaManager/Edit/:schemaId',
-				element: <SchemaEditor />,
+				element: <SchemaEditorEntrypoint />,
 			},
 			{
 				path: 'SchemaManager/Delete/:schemaId',

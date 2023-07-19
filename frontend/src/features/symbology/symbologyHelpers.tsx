@@ -66,7 +66,7 @@ export const getAppDefaultSymbologyConfig = () =>
 		secondary_opacity: defaultSymbolSecondaryOpacity,
 		tertiary_colour: defaultSymbolTertiaryColour,
 		tertiary_opacity: defaultSymbolTertiaryOpacity,
-	} as SymbologyProps);
+	}) as SymbologyProps;
 
 export const getFontAwesomeIconFromLibrary = (
 	iconProps: FontAwesomeIconSVGProps,

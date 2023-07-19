@@ -18,6 +18,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import {
@@ -29,11 +30,10 @@ import {
 import { usePatchMapMutation } from '../../app/services/maps';
 import { usePatchFeatureSchemaMutation } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import NotFound from '../../NotFound';
 import { selectActiveMapId } from '../app/appSlice';
+import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import SchemaFieldDataEntryManager, { SchemaFormFieldsFormValues } from '../schemaFields/schemaFieldDataEntryManager';
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
-import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import { SchemaEditor } from '../schemas/schemaEditor';
 import { getFieldFromSchemaDefinitionById } from '../schemas/schemaHelpers';
 import SchemaSelectFormControls from '../schemas/schemaSelectFormControls';
