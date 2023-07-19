@@ -536,14 +536,14 @@ function SymbologyFieldEditor(props: Props) {
 				</AppBar>
 
 				<Box
-					style={{
+					sx={{
 						position: 'sticky',
 						zIndex: 10,
 						top: 56, // The height of the AppBar
-						marginLeft: 24,
-						marginRight: 24,
-						paddingTop: 20,
-						paddingBottom: 20,
+						ml: 3,
+						mr: 3,
+						pt: 3,
+						pb: 3,
 						backgroundColor: 'white',
 					}}
 				>
