@@ -1,9 +1,9 @@
 repos:
   - repo: local
     hooks:
-      - id: eslint
+      - id: eslintz
         language: system
         name: eslint
-        entry: cd frontend && yarn run lint
+        entry: cd frontend && yarn run foobar
         pass_filenames: false
         types_or: [javascript, jsx, ts, tsx]

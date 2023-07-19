@@ -12,6 +12,7 @@ import {
 	Badge,
 	BottomNavigation,
 	BottomNavigationAction,
+	Box,
 	Button,
 	FormControl,
 	FormGroup,
@@ -534,28 +535,42 @@ function SymbologyFieldEditor(props: Props) {
 					</Toolbar>
 				</AppBar>
 
-				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
-					<Paper elevation={0} sx={{ m: 3 }}>
-						<Paper variant="outlined" sx={{ textAlign: 'center', mb: 1, pt: 2, pb: 2 }}>
-							{symbol !== null &&
-								getFontAwesomeIconForSymbolPreview({
-									...symbol,
-									icon,
-									icon_style,
-									colour,
-									opacity,
-									secondary_colour,
-									secondary_opacity,
-									tertiary_colour,
-									tertiary_opacity,
-									modifier_icon,
-									modifier_colour,
-									modifier_opacity,
-									size: (size !== undefined ? size : defaultSymbolSizeForFormFields) * 2,
-									rotation,
-								})}
-						</Paper>
+				{/* Foobar 3 */}
+				<Box
+					style={{
+						position: 'sticky',
+						zIndex: 10,
+						top: 56, // The height of the AppBar
+						marginLeft: 24,
+						marginRight: 24,
+						paddingTop: 20,
+						paddingBottom: 20,
+						backgroundColor: 'white',
+					}}
+				>
+					<Paper variant="outlined" sx={{ mt: 0, pt: 2, pb: 2, textAlign: 'center' }}>
+						{symbol !== null &&
+							getFontAwesomeIconForSymbolPreview({
+								...symbol,
+								icon,
+								icon_style,
+								colour,
+								opacity,
+								secondary_colour,
+								secondary_opacity,
+								tertiary_colour,
+								tertiary_opacity,
+								modifier_icon,
+								modifier_colour,
+								modifier_opacity,
+								size: (size !== undefined ? size : defaultSymbolSizeForFormFields) * 2,
+								rotation,
+							})}
+					</Paper>
+				</Box>
 
+				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
+					<Paper elevation={0} sx={{ m: 3, mt: 0 }}>
 						{navigationValue === 0 && (
 							<React.Fragment>
 								{nameFieldRequired !== false && (
@@ -980,7 +995,8 @@ function SymbologyFieldEditor(props: Props) {
 									{errors.size && <FormHelperText error>{errors.size.message}</FormHelperText>}
 								</FormControl>
 
-								<FormControl fullWidth={true} sx={{ mb: 3, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
+								{/* mb: 6 because we need breathing space to account for the BottomNavigation element */}
+								<FormControl fullWidth={true} sx={{ mb: 6, pl: 1, pr: 1 }} component="fieldset" variant="outlined">
 									<FormLabel component="legend">Rotation</FormLabel>
 
 									<FormGroup>
