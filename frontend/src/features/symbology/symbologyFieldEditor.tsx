@@ -535,7 +535,7 @@ function SymbologyFieldEditor(props: Props) {
 					</Toolbar>
 				</AppBar>
 
-				{/* Foobar 6 */}
+				{/* Foobar 7 */}
 				<Box
 					style={{
 						position: 'sticky',
