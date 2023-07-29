@@ -694,13 +694,13 @@ files = [
 
 [[package]]
 name = "jsonschema"
-version = "4.18.3"
+version = "4.18.4"
 description = "An implementation of JSON Schema validation for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "jsonschema-4.18.3-py3-none-any.whl", hash = "sha256:aab78b34c2de001c6b692232f08c21a97b436fe18e0b817bf0511046924fceef"},
-    {file = "jsonschema-4.18.3.tar.gz", hash = "sha256:64b7104d72efe856bea49ca4af37a14a9eba31b40bb7238179f3803130fd34d9"},
+    {file = "jsonschema-4.18.4-py3-none-any.whl", hash = "sha256:971be834317c22daaa9132340a51c01b50910724082c2c1a2ac87eeec153a3fe"},
+    {file = "jsonschema-4.18.4.tar.gz", hash = "sha256:fb3642735399fa958c0d2aad7057901554596c63349f4f6b283c493cf692a25d"},
 ]
 
 [package.dependencies]
@@ -1360,4 +1360,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5021b2036c5e2e71bf6fddac44de8febaab7d342aab249b2a6e6bbb8bd09bbbe"
+content-hash = "56ee8bc080a7b639564cae22a2dc79df8d821d5be2f9f23fb7d8e789719df833"
