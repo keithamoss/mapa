@@ -482,13 +482,13 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0dev)"]
 
 [[package]]
 name = "google-api-python-client"
-version = "2.95.0"
+version = "2.97.0"
 description = "Google API Client Library for Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "google-api-python-client-2.95.0.tar.gz", hash = "sha256:d2731ede12f79e53fbe11fdb913dfe986440b44c0a28431c78a8ec275f4c1541"},
-    {file = "google_api_python_client-2.95.0-py2.py3-none-any.whl", hash = "sha256:a8aab2da678f42a01f2f52108f787fef4310f23f9dd917c4e64664c3f0c885ba"},
+    {file = "google-api-python-client-2.97.0.tar.gz", hash = "sha256:48277291894876a1ca7ed4127e055e81f81e6343ced1b544a7200ae2c119dcd7"},
+    {file = "google_api_python_client-2.97.0-py2.py3-none-any.whl", hash = "sha256:5215f4cd577753fc4192ccfbe0bb8b55d4bb5fd68fa6268ac5cf271b6305de31"},
 ]
 
 [package.dependencies]
@@ -1358,4 +1358,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "94c4412c51b1e5db09b40164c9bb119c96aaf72c5cbfc3b370aeb153111a3ccf"
+content-hash = "a5fa43ac620dd131495f99b6dfeb8f1b2e7f3cec45aba021199272294f59eb65"
