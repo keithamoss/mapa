@@ -3600,7 +3600,7 @@ __metadata:
     js-cookie: ^3.0.4
     lodash-es: ^4.17.21
     minisearch: ^6.1.0
-    ol: ^7.5.0
+    ol: ^7.5.1
     prettier: ^3.0.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -5201,16 +5201,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^7.5.0":
-  version: 7.5.0
-  resolution: "ol@npm:7.5.0"
+"ol@npm:^7.5.1":
+  version: 7.5.1
+  resolution: "ol@npm:7.5.1"
   dependencies:
     earcut: ^2.2.3
     geotiff: ^2.0.7
     ol-mapbox-style: ^10.1.0
     pbf: 3.2.1
     rbush: ^3.0.1
-  checksum: b3c8d849b155bb99e85d286153520861e985023e378f720ce5bcd937c7458f58452ca75c176e02ee0016e5e517a854d8b86f78de3a7c849edab0e2639d002da8
+  checksum: afebc55b87778afc9995ef9c957955238d56767ed5c0c72f8be9092da38e4088251a789c5cca78680150a099da6774713b2501862d82225c8c6d1338a633889e
   languageName: node
   linkType: hard
 
