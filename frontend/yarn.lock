@@ -1243,7 +1243,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.64.0, @sentry/browser@npm:^7.64.0":
+"@sentry/browser@npm:7.66.0":
+  version: 7.66.0
+  resolution: "@sentry/browser@npm:7.66.0"
+  dependencies:
+    "@sentry-internal/tracing": 7.66.0
+    "@sentry/core": 7.66.0
+    "@sentry/replay": 7.66.0
+    "@sentry/types": 7.66.0
+    "@sentry/utils": 7.66.0
+    tslib: ^2.4.1 || ^1.9.3
+  checksum: c3530289f31514fcd6ac1009dc7fd3fc28a378d9bd11ed6f9acdc02729119287810ced25bf53eaa64983ab04558ce234d9938f6dc4e42f079da3eebb94939b64
+  languageName: node
+  linkType: hard
+
+"@sentry/browser@npm:^7.64.0":
   version: 7.64.0
   resolution: "@sentry/browser@npm:7.64.0"
   dependencies:
@@ -1337,18 +1351,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:^7.64.0":
-  version: 7.64.0
-  resolution: "@sentry/react@npm:7.64.0"
+"@sentry/react@npm:^7.66.0":
+  version: 7.66.0
+  resolution: "@sentry/react@npm:7.66.0"
   dependencies:
-    "@sentry/browser": 7.64.0
-    "@sentry/types": 7.64.0
-    "@sentry/utils": 7.64.0
+    "@sentry/browser": 7.66.0
+    "@sentry/types": 7.66.0
+    "@sentry/utils": 7.66.0
     hoist-non-react-statics: ^3.3.2
     tslib: ^2.4.1 || ^1.9.3
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
-  checksum: f5f6b36037b659a7d64eb56a98121e72a592b9fe1b0ed8626598cf700e552007a1d3e3fe9c922985dd9adda6349b28231e9b767e6c8aeb6c446355ff26a42ec6
+  checksum: 3d24dd82aad7ec39d9aabbb056b895089e6d459b5c1f325c5f0816dc3d8aecd2b057c4ea4b5e17b100c168dde381d6561a84b1371408580c175d7b5447185b88
   languageName: node
   linkType: hard
 
@@ -1360,6 +1374,17 @@ __metadata:
     "@sentry/types": 7.64.0
     "@sentry/utils": 7.64.0
   checksum: 0e9522bff5ee8a6383660e8da182b0918b01782153f1ac645b2a3c917656705ca19b6eb176b80becb0b527e42ceb12e85baf405f3e4f82ca2c09ffda80fea242
+  languageName: node
+  linkType: hard
+
+"@sentry/replay@npm:7.66.0":
+  version: 7.66.0
+  resolution: "@sentry/replay@npm:7.66.0"
+  dependencies:
+    "@sentry/core": 7.66.0
+    "@sentry/types": 7.66.0
+    "@sentry/utils": 7.66.0
+  checksum: 54b4ea614a4eb79b7a35327249f06612b4bc60209927046736e5ae8b609883e1a295563a5f9377140a21c74e777ae6c81bdb4498f3f920163df9a6fe135241b2
   languageName: node
   linkType: hard
 
@@ -3717,7 +3742,7 @@ __metadata:
     "@mui/material": ^5.14.6
     "@reduxjs/toolkit": ^1.9.5
     "@sentry/browser": ^7.64.0
-    "@sentry/react": ^7.64.0
+    "@sentry/react": ^7.66.0
     "@sentry/tracing": ^7.66.0
     "@sentry/vite-plugin": ^2.7.0
     "@testing-library/jest-dom": ^6.1.2
