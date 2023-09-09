@@ -1201,7 +1201,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.68.0":
+"@sentry/browser@npm:7.68.0, @sentry/browser@npm:^7.68.0":
   version: 7.68.0
   resolution: "@sentry/browser@npm:7.68.0"
   dependencies:
@@ -1212,20 +1212,6 @@ __metadata:
     "@sentry/utils": 7.68.0
     tslib: ^2.4.1 || ^1.9.3
   checksum: 85d688902057d85113cd6fb46e4ca17167bfda6ce77c8264f1f29bf7d451dd73315ebcf7134ac91d539fc4032449ac25b0dd6e9209695bd934a4716acda55aac
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:^7.66.0":
-  version: 7.66.0
-  resolution: "@sentry/browser@npm:7.66.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.66.0
-    "@sentry/core": 7.66.0
-    "@sentry/replay": 7.66.0
-    "@sentry/types": 7.66.0
-    "@sentry/utils": 7.66.0
-    tslib: ^2.4.1 || ^1.9.3
-  checksum: c3530289f31514fcd6ac1009dc7fd3fc28a378d9bd11ed6f9acdc02729119287810ced25bf53eaa64983ab04558ce234d9938f6dc4e42f079da3eebb94939b64
   languageName: node
   linkType: hard
 
@@ -1321,17 +1307,6 @@ __metadata:
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
   checksum: 73b9c3e2e3805ec068d95ceef0702783604c972b1ea873523ec63af9b3ce73667eb9fecbfe0838a5b0f33fe87da97cd2f6c1a74859e342c637adf15999f1bae2
-  languageName: node
-  linkType: hard
-
-"@sentry/replay@npm:7.66.0":
-  version: 7.66.0
-  resolution: "@sentry/replay@npm:7.66.0"
-  dependencies:
-    "@sentry/core": 7.66.0
-    "@sentry/types": 7.66.0
-    "@sentry/utils": 7.66.0
-  checksum: 54b4ea614a4eb79b7a35327249f06612b4bc60209927046736e5ae8b609883e1a295563a5f9377140a21c74e777ae6c81bdb4498f3f920163df9a6fe135241b2
   languageName: node
   linkType: hard
 
@@ -3692,7 +3667,7 @@ __metadata:
     "@mui/icons-material": ^5.14.7
     "@mui/material": ^5.14.7
     "@reduxjs/toolkit": ^1.9.5
-    "@sentry/browser": ^7.66.0
+    "@sentry/browser": ^7.68.0
     "@sentry/react": ^7.68.0
     "@sentry/tracing": ^7.66.0
     "@sentry/vite-plugin": ^2.7.1
