@@ -10,7 +10,7 @@
     "@mui/icons-material": "^5.14.9",
     "@mui/material": "^5.14.9",
     "@reduxjs/toolkit": "^1.9.5",
-    "@sentry/browser": "^7.68.0",
+    "@sentry/browser": "^7.69.0",
     "@sentry/react": "^7.68.0",
     "@sentry/tracing": "^7.69.0",
     "@testing-library/jest-dom": "^6.1.3",
