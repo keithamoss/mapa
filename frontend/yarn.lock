@@ -1718,10 +1718,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.5.8":
-  version: 20.5.8
-  resolution: "@types/node@npm:20.5.8"
-  checksum: ccd73e0e99ddfcf42e10b7a30a58a432bc39eeb9d1d59084ed818be468e05375b212a29d03529149aff58366c0eddb9bf367cb335db6620a4855ce315c5ecf28
+"@types/node@npm:^20.6.1":
+  version: 20.6.1
+  resolution: "@types/node@npm:20.6.1"
+  checksum: f9848617221b513d558071c804b006750d1ee1734c5ffea3ada9a0edd1642334ad0812222d6b99b7b8c0e1a5f1e557946ae99444c2705e9afc125abdf9fa36c2
   languageName: node
   linkType: hard
 
@@ -3651,7 +3651,7 @@ __metadata:
     "@types/jest": ^29.5.4
     "@types/js-cookie": ^3.0.4
     "@types/lodash-es": ^4.17.9
-    "@types/node": ^20.5.8
+    "@types/node": ^20.6.1
     "@types/react": ^18.2.21
     "@types/react-dom": ^18.2.7
     "@typescript-eslint/eslint-plugin": ^6.7.0
