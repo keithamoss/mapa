@@ -3491,7 +3491,7 @@ __metadata:
     js-cookie: ^3.0.4
     lodash-es: ^4.17.21
     minisearch: ^6.1.0
-    ol: ^7.5.2
+    ol: ^7.4.0
     prettier: ^3.0.3
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -5145,7 +5145,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^7.3.0, ol@npm:^7.5.2":
+"ol@npm:^7.3.0, ol@npm:^7.4.0":
   version: 7.5.2
   resolution: "ol@npm:7.5.2"
   dependencies:

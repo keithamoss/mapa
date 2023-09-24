@@ -1,6 +1,6 @@
 import { Map } from 'ol';
-import BaseEvent from 'ol/events/Event';
 import { default as OLFeature } from 'ol/Feature';
+import BaseEvent from 'ol/events/Event';
 import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -37,7 +37,7 @@ export const manageVectorImageLayerCreation = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		vectorLayer as VectorLayer<VectorSource<Geometry>>,
+		vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);
