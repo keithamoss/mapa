@@ -77,7 +77,7 @@ def migrate():
                 print(serializer.data)
                 raise Exception("is not valid!")
 
-    with open("contents.csv", "w") as f_csv:
+    with open("map_marker_contents.csv", "w") as f_csv:
         contentsCSV = csv.DictWriter(f_csv, ["id", "title", "description", "folder_id", "icon_id"])
         contentsCSV.writeheader()
 
