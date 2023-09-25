@@ -8,7 +8,7 @@ export const schemaFormValidationSchema = yup
 		definition: yup.array().notRequired(),
 		symbology: yup.object().required(),
 		default_symbology: symbologyFormValidationSchema(false, false),
-		recently_used_symbols: yup.object().required(),
+		recently_used_symbols: yup.object().optional(),
 	})
 	.required();
 
