@@ -88,5 +88,6 @@ class Features(models.Model):
     symbol_id = models.IntegerField(blank=True, null=True)
     data = JSONField(default=list, blank=True)
     deleted_at = models.DateTimeField(null=True)
+    import_job = models.TextField(default="")
 
     history = HistoricalRecords()

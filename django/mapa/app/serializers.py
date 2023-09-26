@@ -52,7 +52,7 @@ class MapSerializer(serializers.ModelSerializer):
 class FeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Features
-        fields = ("id", "geom", "geom_type", "map_id", "schema_id", "symbol_id", "data")
+        fields = ("id", "geom", "geom_type", "map_id", "schema_id", "symbol_id", "data", "import_job")
 
 
 class FeatureSchemaSerializer(serializers.ModelSerializer):

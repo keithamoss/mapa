@@ -47,6 +47,7 @@ export const initFeatureFromMapCentre = (mapId: number) => {
 				schema_id: getSchemaIdForNewFeature(),
 				symbol_id: null,
 				data: [],
+				import_job: '',
 			};
 		}
 	};

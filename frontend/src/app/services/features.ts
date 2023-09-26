@@ -51,6 +51,7 @@ export interface Feature {
 	symbolCacheKey?: string;
 	symbol?: Partial<SymbologyProps>;
 	symbolCacheKeyWebGL?: string;
+	import_job: string;
 }
 
 export type NewFeature = Omit<Feature, 'id'>;
