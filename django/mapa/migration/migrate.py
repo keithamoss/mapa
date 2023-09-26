@@ -10,11 +10,11 @@ IMPORT_JOB_NAME = "20230926 Foraging Map Migration"
 JSON_DATA_FILE_PATH = "./content.json"
 CSV_DATA_FILE_PATH = "./MIGRATED_map_marker_contents_30Aug2023 - map_marker_contents_30Aug2023.csv"
 # Keith's Local Dev
-# FORAGING_MAP_ID = 26
-# FORAGING_SCHEMA_ID = 67
+FORAGING_MAP_ID = 26
+FORAGING_SCHEMA_ID = 67
 # Production
-FORAGING_MAP_ID = 7
-FORAGING_SCHEMA_ID = 6
+# FORAGING_MAP_ID = 7
+# FORAGING_SCHEMA_ID = 6
 
 def migrate():
     from mapa.app.enums import GeomType
