@@ -28,17 +28,17 @@ import {
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { searchFormValidationSchema } from '../../app/forms/searchForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Feature } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import NotFound from '../../NotFound';
 import {
-	defaultSearchParameters,
-	getSearchParameters,
 	SearchField,
 	SearchFieldLabel,
 	SearchParameters,
+	defaultSearchParameters,
+	getSearchParameters,
 	selectActiveMapId,
 	setFilteredFeatures,
 	setSearchParameters,
@@ -202,7 +202,7 @@ function SearchManager(props: Props) {
 								<FormGroup>
 									{searchResults.length === 0 && isSearchingYet(search_term) === true && (
 										<Typography variant="caption" sx={{ fontStyle: 'italic', mt: 1 }}>
-											No results found :(
+											No results found.
 										</Typography>
 									)}
 
