@@ -6,15 +6,18 @@ from django.forms.models import model_to_dict
 
 django.setup()
 
-IMPORT_JOB_NAME = "20230926 Foraging Map Migration"
+IMPORT_JOB_NAME = "20230930 Foraging Map Migration"
 JSON_DATA_FILE_PATH = "./content.json"
-CSV_DATA_FILE_PATH = "./MIGRATED_map_marker_contents_30Aug2023 - map_marker_contents_30Aug2023.csv"
+CSV_DATA_FILE_PATH = "./MIGRATED_map_marker_contents_foraging_map_30Aug2023.csv"
 # Local Dev
 FORAGING_MAP_ID = 26
 FORAGING_SCHEMA_ID = 67
-# Production
+# Production - H
 # FORAGING_MAP_ID = 7
 # FORAGING_SCHEMA_ID = 6
+# Production - K
+# FORAGING_MAP_ID = 10
+# FORAGING_SCHEMA_ID = 9
 
 def migrate():
     from mapa.app.enums import GeomType
