@@ -30,6 +30,56 @@ export const setAttributesOnElement = (svg: Element, attributes: { [key: string]
 		svg.setAttribute(attributeName, attributeValue),
 	);
 
+const calculateScaleAndTranslationForSVGModifierIcon = (
+	originalIconViewboxWidthDimension: number,
+	originalIconViewboxHeightDimension: number,
+	modifierIconViewboxWidthDimension: number,
+) => {
+	// We want modifier icons to be 40% the size of the original icon.
+	// We'll use the `scale` property to change it's size.
+	const modifierIconWidthPercentage = 0.4;
+
+	// Take the largest of the dimensions to accomodate original icons that
+	// have viewboxes that arent't squares.
+	// e.g. The 'place marker question mark icon' is "0 0 384 512"
+	const originalIconViewboxLargestDimension = Math.max(
+		originalIconViewboxWidthDimension,
+		originalIconViewboxHeightDimension,
+	);
+
+	// To scale it, we need to know how much to scale the modifier
+	// icon by in relation to the viewbox of the original icon.
+	// The original icons can have varying viewbox sizes - anything
+	// from "0 0 48 48" to "0 0 512 512" and beyond.
+	// Whereas the modifier icons are usually "0 0 512 512"
+	// This may change in future when we allow users to use any
+	// icons as modifers, not just the circle-* icons.
+
+	// We need to convert that to the size of the viewbox dimensions.
+	// We can think of these as pixels.
+	// Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox
+	// e.g. An original icon with a viewbox of "0 0 48 48" would lead to a
+	// desired modifier icon with dimensions of (48 * 0.4) = 19.2
+	const desiredModifierIconSizeInViewboxDimensions = originalIconViewboxLargestDimension * modifierIconWidthPercentage;
+
+	// Now let's turn this into a % value we can use in the `scale` function.
+	// e.g. An original icon with a desired modifier icon size of 19.2 viewbox dims
+	// would lead to a desired scale of (19.2 / 512) * 100 = 3.75%
+	const scale = (desiredModifierIconSizeInViewboxDimensions / modifierIconViewboxWidthDimension) * 100;
+
+	// Lastly, now we need to work out where to position the top-left corner of the
+	// modifier icon so it sits neatly in the bottom-right corner of the original icon.
+	// Since the modifier icons are modifierIconWidthPercentage% of the original, the
+	// offset just becomes 100% - modifierIconWidthPercentage.
+	// e.g. If we want to scale the modifier to 40%, then logically the offset value is 60%.
+	const modifierIconPositionOffsetPercentage = 1 - modifierIconWidthPercentage;
+
+	const translateX = originalIconViewboxWidthDimension * modifierIconPositionOffsetPercentage;
+	const translateY = originalIconViewboxHeightDimension * modifierIconPositionOffsetPercentage;
+
+	return { scale, translateX, translateY };
+};
+
 export const parseAndManipulateSVGIcon = (
 	svg: string,
 	iconProps: FontAwesomeIconSVGProps,
@@ -114,44 +164,60 @@ export const parseAndManipulateSVGIcon = (
 		const modifierIcon = getIconByName(iconProps.modifierIcon);
 
 		if (modifierIcon !== null) {
-			// Scale all <paths> back by 80% (towards the top-left corner) to give the modifier icon room to live
-			for (const pathElement of svgDOMElement.getElementsByTagName('path')) {
-				setAttributesOnElement(pathElement, {
-					style: 'scale: 80%;',
-				});
+			// Wrapping the modifier SVG element in a <div> let's us easily access the typed SVGSVGElement object
+			const modifierSVG = getIconSVG(modifierIcon, 'solid') || defaultSymbolIconSVG;
+			const modifierSVGDOMElementWrapped = new DOMParser().parseFromString(
+				`<div>${modifierSVG}</div>`,
+				'image/svg+xml',
+			);
+			const modifierSVGDOMElement = modifierSVGDOMElementWrapped.getElementsByTagName('svg')[0];
+
+			// We need to know the size of both the base and modifier icon viewboxes to place the modifier icon properly, so let's hackily parse them
+			const viewbox = svgDOMElement.getAttribute('viewBox')?.split(' ');
+			const modifierIconViewbox = modifierSVGDOMElement.getAttribute('viewBox')?.split(' ');
+
+			// Errors raised here get reported in getFontAwesomeIconFromLibrary() and defaultSymbolIconSVGPreStyled is returned instead
+			if (viewbox === undefined) {
+				throw Error(`Unable to find a viewbox in the base icon SVG: ${JSON.stringify(iconProps)} // ${svg}`);
 			}
 
-			// We need to know the size of the viewbox to place the modifier icon properly, so let's hackily parse it
-			const viewBox = svgDOMElement.getAttribute('viewBox')?.split(' ');
-
-			if (viewBox !== undefined) {
-				const modifierSVG = getIconSVG(modifierIcon, 'solid') || defaultSymbolIconSVG;
-				const modifierSVGDOMElement = new DOMParser().parseFromString(modifierSVG, 'image/svg+xml');
-
-				// As a baseline, 512 dims = 250px of translation to get the modifier to roughly the bottom right-hand corner
-				const translateX = 250 + (Number(viewBox[2]) - 512);
-				const translateY = 250 + (Number(viewBox[3]) - 512);
-
-				// Scale all <paths> back by 50% to make the modifier icon just the right size to sit in the bottom-right corner
-				// Translate takes care of finding the precise top-left corner to place the icon in based on the dimensions of
-				// the parent icon.
-				for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
-					pathElement.setAttribute(
-						'style',
-						`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: 50%;`,
-					);
-				}
-
-				// Place a white background circle behind the modifier icon so it's appearance is uniform
-				svgDOMElement.insertAdjacentHTML(
-					'beforeend',
-					`<path style="fill: rgb(255, 255, 255); translate: ${translateX}px ${translateY}px; scale: 50%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
+			if (modifierIconViewbox === undefined) {
+				throw Error(
+					`Unable to find a viewbox in the modifier icon SVG: ${JSON.stringify(iconProps)} // ${modifierSVG}`,
 				);
+			}
 
-				// Lastly, insert our modifier icon path elements into the parent icon
-				for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
-					svgDOMElement.insertAdjacentElement('beforeend', pathElement);
-				}
+			// NOTE: We assume the viewbox width and height of the modifier icon are the same (i.e. they're squares).
+			// This is a safe assumption (...for now!)
+			const originalIconViewboxWidth = parseInt(viewbox[2]);
+			const originalIconViewboxHeight = parseInt(viewbox[3]);
+			const modifierIconViewboxWidth = parseInt(modifierIconViewbox[2]);
+
+			const { scale, translateX, translateY } = calculateScaleAndTranslationForSVGModifierIcon(
+				originalIconViewboxWidth,
+				originalIconViewboxHeight,
+				modifierIconViewboxWidth,
+			);
+
+			// Scale all <paths> to make the modifier icon just the right size to sit in the bottom-right corner.
+			// Translate takes care of placing the top-left corner of the modifier icon so it sits neatly in the
+			// bottom right-hand corner of the original icon.
+			for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
+				pathElement.setAttribute(
+					'style',
+					`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
+				);
+			}
+
+			// Place a white background circle behind the modifier icon so it's appearance is uniform
+			svgDOMElement.insertAdjacentHTML(
+				'beforeend',
+				`<path style="fill: rgb(255, 255, 255); translate: ${translateX}px ${translateY}px; scale: ${scale}%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
+			);
+
+			// Lastly, insert our modifier icon path elements into the parent icon
+			for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
+				svgDOMElement.insertAdjacentElement('beforeend', pathElement);
 			}
 		}
 	}
