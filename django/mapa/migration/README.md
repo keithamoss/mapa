@@ -21,7 +21,7 @@ cd /app/mapa/migration
 # Only if needed
 # apt update
 # apt install nano
-# nano migrate.py
+# nano migrate_foraging_map.py
 
-python migrate.py
+python migrate_foraging_map.py
 ```

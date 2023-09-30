@@ -7,9 +7,20 @@ import django
 django.setup()
 
 JSON_DATA_FILE_PATH = "./content.json"
+IMPORT_JOB_NAME = "20230930 Interesting Maps Migration"
 FORAGING_FOLDER_ID = 2
-FORAGING_MAP_ID = 22
-FORAGING_SCHEMA_ID = 64
+# Local Dev
+# FORAGING_MAP_ID = 26
+# FORAGING_SCHEMA_ID = 64
+# INTERESTING_PERTH_MAP_ID = 27
+# INTERESTING_SYDNEY_MAP_ID = 28
+# INTERESTING_SCHEMA_ID = 68
+# Production
+FORAGING_MAP_ID = 10
+FORAGING_SCHEMA_ID = 9
+INTERESTING_PERTH_MAP_ID = 8
+INTERESTING_SYDNEY_MAP_ID = 9
+INTERESTING_SCHEMA_ID = 8
 
 
 def translate_folder_to_map(folderId, folders):
@@ -18,8 +29,10 @@ def translate_folder_to_map(folderId, folders):
     if folder is not None:
         if folder["name"] == "Foraging":
             return FORAGING_MAP_ID
-        elif folder["name"] == "Interesting Perth" or folder["name"] == "Interesting Sydney":
-            return -1
+        elif folder["name"] == "Interesting Perth":
+            return INTERESTING_PERTH_MAP_ID
+        elif folder["name"] == "Interesting Sydney":
+            return INTERESTING_SYDNEY_MAP_ID
 
     raise Exception("Unknown folder")
 
@@ -30,7 +43,9 @@ def migrate():
     from mapa.app.serializers import FeatureSerializer
 
     with open(JSON_DATA_FILE_PATH, "r") as f:
-        Features.objects.filter(map_id=FORAGING_MAP_ID).delete()
+        # Features.objects.filter(map_id=FORAGING_MAP_ID).delete()
+        # Features.objects.filter(map_id=INTERESTING_PERTH_MAP_ID).delete()
+        # Features.objects.filter(map_id=INTERESTING_SYDNEY_MAP_ID).delete()
 
         data = json.load(f)["data_content"]
         folders = data["folder"]
@@ -38,14 +53,11 @@ def migrate():
         csv_out = []
 
         for feature in data["poi"]:
-            # print(feature)
-
-            if feature["folder_id"] != FORAGING_FOLDER_ID:
+            if feature["folder_id"] == FORAGING_FOLDER_ID:
                 continue
 
             serializer = FeatureSerializer(data={
-                "geom_type": GeomType.POINT,
-                "map_id": translate_folder_to_map(feature["folder_id"], folders),
+                "import_job": IMPORT_JOB_NAME,
                 "geom": {
                     "type": "Point",
                     "coordinates": [
@@ -53,9 +65,17 @@ def migrate():
                         feature["geometry"]["data"]["latitude"],
                     ]
                 },
-                "schema_id": FORAGING_SCHEMA_ID,
-                "data": [],
-                "symbol_id": random.randint(1, 9)
+                "geom_type": GeomType.POINT,
+                "map_id": translate_folder_to_map(feature["folder_id"], folders),
+                "schema_id": FORAGING_SCHEMA_ID if feature["folder_id"] == FORAGING_FOLDER_ID else INTERESTING_SCHEMA_ID,
+                "symbol_id": None,
+                "data": [{
+                    "value": feature["title"],
+                    "schema_field_id": 1
+                },{
+                    "value": feature["description"],
+                    "schema_field_id": 2
+                }],
             })
 
             csv_out.append({

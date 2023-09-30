@@ -9,7 +9,7 @@ django.setup()
 IMPORT_JOB_NAME = "20230926 Foraging Map Migration"
 JSON_DATA_FILE_PATH = "./content.json"
 CSV_DATA_FILE_PATH = "./MIGRATED_map_marker_contents_30Aug2023 - map_marker_contents_30Aug2023.csv"
-# Keith's Local Dev
+# Local Dev
 FORAGING_MAP_ID = 26
 FORAGING_SCHEMA_ID = 67
 # Production
