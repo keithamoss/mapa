@@ -16,3 +16,16 @@ updates:
       time: "09:30"
       timezone: Australia/Perth
     open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: "react-hook-form"
+    versions:
+    - 7.44.3
+  - dependency-name: "@hookform/resolvers"
+    versions:
+    - 3.1.0
+  - dependency-name: "yup"
+    versions:
+    - 1.2.0
+  - dependency-name: "7.4.0"
+    versions:
+    - 7.4.0
