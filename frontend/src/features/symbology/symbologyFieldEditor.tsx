@@ -139,9 +139,13 @@ export const getAppMapAndSchemaDefaultSymbologyConfigForForm = (
 	const defaults = { ...getAppDefaultSymbologyConfig(), ...mapDefaultSymbology, ...schemaDefaultSymbology };
 
 	// This UI is all about choosing an icon, so we don't want
-	// to delete any defaults props about the icon itself
-	delete defaults.icon;
-	delete defaults.icon_style;
+	// to delete any defaults props about the icon itself.
+	// ...actually, scratch that!
+	// We do want to delete defaults for the icon because
+	// components like SchemaFieldFormForSymbologyBoolean rely
+	// being able to only set any fields e.g. just the modifier icon.
+	// delete defaults.icon;
+	// delete defaults.icon_style;
 
 	return defaults as Partial<SymbologyProps>;
 };
