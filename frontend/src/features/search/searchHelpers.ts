@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import MiniSearch from 'minisearch';
 import { Feature } from '../../app/services/features';
-import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
+import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
 import { SearchField } from '../app/appSlice';
 import { getFeatureDataItemForSchemaField } from '../features/featureHelpers';
 import { getSymbolNameBySymbolId } from '../symbology/symbologyHelpers';
@@ -76,4 +76,47 @@ export const searchFeatures = (
 	miniSearch.addAll(Object.values(features));
 
 	return miniSearch.search(search_term) as FeatureSearchResult[];
+};
+
+export interface SymbolSearchResult {
+	id: number;
+	match: {
+		[key: string]: string[];
+	};
+	score: number;
+	terms: string[];
+	'prop.name': string;
+}
+
+export const searchSymbols = (
+	symbology: FeatureSchemaSymbology,
+	search_term: string,
+	search_fields = ['props.name'],
+) => {
+	if (isSearchingYet(search_term) === false) {
+		return [];
+	}
+
+	const miniSearch = new MiniSearch({
+		fields: search_fields, // Fields to index for full-text search
+		storeFields: [...search_fields], // Fields to return with search results
+		searchOptions: {
+			// boost: {  }, // Fields to boost in the results
+			prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
+			combineWith: 'AND', // Combine terms with AND, not OR
+			// Fuzzy search with a max edit distance of 0.2 * term length,
+			// rounded to nearest integer. The mispelled 'ismael' will match 'ishmael'.
+			fuzzy: 2,
+		},
+		// Access schema-derived fields and nested fields (and regular top-level fields)
+		extractField: (document, fieldName) => {
+			// Unpack nested fields
+			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
+		},
+	});
+
+	// Index all documents
+	miniSearch.addAll(symbology.symbols);
+
+	return miniSearch.search(search_term) as SymbolSearchResult[];
 };

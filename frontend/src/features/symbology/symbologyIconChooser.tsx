@@ -29,6 +29,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
+import { isSearchingYet } from '../search/searchHelpers';
 import {
 	IFontAwesomeIcon,
 	IconStyle,
@@ -61,7 +62,7 @@ function SymbologyIconChooser(props: Props) {
 
 	const onIconSearchInputChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 		startTransition(() => {
-			if (event.target.value.length >= 3) {
+			if (isSearchingYet(event.target.value) === true) {
 				setIconSearchTerm(event.target.value);
 			} else if (event.target.value.length === 0) {
 				setIconSearchTerm('');
