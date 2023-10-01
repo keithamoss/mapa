@@ -64,6 +64,7 @@ import { getNextSchemaFieldId } from './schemasSlice';
 
 interface Props {
 	schema?: FeatureSchema;
+	symbolId?: number;
 	onDoneAdding?: (schema: NewFeatureSchema) => void;
 	onDoneEditing?: (schema: FeatureSchema) => void;
 	onCancel?: () => void;
@@ -74,7 +75,7 @@ function SchemaForm(props: Props) {
 
 	const mapId = useAppSelector(selectActiveMapId);
 
-	const { schema, onDoneAdding, onDoneEditing, onCancel } = props;
+	const { schema, symbolId, onDoneAdding, onDoneEditing, onCancel } = props;
 
 	const {
 		watch,
@@ -343,6 +344,7 @@ function SchemaForm(props: Props) {
 							<FormGroup>
 								<SchemaSymbologyManager
 									schemaId={schema?.id}
+									symbolId={symbolId}
 									symbology={symbology}
 									mapId={mapId}
 									onAddGroup={onAddSymbolGroup}

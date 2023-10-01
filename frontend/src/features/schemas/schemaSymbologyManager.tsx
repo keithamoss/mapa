@@ -8,7 +8,6 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import {
 	AppBar,
 	Box,
@@ -25,7 +24,9 @@ import {
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
 import { groupBy } from 'lodash-es';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
 import {
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologyGroup,
@@ -34,8 +35,8 @@ import {
 } from '../../app/services/schemas';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import {
-	defaultSymbologyGroupId,
 	defaultSymbolSizeForFormFields,
+	defaultSymbologyGroupId,
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolGroups,
 	getSymbologyGroupById,
@@ -46,6 +47,7 @@ import SchemaSymbologyGroupEditor from './schemaSymbologyGroupEditor';
 
 interface Props {
 	schemaId?: number;
+	symbolId?: number;
 	symbology: FeatureSchemaSymbology;
 	mapId?: number;
 	onAddGroup: (groupName: string) => number;
@@ -62,6 +64,7 @@ interface Props {
 function SchemaSymbologyManager(props: Props) {
 	const {
 		schemaId,
+		symbolId,
 		symbology,
 		mapId,
 		onAddGroup,
@@ -74,6 +77,10 @@ function SchemaSymbologyManager(props: Props) {
 		onUnfavouriteSymbol,
 		onRearrangeSymbolsToGroup,
 	} = props;
+
+	const navigate = useNavigate();
+
+	const { showBoundary } = useErrorBoundary();
 
 	const symbolsByGroup = groupBy(symbology.symbols, 'group_id');
 
@@ -209,9 +216,13 @@ function SchemaSymbologyManager(props: Props) {
 
 	const onEditSymbol = (symbol: FeatureSchemaSymbologySymbolsValue) => () => {
 		setSymbolFieldForEditor(symbol);
+		navigate(`/SchemaManager/Edit/${schemaId}/${symbol.id}`);
 	};
 
-	const onCancelEditingSymbol = () => setSymbolFieldForEditor(undefined);
+	const onCancelEditingSymbol = () => {
+		setSymbolFieldForEditor(undefined);
+		navigate(`/SchemaManager/Edit/${schemaId}`);
+	};
 
 	const onDoneEditingSymbol = (symbologyField: SymbologyProps, groupId: number) => {
 		if (symbolFieldForEditor !== undefined) {
@@ -223,6 +234,7 @@ function SchemaSymbologyManager(props: Props) {
 			onEditObject(local_symbol);
 
 			setSymbolFieldForEditor(undefined);
+			navigate(`/SchemaManager/Edit/${schemaId}`);
 		}
 	};
 	// ######################
@@ -272,6 +284,29 @@ function SchemaSymbologyManager(props: Props) {
 	// ######################
 	// Delete Symbol (End)
 	// ######################
+
+	// Allow symbolId to be consumed from the URL
+	useEffect(() => {
+		if (symbolId !== undefined) {
+			const selectedSymbol = symbology.symbols.find((s) => s.id === symbolId);
+
+			// Allow for users to navigate back to symbols they've deleted
+			if (selectedSymbol === undefined) {
+				// return <NotFound />;
+				// navigate('NotFound', {replace: true})
+				// throw new Error('Not Foundz');
+				showBoundary('Not Found 2');
+
+				// Set the editable symbol object for the chosen symbol when the user navigates here
+			} else if (selectedSymbol !== undefined && selectedSymbol !== symbolFieldForEditor) {
+				setSymbolFieldForEditor(selectedSymbol);
+			}
+
+			// Clear the editable symbol object when the user navigates away (e.g. goes back to the parent SchemaForm)
+		} else if (symbolFieldForEditor !== undefined) {
+			setSymbolFieldForEditor(undefined);
+		}
+	}, [showBoundary, symbolFieldForEditor, symbolId, symbology.symbols]);
 
 	return (
 		<React.Fragment>

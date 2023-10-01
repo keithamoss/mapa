@@ -15,7 +15,7 @@ function SchemaEditorEntrypoint() {
 		return <NotFound />;
 	}
 
-	return <SchemaEditor schemaId={schemaId} />;
+	return <SchemaEditor schemaId={schemaId} symbolId={getIntegerParamOrUndefined(params, 'symbolId')} />;
 }
 
 interface LocationState {
@@ -24,12 +24,13 @@ interface LocationState {
 
 interface Props {
 	schemaId: number;
+	symbolId?: number;
 	onDoneEditingSchema?: () => void;
 	onCancelEditing?: () => void;
 }
 
 export function SchemaEditor(props: Props) {
-	const { schemaId, onDoneEditingSchema, onCancelEditing } = props;
+	const { schemaId, symbolId, onDoneEditingSchema, onCancelEditing } = props;
 
 	const navigate = useNavigate();
 
@@ -77,7 +78,7 @@ export function SchemaEditor(props: Props) {
 		return null;
 	}
 
-	return <SchemaForm schema={schema} onDoneEditing={onDoneEditing} onCancel={onCancelEditing} />;
+	return <SchemaForm schema={schema} symbolId={symbolId} onDoneEditing={onDoneEditing} onCancel={onCancelEditing} />;
 }
 
 export default SchemaEditorEntrypoint;
