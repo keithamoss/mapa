@@ -50,6 +50,7 @@ import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import {
 	addNewSymbologyGroup,
 	addSymbolToGroup,
+	addSymbolToGroupAfterSymbol,
 	defaultSymbologyGroupId,
 	deleteSymbologyGroup,
 	editSymbologyGroup,
@@ -143,8 +144,11 @@ function SchemaForm(props: Props) {
 		setValue('symbology', local_symbology, { shouldDirty: true });
 	};
 
-	const onAddSymbol = (symbol: SymbologyProps, groupId: number) => {
-		const [local_symbology] = addSymbolToGroup(symbol, symbology, groupId);
+	const onAddSymbol = (symbol: SymbologyProps, groupId: number, symbolIdToAddAfter?: number) => {
+		const [local_symbology] =
+			symbolIdToAddAfter === undefined
+				? addSymbolToGroup(symbol, symbology, groupId)
+				: addSymbolToGroupAfterSymbol(symbol, symbology, groupId, symbolIdToAddAfter);
 		setValue('symbology', local_symbology, { shouldDirty: true });
 	};
 

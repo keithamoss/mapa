@@ -1,8 +1,10 @@
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MediationIcon from '@mui/icons-material/Mediation';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,6 +22,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	ListSubheader,
+	MenuItem,
 	Toolbar,
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
@@ -33,6 +36,7 @@ import {
 	FeatureSchemaSymbologySymbolsValue,
 	SymbologyProps,
 } from '../../app/services/schemas';
+import { StyledMenu } from '../../app/ui/styledMenu';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import {
 	defaultSymbolSizeForFormFields,
@@ -53,7 +57,7 @@ interface Props {
 	onAddGroup: (groupName: string) => number;
 	onEditGroup: (groupId: number, groupName: string) => void;
 	onDeleteGroup: (groupId: number) => void;
-	onAddObject: (symbol: SymbologyProps, groupId: number) => void;
+	onAddObject: (symbol: SymbologyProps, groupId: number, symbolIdToAddAfter?: number) => void;
 	onEditObject: (symbol: FeatureSchemaSymbologySymbolsValue) => void;
 	onDeleteObject: (symbolId: number) => void;
 	onFavouriteSymbol: (symbolId: number) => void;
@@ -260,6 +264,57 @@ function SchemaSymbologyManager(props: Props) {
 	// ######################
 
 	// ######################
+	// Menu
+	// ######################
+	const [symbolIdForMenu, setFieldIdForMenu] = useState<number | null>(null);
+
+	const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+	const isMenuOpen = Boolean(menuAnchorEl);
+
+	const handleOpenMenuClick = (fieldId: number) => (event: React.MouseEvent<HTMLElement>) => {
+		setFieldIdForMenu(fieldId);
+		setMenuAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = () => {
+		setFieldIdForMenu(null);
+		setMenuAnchorEl(null);
+	};
+	// ######################
+	// Menu (End)
+	// ######################
+
+	// ######################
+	// Duplicate Symbol
+	// ######################
+	const onClickDuplicateSymbol = (symbolId: number) => () => {
+		const symbol = symbology.symbols.find((s) => s.id === symbolId);
+
+		if (schemaId !== undefined && symbol !== undefined) {
+			onAddObject(
+				{
+					...symbol.props,
+					name: `${symbol.props.name} (Copy ${new Date().toLocaleString('en-GB', {
+						weekday: 'short',
+						year: 'numeric',
+						month: 'short',
+						day: 'numeric',
+						hour: 'numeric',
+						minute: 'numeric',
+						second: 'numeric',
+					})})`,
+				},
+				symbol.group_id,
+				symbolId,
+			);
+			handleClose();
+		}
+	};
+	// ######################
+	// Duplicate Symbol (End)
+	// ######################
+
+	// ######################
 	// Delete Symbol
 	// ######################
 	const [symbolIdToDelete, setSymbolIdToDelete] = useState<number | undefined>(undefined);
@@ -278,6 +333,7 @@ function SchemaSymbologyManager(props: Props) {
 	const onDeleteSymbol = (symbolId: number) => {
 		onDeleteObject(symbolId);
 		setSymbolIdToDelete(undefined);
+		handleClose();
 	};
 
 	const onCancelDeleteSymbol = () => setSymbolIdToDelete(undefined);
@@ -367,8 +423,8 @@ function SchemaSymbologyManager(props: Props) {
 									<ListItem
 										key={symbol.id}
 										secondaryAction={
-											<IconButton edge="end" aria-label="delete" onClick={onClickDeleteSymbol(symbol.id)}>
-												<DeleteIcon />
+											<IconButton edge="end" onClick={handleOpenMenuClick(symbol.id)}>
+												<MoreVertIcon />
 											</IconButton>
 										}
 									>
@@ -418,6 +474,22 @@ function SchemaSymbologyManager(props: Props) {
 					</React.Fragment>
 				))}
 			</List>
+
+			<StyledMenu anchorEl={menuAnchorEl} open={isMenuOpen} onClose={handleClose}>
+				{symbolIdForMenu !== null && (
+					<MenuItem onClick={onClickDuplicateSymbol(symbolIdForMenu)} disableRipple>
+						<ContentCopyIcon />
+						Duplicate
+					</MenuItem>
+				)}
+
+				{symbolIdForMenu !== null && (
+					<MenuItem onClick={onClickDeleteSymbol(symbolIdForMenu)} disableRipple>
+						<DeleteIcon />
+						Delete
+					</MenuItem>
+				)}
+			</StyledMenu>
 
 			{isRearrangingSymbols === true && (
 				<AppBar position="fixed" color="default" sx={{ top: 'auto', bottom: 0 }}>

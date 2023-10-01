@@ -3,62 +3,14 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import {
-	IconButton,
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemText,
-	Menu,
-	MenuItem,
-	MenuProps,
-	alpha,
-	styled,
-} from '@mui/material';
+import { IconButton, List, ListItem, ListItemButton, ListItemText, MenuItem } from '@mui/material';
 import React, { useState } from 'react';
 import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldTypeLabel } from '../../app/services/schemas';
+import { StyledMenu } from '../../app/ui/styledMenu';
 import SchemaFieldDeleteManager from '../schemas/schemaFieldDeleteManager';
 import { moveFieldDown, moveFieldUp, removeField } from '../schemas/schemaHelpers';
 import { getFieldFromSchemaById } from '../schemas/schemasSlice';
 import SchemaFieldCreatorAndEditor from './schemaFieldCreatorAndEditor';
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const StyledMenu = styled((props: MenuProps) => (
-	<Menu
-		elevation={0}
-		anchorOrigin={{
-			vertical: 'bottom',
-			horizontal: 'right',
-		}}
-		transformOrigin={{
-			vertical: 'top',
-			horizontal: 'right',
-		}}
-		{...props}
-	/>
-))(({ theme }) => ({
-	'& .MuiPaper-root': {
-		borderRadius: 6,
-		marginTop: theme.spacing(1),
-		minWidth: 180,
-		color: theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-		boxShadow:
-			'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-		'& .MuiMenu-list': {
-			padding: '4px 0',
-		},
-		'& .MuiMenuItem-root': {
-			'& .MuiSvgIcon-root': {
-				fontSize: 18,
-				color: theme.palette.text.secondary,
-				marginRight: theme.spacing(1.5),
-			},
-			'&:active': {
-				backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
-			},
-		},
-	},
-}));
 
 interface Props {
 	schemaId?: number;
@@ -106,6 +58,7 @@ function SchemaFieldListManager(props: Props) {
 	};
 
 	const handleClose = () => {
+		setFieldIdForMenu(null);
 		setMenuAnchorEl(null);
 	};
 	// ######################

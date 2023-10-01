@@ -269,6 +269,38 @@ export const addSymbolToGroup = (
 	];
 };
 
+export const addSymbolToGroupAfterSymbol = (
+	symbol: SymbologyProps,
+	symbology: FeatureSchemaSymbology,
+	groupId: number,
+	symbolIdToAddAfter: number,
+): [FeatureSchemaSymbology, number] => {
+	const symbolIdx = symbology.symbols.findIndex((s) => s.id === symbolIdToAddAfter);
+
+	if (symbolIdx !== -1) {
+		const newSymbolId = getNextSymbologySymbolId(symbology);
+		return [
+			{
+				...symbology,
+				symbols: [
+					...symbology.symbols.slice(0, symbolIdx + 1),
+					{
+						id: newSymbolId,
+						group_id: groupId,
+						props: symbol,
+						favourited_map_ids: [],
+					},
+					...symbology.symbols.slice(symbolIdx + 1),
+				],
+			},
+			newSymbolId,
+		];
+	}
+
+	// If for some reason we can't find the symbol to reference, just add it to the end of the list
+	return addSymbolToGroup(symbol, symbology, groupId);
+};
+
 export const modifySymbolInGroup = (symbol: FeatureSchemaSymbologySymbolsValue, symbology: FeatureSchemaSymbology) => {
 	const symbolIdx = symbology.symbols.findIndex((s) => s.id === symbol.id);
 
