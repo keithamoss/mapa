@@ -141,6 +141,7 @@ function FeatureEditor(props: Props) {
 		setLocalFeature({
 			...localFeature,
 			schema_id: schemaId,
+			symbol_id: null,
 			data: [],
 		});
 	};
