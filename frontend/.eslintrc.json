@@ -81,7 +81,8 @@
                 "selector": "variable",
                 "format": [
                     "camelCase",
-                    "snake_case"
+                    "snake_case",
+                    "StrictPascalCase"
                 ]
             }
         ],
