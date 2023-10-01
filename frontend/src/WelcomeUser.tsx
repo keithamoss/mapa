@@ -3,7 +3,6 @@ import MapIcon from '@mui/icons-material/Map';
 import { Alert, AlertTitle, Button, styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledDiv = styled('div')(({ theme }) => ({
 	width: '100dvw',
 	height: '100dvh',

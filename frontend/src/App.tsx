@@ -18,7 +18,6 @@ import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const LoginContainer = styled('div')`
 	height: 100dvh;
 	display: flex;

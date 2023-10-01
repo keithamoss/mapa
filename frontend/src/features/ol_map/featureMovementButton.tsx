@@ -4,7 +4,6 @@ import { Avatar, IconButton, styled } from '@mui/material';
 import { memo } from 'react';
 import { mapaThemeWarningPurple } from '../../app/ui/theme';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',
 	top: theme.spacing(8),

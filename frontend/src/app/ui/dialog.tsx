@@ -4,7 +4,6 @@ import React, { forwardRef, useEffect, useRef } from 'react';
 import { useUnmount } from '../hooks/useUnmount';
 import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour, getThemeColour, setThemeColour } from './theme';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const Transition = forwardRef(function Transition(
 	props: TransitionProps & {
 		children: React.ReactElement;
@@ -21,8 +20,6 @@ interface Props {
 	transitionProps?: Partial<TransitionProps>;
 	themeColour?: string;
 }
-
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const DialogWithTransition = ({
 	onClose,
 	children,

@@ -7,7 +7,6 @@ import { useAppDispatch } from '../../app/hooks/store';
 import { useAddFeatureToMapMutation } from '../../app/services/features';
 import { initFeatureFromMapCentre } from '../features/featuresSlice';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 	position: 'absolute',
 	bottom: theme.spacing(2),

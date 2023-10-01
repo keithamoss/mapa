@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import * as React from 'react';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const CircularProgressWithLabel = (props: CircularProgressProps & { value: number }) => (
 	<Box sx={{ position: 'relative', display: 'inline-flex' }}>
 		<CircularProgress variant="indeterminate" {...props} />

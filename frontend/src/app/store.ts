@@ -4,7 +4,6 @@ import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';
 import { eAppEnv, getEnvironment } from './utils';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const Middleware: Array<StoreEnhancer> = [];
 
 if (getEnvironment() !== eAppEnv.DEVELOPMENT) {

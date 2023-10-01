@@ -4,7 +4,6 @@ import { Avatar, IconButton, styled } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { memo } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',
 	top: theme.spacing(2),

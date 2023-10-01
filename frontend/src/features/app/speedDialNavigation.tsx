@@ -15,14 +15,12 @@ import { useAppSelector } from '../../app/hooks/store';
 import { mapaThemeWarningPurple } from '../../app/ui/theme';
 import { getCountOfFilteredFeatureIds } from './appSlice';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledAvatar = styled(Avatar)(() => ({
 	position: 'absolute',
 	top: '-12px',
 	right: '-6px',
 }));
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
 	position: 'absolute',
 	bottom: theme.spacing(11),

@@ -21,7 +21,6 @@ import { forwardRef, useEffect } from 'react';
 // tl;dr This seems to work pretty well with limited compromises
 // This restricts slider adjustment to only when the slider is moved via the thumb, rather than single clicking on the track.
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const StyledSlider = styled(Slider)`
 	/* touch-action: none; */
 	pointer-events: none;
