@@ -251,7 +251,7 @@ function SchemaForm(props: Props) {
 
 	const onClose = () => {
 		if (onCancel === undefined) {
-			navigate(-1);
+			navigate('/SchemaManager');
 		} else {
 			onCancel();
 		}
