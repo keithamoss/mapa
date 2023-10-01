@@ -1,4 +1,5 @@
 import { Checkbox, FormControlLabel, FormHelperText, Typography } from '@mui/material';
+import { isBoolean } from 'lodash-es';
 import { Control, Controller } from 'react-hook-form';
 import { FeatureDataItem } from '../../../app/services/features';
 import {
@@ -34,7 +35,10 @@ function SchemaDataEntryBooleanyTypeFields(props: Props) {
 					control={control}
 					defaultValue={dataItem !== undefined ? (dataItem.value as boolean) : undefined}
 					render={({ field }) => (
-						<Checkbox {...field} checked={field.value !== undefined ? (field.value as boolean) : undefined} />
+						<Checkbox
+							{...field}
+							checked={(field.value !== field.value) !== undefined && isBoolean(field.value) ? field.value : undefined}
+						/>
 					)}
 				/>
 			}

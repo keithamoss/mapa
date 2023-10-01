@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, FormGroup, FormHelperText, FormLabel } from '@mui/material';
 import React from 'react';
-import { useForm, UseFormHandleSubmit } from 'react-hook-form';
+import { UseFormHandleSubmit, useForm } from 'react-hook-form';
+import NotFound from '../../NotFound';
 import {
 	getDefaultValuesForSchemaFieldForm,
 	getYupValidationSchemaForSchemaFieldForm,
@@ -9,7 +10,6 @@ import {
 import { useAppSelector } from '../../app/hooks/store';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
-import NotFound from '../../NotFound';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 import SchemaDataEntryBooleanyTypeFields from './BooleanyTypeFields/schemaDataEntryBooleanyTypeFields';
 import SchemaDataEntryNumberField from './NumberField/schemaDataEntryNumberField';
