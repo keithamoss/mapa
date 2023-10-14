@@ -839,9 +839,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.14.12":
-  version: 5.14.12
-  resolution: "@mui/icons-material@npm:5.14.12"
+"@mui/icons-material@npm:^5.14.13":
+  version: 5.14.13
+  resolution: "@mui/icons-material@npm:5.14.13"
   dependencies:
     "@babel/runtime": ^7.23.1
   peerDependencies:
@@ -851,7 +851,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 55f147242afc47c50b4761e487c1d2a114d97384f94efe915a2ec6822431c0b6f5271118f918b8511a26d5dbd8e858c8ee2cbce622057ce89e3b00b3ea9829e2
+  checksum: a25db309d02654d1f2d51887986e11b26fc7aea864a398fdc55ca2f4ffd80bbc7402e7686f6a0aeab04a440993e0733aa52f752db50e083dae03e04c558f7bfd
   languageName: node
   linkType: hard
 
@@ -3640,7 +3640,7 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@hookform/resolvers": 3.1.0
-    "@mui/icons-material": ^5.14.12
+    "@mui/icons-material": ^5.14.13
     "@mui/material": ^5.14.12
     "@reduxjs/toolkit": ^1.9.7
     "@sentry/browser": ^7.74.0
