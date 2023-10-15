@@ -4,31 +4,31 @@ import { isEmpty } from 'lodash-es';
 import { useRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
-import { symbologyGroupFormValidationSchema } from '../../app/forms/symbologyGroupForm';
-import { FeatureSchemaSymbologyGroup, FeatureSchemaSymbologyGroupModifiableProps } from '../../app/services/schemas';
+import { forkingSchemaFormValidationSchema } from '../../app/forms/schemaForking';
+import { FeatureSchemaForkingSchemaModifiableProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 
 interface Props {
-	group?: FeatureSchemaSymbologyGroup;
-	onDone: (groupName: string) => void;
+	name: string; // The name of the schema being forked
+	onDone: (schemaName: string) => void;
 	onCancel: () => void;
 }
 
-function SchemaSymbologyGroupEditor(props: Props) {
-	const { group, onDone, onCancel } = props;
+function SchemaForkingNameChooser(props: Props) {
+	const { name, onDone, onCancel } = props;
 
 	const {
 		handleSubmit,
 		control,
 		formState: { errors },
-	} = useForm<FeatureSchemaSymbologyGroupModifiableProps>({
-		resolver: yupResolver(symbologyGroupFormValidationSchema),
+	} = useForm<FeatureSchemaForkingSchemaModifiableProps>({
+		resolver: yupResolver(forkingSchemaFormValidationSchema),
 		defaultValues: {
-			name: group?.name || '',
+			name,
 		},
 	});
 
-	const onDoneWithForm: SubmitHandler<FeatureSchemaSymbologyGroupModifiableProps> = (data) => {
+	const onDoneWithForm: SubmitHandler<FeatureSchemaForkingSchemaModifiableProps> = (data) => {
 		if (isEmpty(data) === false) {
 			onDone(data.name);
 		}
@@ -52,14 +52,14 @@ function SchemaSymbologyGroupEditor(props: Props) {
 				},
 			}}
 		>
-			<DialogTitle>{group !== undefined ? 'Edit Group' : 'Create Group'}</DialogTitle>
+			<DialogTitle>Fork Schema</DialogTitle>
 			<DialogContent>
 				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
 					<Controller
 						name="name"
 						control={control}
 						render={({ field }) => (
-							<TextField {...field} inputRef={textInput} label="Group name" margin="dense" fullWidth />
+							<TextField {...field} inputRef={textInput} label="Schema name" margin="dense" fullWidth />
 						)}
 					/>
 
@@ -68,10 +68,10 @@ function SchemaSymbologyGroupEditor(props: Props) {
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={onCancel}>Cancel</Button>
-				<Button onClick={onClickSave}>Save</Button>
+				<Button onClick={onClickSave}>Fork</Button>
 			</DialogActions>
 		</DialogWithTransition>
 	);
 }
 
-export default SchemaSymbologyGroupEditor;
+export default SchemaForkingNameChooser;

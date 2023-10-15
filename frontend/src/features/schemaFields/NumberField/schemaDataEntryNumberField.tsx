@@ -21,7 +21,7 @@ function SchemaDataEntryNumberField(props: Props) {
 			control={control}
 			render={({ field }) => (
 				<TextField
-					{...field}
+					{...{ ...field, value: field.value !== undefined ? field.value : '' }}
 					type="number"
 					inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
 					label={schemaField.name}

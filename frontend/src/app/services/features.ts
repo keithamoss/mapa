@@ -33,11 +33,16 @@ export interface FeatureDataItemSymbologyBooleanField extends FeatureDataItemBas
 	value: boolean;
 }
 
+export interface FeatureDataItemDateField extends FeatureDataItemBase {
+	value: string;
+}
+
 export type FeatureDataItem =
 	| FeatureDataItemTextField
 	| FeatureDataItemNumberField
 	| FeatureDataItemBooleanField
-	| FeatureDataItemSymbologyBooleanField;
+	| FeatureDataItemSymbologyBooleanField
+	| FeatureDataItemDateField;
 
 export interface Feature {
 	id: number;
@@ -50,7 +55,7 @@ export interface Feature {
 	// These three are inserted by buildGeoJSONFromFeatures()
 	symbolCacheKey?: string;
 	symbol?: Partial<SymbologyProps>;
-	symbolCacheKeyWebGL?: string;
+	// symbolCacheKeyWebGL?: string;
 	import_job: string;
 }
 

@@ -222,6 +222,7 @@ function DebugView() {
 			<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 				<FormGroup>
 					{iconDefs.map((iconDefsJSON, idx) => {
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						const iconDefs: any = JSON.parse(iconDefsJSON);
 						return (
 							<ListItem key={idx} disablePadding>

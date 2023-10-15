@@ -1,10 +1,12 @@
+import dayjs from 'dayjs';
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
+import { AnyObject, ObjectSchema } from 'yup';
 import { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
 import { Feature } from '../services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
+	FeatureSchemaFieldDefinitionDateFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
 	FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
@@ -49,6 +51,26 @@ export const schemaSymbologyBooleanFieldFormValidationSchema: ObjectSchema<Featu
 		})
 		.required();
 
+export const schemaDateFieldFormValidationSchema: ObjectSchema<FeatureSchemaFieldDefinitionDateFieldFormModifiableProps> =
+	yup
+		.object({
+			name: yup.string().required(),
+			default_value: yup
+				.string()
+				// Ensures DayJS objects are turned into ISO8601 fields
+				// It will be a string if there is no default (i.e. '')
+				// or if we are editing an existing field that was already saved as ISO8601
+				// it will be a DayJS object if we are creating the field for the first time and
+				// it will be null if the user has (a) cleared the field or (b) only clicked once when chosing a date
+				// https://day.js.org/docs/en/display/format
+				.transform((_, val: string | dayjs.Dayjs) => (typeof val === 'string' ? val : val !== null ? val.format() : ''))
+				// Doesn't actually seemed to be needed (converts null and undefiend to an empty string)
+				// .ensure()
+				.defined(),
+			required_field: yup.boolean().required(),
+		})
+		.required();
+
 export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, feature: Feature) => {
 	const values: SchemaFormFieldsFormValues = {};
 
@@ -63,7 +85,8 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 			fieldDefinition.type === FeatureSchemaFieldType.TextField ||
 			fieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 			fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean ||
-			fieldDefinition.type === FeatureSchemaFieldType.NumberField
+			fieldDefinition.type === FeatureSchemaFieldType.NumberField ||
+			fieldDefinition.type === FeatureSchemaFieldType.DateField
 		) {
 			values[schemaFieldName] = featureDataItemForSchemaField?.value || fieldDefinition.default_value;
 		}
@@ -71,7 +94,7 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 
 	return values;
 };
-export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema) => {
+export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema): ObjectSchema<AnyObject> => {
 	const values: yup.ObjectShape = {};
 
 	schema.definition.forEach((fieldDefinition) => {
@@ -92,6 +115,14 @@ export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema) 
 				.number()
 				.transform((_, val) => (val !== '' ? Number(val) : undefined))
 				.optional();
+		} else if (fieldDefinition.type === FeatureSchemaFieldType.DateField) {
+			const validator = yup
+				.string()
+				// See comments above in schemaDateFieldFormValidationSchema()
+				.transform((_, val: string | dayjs.Dayjs) =>
+					typeof val === 'string' ? val : val !== null ? val.format() : '',
+				);
+			values[schemaFieldName] = fieldDefinition.required_field === true ? validator.required() : validator.optional();
 		}
 	});
 

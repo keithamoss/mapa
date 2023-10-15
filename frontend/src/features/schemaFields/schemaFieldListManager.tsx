@@ -1,16 +1,38 @@
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton, List, ListItem, ListItemButton, ListItemText, MenuItem } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import NumbersIcon from '@mui/icons-material/Numbers';
+import PhotoIcon from '@mui/icons-material/Photo';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import TodayIcon from '@mui/icons-material/Today';
+import { IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import React, { useState } from 'react';
-import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldTypeLabel } from '../../app/services/schemas';
+import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { StyledMenu } from '../../app/ui/styledMenu';
 import SchemaFieldDeleteManager from '../schemas/schemaFieldDeleteManager';
 import { moveFieldDown, moveFieldUp, removeField } from '../schemas/schemaHelpers';
 import { getFieldFromSchemaById } from '../schemas/schemasSlice';
 import SchemaFieldCreatorAndEditor from './schemaFieldCreatorAndEditor';
+
+const getIconForSchemaFieldType = (field: FeatureSchemaFieldDefinitionCollection) => {
+	switch (field.type) {
+		case FeatureSchemaFieldType.TextField:
+			return <TextFieldsIcon />;
+		case FeatureSchemaFieldType.NumberField:
+			return <NumbersIcon />;
+		case FeatureSchemaFieldType.BooleanField:
+			return <CheckBoxIcon />;
+		case FeatureSchemaFieldType.SymbologyFieldBoolean:
+			return <PhotoIcon />;
+		case FeatureSchemaFieldType.DateField:
+			return <TodayIcon />;
+		default:
+			return <QuestionMarkIcon />;
+	}
+};
 
 interface Props {
 	schemaId?: number;
@@ -59,6 +81,7 @@ function SchemaFieldListManager(props: Props) {
 
 	const handleClose = () => {
 		setFieldIdForMenu(null);
+		setFieldIdx(null);
 		setMenuAnchorEl(null);
 	};
 	// ######################
@@ -132,6 +155,7 @@ function SchemaFieldListManager(props: Props) {
 				{schemaDefinition.map((field, idx) => (
 					<ListItem
 						key={field.id}
+						// disablePadding={true}
 						secondaryAction={
 							<IconButton edge="end" onClick={handleOpenMenuClick(field.id, idx)}>
 								<MoreVertIcon />
@@ -139,7 +163,8 @@ function SchemaFieldListManager(props: Props) {
 						}
 					>
 						<ListItemButton onClick={onEditField(field.id)} disableGutters>
-							<ListItemText primary={field.name} secondary={FeatureSchemaFieldTypeLabel[field.type]} />
+							<ListItemIcon>{getIconForSchemaFieldType(field)}</ListItemIcon>
+							<ListItemText primary={field.name} /*secondary={FeatureSchemaFieldTypeLabel[field.type]}*/ />
 						</ListItemButton>
 					</ListItem>
 				))}

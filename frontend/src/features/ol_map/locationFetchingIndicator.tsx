@@ -3,7 +3,7 @@ import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
 
 import Box from '@mui/material/Box';
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 const CircularProgressWithLabel = (props: CircularProgressProps & { value: number }) => (
 	<Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -26,9 +26,9 @@ const CircularProgressWithLabel = (props: CircularProgressProps & { value: numbe
 );
 
 export default function LocationFetchingIndicator() {
-	const [progress, setProgress] = React.useState(10);
+	const [progress, setProgress] = useState(10);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const timer = setInterval(() => {
 			setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
 		}, 700);

@@ -13,24 +13,26 @@ import {
 	FormHelperText,
 	TextField,
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
-import { schemaTextFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
+import { schemaDateFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
 import {
+	FeatureSchemaFieldDefinitionDateField,
+	FeatureSchemaFieldDefinitionDateFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
-	FeatureSchemaFieldDefinitionTextField,
-	FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
 
 interface Props {
-	field: FeatureSchemaFieldDefinitionTextField | undefined;
+	field: FeatureSchemaFieldDefinitionDateField | undefined;
 	onDone: (fieldFormProps: FeatureSchemaFieldDefinitionFormModifiablePropsCollection) => void;
 	onCancel: () => void;
 }
 
-function SchemaFieldFormForTextField(props: Props) {
+function SchemaFieldFormForDateField(props: Props) {
 	const { field, onDone, onCancel } = props;
 
 	const defaultValues = {
@@ -43,12 +45,12 @@ function SchemaFieldFormForTextField(props: Props) {
 		handleSubmit,
 		control,
 		formState: { errors },
-	} = useForm<FeatureSchemaFieldDefinitionTextFieldFormModifiableProps>({
-		resolver: yupResolver(schemaTextFieldFormValidationSchema),
+	} = useForm<FeatureSchemaFieldDefinitionDateFieldFormModifiableProps>({
+		resolver: yupResolver(schemaDateFieldFormValidationSchema),
 		defaultValues,
 	});
 
-	const onDoneWithForm: SubmitHandler<FeatureSchemaFieldDefinitionTextFieldFormModifiableProps> = (data) => {
+	const onDoneWithForm: SubmitHandler<FeatureSchemaFieldDefinitionDateFieldFormModifiableProps> = (data) => {
 		if (isEmpty(data) === false) {
 			onDone(data);
 		}
@@ -60,7 +62,7 @@ function SchemaFieldFormForTextField(props: Props) {
 
 	return (
 		<DialogWithTransition onClose={onCancel} dialogProps={{ fullScreen: false, fullWidth: true }}>
-			<DialogTitle>Text Field</DialogTitle>
+			<DialogTitle>Date Field</DialogTitle>
 			<DialogContent>
 				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
 					<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
@@ -81,10 +83,23 @@ function SchemaFieldFormForTextField(props: Props) {
 								name="default_value"
 								control={control}
 								render={({ field }) => (
-									<TextField
-										{...field}
+									<DatePicker
+										// If we are editing a saved field, we need to parse the ISO8601 date string into
+										// a DayJS object.
+										{...{
+											...field,
+											value: field.value != '' && typeof field.value === 'string' ? dayjs(field.value) : null,
+										}}
 										label="Default value"
-										helperText="Will be used if you don't enter anything when creating a feature"
+										format={'DD/MM/YYYY'}
+										slotProps={{
+											textField: { helperText: "Will be used if you don't enter anything when creating a feature" },
+											field: { clearable: true },
+											actionBar: {
+												// https://mui.com/x/api/date-pickers/pickers-action-bar/#PickersActionBar-prop-actions
+												actions: ['clear', 'cancel', 'accept'],
+											},
+										}}
 									/>
 								)}
 							/>
@@ -117,4 +132,4 @@ function SchemaFieldFormForTextField(props: Props) {
 	);
 }
 
-export default SchemaFieldFormForTextField;
+export default SchemaFieldFormForDateField;

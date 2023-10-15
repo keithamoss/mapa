@@ -66,7 +66,7 @@ function SchemaFieldFormForBooleanField(props: Props) {
 							<Controller
 								name="name"
 								control={control}
-								render={({ field }) => <TextField {...field} label="Field label" />}
+								render={({ field }) => <TextField {...field} required={true} label="Field label" />}
 							/>
 						</FormGroup>
 

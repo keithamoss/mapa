@@ -6,3 +6,7 @@ export const getIntegerParamOrUndefined = (params: Params<string>, paramName: st
 	}
 	return undefined;
 };
+
+export const getStringParamOrUndefined = (params: Params<string>, paramName: string) => {
+	return params[paramName] || undefined;
+};

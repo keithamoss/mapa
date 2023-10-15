@@ -135,7 +135,7 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows feature schemas to be viewed and edited.
     """
-    queryset = FeatureSchemas.objects.filter(deleted_at=None).order_by("-id")
+    queryset = FeatureSchemas.objects.filter(deleted_at=None).order_by("name")
     serializer_class = FeatureSchemaSerializer
     permission_classes = (IsAuthenticated,)
 

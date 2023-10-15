@@ -1,6 +1,9 @@
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
-import { FeatureSchemaSymbologyGroupModifiableProps } from '../services/schemas';
+import {
+	FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps,
+	FeatureSchemaSymbologyGroupModifiableProps,
+} from '../services/schemas';
 
 export const symbologyGroupFormValidationSchema: ObjectSchema<FeatureSchemaSymbologyGroupModifiableProps> = yup
 	.object({
@@ -8,8 +11,9 @@ export const symbologyGroupFormValidationSchema: ObjectSchema<FeatureSchemaSymbo
 	})
 	.required();
 
-export const symbologyGroupFormValidationSchemaIDOnly = yup
-	.object({
-		id: yup.number().required(),
-	})
-	.required();
+export const symbologyGroupFormValidationSchemaIDOnly: ObjectSchema<FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps> =
+	yup
+		.object({
+			id: yup.number().required(),
+		})
+		.required();

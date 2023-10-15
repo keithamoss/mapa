@@ -573,11 +573,11 @@ function SymbologyFieldEditor(props: Props) {
 				</Box>
 
 				<form onSubmit={stopPropagate(handleSubmit(onDoneWithForm))}>
-					<Paper elevation={0} sx={{ m: 3, mt: 0 }}>
+					<Paper elevation={0} sx={{ m: 3, mt: 1 }}>
 						{navigationValue === 0 && (
 							<React.Fragment>
 								{nameFieldRequired !== false && (
-									<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
+									<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 										<FormGroup>
 											<Controller
 												name="name"
@@ -585,6 +585,7 @@ function SymbologyFieldEditor(props: Props) {
 												render={({ field }) => (
 													<TextField
 														{...field}
+														required={true}
 														inputRef={textInput}
 														// Makes shouldFocusError work
 														// c.f. https://stackoverflow.com/a/74529792
@@ -1048,7 +1049,7 @@ function SymbologyFieldEditor(props: Props) {
 
 						{navigationValue === 1 && (
 							<React.Fragment>
-								<FormControl fullWidth={true} sx={{ mb: 3, mt: 1 }} component="fieldset" variant="outlined">
+								<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 									<FormGroup>
 										<Paper elevation={0} sx={{ display: 'flex' }}>
 											<TextField
@@ -1168,7 +1169,12 @@ function SymbologyFieldEditor(props: Props) {
 							</React.Fragment>
 						)}
 
-						<Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+						<Paper
+							// Give ourselves a little bit of padding on the bottom if we're installed as a PWA so the iOS gesture bar
+							// doesn't sit right on top of the icons
+							sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, pb: document.fullscreenElement !== null ? 1 : 0 }}
+							elevation={3}
+						>
 							<BottomNavigation showLabels value={navigationValue} onChange={onChangeBottomNavigation}>
 								<BottomNavigationAction
 									label="Primary Icon"

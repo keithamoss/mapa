@@ -1,7 +1,7 @@
 import { AddLocationAlt } from '@mui/icons-material';
 import { styled } from '@mui/material';
 import SpeedDial from '@mui/material/SpeedDial';
-import * as React from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks/store';
 import { useAddFeatureToMapMutation } from '../../app/services/features';
@@ -26,7 +26,7 @@ export default function AddFeatureButton(props: Props) {
 
 	const [addFeature] = useAddFeatureToMapMutation();
 
-	const onAddFeature = React.useCallback(async () => {
+	const onAddFeature = useCallback(async () => {
 		if (mapId !== undefined) {
 			const feature = dispatch(initFeatureFromMapCentre(mapId));
 			if (feature !== undefined) {

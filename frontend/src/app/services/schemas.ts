@@ -35,6 +35,14 @@ export interface FeatureSchemaSymbologyGroup extends FeatureSchemaSymbologyGroup
 	id: number;
 }
 
+export interface FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps {
+	id: number;
+}
+
+export interface FeatureSchemaForkingSchemaModifiableProps {
+	name: string;
+}
+
 export interface FeatureSchemaSymbology {
 	groups: FeatureSchemaSymbologyGroup[];
 	symbols: FeatureSchemaSymbologySymbolsValue[];
@@ -62,6 +70,7 @@ export enum FeatureSchemaFieldType {
 	NumberField = 'number_field',
 	BooleanField = 'boolean_field',
 	SymbologyFieldBoolean = 'symbology_field_boolean',
+	DateField = 'date_field',
 }
 
 export enum FeatureSchemaFieldTypeLabel {
@@ -69,8 +78,12 @@ export enum FeatureSchemaFieldTypeLabel {
 	number_field = 'Number field',
 	boolean_field = 'Boolean field',
 	symbology_field_boolean = 'Symbology field boolean',
+	date_field = 'Date field',
 }
 
+// ######################
+// Text Field
+// ######################
 export type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps = {
 	name: string;
 	default_value: string;
@@ -81,7 +94,13 @@ export type FeatureSchemaFieldDefinitionTextField = FeatureSchemaFieldDefinition
 	type: FeatureSchemaFieldType.TextField;
 	id: number;
 };
+// ######################
+// Text Field (End)
+// ######################
 
+// ######################
+// Number Field
+// ######################
 export type FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps = {
 	name: string;
 	default_value: number;
@@ -91,7 +110,13 @@ export type FeatureSchemaFieldDefinitionNumberField = FeatureSchemaFieldDefiniti
 	type: FeatureSchemaFieldType.NumberField;
 	id: number;
 };
+// ######################
+// Number Field (End)
+// ######################
 
+// ######################
+// Boolean Field
+// ######################
 export type FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps = {
 	name: string;
 	default_value: boolean;
@@ -101,30 +126,58 @@ export type FeatureSchemaFieldDefinitionBooleanField = FeatureSchemaFieldDefinit
 	type: FeatureSchemaFieldType.BooleanField;
 	id: number;
 };
+// ######################
+// Boolean Field (End)
+// ######################
 
+// ######################
+// Symbology Boolean Field
+// ######################
 export type FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps = {
 	name: string;
 	default_value: boolean;
 	symbol: SymbologyProps;
 };
 
-export type FeatureSchemaFieldDefinitionSymbologyBoolean =
+export type FeatureSchemaFieldDefinitionSymbologyBooleanField =
 	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps & {
 		type: FeatureSchemaFieldType.SymbologyFieldBoolean;
 		id: number;
 	};
+// ######################
+// Symbology Boolean Field (End)
+// ######################
+
+// ######################
+// Date Field
+// ######################
+export type FeatureSchemaFieldDefinitionDateFieldFormModifiableProps = {
+	name: string;
+	default_value: string;
+	required_field: boolean;
+};
+
+export type FeatureSchemaFieldDefinitionDateField = FeatureSchemaFieldDefinitionDateFieldFormModifiableProps & {
+	type: FeatureSchemaFieldType.DateField;
+	id: number;
+};
+// ######################
+// Date Field (End)
+// ######################
 
 export type FeatureSchemaFieldDefinitionFormModifiablePropsCollection =
 	| FeatureSchemaFieldDefinitionTextFieldFormModifiableProps
 	| FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps
 	| FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps
-	| FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps;
+	| FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps
+	| FeatureSchemaFieldDefinitionDateFieldFormModifiableProps;
 
 export type FeatureSchemaFieldDefinitionCollection =
 	| FeatureSchemaFieldDefinitionTextField
 	| FeatureSchemaFieldDefinitionNumberField
 	| FeatureSchemaFieldDefinitionBooleanField
-	| FeatureSchemaFieldDefinitionSymbologyBoolean;
+	| FeatureSchemaFieldDefinitionSymbologyBooleanField
+	| FeatureSchemaFieldDefinitionDateField;
 
 export type NewFeatureSchemaFieldDefinitionCollection = Omit<FeatureSchemaFieldDefinitionCollection, 'id'>;
 

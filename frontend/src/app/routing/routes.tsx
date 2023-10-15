@@ -44,6 +44,10 @@ export const router = sentryCreateBrowserRouter([
 				element: <SchemaManager />,
 			},
 			{
+				path: 'SchemaManager/Create/:symbolId',
+				element: <SchemaCreator />,
+			},
+			{
 				path: 'SchemaManager/Create',
 				element: <SchemaCreator />,
 			},

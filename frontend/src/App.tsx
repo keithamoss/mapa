@@ -1,10 +1,8 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import { Button, styled } from '@mui/material';
 import React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
-import ErrorBoundaryFallback from './ErrorBoundaryFallback';
 import WelcomeUser from './WelcomeUser';
 import { useAppSelector } from './app/hooks/store';
 import { Basemap, MapRenderer } from './app/services/auth';
@@ -60,28 +58,28 @@ function App() {
 	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
 
 	return (
-		<ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-			<div className="App">
-				{mapId !== undefined && (
-					<OLMap
-						mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
-						basemap={user.settings.basemap || Basemap.MapboxVectorTile}
-					/>
-				)}
+		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
+		<div className="App">
+			{mapId !== undefined && (
+				<OLMap
+					mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
+					basemap={user.settings.basemap || Basemap.MapboxVectorTile}
+				/>
+			)}
 
-				{location.pathname === '/' && (
-					<React.Fragment>
-						{mapId === undefined && <WelcomeUser />}
+			{location.pathname === '/' && (
+				<React.Fragment>
+					{mapId === undefined && <WelcomeUser />}
 
-						<AddFeatureButton mapId={mapId} />
+					<AddFeatureButton mapId={mapId} />
 
-						<SpeedDialNavigation />
-					</React.Fragment>
-				)}
+					<SpeedDialNavigation />
+				</React.Fragment>
+			)}
 
-				<Outlet />
-			</div>
-		</ErrorBoundary>
+			<Outlet />
+		</div>
+		// </ErrorBoundary>
 	);
 }
 

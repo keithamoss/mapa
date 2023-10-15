@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import dayjs from 'dayjs';
 import MiniSearch from 'minisearch';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
@@ -49,7 +50,6 @@ export const searchFeatures = (
 		extractField: (document, fieldName) => {
 			if (fieldName === 'symbol_name') {
 				const schema = schemas.find((s) => s.id === document.schema_id);
-
 				return schema !== undefined ? getSymbolNameBySymbolId(document.symbol_id, schema) : null;
 			} else if (fieldName === 'text_fields') {
 				const schema = schemas.find((s) => s.id === document.schema_id);
@@ -61,6 +61,27 @@ export const searchFeatures = (
 							const dataItem = getFeatureDataItemForSchemaField(f, document);
 
 							return dataItem !== undefined ? dataItem.value : f.default_value;
+						});
+				}
+
+				return null;
+			} else if (fieldName === 'date_fields') {
+				// Hacky, but it'll do.
+				// Ref: https://github.com/lucaong/minisearch/issues/173
+				// ^ suggests we might need to add an entirely separate layer of date searching alongside (via DayJS?)
+				const schema = schemas.find((s) => s.id === document.schema_id);
+
+				if (schema !== undefined) {
+					return schema.definition
+						.filter((f) => f.type === FeatureSchemaFieldType.DateField)
+						.map((f) => {
+							const dataItem = getFeatureDataItemForSchemaField(f, document);
+
+							return dataItem !== undefined && typeof dataItem.value === 'string'
+								? dayjs(dataItem.value).format('DD/MM/YYYY')
+								: typeof f.default_value === 'string'
+								? dayjs(f.default_value).format('DD/MM/YYYY')
+								: '';
 						});
 				}
 

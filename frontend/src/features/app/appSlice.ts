@@ -23,11 +23,13 @@ export enum eMapFeaturesLoadingStatus {
 export enum SearchField {
 	SymbolName = 'symbol_name',
 	SchemaTextFields = 'text_fields',
+	SchemaDateFields = 'date_fields',
 }
 
 export enum SearchFieldLabel {
 	symbol_name = 'Symbol name',
 	text_fields = 'Text fields',
+	date_fields = 'Date fields',
 }
 
 export interface SearchParameters {

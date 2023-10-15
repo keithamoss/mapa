@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FormControl, FormGroup, FormHelperText, FormLabel } from '@mui/material';
-import React from 'react';
+import { FormControl, FormGroup, FormHelperText } from '@mui/material';
+import React, { useEffect } from 'react';
 import { UseFormHandleSubmit, useForm } from 'react-hook-form';
 import NotFound from '../../NotFound';
 import {
@@ -10,10 +10,14 @@ import {
 import { useAppSelector } from '../../app/hooks/store';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
+import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 import SchemaDataEntryBooleanyTypeFields from './BooleanyTypeFields/schemaDataEntryBooleanyTypeFields';
+import SchemaDataEntryDateField from './DateField/schemaDataEntryDateField';
 import SchemaDataEntryNumberField from './NumberField/schemaDataEntryNumberField';
 import SchemaDataEntryTextField from './TextField/schemaDataEntryTextField';
+import { usePrevious } from '../../app/hooks/usePrevious';
+import { isEqual } from 'lodash-es';
 
 interface PropsEntrypoint {
 	schemaId: number;
@@ -27,6 +31,7 @@ interface PropsEntrypoint {
 		  >
 		| undefined
 	>;
+	isDirtyRef: React.MutableRefObject<boolean | undefined>;
 }
 
 function SchemaFieldDataEntryManagerEntrypoint(props: PropsEntrypoint) {
@@ -42,6 +47,7 @@ function SchemaFieldDataEntryManagerEntrypoint(props: PropsEntrypoint) {
 		// Reset our ref in case we're switching from a schema with fields to one without
 		props.handleSubmitRef.current = undefined;
 		props.touchedFieldsRef.current = undefined;
+		props.isDirtyRef.current = undefined;
 		return null;
 	}
 
@@ -64,28 +70,41 @@ interface Props {
 		  >
 		| undefined
 	>;
+	isDirtyRef: React.MutableRefObject<boolean | undefined>;
 }
 
 function SchemaFieldDataEntryManager(props: Props) {
-	const { schema, feature, handleSubmitRef, touchedFieldsRef } = props;
+	const { schema, feature, handleSubmitRef, touchedFieldsRef, isDirtyRef } = props;
+
+	const defaultValues = getDefaultValuesForSchemaFieldForm(schema, feature);
+	const previousDefaultValues = usePrevious(defaultValues);
 
 	const {
 		handleSubmit,
 		control,
-		formState: { errors, touchedFields },
+		reset,
+		formState: { errors, touchedFields, isDirty },
 	} = useForm<SchemaFormFieldsFormValues>({
 		resolver: yupResolver(getYupValidationSchemaForSchemaFieldForm(schema)),
-		defaultValues: getDefaultValuesForSchemaFieldForm(schema, feature),
+		defaultValues,
 	});
 
 	handleSubmitRef.current = handleSubmit;
 	touchedFieldsRef.current = touchedFields;
+	isDirtyRef.current = isDirty;
+
+	// Ensure we reset the form's state, and set new default values, when the schema changes.
+	useEffect(() => {
+		// This is a good enough check to know if the schema has changed.
+		if (isEqual(defaultValues, previousDefaultValues) === false) {
+			reset(defaultValues);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [defaultValues]);
 
 	return (
 		<FormControl fullWidth={true} component="fieldset" variant="outlined" sx={{ mb: 3 }}>
-			<FormLabel component="legend" sx={{ mb: 2 }}>
-				Your Fields
-			</FormLabel>
+			<FormSectionHeading marginBottom={2}>Your Fields</FormSectionHeading>
 
 			<FormGroup>
 				{schema.definition.map((fieldDefinition, index) => {
@@ -97,22 +116,39 @@ function SchemaFieldDataEntryManager(props: Props) {
 					switch (fieldDefinition.type) {
 						case FeatureSchemaFieldType.TextField:
 							field = (
-								<SchemaDataEntryTextField key={fieldDefinition.id} control={control} schemaField={fieldDefinition} />
+								<SchemaDataEntryTextField
+									key={`${schema.id}_${fieldDefinition.id}`}
+									control={control}
+									schemaField={fieldDefinition}
+								/>
 							);
 							break;
 						case FeatureSchemaFieldType.NumberField:
 							field = (
-								<SchemaDataEntryNumberField key={fieldDefinition.id} control={control} schemaField={fieldDefinition} />
+								<SchemaDataEntryNumberField
+									key={`${schema.id}_${fieldDefinition.id}`}
+									control={control}
+									schemaField={fieldDefinition}
+								/>
 							);
 							break;
 						case FeatureSchemaFieldType.BooleanField:
 						case FeatureSchemaFieldType.SymbologyFieldBoolean:
 							field = (
 								<SchemaDataEntryBooleanyTypeFields
-									key={fieldDefinition.id}
+									key={`${schema.id}_${fieldDefinition.id}`}
 									control={control}
 									schemaField={fieldDefinition}
 									dataItem={featureDataItemForSchemaField}
+								/>
+							);
+							break;
+						case FeatureSchemaFieldType.DateField:
+							field = (
+								<SchemaDataEntryDateField
+									key={`${schema.id}_${fieldDefinition.id}`}
+									control={control}
+									schemaField={fieldDefinition}
 								/>
 							);
 							break;

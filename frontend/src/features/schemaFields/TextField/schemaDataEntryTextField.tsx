@@ -21,7 +21,7 @@ function SchemaDataEntryTextField(props: Props) {
 			control={control}
 			render={({ field }) => (
 				<TextField
-					{...field}
+					{...{ ...field, value: field.value !== undefined ? field.value : '' }}
 					required={schemaField.required_field}
 					label={schemaField.name}
 					helperText={schemaField.default_value !== '' ? `Default value: ${schemaField.default_value}` : undefined}

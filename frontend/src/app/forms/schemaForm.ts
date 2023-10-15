@@ -1,14 +1,20 @@
 import * as yup from 'yup';
-import { FeatureSchemaFieldDefinitionCollection } from '../services/schemas';
+import { ObjectSchema } from 'yup';
+import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaModifiableProps } from '../services/schemas';
 import { symbologyFormValidationSchema } from './symbologyForm';
 
-export const schemaFormValidationSchema = yup
+export const schemaFormValidationSchema: ObjectSchema<FeatureSchemaModifiableProps> = yup
 	.object({
 		name: yup.string().required(),
-		definition: yup.array().notRequired(),
-		symbology: yup.object().required(),
+		definition: yup.array().ensure().required(),
+		symbology: yup
+			.object({
+				groups: yup.array().required(),
+				symbols: yup.array().required(),
+			})
+			.required(),
 		default_symbology: symbologyFormValidationSchema(false, false),
-		recently_used_symbols: yup.object().optional(),
+		recently_used_symbols: yup.object({}).defined(),
 	})
 	.required();
 

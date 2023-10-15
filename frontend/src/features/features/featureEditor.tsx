@@ -8,13 +8,13 @@ import {
 	DialogActions,
 	DialogTitle,
 	FormControl,
-	FormLabel,
 	Grid,
 	IconButton,
 	Paper,
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { isEqual } from 'lodash-es';
 import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -28,8 +28,11 @@ import {
 	useUpdateFeatureMutation,
 } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { usePatchFeatureSchemaMutation } from '../../app/services/schemas';
+import { FeatureSchemaFieldType, usePatchFeatureSchemaMutation } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import FormSectionHeading from '../../app/ui/formSectionHeading';
+import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import { selectActiveMapId } from '../app/appSlice';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import SchemaFieldDataEntryManager, { SchemaFormFieldsFormValues } from '../schemaFields/schemaFieldDataEntryManager';
@@ -214,7 +217,23 @@ function FeatureEditor(props: Props) {
 		Object.entries(data).forEach(([fieldName, fieldValue]) => {
 			// If the user hasn't touched any fields, or if the field already has a value defined, always include it in the data object.
 			if (touchedFieldsRef.current === undefined || featureDataSchemaFieldNames.includes(fieldName)) {
-				dataFiltered[fieldName] = fieldValue;
+				// I think it's now impossible to have a null schema, but retaining this just in case
+				if (schema === undefined) {
+					dataFiltered[fieldName] = fieldValue;
+				} else {
+					// This handles the oddities of DatePicker and react-hook-form (ref: SchemaDataEntryDateField) and ensures that
+					// we don't save an empty string when the user clears the field.
+					const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
+					const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
+
+					if (schemaField?.type === FeatureSchemaFieldType.DateField) {
+						if (fieldValue !== '') {
+							dataFiltered[fieldName] = fieldValue;
+						}
+					} else {
+						dataFiltered[fieldName] = fieldValue;
+					}
+				}
 			} else if (touchedFieldsRef.current[fieldName] !== undefined && schema !== undefined) {
 				// If the field wasn't previously set, has been touched, and we have a schema, check to see if the value
 				// in the field is different from the default value before including it in the data object.
@@ -304,19 +323,39 @@ function FeatureEditor(props: Props) {
 	// ######################
 	// Overall Component
 	// ######################
-	const onCancelForEditor = () => {
+	const isDirtyRef = useRef<boolean>();
+
+	const onClose = () => {
 		if (isAddingNewFeature === true) {
 			deleteFeature(feature.id);
 		} else {
 			navigate(-1);
 		}
 	};
+
+	const onCancelForEditor = () => {
+		if (isEqual(feature, localFeature) === false || isDirtyRef.current === true) {
+			setIsDiscardChangesDialogShown(true);
+		} else {
+			onClose();
+		}
+	};
+
+	const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] = useState(false);
+
+	const onConfirmDiscardChanges = () => onClose();
+
+	const onCancelDiscardChangesDialog = () => setIsDiscardChangesDialogShown(false);
 	// ######################
 	// Overall Component (End)
 	// ######################
 
 	return (
 		<React.Fragment>
+			{isDiscardChangesDialogShown === true && (
+				<DiscardChangesDialog onNo={onCancelDiscardChangesDialog} onYes={onConfirmDiscardChanges} />
+			)}
+
 			{isDeletingFeature === true && (
 				<Dialog open={true} onClose={onCancelDeleteFeature} fullWidth>
 					<DialogTitle>Delete feature?</DialogTitle>
@@ -348,7 +387,7 @@ function FeatureEditor(props: Props) {
 				<Paper elevation={0} sx={{ m: 3, mt: 2 }}>
 					{localFeature.data.length >= 1 && (
 						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend">Feature Summary</FormLabel>
+							<FormSectionHeading>Feature Summary</FormSectionHeading>
 
 							{localFeature.schema_id !== null && (
 								<SchemaFieldSummaryPanel schemaId={localFeature.schema_id} feature={localFeature} />
@@ -357,9 +396,7 @@ function FeatureEditor(props: Props) {
 					)}
 
 					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-						<FormLabel component="legend" sx={{ mb: 2 }}>
-							Schema
-						</FormLabel>
+						<FormSectionHeading marginBottom={2}>Schema</FormSectionHeading>
 
 						<SchemaSelectFormControls
 							mapId={mapId}
@@ -372,9 +409,7 @@ function FeatureEditor(props: Props) {
 					{localFeature.schema_id !== null && (
 						<React.Fragment>
 							<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-								<FormLabel component="legend" sx={{ mb: 2 }}>
-									Symbology
-								</FormLabel>
+								<FormSectionHeading marginBottom={2}>Symbology</FormSectionHeading>
 
 								<SchemaDataEntrySymbology
 									mapId={mapId}
@@ -390,6 +425,7 @@ function FeatureEditor(props: Props) {
 								feature={localFeature}
 								handleSubmitRef={handleSubmitRef}
 								touchedFieldsRef={touchedFieldsRef}
+								isDirtyRef={isDirtyRef}
 							/>
 						</React.Fragment>
 					)}
@@ -398,14 +434,13 @@ function FeatureEditor(props: Props) {
 						<Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
 							<Grid container direction="row" alignItems="center">
 								<Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
-									<FormLabel component="legend">Danger Zone</FormLabel>
+									<FormSectionHeading>Danger Zone</FormSectionHeading>
 								</Grid>
 								<Grid item>
 									<FlightIcon
 										sx={{
-											verticalAlign: 'middle',
-											color: 'rgb(0, 0, 0)',
-											opacity: 0.5,
+											verticalAlign: 'top',
+											color: mapaThemeSecondaryBlue,
 											fontSize: '16px',
 										}}
 									/>

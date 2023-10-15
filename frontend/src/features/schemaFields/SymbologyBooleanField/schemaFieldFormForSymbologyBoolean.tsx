@@ -22,7 +22,7 @@ import { schemaSymbologyBooleanFieldFormValidationSchema } from '../../../app/fo
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
 import {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
-	FeatureSchemaFieldDefinitionSymbologyBoolean,
+	FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
 	SymbologyProps,
 } from '../../../app/services/schemas';
@@ -30,7 +30,7 @@ import { DialogWithTransition } from '../../../app/ui/dialog';
 import SymbologyFieldEditor from '../../symbology/symbologyFieldEditor';
 
 interface Props {
-	field: Partial<FeatureSchemaFieldDefinitionSymbologyBoolean> | undefined;
+	field: Partial<FeatureSchemaFieldDefinitionSymbologyBooleanField> | undefined;
 	onDone: (fieldFormProps: FeatureSchemaFieldDefinitionFormModifiablePropsCollection) => void;
 	onCancel: () => void;
 }
@@ -91,7 +91,7 @@ function SchemaFieldFormForSymbologyBoolean(props: Props) {
 								<Controller
 									name="name"
 									control={control}
-									render={({ field }) => <TextField {...field} label="Field label" />}
+									render={({ field }) => <TextField {...field} required={true} label="Field label" />}
 								/>
 							</FormGroup>
 

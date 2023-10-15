@@ -2,14 +2,16 @@ import React from 'react';
 import {
 	FeatureSchemaFieldDefinitionBooleanField,
 	FeatureSchemaFieldDefinitionCollection,
+	FeatureSchemaFieldDefinitionDateField,
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 	FeatureSchemaFieldDefinitionNumberField,
-	FeatureSchemaFieldDefinitionSymbologyBoolean,
+	FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldDefinitionTextField,
 	FeatureSchemaFieldType,
 	NewFeatureSchemaFieldDefinitionCollection,
 } from '../../app/services/schemas';
 import SchemaFieldFormForBooleanField from './BooleanField/schemaFieldFormForBooleanField';
+import SchemaFieldFormForDateField from './DateField/schemaFieldFormForDateField';
 import SchemaFieldFormForNumberField from './NumberField/schemaFieldFormForNumberField';
 import SchemaFieldFormForSymbologyBoolean from './SymbologyBooleanField/schemaFieldFormForSymbologyBoolean';
 import SchemaFieldFormForTextField from './TextField/schemaFieldFormForTextField';
@@ -75,7 +77,16 @@ function SchemaFieldCreatorAndEditor(props: Props) {
 			{(fieldTypeToAdd === FeatureSchemaFieldType.SymbologyFieldBoolean ||
 				fieldToEdit?.type === FeatureSchemaFieldType.SymbologyFieldBoolean) && (
 				<SchemaFieldFormForSymbologyBoolean
-					field={fieldToEdit as FeatureSchemaFieldDefinitionSymbologyBoolean}
+					field={fieldToEdit as FeatureSchemaFieldDefinitionSymbologyBooleanField}
+					onDone={onDone}
+					onCancel={onCancel}
+				/>
+			)}
+
+			{(fieldTypeToAdd === FeatureSchemaFieldType.DateField ||
+				fieldToEdit?.type === FeatureSchemaFieldType.DateField) && (
+				<SchemaFieldFormForDateField
+					field={fieldToEdit as FeatureSchemaFieldDefinitionDateField}
 					onDone={onDone}
 					onCancel={onCancel}
 				/>

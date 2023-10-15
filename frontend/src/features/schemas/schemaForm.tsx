@@ -16,7 +16,6 @@ import {
 	FormControl,
 	FormGroup,
 	FormHelperText,
-	FormLabel,
 	Grid,
 	IconButton,
 	Paper,
@@ -43,6 +42,8 @@ import {
 } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import FormSectionHeading from '../../app/ui/formSectionHeading';
+import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import { selectActiveMapId } from '../app/appSlice';
 import SchemaFieldCreatorAndEditor from '../schemaFields/schemaFieldCreatorAndEditor';
 import SchemaFieldListManager from '../schemaFields/schemaFieldListManager';
@@ -65,7 +66,6 @@ import { getNextSchemaFieldId } from './schemasSlice';
 
 interface Props {
 	schema?: FeatureSchema;
-	symbolId?: number;
 	onDoneAdding?: (schema: NewFeatureSchema) => void;
 	onDoneEditing?: (schema: FeatureSchema) => void;
 	onCancel?: () => void;
@@ -76,7 +76,7 @@ function SchemaForm(props: Props) {
 
 	const mapId = useAppSelector(selectActiveMapId);
 
-	const { schema, symbolId, onDoneAdding, onDoneEditing, onCancel } = props;
+	const { schema, onDoneAdding, onDoneEditing, onCancel } = props;
 
 	const {
 		watch,
@@ -99,7 +99,7 @@ function SchemaForm(props: Props) {
 			},
 			default_symbology: schema?.default_symbology || undefined,
 			definition: schema?.definition,
-			recently_used_symbols: schema?.recently_used_symbols,
+			recently_used_symbols: schema?.recently_used_symbols || {},
 		},
 	});
 
@@ -162,7 +162,7 @@ function SchemaForm(props: Props) {
 		setValue('symbology', local_symbology, { shouldDirty: true });
 
 		const local_recently_used_symbols: FeatureSchemaModifiableProps['recently_used_symbols'] = {};
-		Object.entries(recently_used_symbols).forEach(
+		Object.entries(recently_used_symbols || {}).forEach(
 			([mapId, symbolIds]) => (local_recently_used_symbols[Number(mapId)] = symbolIds.filter((id) => id !== symbolId)),
 		);
 		setValue('recently_used_symbols', local_recently_used_symbols, { shouldDirty: true });
@@ -307,9 +307,7 @@ function SchemaForm(props: Props) {
 						</FormControl>
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend" sx={{ mb: 1 }}>
-								Default symbology
-							</FormLabel>
+							<FormSectionHeading>Default symbology</FormSectionHeading>
 
 							<FormGroup>
 								<Typography variant="body2">
@@ -341,14 +339,11 @@ function SchemaForm(props: Props) {
 						</FormControl>
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend" sx={{ mb: 1 }}>
-								Symbols
-							</FormLabel>
+							<FormSectionHeading>Symbols</FormSectionHeading>
 
 							<FormGroup>
 								<SchemaSymbologyManager
 									schemaId={schema?.id}
-									symbolId={symbolId}
 									symbology={symbology}
 									mapId={mapId}
 									onAddGroup={onAddSymbolGroup}
@@ -367,9 +362,7 @@ function SchemaForm(props: Props) {
 						</FormControl>
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend" sx={{ mb: 1 }}>
-								Your Fields
-							</FormLabel>
+							<FormSectionHeading>Your Fields</FormSectionHeading>
 
 							<FormGroup>
 								<Typography variant="body2">
@@ -416,14 +409,13 @@ function SchemaForm(props: Props) {
 								<Grid container direction="column" sx={{ mt: 1, mb: 2 }}>
 									<Grid container direction="row" alignItems="center">
 										<Grid item sx={{ mr: 0.5, flexGrow: 1 }}>
-											<FormLabel component="legend">Danger Zone</FormLabel>
+											<FormSectionHeading>Danger Zone</FormSectionHeading>
 										</Grid>
 										<Grid item>
 											<FlightIcon
 												sx={{
-													verticalAlign: 'middle',
-													color: 'rgb(0, 0, 0)',
-													opacity: 0.5,
+													verticalAlign: 'top',
+													color: mapaThemeSecondaryBlue,
 													fontSize: '16px',
 												}}
 											/>

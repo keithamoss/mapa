@@ -13,12 +13,11 @@ import { isEmpty } from 'lodash-es';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import { symbologyGroupFormValidationSchemaIDOnly } from '../../app/forms/symbologyGroupForm';
-import { FeatureSchemaSymbologyGroup } from '../../app/services/schemas';
+import {
+	FeatureSchemaSymbologyGroup,
+	FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps,
+} from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
-
-interface FormState {
-	id: string;
-}
 
 interface Props {
 	groups: FeatureSchemaSymbologyGroup[];
@@ -29,24 +28,16 @@ interface Props {
 function SchemaSymbologyGroupChooserForRerranging(props: Props) {
 	const { groups, onDone, onCancel } = props;
 
-	const {
-		handleSubmit,
-		control,
-		// formState: { errors },
-	} = useForm<FormState>({
+	const { handleSubmit, control } = useForm<FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps>({
 		resolver: yupResolver(symbologyGroupFormValidationSchemaIDOnly),
 		defaultValues: {
-			id: '',
+			id: undefined,
 		},
 	});
 
-	const onDoneWithForm: SubmitHandler<FormState> = (data) => {
+	const onDoneWithForm: SubmitHandler<FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps> = (data) => {
 		if (isEmpty(data) === false) {
-			// NOTE: The id is technically already a number here, but because of
-			// react-hook-form's inability to take undefined/null for controlled inputs
-			// it needs to think that it's a string.
-			// This parsing doesn't actually do anything but make TypeScript happy.
-			onDone(parseInt(`${data.id}`));
+			onDone(data.id);
 		}
 	};
 
@@ -66,7 +57,7 @@ function SchemaSymbologyGroupChooserForRerranging(props: Props) {
 								name="id"
 								control={control}
 								render={({ field }) => (
-									<Select {...field} label="Group">
+									<Select {...field} value={field.value !== undefined ? field.value : ''} label="Group">
 										{groups.map((group) => (
 											<MenuItem key={group.id} value={group.id}>
 												{group.name}

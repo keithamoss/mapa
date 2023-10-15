@@ -1,4 +1,5 @@
 import { MapBrowserEvent, Overlay } from 'ol';
+import { MapboxVectorLayer } from 'ol-mapbox-style';
 import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { ObjectEvent } from 'ol/Object';
@@ -6,7 +7,6 @@ import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
 import { Point } from 'ol/geom';
 import { ModifyEvent } from 'ol/interaction/Modify';
-import MapboxVector from 'ol/layer/MapboxVector';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap } from '../../app/services/auth';
@@ -22,7 +22,7 @@ export const geolocationMarkerOvelayerIdInner = 'geolocation_marker_inner';
 export const getBasemap = (basemap: Basemap | undefined) =>
 	basemap === Basemap.MapboxWMTS
 		? getWMTSTileLayer()
-		: new MapboxVector({
+		: new MapboxVectorLayer({
 				styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Infinity,

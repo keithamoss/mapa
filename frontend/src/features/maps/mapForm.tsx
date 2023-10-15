@@ -12,7 +12,6 @@ import {
 	FormControl,
 	FormGroup,
 	FormHelperText,
-	FormLabel,
 	IconButton,
 	InputLabel,
 	ListItemText,
@@ -34,6 +33,7 @@ import { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
 import { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectAllFeatures } from '../features/featuresSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
@@ -116,7 +116,7 @@ function MapForm(props: Props) {
 		}
 	};
 
-	const onClose = () => navigate(-1);
+	const onClose = () => navigate('/MapManager');
 
 	const onCancelForm = () => {
 		if (isDirty === true) {
@@ -129,11 +129,17 @@ function MapForm(props: Props) {
 	// Form Management (End)
 	// ######################
 
+	// ######################
+	// Discard Changes
+	// ######################
 	const [isDiscardChangesDialogShown, setIsDiscardChangesDialogShown] = useState(false);
 
 	const onConfirmDiscardChanges = () => onClose();
 
 	const onCancelDiscardChangesDialog = () => setIsDiscardChangesDialogShown(false);
+	// ######################
+	// Discard Changes (End)
+	// ######################
 
 	return (
 		<React.Fragment>
@@ -171,9 +177,7 @@ function MapForm(props: Props) {
 						</FormControl>
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
-							<FormLabel component="legend" sx={{ mb: 1 }}>
-								Default symbology
-							</FormLabel>
+							<FormSectionHeading>Default symbology</FormSectionHeading>
 
 							<FormGroup>
 								<Typography variant="body2">
@@ -204,9 +208,7 @@ function MapForm(props: Props) {
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 							<FormGroup>
-								<FormLabel component="legend" sx={{ mb: 1 }}>
-									Schemas
-								</FormLabel>
+								<FormSectionHeading>Schemas</FormSectionHeading>
 
 								<Typography variant="body2">
 									Choose the schemas you would like to use on this map. If schemas are in use on the map, they will be

@@ -4,14 +4,14 @@ import { Control, Controller } from 'react-hook-form';
 import { FeatureDataItem } from '../../../app/services/features';
 import {
 	FeatureSchemaFieldDefinitionBooleanField,
-	FeatureSchemaFieldDefinitionSymbologyBoolean,
+	FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldType,
 } from '../../../app/services/schemas';
 import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
 	control: Control<SchemaFormFieldsFormValues, unknown>;
-	schemaField: FeatureSchemaFieldDefinitionBooleanField | FeatureSchemaFieldDefinitionSymbologyBoolean;
+	schemaField: FeatureSchemaFieldDefinitionBooleanField | FeatureSchemaFieldDefinitionSymbologyBooleanField;
 	dataItem: FeatureDataItem | undefined;
 }
 
@@ -33,12 +33,9 @@ function SchemaDataEntryBooleanyTypeFields(props: Props) {
 				<Controller
 					name={`schema_field_${schemaField.id}`}
 					control={control}
-					defaultValue={dataItem !== undefined ? (dataItem.value as boolean) : undefined}
+					defaultValue={dataItem !== undefined ? (dataItem.value as boolean) : false}
 					render={({ field }) => (
-						<Checkbox
-							{...field}
-							checked={(field.value !== field.value) !== undefined && isBoolean(field.value) ? field.value : undefined}
-						/>
+						<Checkbox {...field} checked={field.value !== undefined && isBoolean(field.value) ? field.value : false} />
 					)}
 				/>
 			}

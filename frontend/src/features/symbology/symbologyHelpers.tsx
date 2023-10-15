@@ -25,7 +25,7 @@ export const defaultSymbolModiferColour = '#183153';
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 15;
 // <input type="color" /> doesn't support opacity, so provide pure white for the form and very opaque black for the map
-export const defaultSymbolFillColour = '#FFFFFF03'; // So the whole icon is draggable in OL
+export const defaultSymbolFillColour = '#FFFFFF10'; // So the whole icon is draggable in OL
 // export const defaultSymbolFillColourForSymbologyForm = "#FFFFFF"; // So the whole icon is draggable in OL
 export const defaultSymbolRotation = 0;
 export const defaultSymbolOpacity = 1;
@@ -119,7 +119,7 @@ export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAw
 		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		rotation: symbol?.rotation || defaultSymbolRotation,
-		backgroundColour: hextoRGBACSS(defaultSymbolFillColour), // Ensure transparent areas of the icon are draggable
+		backgroundColour: hextoRGBACSS(defaultSymbolFillColour), // Ensure transparent areas of the icon are draggable and clickable
 	};
 };
 

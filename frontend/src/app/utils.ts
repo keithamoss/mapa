@@ -26,3 +26,8 @@ export function getAPIBaseURL(): string {
 export function getBaseURL(): string {
 	return import.meta.env.VITE_SITE_BASE_URL;
 }
+
+// https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
+export function isTouchDevice() {
+	return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}

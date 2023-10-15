@@ -6,6 +6,7 @@ import VectorLayer from 'ol/layer/Vector';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { SymbologyProps } from '../../app/services/schemas';
+import { mapaThemePrimaryGreen } from '../../app/ui/theme';
 import {
 	defaultSymbolIcon,
 	defaultSymbolIconStyle,
@@ -17,8 +18,8 @@ import { GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from 
 // Types picked from LiteralSymbolStyle
 export interface WebGLLayerSpriteSheet {
 	src: string;
-	textureCoord: (string | string[] | number[])[];
-	size: (string | string[] | number)[];
+	iconOffset: (string | string[] | number[])[];
+	iconSize: (string | string[] | number[])[];
 }
 
 const spriteSheetCanvas = document.createElement('canvas');
@@ -92,9 +93,8 @@ export const buildSpriteSheet = async (symbols: {
 	// ######################
 	// Draw SVG Images To Canvas
 	// ######################
-	const spriteSheetTextureCoords: (string | string[] | number[])[] = ['match', ['get', 'symbolCacheKey']];
-
-	const spriteSheetSizes: (string | string[] | number)[] = ['match', ['get', 'symbolCacheKey']];
+	const iconOffsetCoords: (string | string[] | number[])[] = ['match', ['get', 'symbolCacheKey']];
+	const iconSizeCoords: (string | string[] | number[])[] = ['match', ['get', 'symbolCacheKey']];
 
 	let nextCanvasPositionY = padding;
 
@@ -114,50 +114,36 @@ export const buildSpriteSheet = async (symbols: {
 			);
 		}
 
-		// Create the expression for determine the texture coordinates of each sprite
-		spriteSheetTextureCoords.push(symbolCacheKey);
-
-		const topLeftX = padding;
-		const topLeftY = nextCanvasPositionY;
-
-		// Translate from image dimensions into dimensions within the canvas in a 0 - 1 range
-		spriteSheetTextureCoords.push([
-			// tlx, tly, brx, bry
-			topLeftX / spriteSheetCanvas.width,
-			topLeftY / spriteSheetCanvas.height,
-			(topLeftX + img.width) / spriteSheetCanvas.width,
-			(topLeftY + img.height) / spriteSheetCanvas.height,
-		]);
-
-		// Create the expression for determine the sizes of each sprite
-		spriteSheetSizes.push(symbolCacheKey);
-		spriteSheetSizes.push(img.width / 2);
+		// Offset, together with the size and the offset origin, define the sub-rectangle to use from the original icon image.
+		iconOffsetCoords.push(symbolCacheKey, [padding, nextCanvasPositionY]); // opLeftX, topLeftY
+		iconSizeCoords.push(symbolCacheKey, [img.width, img.height]);
 
 		nextCanvasPositionY += img.height + padding;
 	});
 
-	// Use our default icon as the fallback for textures and coordinates.
-	const defaultIconTextureCoordsIdx = spriteSheetTextureCoords.findIndex((item) => item === 'default_icon');
-	spriteSheetTextureCoords.push(spriteSheetTextureCoords[defaultIconTextureCoordsIdx + 1]);
+	// Use our default icon as the fallback.
+	const defaultIconOffsetCoordsIdx = iconOffsetCoords.findIndex((item) => item === 'default_icon');
+	iconOffsetCoords.push(iconOffsetCoords[defaultIconOffsetCoordsIdx + 1]);
 
-	const defaultIconSizeIdx = spriteSheetSizes.findIndex((item) => item === 'default_icon');
-	spriteSheetSizes.push(spriteSheetSizes[defaultIconSizeIdx + 1]);
+	const defaultIconSizeCoordsIdx = iconSizeCoords.findIndex((item) => item === 'default_icon');
+	iconSizeCoords.push(iconSizeCoords[defaultIconSizeCoordsIdx + 1]);
 	// ######################
 	// Draw SVG Images To Canvas (End)
 	// ######################
 
 	// Only used for debugging
-	// spriteSheetCanvas.style.zIndex = "20000";
-	// spriteSheetCanvas.style.position = "absolute";
-	// spriteSheetCanvas.style.bottom = "0";
+	// spriteSheetCanvas.style.zIndex = '20000';
+	// spriteSheetCanvas.style.position = 'absolute';
+	// spriteSheetCanvas.style.bottom = '0';
+	// spriteSheetCanvas.style.maxHeight = '100%';
 	// // context.fillStyle = "black";
 	// // context.fillRect(0, 0, spriteSheetCanvas.width, spriteSheetCanvas.height);
 	// document.body.appendChild(spriteSheetCanvas);
 
 	return {
 		src: spriteSheetCanvas.toDataURL('image/png'),
-		textureCoord: spriteSheetTextureCoords,
-		size: spriteSheetSizes,
+		iconOffset: iconOffsetCoords,
+		iconSize: iconSizeCoords,
 	};
 };
 
@@ -194,24 +180,21 @@ export const createWebGLPointsLayer = (
 			format: geoJSONFormat,
 			features: geoJSONFormat.readFeatures(features),
 		}) as VectorSource<Point>,
-		// Something odd going on in the typings here, but this seems to work without issue anyway.
 		style:
 			spriteSheet !== undefined
 				? {
-						symbol: {
-							symbolType: 'image',
-							rotateWithView: false,
-							src: spriteSheet.src,
-							size: spriteSheet.size,
-							textureCoord: spriteSheet.textureCoord,
-						},
+						'icon-src': spriteSheet.src,
+						'icon-rotate-with-view': false,
+						'icon-scale': 0.5,
+						'icon-offset': spriteSheet.iconOffset,
+						'icon-size': spriteSheet.iconSize,
 				  }
 				: {
-						symbol: {
-							symbolType: 'circle',
-							size: 12,
-							rotateWithView: false,
-						},
+						'circle-radius': 12,
+						'circle-rotate-with-view': false,
+						'circle-fill-color': mapaThemePrimaryGreen,
+						'circle-stroke-width': 1.5,
+						'circle-stroke-color': 'white',
 				  },
 		properties: {
 			id: 'data-layer',

@@ -1,0 +1,27 @@
+/* Based on https://codesandbox.io/s/3filx?file=/src/styles.module.css
+with many things stripped out that didn't seem to be necessary. */
+
+.item {
+	position: relative;
+	pointer-events: auto;
+	transform-origin: 50% 50% 0px;
+	display: grid;
+	align-items: center;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.fg {
+	cursor: -webkit-grab grab;
+	background-color: white;
+	position: absolute;
+	width: 100%;
+}
+
+.fg:active {
+	cursor: -webkit-grabbing grabbing;
+}
+
+.fg > * {
+	pointer-events: none;
+}

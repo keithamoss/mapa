@@ -1,4 +1,5 @@
 import { List, ListItem, ListItemText } from '@mui/material';
+import dayjs from 'dayjs';
 import { useAppSelector } from '../../app/hooks/store';
 import { Feature, FeatureDataItem } from '../../app/services/features';
 import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
@@ -18,6 +19,8 @@ const getDataItemAsString = (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
 	) {
 		return dataItem.value === true ? 'On' : 'Off';
+	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
+		return typeof dataItem.value === 'string' ? dayjs(dataItem.value).format('ddd, MMM D YYYY') : '';
 	} else {
 		return 'Unknown value-to-string mapping';
 	}
