@@ -1381,12 +1381,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:^7.72.0":
-  version: 7.74.0
-  resolution: "@sentry/tracing@npm:7.74.0"
+"@sentry/tracing@npm:^7.74.1":
+  version: 7.74.1
+  resolution: "@sentry/tracing@npm:7.74.1"
   dependencies:
-    "@sentry-internal/tracing": 7.74.0
-  checksum: 9ea424fbef2ad82683a2d8ee4821ec2839dd4f2313ecb4b85f5aa9c3699b8a470aa3e94affb9809d1ac1afdaa963923cdbdbc08f62ec1ebfe528e906c46b01c3
+    "@sentry-internal/tracing": 7.74.1
+  checksum: fa0b8754d4bc99789eca826013d82b1842c86d2d58c97717788b9f0b77561d9c3e4ed4815b5f985b82e42aaafcf6da12bec6a7a98459885dcca459a3e4c5c2db
   languageName: node
   linkType: hard
 
@@ -3786,7 +3786,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.9.6
     "@sentry/browser": ^7.74.1
     "@sentry/react": ^7.74.1
-    "@sentry/tracing": ^7.72.0
+    "@sentry/tracing": ^7.74.1
     "@sentry/vite-plugin": ^2.8.0
     "@testing-library/jest-dom": ^6.1.3
     "@testing-library/react": ^14.0.0
