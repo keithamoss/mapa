@@ -1272,21 +1272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.74.0":
-  version: 7.74.0
-  resolution: "@sentry/browser@npm:7.74.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.74.0
-    "@sentry/core": 7.74.0
-    "@sentry/replay": 7.74.0
-    "@sentry/types": 7.74.0
-    "@sentry/utils": 7.74.0
-    tslib: ^2.4.1 || ^1.9.3
-  checksum: dafb8e182b41b6afa1e2f44242e2ce91f2ababc2655605e95d664ca48ca913cab9b86033d79ec87e9a71d63d3970dacb1c1ca4e06aa8ed872cf832009f0f48c8
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:^7.74.1":
+"@sentry/browser@npm:7.74.1, @sentry/browser@npm:^7.74.1":
   version: 7.74.1
   resolution: "@sentry/browser@npm:7.74.1"
   dependencies:
@@ -1369,29 +1355,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:^7.70.0":
-  version: 7.74.0
-  resolution: "@sentry/react@npm:7.74.0"
+"@sentry/react@npm:^7.74.1":
+  version: 7.74.1
+  resolution: "@sentry/react@npm:7.74.1"
   dependencies:
-    "@sentry/browser": 7.74.0
-    "@sentry/types": 7.74.0
-    "@sentry/utils": 7.74.0
+    "@sentry/browser": 7.74.1
+    "@sentry/types": 7.74.1
+    "@sentry/utils": 7.74.1
     hoist-non-react-statics: ^3.3.2
     tslib: ^2.4.1 || ^1.9.3
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
-  checksum: 5c3905803d87df35e565a63800158d8a8ca42d9ebb800b9e3d089ac0be0420fdf6af986ce26590c871c5bc279bb443d27c7ad4b3ed438ff56f31ff7f682f30a6
-  languageName: node
-  linkType: hard
-
-"@sentry/replay@npm:7.74.0":
-  version: 7.74.0
-  resolution: "@sentry/replay@npm:7.74.0"
-  dependencies:
-    "@sentry/core": 7.74.0
-    "@sentry/types": 7.74.0
-    "@sentry/utils": 7.74.0
-  checksum: 9ea0c88d8233c9faccd61873ad83c19c4ece36e29c11dcc896cbe01013652b990ffa32a8c68e87c40c523bc96cd3a190b27a3f960bde4aa894f10e27a9f9a74e
+  checksum: 52c8b28a1f020216f140215497b9515abd6973a282d839b3ee0363b84d0ea10a0d9b3cae2136d563f7ccb30e419b00ee0d117b4edf70bcbe2259969ba0b1650c
   languageName: node
   linkType: hard
 
@@ -3792,7 +3767,7 @@ __metadata:
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^1.9.6
     "@sentry/browser": ^7.74.1
-    "@sentry/react": ^7.70.0
+    "@sentry/react": ^7.74.1
     "@sentry/tracing": ^7.72.0
     "@sentry/vite-plugin": ^2.8.0
     "@testing-library/jest-dom": ^6.1.3
