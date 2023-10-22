@@ -204,49 +204,75 @@ function FeatureEditor(props: Props) {
 	};
 
 	const onDoneWithForm: SubmitHandler<SchemaFormFieldsFormValues> = (data) => {
-		const featureDataSchemaFieldNames = localFeature.data.map(
-			(featureDataItem) => `schema_field_${featureDataItem.schema_field_id}`,
-		);
+		// If there's no schema, there's no fields to process, so just go ahead and update.
+		// I think it's impossible to have no schema on a feature now, but maybe first time users can?
+		if (schema === undefined) {
+			onSaveAndUpdateFeature(updateFeatureDataFromForm(localFeature, {}));
+			return;
+		}
 
-		// We want to filter out any fields with non-values so that
-		// we fallback to the default values stored on the schema.
-		// This largely means removing any fields that weren't touched
-		// on the form (unless they already had a value saved on the feature).
+		// We want to filter out any fields with values matching the default
+		// values stored on the schema, so that we fall back to them correctly.
+		// Note: We used to use touchedFieldsRef as part of this, but there's a
+		// Safari bug with checkboxes not showing up as a touched field, so we
+		// abandoned that and fixed it with changes here.
+		// Now we only used touchedFieldsRef to handle keeping empty fields in
+		// the filtered data items.
 		const dataFiltered: SchemaFormFieldsFormValues = {};
 
 		Object.entries(data).forEach(([fieldName, fieldValue]) => {
-			// If the user hasn't touched any fields, or if the field already has a value defined, always include it in the data object.
-			if (touchedFieldsRef.current === undefined || featureDataSchemaFieldNames.includes(fieldName)) {
-				// I think it's now impossible to have a null schema, but retaining this just in case
-				if (schema === undefined) {
-					dataFiltered[fieldName] = fieldValue;
-				} else {
-					// This handles the oddities of DatePicker and react-hook-form (ref: SchemaDataEntryDateField) and ensures that
-					// we don't save an empty string when the user clears the field.
-					const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
-					const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
+			const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
+			const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
 
-					if (schemaField?.type === FeatureSchemaFieldType.DateField) {
-						if (fieldValue !== '') {
-							dataFiltered[fieldName] = fieldValue;
-						}
-					} else {
+			if (schemaField !== undefined && fieldValue !== schemaField?.default_value) {
+				// This handles the oddities of DatePicker and react-hook-form (ref: SchemaDataEntryDateField) and ensures that
+				// we don't save an empty string when the user clears the field. (Unless we need to, e.g. where there's a default
+				// value and we want to clear it - that's taken care of in the two sections below.)
+				if (schemaField?.type === FeatureSchemaFieldType.DateField) {
+					if (fieldValue !== '') {
 						dataFiltered[fieldName] = fieldValue;
 					}
-				}
-			} else if (touchedFieldsRef.current[fieldName] !== undefined && schema !== undefined) {
-				// If the field wasn't previously set, has been touched, and we have a schema, check to see if the value
-				// in the field is different from the default value before including it in the data object.
-				// (This is how we filter out the default values.)
-				// Note: This does have the unfortunate side effect of meaning that the user can't enter the same
-				// value as the default value without having it filtered out here.
-				// Oh well 🤷‍♂️
-				const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
-				const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
-
-				if (schemaField !== undefined && fieldValue !== schemaField?.default_value) {
+				} else {
 					dataFiltered[fieldName] = fieldValue;
 				}
+			}
+		});
+
+		// This ensures that when a field is touched, and it's value is set to an empty string, that it actually gets
+		// included in the data.
+		// ReactHookForm, rightly, doesn't include it in the `data` from the form because most forms don't care about
+		// a field that is blank.
+		Object.entries(touchedFieldsRef.current || {}).forEach(([fieldName, wasTouched]) => {
+			const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
+			const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
+
+			if (
+				dataFiltered[fieldName] === undefined &&
+				schemaField !== undefined &&
+				(schemaField?.type === FeatureSchemaFieldType.TextField ||
+					schemaField?.type === FeatureSchemaFieldType.DateField) &&
+				schemaField?.default_value !== '' &&
+				data[fieldName] !== schemaField?.default_value
+			) {
+				dataFiltered[fieldName] = '';
+			}
+		});
+
+		// And this ensures that, if the item is already saved as an empty string on the feature, but the user
+		// hasn't touched the field this time, that it's still included in the data being saved.
+		Object.values(localFeature.data).forEach((data) => {
+			const fieldName = `schema_field_${data.schema_field_id}`;
+			const schemaField = getFieldFromSchemaDefinitionById(schema, data.schema_field_id);
+
+			if (
+				dataFiltered[fieldName] === undefined &&
+				schemaField !== undefined &&
+				(schemaField?.type === FeatureSchemaFieldType.TextField ||
+					schemaField?.type === FeatureSchemaFieldType.DateField) &&
+				schemaField?.default_value !== '' &&
+				data.value === ''
+			) {
+				dataFiltered[fieldName] = '';
 			}
 		});
 

@@ -9,10 +9,9 @@ const getDataItemAsString = (
 	schemaFieldDefinition: FeatureSchemaFieldDefinitionCollection,
 	dataItem: FeatureDataItem,
 ) => {
-	if (
-		schemaFieldDefinition.type === FeatureSchemaFieldType.TextField ||
-		schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField
-	) {
+	if (schemaFieldDefinition.type === FeatureSchemaFieldType.TextField) {
+		return dataItem.value !== '' ? dataItem.value : <em>No text entered</em>;
+	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
 		return dataItem.value;
 	} else if (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
@@ -20,7 +19,11 @@ const getDataItemAsString = (
 	) {
 		return dataItem.value === true ? 'On' : 'Off';
 	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
-		return typeof dataItem.value === 'string' ? dayjs(dataItem.value).format('ddd, MMM D YYYY') : '';
+		return typeof dataItem.value === 'string' && dataItem.value !== '' ? (
+			dayjs(dataItem.value).format('ddd, MMM D YYYY')
+		) : (
+			<em>No date entered</em>
+		);
 	} else {
 		return 'Unknown value-to-string mapping';
 	}

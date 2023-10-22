@@ -88,7 +88,10 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 			fieldDefinition.type === FeatureSchemaFieldType.NumberField ||
 			fieldDefinition.type === FeatureSchemaFieldType.DateField
 		) {
-			values[schemaFieldName] = featureDataItemForSchemaField?.value || fieldDefinition.default_value;
+			values[schemaFieldName] =
+				featureDataItemForSchemaField?.value !== undefined
+					? featureDataItemForSchemaField?.value
+					: fieldDefinition.default_value;
 		}
 	});
 
