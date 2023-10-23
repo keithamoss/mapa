@@ -213,7 +213,7 @@ function SymbologyIconChooser(props: Props) {
 						>
 							{iconSearchResults.length === 0 && iconSearchTerm !== '' && (
 								<Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-									No icons found :(
+									No icons found.
 								</Typography>
 							)}
 
