@@ -32,12 +32,12 @@ import {
 	getBasemap,
 	mapTargetElementId,
 	onGeolocationChangePosition,
-	onGeolocationChangeTracking,
 	onGeolocationError,
 	onMapClick,
 	onModifyInteractionAddRemoveFeature,
 	onModifyInteractionStartEnd,
 	setModifyInteractionStatus,
+	updateMapWithGPSPosition,
 } from './olMapHelpers';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './olWebGLPointsLayerManager';
@@ -105,11 +105,21 @@ function OLMap(props: Props) {
 	geolocationHasPositionRef.current = mapHasPosition;
 
 	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
+	const isFollowingGPSRef = useRef<boolean>(true);
+	isFollowingGPSRef.current = isFollowingGPS;
 
-	const onFollowGPSEnabled = useCallback(() => setIsFollowingGPS(true), []);
+	const onFollowGPSEnabled = useCallback(() => {
+		setIsFollowingGPS(true);
+
+		// When we re-enable location following, grab the current location and snap the map to it
+		if (mapRef.current !== undefined) {
+			const curerentPosition = geolocation.current.getPosition();
+			if (curerentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, curerentPosition, true);
+			}
+		}
+	}, []);
 	const onFollowGPSDisabled = useCallback(() => setIsFollowingGPS(false), []);
-
-	geolocation.current.setTracking(isFollowingGPS);
 	// ######################
 	// Geolocation (End)
 	// ######################
@@ -169,10 +179,12 @@ function OLMap(props: Props) {
 			const geolocationEventKeys = [
 				geolocation.current.on(
 					'change:position',
-					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setMapHasPosition),
+					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setMapHasPosition, isFollowingGPSRef),
 				),
-				geolocation.current.on('change:tracking', onGeolocationChangeTracking(initialMap)),
-				geolocation.current.on('error', onGeolocationError(initialMap, setMapHasPosition, setIsFollowingGPS)),
+				geolocation.current.on(
+					'error',
+					onGeolocationError(initialMap, geolocationHasPositionRef, setMapHasPosition, setIsFollowingGPS),
+				),
 			];
 			// ######################
 			// Geolocation (End)

@@ -40,7 +40,7 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 	});
 };
 
-export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined) => {
+export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
 	if (position !== undefined) {
 		const markerOverlayOuter = map.getOverlayById(geolocationMarkerOvelayerIdOuter);
 		markerOverlayOuter.setPosition(fromLonLat(position));
@@ -48,10 +48,12 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 		const markerOverlayInner = map.getOverlayById(geolocationMarkerOvelayerIdInner);
 		markerOverlayInner.setPosition(fromLonLat(position));
 
-		const view = map.getView();
-		view.setCenter(fromLonLat(position));
-		view.setZoom(defaultZoomLevel);
-		map.setView(view);
+		if (centreOnMarker === true) {
+			const view = map.getView();
+			view.setCenter(fromLonLat(position));
+			view.setZoom(defaultZoomLevel);
+			map.setView(view);
+		}
 	}
 };
 
@@ -60,34 +62,33 @@ export const onGeolocationChangePosition =
 		map: Map,
 		geolocationHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
+		isFollowingGPSRef: React.MutableRefObject<boolean>,
 	) =>
 	(evt: BaseEvent) => {
-		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition());
+		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
 
 		if (geolocationHasPositionRef.current === false) {
 			setMapHasPosition(true);
 		}
 	};
 
-export const onGeolocationChangeTracking = (map: Map) => (evt: BaseEvent) => {
-	if ((evt as ObjectEvent).oldValue === false) {
-		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition());
-	}
-};
-
 export const onGeolocationError =
 	(
 		map: Map,
+		geolocationHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
 	) =>
 	(/*evt: GeolocationError*/) => {
-		const view = map.getView();
-		view.setCenter(fromLonLat(defaultMapStartingPoint));
-		view.setZoom(defaultZoomLevel);
-		map.setView(view);
+		if (geolocationHasPositionRef.current === false) {
+			const view = map.getView();
+			view.setCenter(fromLonLat(defaultMapStartingPoint));
+			view.setZoom(defaultZoomLevel);
+			map.setView(view);
 
-		setMapHasPosition(true);
+			setMapHasPosition(true);
+		}
+
 		setIsFollowingGPS(false);
 	};
 
