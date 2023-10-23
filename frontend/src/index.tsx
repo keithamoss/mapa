@@ -12,12 +12,6 @@ import { store } from './app/store';
 import { theme } from './app/ui/theme';
 // import './browserstack';
 
-// https://github.com/bvaughn/react-error-boundary/issues/126
-// which links to https://github.com/facebook/react/issues/15069
-// eslint-disable-next-line no-console
-// console.error = () => {};
-
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
