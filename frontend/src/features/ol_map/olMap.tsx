@@ -1,5 +1,6 @@
+import { Alert, AlertTitle } from '@mui/material';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
-import Geolocation from 'ol/Geolocation';
+import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import { Geometry, Point } from 'ol/geom';
@@ -100,12 +101,15 @@ function OLMap(props: Props) {
 	);
 
 	const [mapHasPosition, setMapHasPosition] = useState<boolean>(false);
+	const mapHasPositionRef = useRef<boolean>(mapHasPosition);
+	mapHasPositionRef.current = mapHasPosition;
 
-	const geolocationHasPositionRef = useRef<boolean>(false);
-	geolocationHasPositionRef.current = mapHasPosition;
+	const [geolocationHasError, setGeolocationHasError] = useState<false | GeolocationError>(false);
+	const geolocationHasErrorRef = useRef<false | GeolocationError>(geolocationHasError);
+	geolocationHasErrorRef.current = geolocationHasError;
 
 	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
-	const isFollowingGPSRef = useRef<boolean>(true);
+	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
 	const onFollowGPSEnabled = useCallback(() => {
@@ -179,11 +183,18 @@ function OLMap(props: Props) {
 			const geolocationEventKeys = [
 				geolocation.current.on(
 					'change:position',
-					onGeolocationChangePosition(initialMap, geolocationHasPositionRef, setMapHasPosition, isFollowingGPSRef),
+					onGeolocationChangePosition(
+						initialMap,
+						mapHasPositionRef,
+						setMapHasPosition,
+						isFollowingGPSRef,
+						geolocationHasErrorRef,
+						setGeolocationHasError,
+					),
 				),
 				geolocation.current.on(
 					'error',
-					onGeolocationError(initialMap, geolocationHasPositionRef, setMapHasPosition, setIsFollowingGPS),
+					onGeolocationError(initialMap, mapHasPositionRef, setMapHasPosition, setGeolocationHasError),
 				),
 			];
 			// ######################
@@ -347,7 +358,6 @@ function OLMap(props: Props) {
 	return (
 		<div className="map-container">
 			<div id={mapTargetElementId} />
-
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
 			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
@@ -370,6 +380,16 @@ function OLMap(props: Props) {
 				</React.Fragment>
 			) : (
 				<React.Fragment></React.Fragment>
+			)}
+
+			{geolocationHasError !== false && (
+				<Alert severity="error" sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1 }}>
+					<AlertTitle>Error determining your location</AlertTitle>
+					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
+					the app and report it to the developer.
+					<br />
+					Type: {geolocationHasError.type}, Code: {geolocationHasError.code}, Message: {geolocationHasError.message}
+				</Alert>
 			)}
 		</div>
 	);

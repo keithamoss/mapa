@@ -1,8 +1,7 @@
 import { MapBrowserEvent, Overlay } from 'ol';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
-import Geolocation from 'ol/Geolocation';
+import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
-import { ObjectEvent } from 'ol/Object';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
 import { Point } from 'ol/geom';
@@ -60,27 +59,36 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 export const onGeolocationChangePosition =
 	(
 		map: Map,
-		geolocationHasPositionRef: React.MutableRefObject<boolean>,
+		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		isFollowingGPSRef: React.MutableRefObject<boolean>,
+		geolocationHasErrorRef: React.MutableRefObject<false | GeolocationError>,
+		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
 	) =>
 	(evt: BaseEvent) => {
 		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
 
-		if (geolocationHasPositionRef.current === false) {
+		if (mapHasPositionRef.current === false) {
 			setMapHasPosition(true);
+		}
+
+		if (geolocationHasErrorRef.current !== false) {
+			setGeolocationHasError(false);
 		}
 	};
 
 export const onGeolocationError =
 	(
 		map: Map,
-		geolocationHasPositionRef: React.MutableRefObject<boolean>,
+		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
-		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
+		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
 	) =>
-	(/*evt: GeolocationError*/) => {
-		if (geolocationHasPositionRef.current === false) {
+	(evt: GeolocationError) => {
+		setGeolocationHasError(evt);
+
+		// If this is our initial load, just use our default starting point so we can at least render the map for the first time.
+		if (mapHasPositionRef.current === false) {
 			const view = map.getView();
 			view.setCenter(fromLonLat(defaultMapStartingPoint));
 			view.setZoom(defaultZoomLevel);
@@ -88,8 +96,6 @@ export const onGeolocationError =
 
 			setMapHasPosition(true);
 		}
-
-		setIsFollowingGPS(false);
 	};
 
 export const onMapClick = (callback: (features: Feature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
