@@ -12,7 +12,7 @@ import { Basemap } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
-export const defaultZoomLevel = 18;
+export const defaultZoomLevel = 20;
 export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
 export const geolocationMarkerOvelayerIdOuter = 'geolocation_marker_outer';
