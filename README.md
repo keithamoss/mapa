@@ -37,6 +37,6 @@ If you're having trouble with yarn, try running:
 
 ```
 rm -f .yarn*
-yarn set version stable
+yarn set version 3.x
 yarn install
 ```

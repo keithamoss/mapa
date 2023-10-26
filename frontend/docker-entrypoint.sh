@@ -5,9 +5,10 @@ cd /app
 
 if [ ! -d ".yarn" ]; then
   rm -f .yarn*
-  yarn set version stable
+  yarn set version 3.x
   yarn install
 else
+  yarn set version 3.x
   yarn install
 fi
 
