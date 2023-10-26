@@ -53,6 +53,7 @@ import { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/
 import {
 	defaultSymbolColour,
 	defaultSymbolIcon,
+	defaultSymbolModiferColour,
 	defaultSymbolOpacity,
 	defaultSymbolRotation,
 	defaultSymbolSecondaryColour,
@@ -123,7 +124,7 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 		),
 		tertiary_opacity: getNumberOrDefaultForSymbologyField(symbol, 'tertiary_opacity', defaultSymbolTertiaryOpacity),
 		modifier_icon: getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon'),
-		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolColour),
+		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolModiferColour),
 		modifier_opacity: getNumberOrDefaultForSymbologyField(symbol, 'modifier_opacity', defaultSymbolOpacity),
 		size: getNumberOrDefaultForSymbologyField(symbol, 'size', defaultSymbolSize),
 		rotation: getNumberOrDefaultForSymbologyField(symbol, 'rotation', defaultSymbolRotation),
