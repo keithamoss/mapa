@@ -11,7 +11,6 @@ import {
 	FormControlLabel,
 	FormGroup,
 	FormHelperText,
-	TextField,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
@@ -25,6 +24,7 @@ import {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 
 interface Props {
 	field: FeatureSchemaFieldDefinitionDateField | undefined;
@@ -70,7 +70,7 @@ function SchemaFieldFormForDateField(props: Props) {
 							<Controller
 								name="name"
 								control={control}
-								render={({ field }) => <TextField {...field} required={true} label="Field label" />}
+								render={({ field }) => <TextFieldWithout1Password {...field} required={true} label="Field label" />}
 							/>
 						</FormGroup>
 

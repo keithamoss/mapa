@@ -19,7 +19,6 @@ import {
 	Grid,
 	IconButton,
 	Paper,
-	TextField,
 	Toolbar,
 	Typography,
 } from '@mui/material';
@@ -43,6 +42,7 @@ import {
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import { selectActiveMapId } from '../app/appSlice';
 import SchemaFieldCreatorAndEditor from '../schemaFields/schemaFieldCreatorAndEditor';
@@ -299,7 +299,7 @@ function SchemaForm(props: Props) {
 								<Controller
 									name="name"
 									control={control}
-									render={({ field }) => <TextField {...field} label="Name" />}
+									render={({ field }) => <TextFieldWithout1Password {...field} label="Name" />}
 								/>
 							</FormGroup>
 

@@ -11,7 +11,6 @@ import {
 	FormGroup,
 	FormHelperText,
 	FormLabel,
-	TextField,
 	Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
@@ -27,6 +26,7 @@ import {
 	SymbologyProps,
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 import SymbologyFieldEditor from '../../symbology/symbologyFieldEditor';
 
 interface Props {
@@ -91,7 +91,7 @@ function SchemaFieldFormForSymbologyBoolean(props: Props) {
 								<Controller
 									name="name"
 									control={control}
-									render={({ field }) => <TextField {...field} required={true} label="Field label" />}
+									render={({ field }) => <TextFieldWithout1Password {...field} required={true} label="Field label" />}
 								/>
 							</FormGroup>
 

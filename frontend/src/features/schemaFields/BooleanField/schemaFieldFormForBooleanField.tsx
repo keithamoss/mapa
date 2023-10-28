@@ -9,7 +9,6 @@ import {
 	FormControlLabel,
 	FormGroup,
 	FormHelperText,
-	TextField,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -22,6 +21,7 @@ import {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 
 interface Props {
 	field: FeatureSchemaFieldDefinitionBooleanField | undefined;
@@ -66,7 +66,7 @@ function SchemaFieldFormForBooleanField(props: Props) {
 							<Controller
 								name="name"
 								control={control}
-								render={({ field }) => <TextField {...field} required={true} label="Field label" />}
+								render={({ field }) => <TextFieldWithout1Password {...field} required={true} label="Field label" />}
 							/>
 						</FormGroup>
 

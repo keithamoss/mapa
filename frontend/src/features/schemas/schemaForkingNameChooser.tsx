@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, DialogActions, DialogContent, DialogTitle, FormHelperText, TextField } from '@mui/material';
+import { Button, DialogActions, DialogContent, DialogTitle, FormHelperText } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { useRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -7,6 +7,7 @@ import { stopPropagate } from '../../app/forms/formUtils';
 import { forkingSchemaFormValidationSchema } from '../../app/forms/schemaForking';
 import { FeatureSchemaForkingSchemaModifiableProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 
 interface Props {
 	name: string; // The name of the schema being forked
@@ -59,7 +60,7 @@ function SchemaForkingNameChooser(props: Props) {
 						name="name"
 						control={control}
 						render={({ field }) => (
-							<TextField {...field} inputRef={textInput} label="Schema name" margin="dense" fullWidth />
+							<TextFieldWithout1Password {...field} inputRef={textInput} label="Schema name" margin="dense" fullWidth />
 						)}
 					/>
 

@@ -24,6 +24,7 @@ import {
 	FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
+import TextFieldWithout1Password from '../../../app/ui/textFieldWithout1Password';
 
 interface Props {
 	field: FeatureSchemaFieldDefinitionNumberField | undefined;
@@ -66,7 +67,7 @@ function SchemaFieldFormForNumberField(props: Props) {
 							<Controller
 								name="name"
 								control={control}
-								render={({ field }) => <TextField {...field} required={true} label="Field label" />}
+								render={({ field }) => <TextFieldWithout1Password {...field} required={true} label="Field label" />}
 							/>
 						</FormGroup>
 

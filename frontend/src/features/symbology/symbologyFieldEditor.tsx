@@ -72,6 +72,7 @@ import { useAppSelector } from '../../app/hooks/store';
 import { Map } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { selectMapById } from '../maps/mapsSlice';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
@@ -584,7 +585,7 @@ function SymbologyFieldEditor(props: Props) {
 												name="name"
 												control={control}
 												render={({ field }) => (
-													<TextField
+													<TextFieldWithout1Password
 														{...field}
 														required={true}
 														inputRef={textInput}

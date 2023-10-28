@@ -19,7 +19,6 @@ import {
 	OutlinedInput,
 	Paper,
 	Select,
-	TextField,
 	Toolbar,
 	Typography,
 } from '@mui/material';
@@ -34,6 +33,7 @@ import { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
+import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { selectAllFeatures } from '../features/featuresSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
@@ -169,7 +169,7 @@ function MapForm(props: Props) {
 								<Controller
 									name="name"
 									control={control}
-									render={({ field }) => <TextField {...field} label="Name" />}
+									render={({ field }) => <TextFieldWithout1Password {...field} label="Name" />}
 								/>
 							</FormGroup>
 
