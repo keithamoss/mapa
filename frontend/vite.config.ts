@@ -17,6 +17,10 @@ export default defineConfig(({ command, mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
+						if (id.includes('/.yarn/')) {
+							return 'vendor';
+						}
+
 						// Creating a chunk for the icons library to encourage use of the cache when we push app updates (which rarely changes)
 						if (id.includes('iconsLibrary.ts')) {
 							return 'iconsLibrary';
