@@ -47,7 +47,9 @@ function SchemaManager() {
 	const [schemaToFork, setSchemaToFork] = useState<FeatureSchema>();
 
 	const onForkSchema = (schema: FeatureSchema) => () => {
-		setSchemaToFork(schema);
+		setTimeout(() => {
+			setSchemaToFork(schema);
+		}, 250);
 	};
 
 	const [addSchema] = useAddFeatureSchemaMutation();

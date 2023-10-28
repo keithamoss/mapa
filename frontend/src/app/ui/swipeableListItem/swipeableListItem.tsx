@@ -51,8 +51,8 @@ export default function SwipeableListItem(props: Props) {
 	}, []);
 
 	const bind = useDrag(
-		({ active, movement: [x] }) => {
-			if (actionTriggered === false && Math.abs(x) >= horizontalDragDistanceThreshold) {
+		({ active, movement: [x], down }) => {
+			if (actionTriggered === false && Math.abs(x) >= horizontalDragDistanceThreshold && down === false) {
 				setActionTriggered(true);
 				onActionTriggered();
 			}
