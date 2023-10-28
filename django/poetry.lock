@@ -360,18 +360,17 @@ pytz = "*"
 
 [[package]]
 name = "djangorestframework-csv"
-version = "2.1.1"
+version = "3.0.1"
 description = "CSV Tools for Django REST Framework"
 optional = false
 python-versions = "*"
 files = [
-    {file = "djangorestframework-csv-2.1.1.tar.gz", hash = "sha256:aa0ee4c894fe319c68e042b05c61dace43a9fb6e6872e1abe1724ca7ea4d15f7"},
+    {file = "djangorestframework-csv-3.0.1.tar.gz", hash = "sha256:76ca3530c362e90ed46316002ea0b17e7e4e14c78240c787125d2c8f7c6c0174"},
+    {file = "djangorestframework_csv-3.0.1-py3-none-any.whl", hash = "sha256:91484439b3eb555eb6496dcf25c9f8d12746533feb9eb35360f5cccee42dfd15"},
 ]
 
 [package.dependencies]
 djangorestframework = "*"
-six = "*"
-unicodecsv = "*"
 
 [[package]]
 name = "djangorestframework-gis"
@@ -1258,16 +1257,6 @@ files = [
 ]
 
 [[package]]
-name = "unicodecsv"
-version = "0.14.1"
-description = "Python2's stdlib csv module is nice, but it doesn't support unicode. This module is a drop-in replacement which *does*."
-optional = false
-python-versions = "*"
-files = [
-    {file = "unicodecsv-0.14.1.tar.gz", hash = "sha256:018c08037d48649a0412063ff4eda26eaa81eff1546dbffa51fa5293276ff7fc"},
-]
-
-[[package]]
 name = "uritemplate"
 version = "4.1.1"
 description = "Implementation of RFC 6570 URI Templates"
@@ -1362,4 +1351,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "695f2807a9c46dbca25ffe21adea0e0f7d22f2157ab8fbf5aed6daffe2ce7234"
+content-hash = "3fe0c43fd5fd61035b04fb8142651f43c6036aa0f2ef0473f580706712844695"
