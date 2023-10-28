@@ -14,6 +14,16 @@ export default defineConfig(({ command, mode }) => {
 	return {
 		build: {
 			outDir: 'build',
+			rollupOptions: {
+				output: {
+					manualChunks(id: string) {
+						// Creating a chunk for the icons library to encourage use of the cache when we push app updates (which rarely changes)
+						if (id.includes('iconsLibrary.ts')) {
+							return 'iconsLibrary';
+						}
+					},
+				},
+			},
 		},
 		plugins: [
 			react(),
