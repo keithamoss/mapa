@@ -28,8 +28,7 @@ import './olMap.css';
 import {
 	createGeolocationMarkerOverlay,
 	defaultZoomLevel,
-	geolocationMarkerOvelayerIdInner,
-	geolocationMarkerOvelayerIdOuter,
+	geolocationMarkerOvelayerId,
 	getBasemap,
 	mapTargetElementId,
 	onGeolocationChangePosition,
@@ -177,8 +176,7 @@ function OLMap(props: Props) {
 			// ######################
 			// Geolocation
 			// ######################
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerIdOuter));
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerIdInner));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerId));
 
 			const geolocationEventKeys = [
 				geolocation.current.on(

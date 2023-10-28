@@ -15,8 +15,7 @@ import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } f
 export const defaultZoomLevel = 20;
 export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
-export const geolocationMarkerOvelayerIdOuter = 'geolocation_marker_outer';
-export const geolocationMarkerOvelayerIdInner = 'geolocation_marker_inner';
+export const geolocationMarkerOvelayerId = 'geolocation_marker';
 
 export const getBasemap = (basemap: Basemap | undefined) =>
 	basemap === Basemap.MapboxWMTS
@@ -28,7 +27,7 @@ export const getBasemap = (basemap: Basemap | undefined) =>
 		  });
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {
-	const markerEl = document.createElement('img');
+	const markerEl = document.createElement('div');
 	markerEl.setAttribute('id', markerElementOverlayId);
 
 	return new Overlay({
@@ -41,11 +40,8 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 
 export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
 	if (position !== undefined) {
-		const markerOverlayOuter = map.getOverlayById(geolocationMarkerOvelayerIdOuter);
-		markerOverlayOuter.setPosition(fromLonLat(position));
-
-		const markerOverlayInner = map.getOverlayById(geolocationMarkerOvelayerIdInner);
-		markerOverlayInner.setPosition(fromLonLat(position));
+		const markerOverlay = map.getOverlayById(geolocationMarkerOvelayerId);
+		markerOverlay.setPosition(fromLonLat(position));
 
 		if (centreOnMarker === true) {
 			const view = map.getView();

@@ -24,29 +24,100 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 }
 
 /* Inspo https://stackoverflow.com/questions/29684069/point-fixed-to-view-eg-cross-of-center-view */
-#geolocation_marker_outer {
-	width: 32px;
-	height: 32px;
-	/* @TODO Not sure why 7px is the magic number... */
-	margin-top: 7px;
-	/* font-awesome circle */
-	content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><defs><style>.fa-secondary{fill:rgb(34, 105, 146); opacity: 1; stroke: white; stroke-width: 20px;}</style></defs><path class="fa-primary" d=""/><path class="fa-secondary" d="M0 256a160 160 0 1 1 320 0A160 160 0 1 1 0 256z"/></svg>');
+#geolocation_marker {
+	border-radius: 50%;
+	border: 2px solid white;
+	box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+	margin: 10px;
+	height: 28px;
+	width: 28px;
+	transform: scale(1);
+	background: rgba(34, 105, 146, 1);
+	box-shadow: 0 0 0 0 rgba(34, 105, 146, 1);
+	animation: pulse-marker 2s infinite;
 }
 
-#geolocation_marker_inner {
-	width: 40px;
-	height: 40px;
-	/* @TODO Not sure why 7px is the magic number... */
-	margin-top: 7px;
-	/* font-awesome circle small */
-	content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><defs><style>.fa-secondary{fill:rgb(34, 105, 146); opacity: 0.5;}</style></defs><path class="fa-primary" d=""/><path class="fa-secondary" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z"/></svg>');
+@keyframes pulse-marker {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(34, 105, 146, 0.7);
+	}
+
+	70% {
+		transform: scale(1.1);
+		box-shadow: 0 0 0 10px rgba(34, 105, 146, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(34, 105, 146, 0);
+	}
 }
+
+/* #geolocation_marker_outer {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	width: 32px;
+	height: 32px;
+
+	&:before {
+		content: '';
+		position: relative;
+		display: block;
+		width: 250%;
+		height: 250%;
+		box-sizing: border-box;
+		margin-left: -75%;
+		margin-top: -75%;
+		border-radius: 45px;
+		background-color: #01a4e9;
+		animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		display: block;
+		width: 100%;
+		height: 100%;
+		background-color: white;
+		border-radius: 15px;
+		box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+		animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+	}
+}
+
+@keyframes pulse-ring {
+	0% {
+		transform: scale(0.33);
+	}
+	80%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes pulse-dot {
+	0% {
+		transform: scale(0.8);
+	}
+	50% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0.8);
+	}
+} */
 
 #centre_of_the_map {
 	position: absolute;
 	width: 40px;
 	height: 40px;
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 0c8.8 0 16 7.2 16 16V48.6C374.1 56.4 455.6 137.9 463.4 240H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H463.4C455.6 374.1 374.1 455.6 272 463.4V496c0 8.8-7.2 16-16 16s-16-7.2-16-16V463.4C137.9 455.6 56.4 374.1 48.6 272H16c-8.8 0-16-7.2-16-16s7.2-16 16-16H48.6C56.4 137.9 137.9 56.4 240 48.6V16c0-8.8 7.2-16 16-16zM80.7 272c7.6 84.4 74.8 151.7 159.3 159.3V384c0-8.8 7.2-16 16-16s16 7.2 16 16v47.3c84.4-7.6 151.7-74.8 159.3-159.3H384c-8.8 0-16-7.2-16-16s7.2-16 16-16h47.3C423.7 155.6 356.4 88.3 272 80.7V128c0 8.8-7.2 16-16 16s-16-7.2-16-16V80.7C155.6 88.3 88.3 155.6 80.7 240H128c8.8 0 16 7.2 16 16s-7.2 16-16 16H80.7zM256 232a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>');
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path style="fill: rgba(0, 0, 0, 0.7);" d="M256 0c8.8 0 16 7.2 16 16V48.6C374.1 56.4 455.6 137.9 463.4 240H496c8.8 0 16 7.2 16 16s-7.2 16-16 16H463.4C455.6 374.1 374.1 455.6 272 463.4V496c0 8.8-7.2 16-16 16s-16-7.2-16-16V463.4C137.9 455.6 56.4 374.1 48.6 272H16c-8.8 0-16-7.2-16-16s7.2-16 16-16H48.6C56.4 137.9 137.9 56.4 240 48.6V16c0-8.8 7.2-16 16-16zM80.7 272c7.6 84.4 74.8 151.7 159.3 159.3V384c0-8.8 7.2-16 16-16s16 7.2 16 16v47.3c84.4-7.6 151.7-74.8 159.3-159.3H384c-8.8 0-16-7.2-16-16s7.2-16 16-16h47.3C423.7 155.6 356.4 88.3 272 80.7V128c0 8.8-7.2 16-16 16s-16-7.2-16-16V80.7C155.6 88.3 88.3 155.6 80.7 240H128c8.8 0 16 7.2 16 16s-7.2 16-16 16H80.7zM256 232a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>');
 }
 
 #workaround_modify_interaction_bug {
