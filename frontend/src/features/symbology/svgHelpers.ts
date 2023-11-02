@@ -268,9 +268,6 @@ export const parseAndManipulateSVGIcon = (
 			} else if (pathElement.getAttribute('class') === 'primary darker') {
 				pathElement.setAttribute('fill', RGBACSSDarkenColour(iconProps.colour, defaultSymbolDarkenColourByPercentage));
 			}
-
-			pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
-			pathElement.removeAttribute('data-original');
 		});
 
 		// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
@@ -284,9 +281,6 @@ export const parseAndManipulateSVGIcon = (
 						RGBACSSDarkenColour(iconProps.secondaryColour, defaultSymbolDarkenColourByPercentage),
 					);
 				}
-
-				pathElement.style.setProperty('opacity', `${iconProps.secondaryOpacity}`);
-				pathElement.removeAttribute('data-original');
 			});
 		}
 
@@ -301,9 +295,6 @@ export const parseAndManipulateSVGIcon = (
 						RGBACSSDarkenColour(iconProps.tertiaryColour, defaultSymbolDarkenColourByPercentage),
 					);
 				}
-
-				pathElement.style.setProperty('opacity', `${iconProps.tertiaryOpacity}`);
-				pathElement.removeAttribute('data-original');
 			});
 		}
 	}
@@ -394,8 +385,6 @@ export const parseAndManipulateSVGIcon = (
 						'style',
 						`fill: ${iconProps.modifierCircleColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
 					);
-
-					pathElement.removeAttribute('data-original');
 				});
 
 				// Place a background circle behind the modifier icon so we can colour the icon.
@@ -449,8 +438,6 @@ export const parseAndManipulateSVGIcon = (
 						'style',
 						`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
 					);
-
-					pathElement.removeAttribute('data-original');
 				});
 
 				// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
@@ -470,8 +457,6 @@ export const parseAndManipulateSVGIcon = (
 								)}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
 							);
 						}
-
-						pathElement.removeAttribute('data-original');
 					});
 				}
 

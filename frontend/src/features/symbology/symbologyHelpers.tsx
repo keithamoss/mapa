@@ -120,9 +120,15 @@ export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAw
 	return {
 		colour: hextoRGBACSS(symbol?.colour || defaultSymbolColour, symbol?.opacity || defaultSymbolOpacity),
 		opacity: symbol?.opacity || defaultSymbolOpacity,
-		secondaryColour: hextoRGBACSS(symbol?.secondary_colour || defaultSymbolSecondaryColour),
+		secondaryColour: hextoRGBACSS(
+			symbol?.secondary_colour || defaultSymbolSecondaryColour,
+			symbol?.secondary_opacity || defaultSymbolSecondaryOpacity,
+		),
 		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of the
-		tertiaryColour: hextoRGBACSS(symbol?.tertiary_colour || defaultSymbolTertiaryColour),
+		tertiaryColour: hextoRGBACSS(
+			symbol?.tertiary_colour || defaultSymbolTertiaryColour,
+			symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity,
+		),
 		tertiaryOpacity: symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity, // Opacity is taken care of in the colour
 		modifierIcon: symbol?.modifier_icon || '',
 		modifierIconStyle: symbol?.modifier_icon_style || '',
