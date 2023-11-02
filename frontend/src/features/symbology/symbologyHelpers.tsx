@@ -21,7 +21,9 @@ export const defaultSymbolDarkenColourByPercentage = 10;
 export const defaultSymbolColour = '#000000';
 export const defaultSymbolSecondaryColour = '#989696';
 export const defaultSymbolTertiaryColour = '#A6A6A6';
-export const defaultSymbolModiferColour = '#000000';
+export const defaultSymbolModifierColour = '#FFFFFF';
+export const defaultSymbolModifierSecondaryColour = '#989696';
+export const defaultSymbolModifierCircleColour = '#000000';
 export const defaultSymbolSize = 15;
 export const defaultSymbolSizeForFormFields = 15;
 // <input type="color" /> doesn't support opacity, so provide pure white for the form and very opaque black for the map
@@ -32,6 +34,8 @@ export const defaultSymbolOpacity = 1;
 export const defaultSymbolSecondaryOpacity = 0.4;
 export const defaultSymbolTertiaryOpacity = 1;
 export const defaultSymbolModifierOpacity = 1;
+export const defaultSymbolModifierSecondaryOpacity = 1;
+export const defaultSymbolModifierCircleOpacity = 1;
 
 export const defaultSymbologyGroupId = 1;
 
@@ -43,8 +47,13 @@ export interface FontAwesomeIconSVGProps {
 	tertiaryColour: string;
 	tertiaryOpacity: number;
 	modifierIcon: string;
+	modifierIconStyle: IconStyle | '';
 	modifierColour: string;
 	modifierOpacity: number;
+	modifierSecondaryColour: string;
+	modifierSecondaryOpacity: number;
+	modifierCircleColour: string;
+	modifierCircleOpacity: number;
 	width: number;
 	height: number;
 	rotation: number;
@@ -60,8 +69,13 @@ export const getAppDefaultSymbologyConfig = () =>
 		colour: defaultSymbolColour,
 		opacity: defaultSymbolOpacity,
 		modifier_icon: undefined,
-		modifier_colour: defaultSymbolModiferColour,
+		modifier_icon_style: undefined,
+		modifier_colour: defaultSymbolModifierColour,
 		modifier_opacity: defaultSymbolModifierOpacity,
+		modifier_secondary_colour: defaultSymbolModifierSecondaryColour,
+		modifier_secondary_opacity: defaultSymbolModifierSecondaryOpacity,
+		modifier_circle_colour: defaultSymbolModifierCircleColour,
+		modifier_circle_opacity: defaultSymbolModifierCircleOpacity,
 		secondary_colour: defaultSymbolSecondaryColour,
 		secondary_opacity: defaultSymbolSecondaryOpacity,
 		tertiary_colour: defaultSymbolTertiaryColour,
@@ -109,13 +123,24 @@ export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAw
 		secondaryColour: hextoRGBACSS(symbol?.secondary_colour || defaultSymbolSecondaryColour),
 		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of the
 		tertiaryColour: hextoRGBACSS(symbol?.tertiary_colour || defaultSymbolTertiaryColour),
-		tertiaryOpacity: symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity, // Opacity is taken care of the
+		tertiaryOpacity: symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity, // Opacity is taken care of in the colour
 		modifierIcon: symbol?.modifier_icon || '',
+		modifierIconStyle: symbol?.modifier_icon_style || '',
 		modifierColour: hextoRGBACSS(
-			symbol?.modifier_colour || defaultSymbolModiferColour,
+			symbol?.modifier_colour || defaultSymbolModifierColour,
 			symbol?.modifier_opacity || defaultSymbolModifierOpacity,
 		),
-		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of the
+		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of in the colour
+		modifierSecondaryColour: hextoRGBACSS(
+			symbol?.modifier_secondary_colour || defaultSymbolModifierSecondaryColour,
+			symbol?.modifier_secondary_opacity || defaultSymbolModifierSecondaryOpacity,
+		),
+		modifierSecondaryOpacity: symbol?.modifier_secondary_opacity || defaultSymbolModifierSecondaryOpacity, // Opacity is taken care of in the colour
+		modifierCircleColour: hextoRGBACSS(
+			symbol?.modifier_circle_colour || defaultSymbolModifierCircleColour,
+			symbol?.modifier_circle_opacity || defaultSymbolModifierCircleOpacity,
+		),
+		modifierCircleOpacity: symbol?.modifier_circle_opacity || defaultSymbolModifierCircleOpacity, // Opacity is taken care of on the colour
 		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		rotation: symbol?.rotation || defaultSymbolRotation,

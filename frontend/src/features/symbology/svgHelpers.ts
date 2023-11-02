@@ -3,7 +3,7 @@ import {
 	IconStyle,
 	getIconByName,
 	getIconSVG,
-	getModifierIconNames,
+	isCircularModifierIcon,
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibrary';
@@ -13,17 +13,14 @@ import {
 	defaultSymbolIconSVG,
 } from './symbologyHelpers';
 
-export const getSVGPathElementsByTagNameAndClassName = (
-	rootElement: SVGSVGElement,
-	className: string,
-	allowNull = false,
-) => {
+export const getSVGPathElementsByClassName = (rootElement: SVGSVGElement, className: string, allowNull = false) => {
 	const elements: SVGPathElement[] = [];
 
 	for (const element of rootElement.getElementsByTagName('path')) {
 		if (
 			(allowNull === true && element.getAttribute('class') === null) ||
-			(element.getAttribute('class') || '').split(' ').includes(className)
+			(element.getAttribute('class') || '').split(' ').includes(className) ||
+			className === ''
 		) {
 			elements.push(element);
 		}
@@ -60,7 +57,7 @@ const calculateScaleAndTranslationForSVGCircularModifierIcon = (
 	// from "0 0 48 48" to "0 0 512 512" and beyond.
 	// Whereas the modifier icons are usually "0 0 512 512"
 	// This may change in future when we allow users to use any
-	// icons as modifers, not just the circle-* icons.
+	// icons as modifiers, not just the circle-* icons.
 
 	// We need to convert that to the size of the viewbox dimensions.
 	// We can think of these as pixels.
@@ -112,7 +109,7 @@ const calculateScaleAndTranslationForSVGModifierIconBackgroundCircle = (
 	// from "0 0 48 48" to "0 0 512 512" and beyond.
 	// Whereas the modifier icons are usually "0 0 512 512"
 	// This may change in future when we allow users to use any
-	// icons as modifers, not just the circle-* icons.
+	// icons as modifiers, not just the circle-* icons.
 
 	// We need to convert that to the size of the viewbox dimensions.
 	// We can think of these as pixels.
@@ -264,22 +261,21 @@ export const parseAndManipulateSVGIcon = (
 		// Apply the primary colour to all path elements as a default
 		// Duotone and Tritone will come through afterwards and set their own colours
 		// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
-		getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
+		getSVGPathElementsByClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
 			// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
 			if (pathElement.getAttribute('class') === 'primary' || pathElement.getAttribute('class') === null) {
 				pathElement.setAttribute('fill', iconProps.colour);
-				pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
 			} else if (pathElement.getAttribute('class') === 'primary darker') {
 				pathElement.setAttribute('fill', RGBACSSDarkenColour(iconProps.colour, defaultSymbolDarkenColourByPercentage));
-				pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
 			}
 
+			pathElement.style.setProperty('opacity', `${iconProps.opacity}`);
 			pathElement.removeAttribute('data-original');
 		});
 
 		// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
 		if (isIconStyleDuotoneOrTritone(iconStyle)) {
-			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
+			getSVGPathElementsByClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
 				if (pathElement.getAttribute('class') === 'secondary') {
 					pathElement.setAttribute('fill', iconProps.secondaryColour);
 				} else if (pathElement.getAttribute('class') === 'secondary darker') {
@@ -290,14 +286,13 @@ export const parseAndManipulateSVGIcon = (
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.secondaryOpacity}`);
-
 				pathElement.removeAttribute('data-original');
 			});
 		}
 
 		// Tritone icons only: Apply the tertiary colour style properties to the tertiary path elements
 		if (isIconStyleTritone(iconStyle)) {
-			getSVGPathElementsByTagNameAndClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
+			getSVGPathElementsByClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
 				if (pathElement.getAttribute('class') === 'tertiary') {
 					pathElement.setAttribute('fill', iconProps.tertiaryColour);
 				} else if (pathElement.getAttribute('class') === 'tertiary darker') {
@@ -308,7 +303,6 @@ export const parseAndManipulateSVGIcon = (
 				}
 
 				pathElement.style.setProperty('opacity', `${iconProps.tertiaryOpacity}`);
-
 				pathElement.removeAttribute('data-original');
 			});
 		}
@@ -319,8 +313,16 @@ export const parseAndManipulateSVGIcon = (
 		const modifierIcon = getIconByName(iconProps.modifierIcon);
 
 		if (modifierIcon !== null) {
+			// This allows us to be backwards compatible with icons defined while we only allowed circular modifier icons.
+			// These never saved the modifierIconStyle as 'solid', because that was the only possible style and the user
+			// didn't need to pick it.
+			const modifierIconStyle =
+				isCircularModifierIcon(iconProps.modifierIcon) === true || iconProps.modifierIconStyle === ''
+					? 'solid'
+					: iconProps.modifierIconStyle;
+
 			// Wrapping the modifier SVG element in a <div> let's us easily access the typed SVGSVGElement object
-			const modifierSVG = getIconSVG(modifierIcon, 'solid') || defaultSymbolIconSVG;
+			const modifierSVG = getIconSVG(modifierIcon, modifierIconStyle) || defaultSymbolIconSVG;
 			const modifierSVGDOMElementWrapped = new DOMParser().parseFromString(
 				`<div>${modifierSVG}</div>`,
 				'image/svg+xml',
@@ -365,8 +367,11 @@ export const parseAndManipulateSVGIcon = (
 			const modifierIconViewboxHeight = parseInt(modifierIconViewbox[3]);
 			const modifierIconCircleBackgroundViewboxWidthAndHeight = 512;
 
+			// ######################
+			// Circular Modifier Icons
+			// ######################
 			// This handles the small subset of the original regular circular modifier icons
-			if (getModifierIconNames().includes(iconProps.modifierIcon) === true) {
+			if (isCircularModifierIcon(iconProps.modifierIcon) === true) {
 				// NOTE: We assume the viewbox width and height of the modifier icon are the same (i.e. they're squares).
 				// This is a safe assumption (...for now!)
 				const originalIconViewboxWidth = parseInt(viewbox[2]);
@@ -382,17 +387,23 @@ export const parseAndManipulateSVGIcon = (
 				// Scale all <paths> to make the modifier icon just the right size to sit in the bottom-right corner.
 				// Translate takes care of placing the top-left corner of the modifier icon so it sits neatly in the
 				// bottom right-hand corner of the original icon.
-				for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
+				// Note: We use modifierCircleColour because the paths in the circular modifier icons describe the circle,
+				// and leave a transparent cut out for the shape of the icon.
+				getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true).forEach((pathElement) => {
 					pathElement.setAttribute(
 						'style',
-						`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
+						`fill: ${iconProps.modifierCircleColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
 					);
-				}
 
-				// Place a white background circle behind the modifier icon so it's appearance is uniform
+					pathElement.removeAttribute('data-original');
+				});
+
+				// Place a background circle behind the modifier icon so we can colour the icon.
+				// This is a little odd, but it works because the special circular modifier icons
+				// have a transparent cut out for the icon shape, not an actual path.
 				svgDOMElement.insertAdjacentHTML(
 					'beforeend',
-					`<path style="fill: rgb(255, 255, 255); translate: ${translateX}px ${translateY}px; scale: ${scale}%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
+					`<path style="fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
 				);
 
 				// Lastly, insert our modifier icon path elements into the parent icon
@@ -400,7 +411,9 @@ export const parseAndManipulateSVGIcon = (
 					svgDOMElement.insertAdjacentElement('beforeend', pathElement);
 				}
 			} else {
-				// And this handles the rest of the icons that need a different treatment
+				// ######################
+				// Regular Modifier Icons
+				// ######################
 				const {
 					scale: backgroundCircleScale,
 					translateX: backgroundCircleTranslateX,
@@ -420,28 +433,52 @@ export const parseAndManipulateSVGIcon = (
 					modifierIconViewboxHeight,
 				);
 
-				// Scale all <paths> to make the modifier icon just the right size to sit in the bottom-right corner.
-				// Translate takes care of placing the top-left corner of the modifier icon so it sits neatly in the
-				// bottom right-hand corner of the original icon.
-				for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
-					pathElement.setAttribute(
-						'style',
-						`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
-					);
-				}
-
 				// Place the background circle that sits behind the modifier icon
 				// The viewbox on this is considered to be '0 0 512 512'
 				// Ref. modifierIconCircleBackgroundViewboxWidthAndHeight
 				svgDOMElement.insertAdjacentHTML(
 					'beforeend',
-					`<path style="fill: rgb(0, 0, 0); translate: ${backgroundCircleTranslateX}px ${backgroundCircleTranslateY}px; scale: ${backgroundCircleScale}%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
+					`<path style="fill: ${iconProps.modifierCircleColour}; translate: ${backgroundCircleTranslateX}px ${backgroundCircleTranslateY}px; scale: ${backgroundCircleScale}%;" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512z" />`,
 				);
 
-				// Lastly, insert our modifier icon path elements into the parent icon
-				for (const pathElement of modifierSVGDOMElement.getElementsByTagName('path')) {
-					svgDOMElement.insertAdjacentElement('beforeend', pathElement);
+				// Scale all <paths> to make the modifier icon just the right size to sit in the bottom-right corner.
+				// Translate takes care of placing the top-left corner of the modifier icon so it sits neatly in the
+				// bottom right-hand corner of the original icon.
+				getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true).forEach((pathElement) => {
+					pathElement.setAttribute(
+						'style',
+						`fill: ${iconProps.modifierColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
+					);
+
+					pathElement.removeAttribute('data-original');
+				});
+
+				// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
+				if (isIconStyleDuotoneOrTritone(modifierIconStyle)) {
+					getSVGPathElementsByClassName(modifierSVGDOMElement, 'secondary').forEach((pathElement) => {
+						if (pathElement.getAttribute('class') === 'secondary') {
+							pathElement.setAttribute(
+								'style',
+								`fill: ${iconProps.modifierSecondaryColour}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
+							);
+						} else if (pathElement.getAttribute('class') === 'secondary darker') {
+							pathElement.setAttribute(
+								'style',
+								`fill: ${RGBACSSDarkenColour(
+									iconProps.modifierSecondaryColour,
+									defaultSymbolDarkenColourByPercentage,
+								)}; translate: ${translateX}px ${translateY}px; scale: ${scale}%;`,
+							);
+						}
+
+						pathElement.removeAttribute('data-original');
+					});
 				}
+
+				// Lastly, insert our modifier icon path elements into the parent icon
+				getSVGPathElementsByClassName(modifierSVGDOMElement, '', true).forEach((pathElement) => {
+					svgDOMElement.insertAdjacentElement('beforeend', pathElement);
+				});
 			}
 		}
 	}

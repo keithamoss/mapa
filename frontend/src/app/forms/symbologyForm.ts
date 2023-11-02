@@ -37,8 +37,17 @@ export const symbologyFormValidationSchema = (
 			tertiary_colour: colourOptional,
 			tertiary_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
 			modifier_icon: yup.string().optional(),
+			modifier_icon_style: yup.string<IconStyle>().when('modifier_icon', {
+				is: (val: string | undefined) => typeof val === 'string' && val.length > 0,
+				then: (schema) => schema.required(),
+				otherwise: (schema) => schema.optional(),
+			}),
 			modifier_colour: colourOptional,
 			modifier_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
+			modifier_secondary_colour: colourOptional,
+			modifier_secondary_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
+			modifier_circle_colour: colourOptional,
+			modifier_circle_opacity: positiveFloatOptional.min(0, 'Must be 0 or larger').max(1, 'Must be 1 or smaller'),
 			size: positiveIntegerOptional.min(symbolMinimumSize).max(symbolMaximumSize),
 			rotation: positiveIntegerOptional.min(0, 'Must be 0 or larger').max(360, 'Must be 360 or smaller'),
 		})

@@ -14,8 +14,13 @@ export interface SymbologyProps {
 	tertiary_colour?: string;
 	tertiary_opacity?: number;
 	modifier_icon?: string;
+	modifier_icon_style?: IconStyle;
 	modifier_colour?: string;
 	modifier_opacity?: number;
+	modifier_secondary_colour?: string;
+	modifier_secondary_opacity?: number;
+	modifier_circle_colour?: string;
+	modifier_circle_opacity?: number;
 	size?: number;
 	rotation?: number;
 }

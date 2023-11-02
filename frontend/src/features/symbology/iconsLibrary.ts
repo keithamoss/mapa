@@ -404,8 +404,10 @@ export const findIconsAvailableForUseAsModifiers = () => {
 	return modifiers.map((icon) => icon.name);
 };
 
+export const isCircularModifierIcon = (iconName: string) => getCircularModifierIconNames().includes(iconName) === true;
+
 // Created using findIconsAvailableForUseAsModifiers() and manual review
-export const getModifierIconNames = () => [
+export const getCircularModifierIconNames = () => [
 	'circle',
 	'circle-0',
 	'circle-1',

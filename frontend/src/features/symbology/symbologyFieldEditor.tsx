@@ -53,7 +53,12 @@ import { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/
 import {
 	defaultSymbolColour,
 	defaultSymbolIcon,
-	defaultSymbolModiferColour,
+	defaultSymbolModifierCircleColour,
+	defaultSymbolModifierCircleOpacity,
+	defaultSymbolModifierColour,
+	defaultSymbolModifierOpacity,
+	defaultSymbolModifierSecondaryColour,
+	defaultSymbolModifierSecondaryOpacity,
 	defaultSymbolOpacity,
 	defaultSymbolRotation,
 	defaultSymbolSecondaryColour,
@@ -93,6 +98,9 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 	const icon = getStringOrDefaultForSymbologyField(symbol, 'icon', defaultSymbolIcon);
 	const icon_style = getStringOrDefaultForSymbologyField(symbol, 'icon_style', getDefaultStyleByIconName(icon));
 
+	const modifier_icon = getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon');
+	const modifier_icon_style = getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon_style');
+
 	const defaultValues = {
 		name: getStringOrEmptyStringForSymbologyField(symbol, 'name'),
 		icon,
@@ -124,9 +132,30 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 			defaultSymbolTertiaryColour,
 		),
 		tertiary_opacity: getNumberOrDefaultForSymbologyField(symbol, 'tertiary_opacity', defaultSymbolTertiaryOpacity),
-		modifier_icon: getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon'),
-		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolModiferColour),
-		modifier_opacity: getNumberOrDefaultForSymbologyField(symbol, 'modifier_opacity', defaultSymbolOpacity),
+		modifier_icon,
+		modifier_icon_style,
+		modifier_colour: getStringOrDefaultForSymbologyField(symbol, 'modifier_colour', defaultSymbolModifierColour),
+		modifier_opacity: getNumberOrDefaultForSymbologyField(symbol, 'modifier_opacity', defaultSymbolModifierOpacity),
+		modifier_secondary_colour: getStringOrDefaultForSymbologyField(
+			symbol,
+			'modifier_secondary_colour',
+			defaultSymbolModifierSecondaryColour,
+		),
+		modifier_secondary_opacity: getNumberOrDefaultForSymbologyField(
+			symbol,
+			'modifier_secondary_opacity',
+			defaultSymbolModifierSecondaryOpacity,
+		),
+		modifier_circle_colour: getStringOrDefaultForSymbologyField(
+			symbol,
+			'modifier_circle_colour',
+			defaultSymbolModifierCircleColour,
+		),
+		modifier_circle_opacity: getNumberOrDefaultForSymbologyField(
+			symbol,
+			'modifier_circle_opacity',
+			defaultSymbolModifierCircleOpacity,
+		),
 		size: getNumberOrDefaultForSymbologyField(symbol, 'size', defaultSymbolSize),
 		rotation: getNumberOrDefaultForSymbologyField(symbol, 'rotation', defaultSymbolRotation),
 	};
@@ -184,8 +213,13 @@ const removeDefaultValuesFromForm = (
 
 	if (data.modifier_icon === undefined) {
 		delete data.modifier_icon;
+		delete data.modifier_icon_style;
 		delete data.modifier_colour;
 		delete data.modifier_opacity;
+		delete data.modifier_secondary_colour;
+		delete data.modifier_secondary_opacity;
+		delete data.modifier_circle_colour;
+		delete data.modifier_circle_opacity;
 	}
 
 	return data;
@@ -277,8 +311,13 @@ function SymbologyFieldEditor(props: Props) {
 		tertiary_colour,
 		tertiary_opacity,
 		modifier_icon,
+		modifier_icon_style,
 		modifier_colour,
 		modifier_opacity,
+		modifier_secondary_colour,
+		modifier_secondary_opacity,
+		modifier_circle_colour,
+		modifier_circle_opacity,
 		size,
 		rotation,
 	} = watch();
@@ -347,6 +386,8 @@ function SymbologyFieldEditor(props: Props) {
 		setValue('icon', icon, { shouldDirty: true });
 		setValue('icon_style', icon_style, { shouldDirty: true });
 
+		// Something something default colours.
+		// See onChooseIconStyle
 		setValue(
 			'colour',
 			getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
@@ -453,18 +494,66 @@ function SymbologyFieldEditor(props: Props) {
 
 	const onOpenIconModifierChooser = () => setIsIconModifierChooserOpen(true);
 
-	const onChooseIconModifier = (icon: string) => {
+	const onChooseIconModifier = (icon: string, icon_style: IconStyle) => {
 		setValue('modifier_icon', icon, { shouldDirty: true });
+		setValue('modifier_icon_style', icon_style, { shouldDirty: true });
 		setIsIconModifierChooserOpen(false);
+
+		// Something something default colours.
+		// See onChooseIconStyle
+		if (modifier_icon !== undefined && modifier_icon_style !== undefined) {
+			setValue(
+				'modifier_colour',
+				getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+					'primary',
+					modifier_icon,
+					modifier_icon_style,
+					defaultSymbolModifierColour,
+				),
+				{
+					shouldDirty: true,
+				},
+			);
+
+			setValue(
+				'modifier_secondary_colour',
+				getColourFromSVGOrDefaultForSymbologyFieldOnIconOrIconStyleChange(
+					'secondary',
+					modifier_icon,
+					modifier_icon_style,
+					defaultSymbolModifierSecondaryColour,
+				),
+				{ shouldDirty: true },
+			);
+		}
 	};
 
 	const onClearIconModifier = () => {
 		setValue('modifier_icon', undefined, { shouldDirty: true });
+		setValue('modifier_icon_style', undefined, { shouldDirty: true });
 	};
 
 	const onCloseIconModifierChooser = () => setIsIconModifierChooserOpen(false);
 	// ######################
 	// Icon Modifier Choosing (End)
+	// ######################
+
+	// ######################
+	// Icon Modifier Style Choosing
+	// ######################
+	const [isModifierIconStyleChooserOpen, setIsModifierIconStyleChooserOpen] = useState(false);
+
+	const onOpenModifierIconStyleChooser = () => setIsModifierIconStyleChooserOpen(true);
+
+	const onChooseModifierIconStyle = (icon_style: IconStyle) => {
+		setValue('modifier_icon_style', icon_style, { shouldDirty: true });
+
+		setIsModifierIconStyleChooserOpen(false);
+	};
+
+	const onCloseModifierIconStyleChooser = () => setIsModifierIconStyleChooserOpen(false);
+	// ######################
+	// Icon Modifier Style Choosing (End)
 	// ######################
 
 	// ######################
@@ -518,10 +607,13 @@ function SymbologyFieldEditor(props: Props) {
 				<SymbologyIconStyleChooser selectedIcon={icon} onChoose={onChooseIconStyle} onClose={onCloseStyleChooser} />
 			)}
 			{isIconModifierChooserOpen === true && icon !== undefined && (
-				<SymbologyIconChooser
-					onlyShowModifiers={true}
-					onChoose={onChooseIconModifier}
-					onClose={onCloseIconModifierChooser}
+				<SymbologyIconChooser onChoose={onChooseIconModifier} onClose={onCloseIconModifierChooser} />
+			)}
+			{isModifierIconStyleChooserOpen === true && modifier_icon !== undefined && (
+				<SymbologyIconStyleChooser
+					selectedIcon={modifier_icon}
+					onChoose={onChooseModifierIconStyle}
+					onClose={onCloseModifierIconStyleChooser}
 				/>
 			)}
 			<DialogWithTransition onClose={onCancelForm}>
@@ -566,8 +658,13 @@ function SymbologyFieldEditor(props: Props) {
 								tertiary_colour,
 								tertiary_opacity,
 								modifier_icon,
+								modifier_icon_style,
 								modifier_colour,
 								modifier_opacity,
+								modifier_secondary_colour,
+								modifier_secondary_opacity,
+								modifier_circle_colour,
+								modifier_circle_opacity,
 								size: (size !== undefined ? size : defaultSymbolSizeForFormFields) * 2,
 								rotation,
 							})}
@@ -1087,11 +1184,46 @@ function SymbologyFieldEditor(props: Props) {
 
 									{errors.modifier_icon && <FormHelperText error>{errors.modifier_icon.message}</FormHelperText>}
 								</FormControl>
+
+								<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+									<FormGroup>
+										<TextField
+											label="Modifier Icon Style"
+											select
+											disabled={modifier_icon === undefined}
+											value={modifier_icon_style !== undefined ? modifier_icon_style : ''}
+											SelectProps={{
+												open: false,
+												onClick: onOpenModifierIconStyleChooser,
+											}}
+											InputProps={{
+												startAdornment:
+													modifier_icon !== undefined && modifier_icon_style !== undefined ? (
+														<InputAdornment position="start" sx={{ mr: 1 }}>
+															{getFontAwesomeIconFromLibraryAsSVGImage(modifier_icon, modifier_icon_style)}
+														</InputAdornment>
+													) : undefined,
+											}}
+										>
+											{modifier_icon_style !== undefined ? (
+												<MenuItem value={modifier_icon_style}>{getIconStyleName(modifier_icon_style)}</MenuItem>
+											) : (
+												<MenuItem />
+											)}
+										</TextField>
+									</FormGroup>
+
+									{errors.modifier_icon_style && (
+										<FormHelperText error>{errors.modifier_icon_style.message}</FormHelperText>
+									)}
+								</FormControl>
+
 								<FormControl fullWidth={true} component="fieldset" variant="outlined">
 									<FormLabel component="legend" sx={{ mb: 1 }}>
 										Modifier Colour and Opacity
 									</FormLabel>
 								</FormControl>
+
 								<div
 									style={{
 										display: 'flex',
@@ -1167,7 +1299,181 @@ function SymbologyFieldEditor(props: Props) {
 											<FormHelperText error>{errors.modifier_opacity.message}</FormHelperText>
 										)}
 									</FormControl>
-								</div>{' '}
+								</div>
+
+								{isIconStyleDuotoneOrTritone(modifier_icon_style) && (
+									<React.Fragment>
+										<FormControl fullWidth={true} component="fieldset" variant="outlined">
+											<FormLabel component="legend" sx={{ mb: 1 }}>
+												Modifier Secondary Colour and Opacity
+											</FormLabel>
+										</FormControl>
+
+										<div
+											style={{
+												display: 'flex',
+												flexDirection: 'row',
+												paddingLeft: '8px',
+												paddingRight: '8px',
+												marginBottom: '24px',
+											}}
+										>
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(30%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<input type="color" className="colourPicker" {...register('modifier_secondary_colour')} />
+												</FormGroup>
+
+												{errors.modifier_secondary_colour && (
+													<FormHelperText error>{errors.modifier_secondary_colour.message}</FormHelperText>
+												)}
+											</FormControl>
+
+											<FormControl
+												fullWidth={true}
+												sx={{
+													width: 'calc(70%)',
+												}}
+												component="fieldset"
+												variant="outlined"
+											>
+												<FormGroup>
+													<Controller
+														name="modifier_secondary_opacity"
+														control={control}
+														render={({ field }) => (
+															<SliderFixed
+																{...field}
+																valueLabelDisplay="auto"
+																min={symbolMinimumOpacity}
+																max={symbolMaximumOpacity}
+																track={false}
+																step={0.1}
+																marks={[
+																	{
+																		value: 0,
+																		label: '0',
+																	},
+																	{
+																		value: 0.25,
+																		label: '0.25',
+																	},
+																	{
+																		value: 0.5,
+																		label: '0.5',
+																	},
+																	{
+																		value: 0.75,
+																		label: '0.75',
+																	},
+																	{
+																		value: 1,
+																		label: '1',
+																	},
+																]}
+															/>
+														)}
+													/>
+												</FormGroup>
+
+												{errors.modifier_secondary_opacity && (
+													<FormHelperText error>{errors.modifier_secondary_opacity.message}</FormHelperText>
+												)}
+											</FormControl>
+										</div>
+									</React.Fragment>
+								)}
+
+								<FormControl fullWidth={true} component="fieldset" variant="outlined">
+									<FormLabel component="legend" sx={{ mb: 1 }}>
+										Modifier Circle Colour and Opacity
+									</FormLabel>
+								</FormControl>
+
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'row',
+										paddingLeft: '8px',
+										paddingRight: '8px',
+										marginBottom: '24px',
+									}}
+								>
+									<FormControl
+										fullWidth={true}
+										sx={{
+											width: 'calc(30%)',
+										}}
+										component="fieldset"
+										variant="outlined"
+									>
+										<FormGroup>
+											<input type="color" className="colourPicker" {...register('modifier_circle_colour')} />
+										</FormGroup>
+
+										{errors.modifier_circle_colour && (
+											<FormHelperText error>{errors.modifier_circle_colour.message}</FormHelperText>
+										)}
+									</FormControl>
+
+									<FormControl
+										fullWidth={true}
+										sx={{
+											width: 'calc(70%)',
+										}}
+										component="fieldset"
+										variant="outlined"
+									>
+										<FormGroup>
+											<Controller
+												name="modifier_circle_opacity"
+												control={control}
+												render={({ field }) => (
+													<SliderFixed
+														{...field}
+														valueLabelDisplay="auto"
+														min={symbolMinimumOpacity}
+														max={symbolMaximumOpacity}
+														track={false}
+														step={0.1}
+														marks={[
+															{
+																value: 0,
+																label: '0',
+															},
+															{
+																value: 0.25,
+																label: '0.25',
+															},
+															{
+																value: 0.5,
+																label: '0.5',
+															},
+															{
+																value: 0.75,
+																label: '0.75',
+															},
+															{
+																value: 1,
+																label: '1',
+															},
+														]}
+													/>
+												)}
+											/>
+										</FormGroup>
+
+										{errors.modifier_circle_opacity && (
+											<FormHelperText error>{errors.modifier_circle_opacity.message}</FormHelperText>
+										)}
+									</FormControl>
+								</div>
 							</React.Fragment>
 						)}
 
