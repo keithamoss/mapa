@@ -11,7 +11,7 @@ export const hextoRGBACSS = (
 	let r: number | string = 0,
 		g: number | string = 0,
 		b: number | string = 0,
-		a: number | string = (opacity_override || 1) * 255;
+		a: number | string = (opacity_override !== undefined ? opacity_override : 1) * 255;
 
 	// #FF0 (default to opacity=1 aka 255)
 	if (h.length == 4) {

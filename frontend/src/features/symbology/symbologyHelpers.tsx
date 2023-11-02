@@ -117,36 +117,49 @@ export const getFontAwesomeIconFromLibrary = (
 };
 
 export const getFontAwesomeIconProps = (symbol: Partial<SymbologyProps>): FontAwesomeIconSVGProps => {
+	const opacity = symbol?.opacity !== undefined ? symbol?.opacity : defaultSymbolOpacity;
+
 	return {
-		colour: hextoRGBACSS(symbol?.colour || defaultSymbolColour, symbol?.opacity || defaultSymbolOpacity),
-		opacity: symbol?.opacity || defaultSymbolOpacity,
+		colour: hextoRGBACSS(symbol?.colour || defaultSymbolColour, opacity),
+		opacity,
 		secondaryColour: hextoRGBACSS(
 			symbol?.secondary_colour || defaultSymbolSecondaryColour,
-			symbol?.secondary_opacity || defaultSymbolSecondaryOpacity,
+			symbol?.secondary_opacity !== undefined ? symbol?.secondary_opacity : defaultSymbolSecondaryOpacity,
 		),
-		secondaryOpacity: symbol?.secondary_opacity || defaultSymbolSecondaryOpacity, // Opacity is taken care of the
+		secondaryOpacity:
+			symbol?.secondary_opacity !== undefined ? symbol?.secondary_opacity : defaultSymbolSecondaryOpacity, // Opacity is taken care of the
 		tertiaryColour: hextoRGBACSS(
 			symbol?.tertiary_colour || defaultSymbolTertiaryColour,
-			symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity,
+			symbol?.tertiary_opacity !== undefined ? symbol?.tertiary_opacity : defaultSymbolTertiaryOpacity,
 		),
-		tertiaryOpacity: symbol?.tertiary_opacity || defaultSymbolTertiaryOpacity, // Opacity is taken care of in the colour
+		tertiaryOpacity: symbol?.tertiary_opacity !== undefined ? symbol?.tertiary_opacity : defaultSymbolTertiaryOpacity, // Opacity is taken care of in the colour
 		modifierIcon: symbol?.modifier_icon || '',
 		modifierIconStyle: symbol?.modifier_icon_style || '',
 		modifierColour: hextoRGBACSS(
 			symbol?.modifier_colour || defaultSymbolModifierColour,
-			symbol?.modifier_opacity || defaultSymbolModifierOpacity,
+			symbol?.modifier_opacity !== undefined ? symbol?.modifier_opacity : defaultSymbolModifierOpacity,
 		),
-		modifierOpacity: symbol?.modifier_opacity || defaultSymbolModifierOpacity, // Opacity is taken care of in the colour
+		modifierOpacity: symbol?.modifier_opacity !== undefined ? symbol?.modifier_opacity : defaultSymbolModifierOpacity, // Opacity is taken care of in the colour
 		modifierSecondaryColour: hextoRGBACSS(
 			symbol?.modifier_secondary_colour || defaultSymbolModifierSecondaryColour,
-			symbol?.modifier_secondary_opacity || defaultSymbolModifierSecondaryOpacity,
+			symbol?.modifier_secondary_opacity !== undefined
+				? symbol?.modifier_secondary_opacity
+				: defaultSymbolModifierSecondaryOpacity,
 		),
-		modifierSecondaryOpacity: symbol?.modifier_secondary_opacity || defaultSymbolModifierSecondaryOpacity, // Opacity is taken care of in the colour
+		modifierSecondaryOpacity:
+			symbol?.modifier_secondary_opacity !== undefined
+				? symbol?.modifier_secondary_opacity
+				: defaultSymbolModifierSecondaryOpacity, // Opacity is taken care of in the colour
 		modifierCircleColour: hextoRGBACSS(
 			symbol?.modifier_circle_colour || defaultSymbolModifierCircleColour,
-			symbol?.modifier_circle_opacity || defaultSymbolModifierCircleOpacity,
+			symbol?.modifier_circle_opacity !== undefined
+				? symbol?.modifier_circle_opacity
+				: defaultSymbolModifierCircleOpacity,
 		),
-		modifierCircleOpacity: symbol?.modifier_circle_opacity || defaultSymbolModifierCircleOpacity, // Opacity is taken care of on the colour
+		modifierCircleOpacity:
+			symbol?.modifier_circle_opacity !== undefined
+				? symbol?.modifier_circle_opacity
+				: defaultSymbolModifierCircleOpacity, // Opacity is taken care of on the colour
 		width: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		height: symbol.size !== undefined ? symbol.size * 1.8 : defaultSymbolSize,
 		rotation: symbol?.rotation || defaultSymbolRotation,
