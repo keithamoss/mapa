@@ -59,7 +59,7 @@
   "devDependencies": {
     "@sentry/vite-plugin": "^2.8.0",
     "@types/autosuggest-highlight": "^3.2.2",
-    "@types/jest": "^29.5.6",
+    "@types/jest": "^29.5.7",
     "@types/js-cookie": "^3.0.5",
     "@types/lodash-es": "^4.17.10",
     "@types/node": "^20.8.7",
