@@ -852,7 +852,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/base@npm:5.0.0-beta.22":
+"@mui/base@npm:5.0.0-beta.22, @mui/base@npm:^5.0.0-beta.22":
   version: 5.0.0-beta.22
   resolution: "@mui/base@npm:5.0.0-beta.22"
   dependencies:
@@ -871,28 +871,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 8677c13174bd7cb79663f1356d4d3f950eb4ec7561480beb586309b84be3b1fc72db6ef59c45539a2d8a8ed610aefc60bdbf32db7f0db6201e5753c953f44e2d
-  languageName: node
-  linkType: hard
-
-"@mui/base@npm:^5.0.0-beta.20":
-  version: 5.0.0-beta.21
-  resolution: "@mui/base@npm:5.0.0-beta.21"
-  dependencies:
-    "@babel/runtime": ^7.23.2
-    "@floating-ui/react-dom": ^2.0.2
-    "@mui/types": ^7.2.7
-    "@mui/utils": ^5.14.15
-    "@popperjs/core": ^2.11.8
-    clsx: ^2.0.0
-    prop-types: ^15.8.1
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: c33de1a4f865e6d1669a37e149ac78ebb744c152229b4c56839254514153e80baa501789f68852ac9c9dae7c9fc9645f16eecac07220c1981ab5f916de54090d
   languageName: node
   linkType: hard
 
@@ -1018,18 +996,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/types@npm:^7.2.7":
-  version: 7.2.7
-  resolution: "@mui/types@npm:7.2.7"
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: cf6a770f6f62b662ba8049c830d9506a3a058b87255d33dcab47a70022496c6b82088ce9185558c4ce4744e369593d3c9b7734664ebb2e6e206fb5380b37e93f
-  languageName: node
-  linkType: hard
-
 "@mui/types@npm:^7.2.8":
   version: 7.2.8
   resolution: "@mui/types@npm:7.2.8"
@@ -1039,24 +1005,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 1302d2d1b5a13201efede82ef16438737bd890f9b0a728714fc2da204f6031f055fbd84623ea63ff4ae5d4306b458699d85925608eb8f35df78e1dc0d7a44fc5
-  languageName: node
-  linkType: hard
-
-"@mui/utils@npm:^5.14.14, @mui/utils@npm:^5.14.15":
-  version: 5.14.15
-  resolution: "@mui/utils@npm:5.14.15"
-  dependencies:
-    "@babel/runtime": ^7.23.2
-    "@types/prop-types": ^15.7.8
-    prop-types: ^15.8.1
-    react-is: ^18.2.0
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-    react: ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 6c4270110eed03a2e9073111eed01555257073ec500f85f6656c9f67ff15019bf12ce632d537e71a2d5872598b62f2d31762a11e1e40ff9e985b7fe2beb6c066
   languageName: node
   linkType: hard
 
@@ -1078,13 +1026,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^6.17.0":
-  version: 6.17.0
-  resolution: "@mui/x-date-pickers@npm:6.17.0"
+"@mui/x-date-pickers@npm:^6.18.0":
+  version: 6.18.0
+  resolution: "@mui/x-date-pickers@npm:6.18.0"
   dependencies:
     "@babel/runtime": ^7.23.2
-    "@mui/base": ^5.0.0-beta.20
-    "@mui/utils": ^5.14.14
+    "@mui/base": ^5.0.0-beta.22
+    "@mui/utils": ^5.14.16
     "@types/react-transition-group": ^4.4.8
     clsx: ^2.0.0
     prop-types: ^15.8.1
@@ -1122,7 +1070,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: a26e7424b239e6c41607a97724ba905593b69e881315f380f0e20a74b1c3e63f5eb704a70738dc4ace5a4cb476266b39ae00a9cb692432b27169fc82d84f02a1
+  checksum: e9742ba64834f9d87806ddf22fd6609fc87e68060e6e9e948f5a821ca2033f8be61909200278a75b77bf9cd636ab80de38b63135c721db3408744ea417d161a2
   languageName: node
   linkType: hard
 
@@ -1870,7 +1818,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*, @types/prop-types@npm:^15.7.8, @types/prop-types@npm:^15.7.9":
+"@types/prop-types@npm:*, @types/prop-types@npm:^15.7.9":
   version: 15.7.9
   resolution: "@types/prop-types@npm:15.7.9"
   checksum: c7591d3ff7593e243908a07e1d3e2bb6e8879008af5800d8378115a90d0fdf669a1cae72a6d7f69e59c4fa7bb4c8ed61f6ebc1c520fe110c6f2b03ac02414072
@@ -3827,7 +3775,7 @@ __metadata:
     "@mui/icons-material": ^5.14.16
     "@mui/material": ^5.14.16
     "@mui/system": ^5.14.16
-    "@mui/x-date-pickers": ^6.17.0
+    "@mui/x-date-pickers": ^6.18.0
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^1.9.6
     "@sentry/browser": ^7.77.0
