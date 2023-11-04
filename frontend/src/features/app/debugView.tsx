@@ -2,25 +2,288 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import CloseIcon from '@mui/icons-material/Close';
-import {
-	AppBar,
-	Box,
-	FormControl,
-	FormGroup,
-	IconButton,
-	ListItem,
-	ListItemButton,
-	Toolbar,
-	Typography,
-} from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { AppBar, FormControl, FormGroup, IconButton, ListItem, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { selectUser } from '../auth/authSlice';
-import { getFontAwesomeIconFromLibrary } from '../symbology/symbologyHelpers';
+import { IconStyle } from '../symbology/iconsLibrary';
+import { getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
 
 const iconDefs = [
+	{
+		id: 26,
+		props: {
+			icon: 'fig-fruits1',
+			name: 'Fig',
+			icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'fig-fruits1',
+			name: 'Fig Bush',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'fig-fruits1',
+			name: 'Fig Salt',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'salt-shaker',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Fig',
+			icon_style: 'solid' as IconStyle,
+			modifier_icon: 'fig-fruits1',
+			modifier_icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'broccoli',
+			name: 'Bush Fig',
+			icon_style: 'duotone' as IconStyle,
+			secondary_colour: '#FF0000',
+			modifier_icon: 'fig-fruits1',
+			modifier_icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'fig-fruits1',
+			name: 'Fig Fig',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'fig-fruits1',
+			modifier_icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'fig-fruits1',
+			name: 'Fig Circle',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle-a',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
+		id: 28,
+		props: {
+			icon: 'broccoli',
+			name: 'Bush Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 28,
+		props: {
+			icon: 'broccoli',
+			icon_style: 'duotone' as IconStyle,
+			secondary_colour: '#FF0000',
+			name: 'Bush Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 28,
+		props: {
+			icon: 'broccoli',
+			icon_style: 'duotone' as IconStyle,
+			secondary_colour: '#FF0000',
+			name: 'Bush Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'duotone' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 31,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 31,
+		props: {
+			icon: 'salt-shaker',
+			icon_style: 'duotone' as IconStyle,
+			secondary_colour: '#FF0000',
+			name: 'Salt Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'duotone' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 29,
+		props: {
+			icon: 'broccoli',
+			name: 'Bush Salt',
+			modifier_icon: 'salt-shaker',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 29,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Salt',
+			modifier_icon: 'salt-shaker',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'circle-a',
+			name: 'Circle Salt',
+			modifier_icon: 'salt-shaker',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Circle',
+			modifier_icon: 'circle-a',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Salt',
+			modifier_icon: 'salt-shaker',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'circle-a',
+			name: 'Circle Circle',
+			modifier_icon: 'circle-a',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'broccoli',
+			name: 'Bush Circle',
+			modifier_icon: 'circle-a',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'circle-a',
+			name: 'Circle Bush',
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'salt-shaker',
+			name: 'Salt Circle',
+			modifier_icon: 'circle-a',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 30,
+		props: {
+			icon: 'circle-a',
+			name: 'Circle Salt',
+			modifier_icon: 'salt-shaker',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+];
+
+const flatIconDefs = [
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"circle-question","modifierColour":"rgba(0, 0, 0, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"apple-fruits7","iconStyle":"coloured"}',
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"","modifierColour":"rgba(24, 49, 83, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"berry-fruits8","iconStyle":"coloured"}',
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"circle-question","modifierColour":"rgba(0, 0, 0, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"almond-nature2","iconStyle":"coloured"}',
@@ -221,7 +484,60 @@ function DebugView() {
 
 			<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 				<FormGroup>
-					{iconDefs.map((iconDefsJSON, idx) => {
+					{iconDefs.map((iconDef, idx) => {
+						return (
+							<ListItem key={idx} sx={{ backgroundColor: 'grey' }}>
+								{getFontAwesomeIconForSymbolPreview(iconDef.props, {
+									// size: defaultSymbolSizeForFormFields,
+									size: 75,
+								})}
+							</ListItem>
+						);
+					})}
+
+					{/* {getIconsForCategory('vegetables-(coloured)').map((iconSearchResult) => (
+						<ListItem key={iconSearchResult.name} disablePadding>
+							<ListItemButton>
+								<ListItemAvatar>
+									<Avatar
+										sx={{
+											bgcolor: grey[50],
+											width: '105px',
+											height: '105px',
+											'& > img': { width: 85, height: 85 },
+										}}
+									>
+										{getFontAwesomeIconFromLibraryAsSVGImage(iconSearchResult.name)}
+									</Avatar>
+								</ListItemAvatar>
+
+								{getAvailableStylesForIcon(iconSearchResult.name)
+									.reverse()
+									.filter((styleName) => ['coloured'].includes(styleName) === false)
+									.map((styleName) => (
+										<ListItemAvatar key={styleName}>
+											<Avatar
+												sx={{
+													bgcolor: grey[50],
+													width: '105px',
+													height: '105px',
+													'& > img': { width: 85, height: 85 },
+												}}
+											>
+												{getFontAwesomeIconFromLibraryAsSVGImage(iconSearchResult.name, styleName)}
+											</Avatar>
+										</ListItemAvatar>
+									))}
+								<ListItemText primary={iconSearchResult.label} secondary={iconSearchResult.name}></ListItemText>
+							</ListItemButton>
+						</ListItem>
+					))} */}
+				</FormGroup>
+			</FormControl>
+
+			{/* <FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+				<FormGroup>
+					{flatIconDefs.map((iconDefsJSON, idx) => {
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						const iconDefs: any = JSON.parse(iconDefsJSON);
 						return (
@@ -316,7 +632,7 @@ function DebugView() {
 						);
 					})}
 				</FormGroup>
-			</FormControl>
+			</FormControl> */}
 
 			{/* <FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 				<FormGroup>
