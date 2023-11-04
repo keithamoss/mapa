@@ -86,7 +86,7 @@ class MapsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows maps to be viewed and edited.
     """
-    queryset = Maps.objects.order_by("id")
+    queryset = Maps.objects.filter(deleted_at=None).order_by("id")
     serializer_class = MapSerializer
     permission_classes = (IsAuthenticated,)
 
