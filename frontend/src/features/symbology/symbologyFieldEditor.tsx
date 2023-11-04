@@ -1233,72 +1233,88 @@ function SymbologyFieldEditor(props: Props) {
 										marginBottom: '24px',
 									}}
 								>
-									<FormControl
-										fullWidth={true}
-										sx={{
-											width: 'calc(30%)',
-										}}
-										component="fieldset"
-										variant="outlined"
-									>
-										<FormGroup>
-											<input type="color" className="colourPicker" {...register('modifier_colour')} />
-										</FormGroup>
+									{modifier_icon !== undefined &&
+										isIconColourLockedByName(modifier_icon, modifier_icon_style) === false && (
+											<React.Fragment>
+												<FormControl
+													fullWidth={true}
+													sx={{
+														width: 'calc(30%)',
+													}}
+													component="fieldset"
+													variant="outlined"
+												>
+													<FormGroup>
+														<input type="color" className="colourPicker" {...register('modifier_colour')} />
+													</FormGroup>
 
-										{errors.modifier_colour && <FormHelperText error>{errors.modifier_colour.message}</FormHelperText>}
-									</FormControl>
+													{errors.modifier_colour && (
+														<FormHelperText error>{errors.modifier_colour.message}</FormHelperText>
+													)}
+												</FormControl>
 
-									<FormControl
-										fullWidth={true}
-										sx={{
-											width: 'calc(70%)',
-										}}
-										component="fieldset"
-										variant="outlined"
-									>
-										<FormGroup>
-											<Controller
-												name="modifier_opacity"
-												control={control}
-												render={({ field }) => (
-													<SliderFixed
-														{...field}
-														valueLabelDisplay="auto"
-														min={symbolMinimumOpacity}
-														max={symbolMaximumOpacity}
-														track={false}
-														step={0.1}
-														marks={[
-															{
-																value: 0,
-																label: '0',
-															},
-															{
-																value: 0.25,
-																label: '0.25',
-															},
-															{
-																value: 0.5,
-																label: '0.5',
-															},
-															{
-																value: 0.75,
-																label: '0.75',
-															},
-															{
-																value: 1,
-																label: '1',
-															},
-														]}
-													/>
-												)}
-											/>
-										</FormGroup>
+												<FormControl
+													fullWidth={true}
+													sx={{
+														width: 'calc(70%)',
+													}}
+													component="fieldset"
+													variant="outlined"
+												>
+													<FormGroup>
+														<Controller
+															name="modifier_opacity"
+															control={control}
+															render={({ field }) => (
+																<SliderFixed
+																	{...field}
+																	valueLabelDisplay="auto"
+																	min={symbolMinimumOpacity}
+																	max={symbolMaximumOpacity}
+																	track={false}
+																	step={0.1}
+																	marks={[
+																		{
+																			value: 0,
+																			label: '0',
+																		},
+																		{
+																			value: 0.25,
+																			label: '0.25',
+																		},
+																		{
+																			value: 0.5,
+																			label: '0.5',
+																		},
+																		{
+																			value: 0.75,
+																			label: '0.75',
+																		},
+																		{
+																			value: 1,
+																			label: '1',
+																		},
+																	]}
+																/>
+															)}
+														/>
+													</FormGroup>
 
-										{errors.modifier_opacity && (
-											<FormHelperText error>{errors.modifier_opacity.message}</FormHelperText>
+													{errors.modifier_opacity && (
+														<FormHelperText error>{errors.modifier_opacity.message}</FormHelperText>
+													)}
+												</FormControl>
+											</React.Fragment>
 										)}
-									</FormControl>
+
+									{modifier_icon !== undefined &&
+										isIconColourLockedByName(modifier_icon, modifier_icon_style) === true && (
+											<Alert severity="info">
+												<AlertTitle>This icon&apos;s colours cannot currently be changed.</AlertTitle>
+												But anything is possible! If you would like to be able to customise the colour of the icon,
+												please message the developer.
+											</Alert>
+										)}
 								</div>
 
 								{isIconStyleDuotoneOrTritone(modifier_icon_style) && (
