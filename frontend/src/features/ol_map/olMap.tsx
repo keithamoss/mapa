@@ -111,6 +111,10 @@ function OLMap(props: Props) {
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
+	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
+	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
+	isUserMovingTheMapRef.current = isUserMovingTheMap;
+
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
 
@@ -199,6 +203,7 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
+						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
 					),
@@ -222,6 +227,7 @@ function OLMap(props: Props) {
 
 			initialMap.on('movestart', () => {
 				isDragging = false;
+				setIsUserMovingTheMap(true);
 			});
 
 			initialMap.on('pointerdrag', () => {
@@ -229,6 +235,8 @@ function OLMap(props: Props) {
 			});
 
 			initialMap.on('moveend', (evt: MapEvent) => {
+				setIsUserMovingTheMap(false);
+
 				if (
 					(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
 					geolocation.current.getTracking() === true

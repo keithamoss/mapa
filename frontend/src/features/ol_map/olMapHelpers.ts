@@ -58,11 +58,15 @@ export const onGeolocationChangePosition =
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		isFollowingGPSRef: React.MutableRefObject<boolean>,
+		isUserMovingTheMapRef: React.MutableRefObject<boolean>,
 		geolocationHasErrorRef: React.MutableRefObject<false | GeolocationError>,
 		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
 	) =>
 	(evt: BaseEvent) => {
-		updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
+		// Don't snap to the user's location if they're actively moving the map
+		if (isUserMovingTheMapRef.current === false) {
+			updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
+		}
 
 		if (mapHasPositionRef.current === false) {
 			setMapHasPosition(true);
