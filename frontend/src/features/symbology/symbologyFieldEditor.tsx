@@ -86,6 +86,7 @@ import {
 	getDefaultStyleByIconName,
 	getIconLabelByName,
 	getIconStyleName,
+	isCircularModifierIcon,
 	isIconColourLockedByName,
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
@@ -99,7 +100,10 @@ const getDefaultValues = (symbol: SymbologyProps | null | undefined) => {
 	const icon_style = getStringOrDefaultForSymbologyField(symbol, 'icon_style', getDefaultStyleByIconName(icon));
 
 	const modifier_icon = getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon');
-	const modifier_icon_style = getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon_style');
+	const modifier_icon_style =
+		modifier_icon !== undefined && isCircularModifierIcon(modifier_icon) === true
+			? 'solid'
+			: getStringOrUndefinedForSymbologyField(symbol, 'modifier_icon_style');
 
 	const defaultValues = {
 		name: getStringOrEmptyStringForSymbologyField(symbol, 'name'),
