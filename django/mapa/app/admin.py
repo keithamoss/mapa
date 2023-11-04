@@ -21,6 +21,10 @@ def get_admins():
         return []
 
 
+def is_admin(user):
+    return user in get_admins()
+
+
 def is_development():
     return get_env("ENVIRONMENT") == "DEVELOPMENT"
 

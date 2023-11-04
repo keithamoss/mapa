@@ -1,7 +1,9 @@
+from copy import deepcopy
 from datetime import datetime
 from http.client import BAD_REQUEST
 
 import pytz
+from mapa.app.admin import get_admins, is_admin
 from mapa.app.models import Features, FeatureSchemas, Maps
 from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
@@ -129,6 +131,51 @@ class MapsViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
 
         return Response([])
+
+    @action(detail=False, methods=["GET"], serializer_class=FeatureSerializer)
+    def copy(self, request, format=None):
+        """
+        Copies a given map and all of its features.
+        """
+        if is_admin(request.user) is False:
+            return Response({}, status.HTTP_401_UNAUTHORIZED)
+
+        mapIdToCopy = request.query_params.get("id")
+        if mapIdToCopy is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        map = Maps.objects.get(id=mapIdToCopy)
+        map.pk = None
+        map.name = f"{map.name} (Copy)"
+        map.owner_id = request.user
+        map.save()
+
+        schemasToCopy = []
+        features = Features.objects.filter(map_id=mapIdToCopy)
+        for feature in features:
+            if feature.schema_id not in schemasToCopy:
+                schemasToCopy.append(deepcopy(feature.schema_id))
+        
+        oldToNewSchemaMapping = {}
+        for schema in schemasToCopy:
+            oldSchemaId = schema.pk
+            schema.pk = None
+            schema.owner_id = request.user
+            schema.save()
+
+            oldToNewSchemaMapping[oldSchemaId] = schema
+        
+        for feature in features:
+            feature.pk = None
+            feature.map_id = map
+            feature.schema_id = oldToNewSchemaMapping[feature.schema_id.pk]
+            feature.save()
+        
+        map.available_schema_ids = [schema.pk for schema in oldToNewSchemaMapping.values()]
+        map.last_used_schema_id = oldToNewSchemaMapping[list(oldToNewSchemaMapping.keys())[0]]
+        map.save()
+
+        return Response({}, status=status.HTTP_201_CREATED)
 
 
 class FeatureSchemasViewSet(viewsets.ModelViewSet):
