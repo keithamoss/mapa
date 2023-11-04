@@ -4,7 +4,7 @@ import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import { Geometry, Point } from 'ol/geom';
-import { DblClickDragZoom, defaults as defaultInteractions } from 'ol/interaction';
+import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
@@ -162,9 +162,22 @@ function OLMap(props: Props) {
 			geolocation.current.setTracking(true);
 			const curerentPosition = geolocation.current.getPosition();
 
+			let isScrollZooming = false;
+
 			const initialMap = new Map({
 				target: mapTargetElementId,
-				interactions: defaultInteractions().extend([new DblClickDragZoom()]),
+				interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
+					new DblClickDragZoom(),
+					new MouseWheelZoom({
+						condition: (mapBrowserEvent) => {
+							if (mapBrowserEvent.type === 'wheel' && isScrollZooming === false) {
+								isScrollZooming = true;
+							}
+
+							return true;
+						},
+					}),
+				]),
 				layers: [getBasemap(basemap)],
 				controls: [],
 				view:
@@ -216,12 +229,16 @@ function OLMap(props: Props) {
 			});
 
 			initialMap.on('moveend', (evt: MapEvent) => {
-				if ((isDragging === true || isDoubleClicking === true) && geolocation.current.getTracking() === true) {
+				if (
+					(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
+					geolocation.current.getTracking() === true
+				) {
 					setIsFollowingGPS(false);
 				}
 
 				isDragging = false;
 				isDoubleClicking = false;
+				isScrollZooming = false;
 
 				// Update the Redux store version of the view for when
 				// we add new features.
