@@ -611,7 +611,11 @@ function SymbologyFieldEditor(props: Props) {
 				<SymbologyIconStyleChooser selectedIcon={icon} onChoose={onChooseIconStyle} onClose={onCloseStyleChooser} />
 			)}
 			{isIconModifierChooserOpen === true && icon !== undefined && (
-				<SymbologyIconChooser onChoose={onChooseIconModifier} onClose={onCloseIconModifierChooser} />
+				<SymbologyIconChooser
+					boostCircularModifierIcons={true}
+					onChoose={onChooseIconModifier}
+					onClose={onCloseIconModifierChooser}
+				/>
 			)}
 			{isModifierIconStyleChooserOpen === true && modifier_icon !== undefined && (
 				<SymbologyIconStyleChooser

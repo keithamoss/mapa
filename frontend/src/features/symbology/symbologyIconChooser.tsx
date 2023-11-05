@@ -41,12 +41,13 @@ import {
 import SymbologyIconStyleChooser from './symbologyIconStyleChooser';
 
 interface Props {
+	boostCircularModifierIcons?: boolean;
 	onChoose: (icon: string, icon_style: IconStyle) => void;
 	onClose: () => void;
 }
 
 function SymbologyIconChooser(props: Props) {
-	const { onChoose, onClose } = props;
+	const { boostCircularModifierIcons, onChoose, onClose } = props;
 
 	// ######################
 	// Icon Searching
@@ -122,7 +123,8 @@ function SymbologyIconChooser(props: Props) {
 	// Icon Style Choosing (End)
 	// ######################
 
-	const iconSearchResults = iconSearchTerm !== '' ? searchIcons(iconSearchTerm, chosenIconCategory) : [];
+	const iconSearchResults =
+		iconSearchTerm !== '' ? searchIcons(iconSearchTerm, chosenIconCategory, boostCircularModifierIcons) : [];
 
 	return (
 		<React.Fragment>

@@ -186,7 +186,12 @@ export interface IconSearchResult {
 	categories: string[];
 }
 
-export const searchIcons = (searchTerm: string, categoryName?: string, iconNamesAvailableToSearch?: string[]) => {
+export const searchIcons = (
+	searchTerm: string,
+	categoryName?: string,
+	boostCircularModifierIcons: boolean = false,
+	iconNamesAvailableToSearch?: string[],
+) => {
 	const icons = categoryName === undefined ? getIcons() : getIconsForCategoryIndexedByIconName(categoryName);
 
 	const miniSearch = new MiniSearch({
@@ -195,6 +200,13 @@ export const searchIcons = (searchTerm: string, categoryName?: string, iconNames
 		storeFields: ['name', 'label', 'search.terms', 'categories'], // Fields to return with search results
 		searchOptions: {
 			boost: { name: 3, categories: 1.5 }, // Fields to boost in the results
+			// documentId is the icon name
+			boostDocument: (documentId) =>
+				boostCircularModifierIcons === true &&
+				typeof documentId === 'string' &&
+				isCircularModifierIcon(documentId) === true
+					? 3
+					: 1,
 			prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
 			combineWith: 'AND', // Combine terms with AND, not OR
 			// Fuzzy search with a max edit distance of 0.2 * term length,
