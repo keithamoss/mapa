@@ -35,15 +35,16 @@ const setAttributesOnElement = (svg: Element, attributes: { [key: string]: strin
 		svg.setAttribute(attributeName, attributeValue),
 	);
 
-const groupElementsTogether = (svgDOMElementWrapped: Document, svgDOMElement: SVGSVGElement, group: SVGElement) => {
-	// No need to copy and delete the elements. This actually moves them from where they are and into the group.
-	const allTagsInSVGDOMElement = [...svgDOMElement.getElementsByTagName('*')];
-	allTagsInSVGDOMElement.forEach((element) => {
-		group.appendChild(element);
-	});
+const groupElementsTogether = (svgDOMElement: SVGSVGElement, groupStyle: string) => {
+	const grpDOMElementWrapped = new DOMParser().parseFromString(
+		`<div><g xmlns="http://www.w3.org/2000/svg">${svgDOMElement.innerHTML}</g></div>`,
+		'image/svg+xml',
+	);
+	const grpDOMElement = grpDOMElementWrapped.getElementsByTagName('g')[0];
 
-	// Now pop our new group into the SVG
-	svgDOMElement.append(group);
+	grpDOMElement.setAttribute('style', groupStyle);
+
+	return grpDOMElement;
 };
 
 const calculateScaleAndTranslationForSVGCircularModifierIcon = (
@@ -328,9 +329,7 @@ export const parseAndManipulateSVGIcon = (
 			}
 
 			// Shrink the original icon slightly by enclosing all of its SVG elements in a <g></g> element
-			const groupForOriginalIcon = svgDOMElementWrapped.createElementNS('http://www.w3.org/2000/svg', 'g');
-			groupForOriginalIcon.setAttribute('style', 'scale: 80%');
-			groupElementsTogether(svgDOMElementWrapped, svgDOMElement, groupForOriginalIcon);
+			svgDOMElement.replaceChildren(groupElementsTogether(svgDOMElement, 'scale: 80%'));
 
 			// Gather some important information we'll need to work out how to position the modifier icon.
 			const originalIconViewboxWidth = parseInt(viewbox[2]);
@@ -442,12 +441,10 @@ export const parseAndManipulateSVGIcon = (
 				}
 
 				// Enclose all of the modifier icon SVG elements in a <g></g> element
-				const groupForModifierIcon = modifierSVGDOMElementWrapped.createElementNS('http://www.w3.org/2000/svg', 'g');
-				groupForModifierIcon.setAttribute('style', `translate: ${translateX}px ${translateY}px; scale: ${scale}%;`);
-
-				groupElementsTogether(modifierSVGDOMElementWrapped, modifierSVGDOMElement, groupForModifierIcon);
-
-				svgDOMElement.insertAdjacentElement('beforeend', groupForModifierIcon);
+				svgDOMElement.insertAdjacentElement(
+					'beforeend',
+					groupElementsTogether(modifierSVGDOMElement, `translate: ${translateX}px ${translateY}px; scale: ${scale}%;`),
+				);
 			}
 		}
 	}

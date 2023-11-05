@@ -12,6 +12,80 @@ import { getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelper
 
 const iconDefs = [
 	{
+		id: 1,
+		props: {
+			icon: 'guava-fruits1',
+			name: 'Guava Naked',
+			icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 2,
+		props: {
+			icon: 'guava-fruits1',
+			name: 'Guava Circle',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle',
+			modifier_icon_style: 'solid' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 2,
+		props: {
+			icon: 'guava-fruits1',
+			name: 'Guava Circle',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'duotone' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 3,
+		props: {
+			icon: 'guava-fruits1',
+			name: 'Guava Circle Yellow',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle',
+			modifier_icon_style: 'solid' as IconStyle,
+			modifier_circle_colour: '#f0f40b',
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 4,
+		props: {
+			icon: 'guava-fruits1',
+			name: 'Guava Circle Yellow MIcon Colour Set',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle',
+			modifier_colour: '#09f505',
+			modifier_icon_style: 'solid' as IconStyle,
+			modifier_circle_colour: '#f0f40b',
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 26,
+		props: {
+			icon: 'quince-fruits9',
+			name: 'Lemon guava',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle',
+			modifier_circle_colour: '#e4e66b',
+		},
+		group_id: 2,
+		favourited_map_ids: [],
+	},
+	{
 		id: 26,
 		props: {
 			icon: 'fig-fruits1',
