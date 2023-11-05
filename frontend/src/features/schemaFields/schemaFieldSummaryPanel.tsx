@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemText } from '@mui/material';
 import dayjs from 'dayjs';
 import { useAppSelector } from '../../app/hooks/store';
-import { Feature, FeatureDataItem } from '../../app/services/features';
+import { Feature, FeatureDataItem, NewFeature } from '../../app/services/features';
 import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 
@@ -31,7 +31,7 @@ const getDataItemAsString = (
 
 interface Props {
 	schemaId: number;
-	feature: Feature;
+	feature: Feature | NewFeature;
 }
 
 function SchemaFieldSummaryPanel(props: Props) {

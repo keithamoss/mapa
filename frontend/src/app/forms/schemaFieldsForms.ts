@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import * as yup from 'yup';
 import { AnyObject, ObjectSchema } from 'yup';
 import { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
-import { Feature } from '../services/features';
+import { Feature, NewFeature } from '../services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
@@ -71,7 +71,7 @@ export const schemaDateFieldFormValidationSchema: ObjectSchema<FeatureSchemaFiel
 		})
 		.required();
 
-export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, feature: Feature) => {
+export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, feature: Feature | NewFeature) => {
 	const values: SchemaFormFieldsFormValues = {};
 
 	schema.definition.forEach((fieldDefinition) => {

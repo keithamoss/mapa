@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, FormGroup, FormHelperText } from '@mui/material';
+import { isEqual } from 'lodash-es';
 import React, { useEffect } from 'react';
 import { UseFormHandleSubmit, useForm } from 'react-hook-form';
 import NotFound from '../../NotFound';
@@ -8,7 +9,8 @@ import {
 	getYupValidationSchemaForSchemaFieldForm,
 } from '../../app/forms/schemaFieldsForms';
 import { useAppSelector } from '../../app/hooks/store';
-import { Feature } from '../../app/services/features';
+import { usePrevious } from '../../app/hooks/usePrevious';
+import { Feature, NewFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
@@ -16,12 +18,10 @@ import SchemaDataEntryBooleanyTypeFields from './BooleanyTypeFields/schemaDataEn
 import SchemaDataEntryDateField from './DateField/schemaDataEntryDateField';
 import SchemaDataEntryNumberField from './NumberField/schemaDataEntryNumberField';
 import SchemaDataEntryTextField from './TextField/schemaDataEntryTextField';
-import { usePrevious } from '../../app/hooks/usePrevious';
-import { isEqual } from 'lodash-es';
 
 interface PropsEntrypoint {
 	schemaId: number;
-	feature: Feature;
+	feature: Feature | NewFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
 	touchedFieldsRef: React.MutableRefObject<
 		| Partial<
@@ -60,7 +60,7 @@ export interface SchemaFormFieldsFormValues {
 
 interface Props {
 	schema: FeatureSchema;
-	feature: Feature;
+	feature: Feature | NewFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
 	touchedFieldsRef: React.MutableRefObject<
 		| Partial<

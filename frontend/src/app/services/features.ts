@@ -94,7 +94,6 @@ export const featuresApi = api.injectEndpoints({
 		}),
 		updateFeature: builder.mutation<Feature, Partial<Feature>>({
 			query: (feature) => ({
-				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				url: `features/${feature.id}/`,
 				method: 'PUT',
 				body: feature,

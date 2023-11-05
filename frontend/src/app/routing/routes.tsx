@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '../../App';
-import FeatureEditor from '../../features/features/featureEditor';
 import FeatureManager from '../../features/features/featureManager';
 import MapCreator from '../../features/maps/mapCreator';
 import MapEditor from '../../features/maps/mapEditor';
@@ -11,6 +10,8 @@ import SchemaCreator from '../../features/schemas/schemaCreator';
 import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 // eslint-disable-next-line import/no-named-as-default
 import DebugView from '../../features/app/debugView';
+import FeatureCreator from '../../features/features/featureCreator';
+import FeatureEditor from '../../features/features/featureEditor';
 import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
@@ -66,6 +67,10 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'FeatureManager',
 				element: <FeatureManager />,
+			},
+			{
+				path: 'FeatureManager/Create',
+				element: <FeatureCreator />,
 			},
 			{
 				path: 'FeatureManager/Edit/:featureId',

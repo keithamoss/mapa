@@ -4,7 +4,6 @@ import SpeedDial from '@mui/material/SpeedDial';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks/store';
-import { useAddFeatureToMapMutation } from '../../app/services/features';
 import { initFeatureFromMapCentre } from '../features/featuresSlice';
 
 const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
@@ -24,20 +23,13 @@ export default function AddFeatureButton(props: Props) {
 
 	const { mapId } = props;
 
-	const [addFeature] = useAddFeatureToMapMutation();
-
-	const onAddFeature = useCallback(async () => {
+	const onAddFeature = useCallback(() => {
 		if (mapId !== undefined) {
-			const feature = dispatch(initFeatureFromMapCentre(mapId));
-			if (feature !== undefined) {
-				const newFeature = await addFeature(feature).unwrap();
-
-				navigate(`/FeatureManager/Edit/${newFeature.id}`, {
-					state: { isAdding: true },
-				});
-			}
+			navigate('/FeatureManager/Create', {
+				state: { feature: dispatch(initFeatureFromMapCentre(mapId)) },
+			});
 		}
-	}, [addFeature, dispatch, mapId, navigate]);
+	}, [dispatch, mapId, navigate]);
 
 	return (
 		<StyledSpeedDial
