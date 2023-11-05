@@ -14,6 +14,65 @@ const iconDefs = [
 	{
 		id: 1,
 		props: {
+			icon: 'lemon-fruits4',
+			name: 'Citrus',
+			icon_style: 'coloured' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 1,
+		props: {
+			icon: 'lemon-fruits4',
+			name: 'Citrus Blobby',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle-question',
+			modifier_colour: '#FFFFFF',
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 1,
+		props: {
+			icon: 'lemon-fruits7',
+			name: 'Citrus Not Blobby',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle-question',
+			modifier_colour: '#FFFFFF',
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 1,
+		props: {
+			icon: 'broccoli',
+			name: 'Bush Not Blobby',
+			// icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'circle-question',
+			modifier_colour: '#FFFFFF',
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 1,
+		props: {
+			icon: 'lemon-fruits4',
+			name: 'Citrus Bush',
+			icon_style: 'coloured' as IconStyle,
+			modifier_icon: 'broccoli',
+			modifier_colour: '#d52a2a',
+			modifier_icon_style: 'duotone' as IconStyle,
+		},
+		group_id: 1,
+		favourited_map_ids: [],
+	},
+	{
+		id: 1,
+		props: {
 			icon: 'guava-fruits1',
 			name: 'Guava Naked',
 			icon_style: 'coloured' as IconStyle,

@@ -103,9 +103,9 @@ const calculateScaleAndTranslationForSVGCircularModifierIcon = (
 	// Lastly, some mild (but reasonably safe) magic numbering required to ensure the background circle
 	// that provides the colour for the icon is hidden behind the actual icon and doesn't peek
 	// out and show it's colour around the edges.
-	const scaleBackground = scale * 0.95;
-	const translateXBackground = translateX + 3;
-	const translateYBackground = translateY + 3;
+	const scaleBackground = scale * 0.9;
+	const translateXBackground = translateX + circleDiameter * 0.05;
+	const translateYBackground = translateY + circleDiameter * 0.05;
 
 	return {
 		scaleIcon: scale,
