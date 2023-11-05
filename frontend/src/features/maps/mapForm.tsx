@@ -62,11 +62,31 @@ function MapForm(props: Props) {
 		defaultValues: {
 			name: map?.name || '',
 			default_symbology: map?.default_symbology || undefined,
+			hero_icon: map?.hero_icon || undefined,
 			available_schema_ids: map?.available_schema_ids || [],
 		},
 	});
 
-	const { default_symbology, available_schema_ids } = watch();
+	const { hero_icon, default_symbology, available_schema_ids } = watch();
+
+	// ######################
+	// Map Hero Icon
+	// ######################
+	const [isSettingMapHeroIcon, setIsSettingMapHeroIcon] = useState(false);
+
+	const onSetMapHeroIcon = () => {
+		setIsSettingMapHeroIcon(true);
+	};
+
+	const onDoneSettingMapHeroIcon = (symbolField: SymbologyProps) => {
+		setValue('hero_icon', symbolField, { shouldDirty: true });
+		setIsSettingMapHeroIcon(false);
+	};
+
+	const onCancelSettingMapHeroIcon = () => setIsSettingMapHeroIcon(false);
+	// ######################
+	// Map Hero Icon (End)
+	// ######################
 
 	// ######################
 	// Default Symbology
@@ -177,6 +197,29 @@ function MapForm(props: Props) {
 						</FormControl>
 
 						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+							<FormSectionHeading>Map icon</FormSectionHeading>
+
+							<FormGroup>
+								<Typography variant="body2">Create an icon to represent your map.</Typography>
+
+								<Button
+									variant="outlined"
+									startIcon={<TuneIcon />}
+									onClick={onSetMapHeroIcon}
+									sx={{ mt: 2, mb: 2, maxWidth: 350 }}
+								>
+									Set Icon
+								</Button>
+
+								{(hero_icon === undefined || isEmpty(hero_icon) === true) && (
+									<Typography variant="caption">No icon has been set</Typography>
+								)}
+							</FormGroup>
+
+							{errors.hero_icon && <FormHelperText error>{errors.hero_icon.message}</FormHelperText>}
+						</FormControl>
+
+						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
 							<FormSectionHeading>Default symbology</FormSectionHeading>
 
 							<FormGroup>
@@ -265,6 +308,16 @@ function MapForm(props: Props) {
 					onCancel={onCancelSettingDefaultSymbol}
 					nameFieldRequired={false}
 					iconFieldRequired={false}
+				/>
+			)}
+
+			{isSettingMapHeroIcon === true && (
+				<SymbologyFieldEditor
+					symbol={hero_icon}
+					onDone={onDoneSettingMapHeroIcon}
+					onCancel={onCancelSettingMapHeroIcon}
+					nameFieldRequired={false}
+					iconFieldRequired={true}
 				/>
 			)}
 		</React.Fragment>

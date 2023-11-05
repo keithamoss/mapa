@@ -6,6 +6,7 @@ import { SymbologyProps } from './schemas';
 export interface MapModifiableProps {
 	name: string;
 	default_symbology: SymbologyProps | null;
+	hero_icon: SymbologyProps | null;
 	available_schema_ids: number[];
 }
 

@@ -3,7 +3,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Divider from '@mui/material/Divider';
 
-import { AppBar, Button, IconButton, List, ListItemButton, Toolbar } from '@mui/material';
+import { AppBar, Button, IconButton, List, ListItemButton, ListItemIcon, Toolbar } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -14,6 +14,13 @@ import { useUpdateUserProfileMutation } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import { defaultSearchParameters, selectActiveMapId, setFilteredFeatures, setSearchParameters } from '../app/appSlice';
+import {
+	defaultMapHeroIcon,
+	defaultMapHeroIconColour,
+	defaultMapHeroIconOpacity,
+	defaultSymbolSizeForFormFields,
+	getFontAwesomeIconForSymbolPreview,
+} from '../symbology/symbologyHelpers';
 import { selectAllMaps } from './mapsSlice';
 
 function MapManager() {
@@ -95,7 +102,20 @@ function MapManager() {
 								</IconButton>
 							}
 						>
-							<ListItemButton onClick={onClickMap(map.id)}>
+							<ListItemIcon sx={{ pl: 1 }}>
+								{map.hero_icon !== null
+									? getFontAwesomeIconForSymbolPreview(map.hero_icon, {
+											size: defaultSymbolSizeForFormFields,
+									  })
+									: getFontAwesomeIconForSymbolPreview({
+											icon: defaultMapHeroIcon,
+											colour: defaultMapHeroIconColour,
+											opacity: defaultMapHeroIconOpacity,
+											size: defaultSymbolSizeForFormFields,
+									  })}
+							</ListItemIcon>
+
+							<ListItemButton onClick={onClickMap(map.id)} sx={{ pl: 0 }}>
 								<ListItemText primary={map.name} />
 							</ListItemButton>
 						</ListItem>

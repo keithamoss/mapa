@@ -72,6 +72,7 @@ class Maps(models.Model):
     name = models.TextField(unique=False)
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column="owner_id")
     default_symbology = JSONField(null=True)
+    hero_icon = JSONField(null=True)
     deleted_at = models.DateTimeField(null=True)
     available_schema_ids = JSONField(default=list, blank=True)
     last_used_schema_id = models.ForeignKey(FeatureSchemas, null=True, on_delete=models.CASCADE, db_column="last_used_schema_id")
