@@ -72,3 +72,9 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	background-color: rgba(0, 0, 0, 0.01);
 	display: none;
 }
+
+/* https://github.com/openlayers/ol-mapbox-style/issues/1001 */
+@font-face {
+	font-family: 'DIN Pro';
+	src: url('fonts/D-DIN-PRO-400-Regular.otf') format('opentype');
+}
