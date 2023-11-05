@@ -5,7 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import WelcomeUser from './WelcomeUser';
 import { useAppSelector } from './app/hooks/store';
-import { Basemap, MapRenderer } from './app/services/auth';
+import { Basemap, BasemapStyle, MapRenderer } from './app/services/auth';
 import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
@@ -64,6 +64,7 @@ function App() {
 				<OLMap
 					mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
 					basemap={user.settings.basemap || Basemap.MapboxVectorTile}
+					basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
 				/>
 			)}
 

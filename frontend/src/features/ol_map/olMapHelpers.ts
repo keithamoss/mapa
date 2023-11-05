@@ -8,7 +8,7 @@ import { Point } from 'ol/geom';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
-import { Basemap } from '../../app/services/auth';
+import { Basemap, BasemapStyle } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
@@ -17,11 +17,11 @@ export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
 export const geolocationMarkerOvelayerId = 'geolocation_marker';
 
-export const getBasemap = (basemap: Basemap | undefined) =>
-	basemap === Basemap.MapboxWMTS
-		? getWMTSTileLayer()
+export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
+	basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
+		? getWMTSTileLayer(basemap_style)
 		: new MapboxVectorLayer({
-				styleUrl: 'mapbox://styles/keithmoss/clgu2ornp001j01r76h3o6j3g',
+				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Infinity,
 		  });

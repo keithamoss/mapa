@@ -5,16 +5,20 @@ import {
 	FormControlLabel,
 	FormLabel,
 	IconButton,
+	InputLabel,
+	MenuItem,
 	Paper,
 	Radio,
 	RadioGroup,
+	Select,
+	SelectChangeEvent,
 	Toolbar,
 	Typography,
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { Basemap, MapRenderer, useUpdateUserProfileMutation } from '../../app/services/auth';
+import { Basemap, BasemapStyle, MapRenderer, useUpdateUserProfileMutation } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { selectUser } from '../auth/authSlice';
 
@@ -48,6 +52,10 @@ function SettingsManager() {
 		if (value in Basemap) {
 			updateUserProfile({ basemap: value as Basemap });
 		}
+	};
+
+	const onBasemapStyleChange = (event: SelectChangeEvent<BasemapStyle>) => {
+		updateUserProfile({ basemap_style: event.target.value as BasemapStyle });
 	};
 
 	const onClose = () => navigate('/');
@@ -92,7 +100,7 @@ function SettingsManager() {
 						<RadioGroup
 							aria-labelledby="radio-buttons-group-map-renderer-label"
 							defaultValue={user?.settings.map_renderer || MapRenderer.WebGLPointsLayer}
-							name="radio-buttons-group"
+							name="radio-buttons-group-map-renderer"
 							onChange={onMapRendererChange}
 						>
 							<FormControlLabel value="WebGLPointsLayer" control={<Radio />} label="GPU" />
@@ -100,17 +108,33 @@ function SettingsManager() {
 						</RadioGroup>
 					</FormControl>
 
-					<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+					<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 						<FormLabel id="radio-buttons-group-basemap-label">Basemap</FormLabel>
 						<RadioGroup
 							aria-labelledby="radio-buttons-group-basemap-label"
 							defaultValue={user?.settings.basemap || Basemap.MapboxVectorTile}
-							name="radio-buttons-group"
+							name="radio-buttons-group-basemap"
 							onChange={onBasemapChange}
 						>
 							<FormControlLabel value="MapboxVectorTile" control={<Radio />} label="Vector" />
 							<FormControlLabel value="MapboxWMTS" control={<Radio />} label="Image" />
 						</RadioGroup>
+					</FormControl>
+
+					<FormControl sx={{ mb: 3 }} fullWidth>
+						<InputLabel id="basemap-style-label">Style</InputLabel>
+						<Select
+							labelId="basemap-style-label"
+							defaultValue={user?.settings.basemap_style || BasemapStyle.Monochrome}
+							label="Style"
+							onChange={onBasemapStyleChange}
+						>
+							{Object.entries(BasemapStyle).map(([name, id]) => (
+								<MenuItem key={id} value={id}>
+									{name}
+								</MenuItem>
+							))}
+						</Select>
 					</FormControl>
 				</Paper>
 			</DialogWithTransition>

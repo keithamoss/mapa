@@ -11,6 +11,7 @@ class ProfileSettings(str, EnumBase):
     LastMapId = "last_map_id"
     MapRenderer = "map_renderer"
     Basemap = "basemap"
+    BasemapStyle = "basemap_style"
 
 
 class GeomType(str, EnumBase):

@@ -8,7 +8,7 @@ import { Modify } from 'ol/interaction';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/WebGLTile';
 import 'ol/ol.css';
-import { get as getProjection, Projection, toLonLat } from 'ol/proj';
+import { Projection, get as getProjection, toLonLat } from 'ol/proj';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS.js';
 
@@ -17,11 +17,12 @@ import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
+import { BasemapStyle } from '../../app/services/auth';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
 import { mapaThemeSecondaryBlueRGB } from '../../app/ui/theme';
 import { determineSymbolForFeature } from './olStylingManager';
-import { buildSpriteSheet, WebGLLayerSpriteSheet } from './olWebGLPointsLayerManager';
+import { WebGLLayerSpriteSheet, buildSpriteSheet } from './olWebGLPointsLayerManager';
 
 export const geoJSONFormat = new GeoJSON({
 	dataProjection: 'EPSG:4326',
@@ -43,7 +44,7 @@ export interface GeoJSONFeatureCollection {
 	}[];
 }
 
-export const getWMTSTileLayer = () => {
+export const getWMTSTileLayer = (basemap_style: BasemapStyle) => {
 	const projection = getProjection('EPSG:3857');
 
 	const getWMTSTileGrid = (projection: Projection | null) => {
@@ -73,11 +74,11 @@ export const getWMTSTileLayer = () => {
 		preload: Infinity,
 		source: new WMTS({
 			urls: [
-				`https://api.mapbox.com/styles/v1/keithmoss/clgu2ornp001j01r76h3o6j3g/tiles/{TileMatrix}/{TileCol}/{TileRow}?access_token=${
+				`https://api.mapbox.com/styles/v1/keithmoss/${basemap_style}/tiles/{TileMatrix}/{TileCol}/{TileRow}?access_token=${
 					import.meta.env.VITE_MAPBOX_API_KEY
 				}`,
 			],
-			layer: 'clgu2ornp001j01r76h3o6j3g',
+			layer: basemap_style,
 			matrixSet: 'GoogleMapsCompatible',
 			format: 'image/png',
 			projection: projection || undefined,

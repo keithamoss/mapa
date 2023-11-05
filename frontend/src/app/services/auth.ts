@@ -10,10 +10,19 @@ export enum Basemap {
 	MapboxWMTS = 'MapboxWMTS',
 }
 
+export enum BasemapStyle {
+	Monochrome = 'clgu2ornp001j01r76h3o6j3g',
+	Streets = 'cloksjj9n001q01rba0zj1ehu',
+	Outdoors = 'cloksl0t5000b01pqg50gcbw2',
+	Navigation = 'cloksjtvv001z01rher2q3r2d',
+	Satellite = 'clokslfco002b01r728815x4k',
+}
+
 export interface UserProfileSettings {
 	last_map_id?: number;
 	map_renderer?: MapRenderer;
 	basemap?: Basemap;
+	basemap_style?: BasemapStyle;
 }
 
 export interface User {

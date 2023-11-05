@@ -13,7 +13,7 @@ import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { Basemap, MapRenderer } from '../../app/services/auth';
+import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
 import { Feature, useUpdateFeatureMutation } from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
@@ -48,8 +48,9 @@ import SnapToGPSButton from './snapToGPSButton';
 // https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 interface Props {
-	mapRenderer?: MapRenderer;
-	basemap?: Basemap;
+	mapRenderer: MapRenderer;
+	basemap: Basemap;
+	basemap_style: BasemapStyle;
 }
 
 function OLMap(props: Props) {
@@ -59,7 +60,7 @@ function OLMap(props: Props) {
 
 	const navigate = useNavigate();
 
-	const { mapRenderer, basemap } = props;
+	const { mapRenderer, basemap, basemap_style } = props;
 
 	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
@@ -182,7 +183,7 @@ function OLMap(props: Props) {
 						},
 					}),
 				]),
-				layers: [getBasemap(basemap)],
+				layers: [getBasemap(basemap, basemap_style)],
 				controls: [],
 				view:
 					curerentPosition !== undefined
@@ -312,7 +313,7 @@ function OLMap(props: Props) {
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
-	}, [basemap, dispatch, navigate]);
+	}, [basemap, basemap_style, dispatch, navigate]);
 	// ######################
 	// Initialise map on load (End)
 	// ######################
