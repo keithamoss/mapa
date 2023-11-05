@@ -43,6 +43,7 @@ CSRF_TRUSTED_ORIGINS = get_env("ALLOWED_HOSTS_AND_WHITELIST").split(",")
 ALLOWED_HOSTS = get_env("ALLOWED_HOSTS_AND_WHITELIST").replace("https://", "").split(",")
 
 SESSION_COOKIE_DOMAIN = get_env("SESSION_COOKIE_DOMAIN")
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 400 # Chrome limits cookies to expiring no more than 400 days in the future
 CSRF_COOKIE_DOMAIN = get_env("CSRF_COOKIE_DOMAIN")
 
 CORS_ALLOW_HEADERS = default_headers + (
