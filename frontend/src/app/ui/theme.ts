@@ -5,7 +5,8 @@ export const mapaThemeSecondaryBlue = '#226992';
 export const mapaThemeSecondaryBlueRGB = '34, 105, 146';
 export const mapaThemeWarningPurple = '#922269';
 
-export const defaultAppMapColour = '#f7f7f7';
+// export const defaultAppMapColour = '#f7f7f7';
+export const defaultAppMapColour = mapaThemePrimaryGreen;
 
 export const defaultAppBarColour = mapaThemePrimaryGreen;
 
