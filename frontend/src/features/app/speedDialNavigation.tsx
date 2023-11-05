@@ -22,10 +22,7 @@ const StyledAvatar = styled(Avatar)(() => ({
 	right: '-6px',
 }));
 
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-	position: 'absolute',
-	bottom: theme.spacing(11),
-	right: theme.spacing(2),
+const StyledSpeedDial = styled(SpeedDial)(() => ({
 	// Ensures that the SVG icons inside <Link /> elements display centred inside their wee circles
 	'& svg': {
 		display: 'block',

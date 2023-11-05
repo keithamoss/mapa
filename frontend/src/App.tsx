@@ -1,5 +1,5 @@
 import GoogleIcon from '@mui/icons-material/Google';
-import { Button, styled } from '@mui/material';
+import { Box, Button, styled, useTheme } from '@mui/material';
 import React from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
@@ -10,6 +10,7 @@ import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
+import { isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
 import { selectActiveMapId } from './features/app/appSlice';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
@@ -25,6 +26,8 @@ const LoginContainer = styled('div')`
 
 function App() {
 	const location = useLocation();
+
+	const theme = useTheme();
 
 	const mapId = useAppSelector(selectActiveMapId);
 
@@ -75,9 +78,16 @@ function App() {
 				<React.Fragment>
 					{mapId === undefined && <WelcomeUser />}
 
-					<AddFeatureButton mapId={mapId} />
-
-					<SpeedDialNavigation />
+					<Box
+						sx={{
+							position: 'absolute',
+							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 4),
+							right: theme.spacing(2),
+						}}
+					>
+						<SpeedDialNavigation />
+						<AddFeatureButton mapId={mapId} />
+					</Box>
 				</React.Fragment>
 			)}
 

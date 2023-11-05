@@ -1,16 +1,9 @@
 import { AddLocationAlt } from '@mui/icons-material';
-import { styled } from '@mui/material';
 import SpeedDial from '@mui/material/SpeedDial';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks/store';
 import { initFeatureFromMapCentre } from '../features/featuresSlice';
-
-const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
-	position: 'absolute',
-	bottom: theme.spacing(2),
-	right: theme.spacing(2),
-}));
 
 interface Props {
 	mapId?: number;
@@ -32,7 +25,7 @@ export default function AddFeatureButton(props: Props) {
 	}, [dispatch, mapId, navigate]);
 
 	return (
-		<StyledSpeedDial
+		<SpeedDial
 			ariaLabel="The primary button to create a new feature"
 			icon={<AddLocationAlt />}
 			onClick={onAddFeature}

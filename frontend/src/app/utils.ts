@@ -31,3 +31,9 @@ export function getBaseURL(): string {
 export function isTouchDevice() {
 	return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
+
+// https://stackoverflow.com/a/52695341
+export const isInStandaloneMode = () =>
+	window.matchMedia('(display-mode: standalone)').matches ||
+	('standalone' in window.navigator && window.navigator.standalone) ||
+	document.referrer.includes('android-app://');
