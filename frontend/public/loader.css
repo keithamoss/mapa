@@ -1,0 +1,132 @@
+/* https://cssloaders.github.io/ */
+
+#loader-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #f7f7f7;
+}
+
+#loader-heart {
+	position: relative;
+	width: 40px;
+	height: 60px;
+	animation: heartbeat 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+#loader-heart:before,
+#loader-heart:after {
+	content: '';
+	background: #ff3d00;
+	width: 40px;
+	height: 60px;
+	border-radius: 50px 50px 0 0;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	transform: rotate(45deg);
+	transform-origin: 50% 68%;
+	box-shadow: 5px 4px 5px #0004 inset;
+}
+
+#loader-heart:after {
+	transform: rotate(-45deg);
+}
+
+@keyframes heartbeat {
+	0% {
+		transform: scale(0.95);
+	}
+	5% {
+		transform: scale(1.1);
+	}
+	39% {
+		transform: scale(0.85);
+	}
+	45% {
+		transform: scale(1);
+	}
+	60% {
+		transform: scale(0.95);
+	}
+	100% {
+		transform: scale(0.9);
+	}
+}
+
+#loader-bouncing-ball {
+	width: 50px;
+	height: 165px;
+	position: relative;
+}
+
+#loader-bouncing-ball::before {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	transform: translate(-50%, 0);
+	width: 16px;
+	height: 16px;
+	background: #699222;
+	border-radius: 50%;
+	animation: bounce 2s linear infinite;
+}
+
+#loader-bouncing-ball::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	height: 48px;
+	width: 48px;
+	background: lightgray;
+	border-radius: 4px;
+	animation: rotate 2s linear infinite;
+}
+
+@keyframes bounce {
+	0%,
+	50%,
+	100% {
+		transform: translate(-50%, 0px);
+		height: 20px;
+	}
+	20% {
+		transform: translate(-25%, 85px);
+		height: 28px;
+	}
+	25% {
+		transform: translate(-25%, 110px);
+		height: 12px;
+	}
+	70% {
+		transform: translate(-75%, 85px);
+		height: 28px;
+	}
+	75% {
+		transform: translate(-75%, 108px);
+		height: 12px;
+	}
+}
+
+@keyframes rotate {
+	0%,
+	50%,
+	100% {
+		transform: rotate(0deg);
+	}
+	25% {
+		transform: rotate(90deg);
+	}
+	75% {
+		transform: rotate(-90deg);
+	}
+}
