@@ -78,6 +78,7 @@ import { Map } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
+import { isInStandaloneMode } from '../../app/utils';
 import { selectMapById } from '../maps/mapsSlice';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
@@ -1504,7 +1505,7 @@ function SymbologyFieldEditor(props: Props) {
 						<Paper
 							// Give ourselves a little bit of padding on the bottom if we're installed as a PWA so the iOS gesture bar
 							// doesn't sit right on top of the icons
-							sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, pb: document.fullscreenElement !== null ? 1 : 0 }}
+							sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, pb: isInStandaloneMode() === false ? 0 : 1 }}
 							elevation={3}
 						>
 							<BottomNavigation showLabels value={navigationValue} onChange={onChangeBottomNavigation}>

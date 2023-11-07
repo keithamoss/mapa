@@ -81,8 +81,9 @@ function App() {
 					<Box
 						sx={{
 							position: 'absolute',
-							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 4),
+							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
 							right: theme.spacing(2),
+							// right: theme.spacing(isInStandaloneMode() === false ? 2 : 4),
 						}}
 					>
 						<SpeedDialNavigation />
