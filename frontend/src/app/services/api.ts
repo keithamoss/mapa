@@ -21,7 +21,11 @@ export const api = createApi({
 	 * Tag types must be defined in the original API definition
 	 * for any tags that would be provided by injected endpoints
 	 */
-	tagTypes: ['User', 'Map', 'Feature', 'FeatureSchema'],
+	tagTypes: ['User', 'Map', 'FeatureSchema'],
+	// IMPORTANT NOTE:
+	// Features uses Redux Toolkit's pessimistic updates pattern as a performance boost for users on poor quality mobile connections.
+	// The API responses for adding/updating/deleting features already contain the data we need to amend in the Redux store.
+	// This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
 });
 
 // Global API error handling

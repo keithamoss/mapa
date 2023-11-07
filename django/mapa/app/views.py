@@ -274,7 +274,6 @@ class FeatureSchemasViewSet(viewsets.ModelViewSet):
             "deletable": featureCount == 0,
             "count": featureCount,
             "count_by_map": features.values("map_id").annotate(count=Count("map_id")),
-
         })
 
 

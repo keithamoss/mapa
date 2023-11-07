@@ -1,4 +1,4 @@
-import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
@@ -68,6 +68,10 @@ export const featuresAdapter = createEntityAdapter<Feature>();
 const initialState = featuresAdapter.getInitialState();
 export { initialState as initialFeaturesState };
 
+// IMPORTANT NOTE:
+// Features uses Redux Toolkit's pessimistic updates pattern (and doesn't use tags at all) as a performance boost for users on poor quality mobile connections.
+// The API responses for adding/updating/deleting features already contain the data we need to amend in the Redux store.
+// This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getFeatures: builder.query<EntityState<Feature>, void>({
@@ -75,10 +79,6 @@ export const featuresApi = api.injectEndpoints({
 			transformResponse: (res: FeaturesResponse) => {
 				return featuresAdapter.setAll(initialState, res);
 			},
-			providesTags: (result) => [
-				{ type: 'Feature', id: 'LIST' },
-				...(result !== undefined ? result.ids.map((id) => ({ type: 'Feature' as const, id })) : []),
-			],
 			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
 				await queryFulfilled;
 				dispatch(prepareFeaturesForMap());
@@ -90,7 +90,26 @@ export const featuresApi = api.injectEndpoints({
 				method: 'POST',
 				body: initialFeature,
 			}),
-			invalidatesTags: [{ type: 'Feature', id: 'LIST' }],
+			async onQueryStarted(feature, { dispatch, queryFulfilled }) {
+				try {
+					const { data: addedFeature } = await queryFulfilled;
+
+					dispatch(
+						featuresApi.util.updateQueryData('getFeatures', undefined, (draft) => {
+							featuresAdapter.addOne(draft, addedFeature);
+						}),
+					);
+
+					// Note: This means prepareFeaturesForMap() gets called twice in some scenarios.
+					// e.g. Here as well as as a result of the getFeatureSchemas() that results from our patchSchema() in FeatureCreator.
+					// But it's important to be sure we run this whenever a feature changes, so we'll wear the small hit.
+					dispatch(prepareFeaturesForMap());
+				} catch {
+					// Maybe we need to imporove error handling here?
+					// https://github.com/reduxjs/redux-toolkit/issues/2064
+					// I presume these are all logged to Sentry at the moment...
+				}
+			},
 		}),
 		updateFeature: builder.mutation<Feature, Partial<Feature>>({
 			query: (feature) => ({
@@ -98,14 +117,49 @@ export const featuresApi = api.injectEndpoints({
 				method: 'PUT',
 				body: feature,
 			}),
-			invalidatesTags: (result, error, { id }) => [{ type: 'Feature', id }],
+			async onQueryStarted(feature, { dispatch, queryFulfilled }) {
+				try {
+					const { data: updatedFeature } = await queryFulfilled;
+
+					dispatch(
+						featuresApi.util.updateQueryData('getFeatures', undefined, (draft) => {
+							featuresAdapter.updateOne(draft, { id: updatedFeature.id, changes: updatedFeature });
+						}),
+					);
+
+					// Note: This means prepareFeaturesForMap() gets called twice in some scenarios.
+					// e.g. Here as well as as a result of the getMaps() that results from our patchMap() in FeatureForm.
+					// But it's important to be sure we run this whenever a feature changes, so we'll wear the small hit.
+					dispatch(prepareFeaturesForMap());
+				} catch {
+					// Maybe we need to imporove error handling here?
+					// https://github.com/reduxjs/redux-toolkit/issues/2064
+					// I presume these are all logged to Sentry at the moment...
+				}
+			},
 		}),
-		deleteFeature: builder.mutation<Feature, number>({
+		deleteFeature: builder.mutation<void, number>({
 			query: (id) => ({
 				url: `features/${id}/`,
 				method: 'DELETE',
 			}),
-			invalidatesTags: (result, error, id) => [{ type: 'Feature', id }],
+			async onQueryStarted(featureId, { dispatch, queryFulfilled }) {
+				try {
+					await queryFulfilled;
+
+					dispatch(
+						featuresApi.util.updateQueryData('getFeatures', undefined, (draft) => {
+							featuresAdapter.removeOne(draft, featureId);
+						}),
+					);
+
+					dispatch(prepareFeaturesForMap());
+				} catch {
+					// Maybe we need to imporove error handling here?
+					// https://github.com/reduxjs/redux-toolkit/issues/2064
+					// I presume these are all logged to Sentry at the moment...
+				}
+			},
 		}),
 	}),
 });

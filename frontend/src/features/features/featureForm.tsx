@@ -50,14 +50,28 @@ function FeatureForm(props: Props) {
 
 	const [patchMap] = usePatchMapMutation();
 
-	const [deleteFeature, { isSuccess: isDeleteFeatureSuccessful }] = useDeleteFeatureMutation();
-
-	// See note in MapEditor about usage of useEffect
-	useEffect(() => {
-		if (isDeleteFeatureSuccessful === true) {
-			navigate('/');
-		}
-	}, [isDeleteFeatureSuccessful, navigate]);
+	// IMPORTANT NOTE:
+	// This is different to our usual pattern of relying on isDeleteFeatureSuccessful to trigger the next action once the feature has been
+	// deleted from the backend.
+	// Why is that?
+	// Well, after much investigation and digging it all makes a lot of logical sense! With pessimistic updates we remove the feature from
+	// the Redux store as soon as the query returns a response. However, because this FeatureForm component is inside FeatureEditor, and
+	// because FeatureEditor is hooked up to the Redux store, FeatureForm gets unmounted as soon as the feature is removed fron the Redux store,
+	// so it's never around to receive the completed query response and see isDeleteFeatureSuccessful === true.
+	// Instead, we rely on attaching an onfulfilled .then() listener to deleteFeature() directly, so we can still take the 'navigate away' action.
+	//
+	// Ref tickets: #503 and #53
+	//
+	// Further:
+	// Deleting features uses Redux Toolkit's pessimistic update pattern as a performance boost for users on poor quality mobile connections.
+	// The API request and response for deleting a feature already contain the data we need to amend in the Redux store.
+	// This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
+	const [
+		deleteFeature,
+		/*{
+			isSuccess: isDeleteFeatureSuccessful
+		},*/
+	] = useDeleteFeatureMutation();
 
 	const [schemaIdForEditing, setSchemaIdForEditing] = useState<number | undefined>();
 
@@ -272,7 +286,8 @@ function FeatureForm(props: Props) {
 
 	const onDeleteFeature = () => {
 		if ('id' in feature) {
-			deleteFeature(feature.id);
+			// See note above about how we're not using isDeleteFeatureSuccessful
+			deleteFeature(feature.id).then(() => navigate('/'));
 		}
 	};
 

@@ -1,4 +1,5 @@
 import { api } from './api';
+import { featuresApi } from './features';
 
 export enum MapRenderer {
 	WebGLPointsLayer = 'WebGLPointsLayer',
@@ -58,8 +59,12 @@ export const authApi = api.injectEndpoints({
 				method: 'POST',
 				body,
 			}),
-			// This is lazy, but ensures features are refreshed when the user's active map changes.
-			invalidatesTags: ['User', { type: 'Feature', id: 'LIST' }],
+			invalidatesTags: ['User'],
+			// This ensures that features are refreshed when the user's active map changes.
+			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+				await queryFulfilled;
+				dispatch(featuresApi.endpoints.getFeatures.initiate(undefined, { forceRefetch: true }));
+			},
 		}),
 	}),
 });
