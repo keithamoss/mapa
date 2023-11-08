@@ -3,6 +3,7 @@ import { MapBrowserEvent, MapEvent, View } from 'ol';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
+import Attribution from 'ol/control/Attribution';
 import { Geometry, Point } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -184,7 +185,7 @@ function OLMap(props: Props) {
 					}),
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
-				controls: [],
+				controls: [new Attribution({ collapsible: false })],
 				view:
 					curerentPosition !== undefined
 						? new View({ zoom: defaultZoomLevel, center: fromLonLat(curerentPosition) })

@@ -16,6 +16,9 @@ export const createVectorImageLayer = (features: GeoJSONFeatureCollection) => {
 		source: new VectorSource({
 			format: geoJSONFormat,
 			features: geoJSONFormat.readFeatures(features),
+			attributions: [
+				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright"> OpenStreetMap contributors</a>',
+			],
 		}),
 		style: styleFunction as StyleFunction,
 		imageRatio: window.location.href.includes('imageRatio15') === true ? 1.5 : 1,

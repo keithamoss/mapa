@@ -23,6 +23,13 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	align-items: center;
 }
 
+.ol-attribution {
+	left: 0 !important;
+	right: auto !important;
+	border-radius: 0 4px 0 0 !important;
+	opacity: 0.7;
+}
+
 /* Inspo https://stackoverflow.com/questions/29684069/point-fixed-to-view-eg-cross-of-center-view */
 #geolocation_marker {
 	border-radius: 50%;

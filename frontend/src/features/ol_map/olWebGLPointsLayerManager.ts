@@ -179,6 +179,9 @@ export const createWebGLPointsLayer = (
 		source: new VectorSource({
 			format: geoJSONFormat,
 			features: geoJSONFormat.readFeatures(features),
+			attributions: [
+				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright"> OpenStreetMap contributors</a>',
+			],
 		}) as VectorSource<Point>,
 		style:
 			spriteSheet !== undefined
