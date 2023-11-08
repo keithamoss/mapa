@@ -12,6 +12,7 @@ import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 import DebugView from '../../features/app/debugView';
 import FeatureCreator from '../../features/features/featureCreator';
 import FeatureEditor from '../../features/features/featureEditor';
+import MapHeroIconEditor from '../../features/maps/mapHeroIconEditor';
 import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
@@ -35,6 +36,10 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'MapManager/Create',
 				element: <MapCreator />,
+			},
+			{
+				path: 'MapManager/Edit/:mapId/hero_icon',
+				element: <MapHeroIconEditor />,
 			},
 			{
 				path: 'MapManager/Edit/:mapId',

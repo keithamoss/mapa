@@ -68,6 +68,8 @@ function MapManager() {
 
 	const onClickMap = (mapId: number) => () => navigate(`/MapManager/Edit/${mapId}/`);
 
+	const onClickMapHeroIcon = (mapId: number) => () => navigate(`/MapManager/Edit/${mapId}/hero_icon/`);
+
 	const onClose = () => navigate('/');
 
 	const onCreate = () => navigate('/MapManager/Create');
@@ -102,7 +104,7 @@ function MapManager() {
 								</IconButton>
 							}
 						>
-							<ListItemIcon sx={{ pl: 1 }}>
+							<ListItemIcon sx={{ pl: 1 }} onClick={onClickMapHeroIcon(map.id)}>
 								{map.hero_icon !== null
 									? getFontAwesomeIconForSymbolPreview(map.hero_icon, {
 											size: defaultSymbolSizeForFormFields,
