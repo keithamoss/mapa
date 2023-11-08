@@ -1,4 +1,5 @@
 import { IconName } from '@fortawesome/fontawesome-svg-core';
+
 import categories from './icons-categories-library.json';
 import icons from './icons-library.json';
 

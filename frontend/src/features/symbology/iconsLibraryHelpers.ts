@@ -2,17 +2,14 @@ import { upperFirst } from 'lodash-es';
 import MiniSearch from 'minisearch';
 import { defaultSymbolIconStyle } from './symbologyHelpers';
 
-import categories from './icons-categories-library.json';
-import icons from './icons-library.json';
 import {
 	FontAwesomeCategory,
-	IFontAwesomeCategories,
 	IFontAwesomeIcon,
 	IFontAwesomeIcons,
 	IconStyle,
+	getCategories,
+	getIcons,
 } from './iconsLibrary';
-
-export const getCategories = () => categories as IFontAwesomeCategories;
 
 export const getCategoryByName = (categoryName: string) => {
 	const categories = getCategories();
@@ -32,8 +29,6 @@ export interface IFontAwesomeIconsByCategory {
 		label: string;
 	};
 }
-
-export const getIcons = () => icons as IFontAwesomeIcons;
 
 export const getIconByName = (iconName: string) => {
 	const icons = getIcons();

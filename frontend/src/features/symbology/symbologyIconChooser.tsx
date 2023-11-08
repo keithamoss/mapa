@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 
 import React, { startTransition, useRef, useState } from 'react';
+import { IconStyle, getCategories } from './iconsLibrary';
 import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 
 import { grey } from '@mui/material/colors';
@@ -30,9 +31,7 @@ import parse from 'autosuggest-highlight/parse';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
 import { isSearchingYet } from '../search/searchHelpers';
-import { IconStyle } from './iconsLibrary';
 import {
-	getCategories,
 	getCategoryLabelByName,
 	getDefaultStyleByIconName,
 	getIconsForCategory,
