@@ -30,14 +30,14 @@ import parse from 'autosuggest-highlight/parse';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
 import { isSearchingYet } from '../search/searchHelpers';
+import { IconStyle } from './iconsLibrary';
 import {
-	IconStyle,
 	getCategories,
 	getCategoryLabelByName,
 	getDefaultStyleByIconName,
 	getIconsForCategory,
 	searchIcons,
-} from './iconsLibrary';
+} from './iconsLibraryHelpers';
 import SymbologyIconStyleChooser from './symbologyIconStyleChooser';
 
 interface Props {

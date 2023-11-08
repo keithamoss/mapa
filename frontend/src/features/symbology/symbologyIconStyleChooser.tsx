@@ -7,7 +7,8 @@ import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 import React from 'react';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
-import { IconStyle, getAvailableStylesForIcon, getIconLabelByName, getIconStyleName } from './iconsLibrary';
+import { IconStyle } from './iconsLibrary';
+import { getAvailableStylesForIcon, getIconLabelByName, getIconStyleName } from './iconsLibraryHelpers';
 
 interface Props {
 	selectedIcon: string;

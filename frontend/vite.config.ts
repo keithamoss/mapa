@@ -17,6 +17,9 @@ export default defineConfig(({ command, mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
+						console.log(id);
+
+						// Creating a chunk for third-party packages
 						if (id.includes('/.yarn/')) {
 							return 'vendor';
 						}

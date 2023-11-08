@@ -1,13 +1,8 @@
 import * as Sentry from '@sentry/react';
 import * as yup from 'yup';
 import { ObjectSchema } from 'yup';
-import {
-	IconColourLevels,
-	IconStyle,
-	getIconByName,
-	getIconSVG,
-	isIconStyleColoured,
-} from '../../features/symbology/iconsLibrary';
+import { IconColourLevels, IconStyle } from '../../features/symbology/iconsLibrary';
+import { getIconByName, getIconSVG, isIconStyleColoured } from '../../features/symbology/iconsLibraryHelpers';
 import { defaultSymbolIconSVG } from '../../features/symbology/symbologyHelpers';
 import { SymbologyProps } from '../services/schemas';
 import { colourOptional, positiveFloatOptional, positiveIntegerOptional } from './yupValidation';

@@ -8,7 +8,8 @@ import {
 
 import { hextoRGBACSS } from '../../app/colourUtils';
 import { isDevelopment } from '../../app/utils';
-import { IconStyle, getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibrary';
+import { IconStyle } from './iconsLibrary';
+import { getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibraryHelpers';
 import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';
