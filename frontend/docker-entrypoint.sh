@@ -3,6 +3,9 @@
 command="$1"
 cd /app
 
+echo "yarn version"
+yarn --version
+
 if [ ! -d ".yarn" ]; then
   rm -f .yarn*
   yarn set version 3.x
@@ -11,6 +14,9 @@ else
   yarn set version 3.x
   yarn install
 fi
+
+echo "fin"
+exit
 
 if [ "$VITE_ENVIRONMENT" = "DEVELOPMENT" ]; then
   yarn run start
