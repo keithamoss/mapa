@@ -20,12 +20,14 @@ export default defineConfig(({ command, mode }) => {
 						console.log(id);
 
 						// Creating a chunk for third-party packages
-						if (id.includes('/.yarn/')) {
+						// .yarn for local and node_modules for GitHub Actions
+						if (id.includes('/.yarn/') || id.includes('/node_modules/')) {
 							return 'vendor';
 						}
 
 						// Creating a chunk for the icons library to encourage use of the cache when we push app updates (which rarely changes)
-						if (id.includes('iconsLibrary.ts')) {
+						if (id.includes('/iconsLibrary.ts')) {
+							console.log('>> found icons library');
 							return 'iconsLibrary';
 						}
 					},
