@@ -135,18 +135,18 @@ jobs:
         run: |
           docker push keithmoss/mapa-django --all-tags
 
-  # deploy-app:
-  #   runs-on: ubuntu-latest
-  #   environment: PRODUCTION
-  #   needs: [build-nginx, build-django]
-  #   steps:
-  #     - name: Deploy to Digital Ocean droplet via SSH action
-  #       uses: appleboy/ssh-action@v0.1.10
-  #       with:
-  #         host: ${{ secrets.SSH_PRODUCTION_HOST }}
-  #         username: ${{ secrets.SSH_PRODUCTION_USERNAME }}
-  #         key: ${{ secrets.SSH_PRODUCTION_KEY }}
-  #         passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
-  #         script: |
-  #           cd /apps/mapa/
-  #           ./mapa-production-redeploy.sh
+  deploy-app:
+    runs-on: ubuntu-latest
+    environment: PRODUCTION
+    needs: [build-nginx, build-django]
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_PRODUCTION_HOST }}
+          username: ${{ secrets.SSH_PRODUCTION_USERNAME }}
+          key: ${{ secrets.SSH_PRODUCTION_KEY }}
+          passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
+          script: |
+            cd /apps/mapa/
+            ./mapa-production-redeploy.sh
