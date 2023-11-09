@@ -180,7 +180,7 @@ export const createWebGLPointsLayer = (
 			format: geoJSONFormat,
 			features: geoJSONFormat.readFeatures(features),
 			attributions: [
-				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright"> OpenStreetMap contributors</a>',
+				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 			],
 		}) as VectorSource<Point>,
 		style:

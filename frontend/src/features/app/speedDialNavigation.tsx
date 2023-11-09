@@ -1,6 +1,7 @@
 import { Schema } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import InfoIcon from '@mui/icons-material/Info';
 import MapIcon from '@mui/icons-material/Map';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -61,6 +62,14 @@ const actions = [
 			</Link>
 		),
 		name: 'Settings',
+	},
+	{
+		icon: (
+			<Link to="/About">
+				<InfoIcon color="primary" />
+			</Link>
+		),
+		name: 'About Mapa',
 	},
 ];
 
