@@ -10,7 +10,7 @@
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.16",
     "@mui/system": "^5.14.17",
-    "@mui/x-date-pickers": "^6.18.0",
+    "@mui/x-date-pickers": "^6.18.1",
     "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.6",
     "@sentry/browser": "^7.77.0",
