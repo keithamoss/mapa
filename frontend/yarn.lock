@@ -1666,10 +1666,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/autosuggest-highlight@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@types/autosuggest-highlight@npm:3.2.2"
-  checksum: 68a8b775549415651831fdaf984113ac4784d9fff3f44ab62803782f24a1e92ce9fdfc9c6df8e21d3a01f010fb80edcc7da741b135f076712691c98c65170a51
+"@types/autosuggest-highlight@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "@types/autosuggest-highlight@npm:3.2.3"
+  checksum: de115f7a838482e5af750f2b51249fcbe1f3473d1c31119731d392dc1dfb119d6b7275f97db737cd4d01b626d3c32d88554377ba4aa55fac8bbae73ab7881756
   languageName: node
   linkType: hard
 
@@ -3752,7 +3752,7 @@ __metadata:
     "@testing-library/jest-dom": ^6.1.3
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.5.1
-    "@types/autosuggest-highlight": ^3.2.2
+    "@types/autosuggest-highlight": ^3.2.3
     "@types/jest": ^29.5.8
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.11
