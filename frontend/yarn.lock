@@ -903,9 +903,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.14.16":
-  version: 5.14.16
-  resolution: "@mui/icons-material@npm:5.14.16"
+"@mui/icons-material@npm:^5.14.18":
+  version: 5.14.18
+  resolution: "@mui/icons-material@npm:5.14.18"
   dependencies:
     "@babel/runtime": ^7.23.2
   peerDependencies:
@@ -915,7 +915,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 9ecd90cf83986c69b9ee5c9b49e0e26bb043b8d3f99327a6530a0c862fe2652f1c8e1f84a59a39bf72e848e7e5cfe9e7ea494bc583f061b6a0215e750fcea777
+  checksum: 719cd99f739a34fedf64bd718942611b12fb86a58a0401c58e2a90dad690e90e33f55cd973c3792c070449fcc44390e22f9319a9129712bc8b41fbfe4611dccc
   languageName: node
   linkType: hard
 
@@ -3847,7 +3847,7 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@hookform/resolvers": ^3.3.1
-    "@mui/icons-material": ^5.14.16
+    "@mui/icons-material": ^5.14.18
     "@mui/material": ^5.14.17
     "@mui/system": ^5.14.17
     "@mui/x-date-pickers": ^6.18.1
