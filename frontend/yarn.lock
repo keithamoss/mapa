@@ -1522,17 +1522,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/tracing@npm:7.81.1":
-  version: 7.81.1
-  resolution: "@sentry-internal/tracing@npm:7.81.1"
-  dependencies:
-    "@sentry/core": 7.81.1
-    "@sentry/types": 7.81.1
-    "@sentry/utils": 7.81.1
-  checksum: 7a92250ff6216b9c4ad15f5b2e21f5acc9ced71f704bfabfec76d05e8787ab69fa4ee46805eb7bcbb3ee0288cdb98a0489877f7ab65cc491b47fccbe76248681
-  languageName: node
-  linkType: hard
-
 "@sentry-internal/tracing@npm:7.84.0":
   version: 7.84.0
   resolution: "@sentry-internal/tracing@npm:7.84.0"
@@ -1694,16 +1683,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:7.81.1":
-  version: 7.81.1
-  resolution: "@sentry/core@npm:7.81.1"
-  dependencies:
-    "@sentry/types": 7.81.1
-    "@sentry/utils": 7.81.1
-  checksum: 9f78797fc612b28b438a3fa72a9cd3c34c90094f322d7a3a0dcb6cb6aea0c222bc4a09a3c444dd399f53601e9d22ee695dfb383be196a18b5168b76312960a25
-  languageName: node
-  linkType: hard
-
 "@sentry/core@npm:7.84.0":
   version: 7.84.0
   resolution: "@sentry/core@npm:7.84.0"
@@ -1775,12 +1754,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:^7.81.1":
-  version: 7.81.1
-  resolution: "@sentry/tracing@npm:7.81.1"
+"@sentry/tracing@npm:^7.85.0":
+  version: 7.85.0
+  resolution: "@sentry/tracing@npm:7.85.0"
   dependencies:
-    "@sentry-internal/tracing": 7.81.1
-  checksum: 02e639e8aa5c727a57f678da0b25523a2d23b15091620397b40d5213b9178854f42fce6b587632f0a4799070e6f40816b2343735f09ee1f853e4499b3098abc6
+    "@sentry-internal/tracing": 7.85.0
+  checksum: b00d993883d2f2763d85f1bf3863337b16e5f82956783fcefc3ba50cd4153c55a8e05ed3c2604c661b90634342d2c90ae2ea009ced7996eb424dc8699142b634
   languageName: node
   linkType: hard
 
@@ -1788,13 +1767,6 @@ __metadata:
   version: 7.75.1
   resolution: "@sentry/types@npm:7.75.1"
   checksum: e0ca511f3e9a4ffda4308ab1ca6a8f31cefcd1b860ccde4338efba384cdf4180d9afc8731595de1eef16692949304c07b5a1f44306162620cf74f7273c96162a
-  languageName: node
-  linkType: hard
-
-"@sentry/types@npm:7.81.1":
-  version: 7.81.1
-  resolution: "@sentry/types@npm:7.81.1"
-  checksum: a3e07ee66a6e75b24837d540a7ec46ac0207f0b948f008d950d5f2619821623ddf1a904d2c2bc59a458b117183ab82e51702fab2ae79f7edb96b6c490f89a731
   languageName: node
   linkType: hard
 
@@ -1818,15 +1790,6 @@ __metadata:
   dependencies:
     "@sentry/types": 7.75.1
   checksum: 83077d597360996b7098894ba083cfb8f6565b0e4bdc4fbc8b805b7041aaa5a1cc5e671c2291c45a27bfb95295b2722923a678875cb11011259a2811c9492a36
-  languageName: node
-  linkType: hard
-
-"@sentry/utils@npm:7.81.1":
-  version: 7.81.1
-  resolution: "@sentry/utils@npm:7.81.1"
-  dependencies:
-    "@sentry/types": 7.81.1
-  checksum: c22256122f01147facd7b7728e5ab969f1ec24e207ba59fd9a59cf98fc12b6ffea90a70071b20b54858473cb4f66c9aa5eafa2a6fbfcb82a0f0a0e653a2b3548
   languageName: node
   linkType: hard
 
@@ -4246,7 +4209,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.9.6
     "@sentry/browser": ^7.85.0
     "@sentry/react": ^7.84.0
-    "@sentry/tracing": ^7.81.1
+    "@sentry/tracing": ^7.85.0
     "@sentry/vite-plugin": ^2.10.2
     "@testing-library/jest-dom": ^6.1.5
     "@testing-library/react": ^14.1.2
