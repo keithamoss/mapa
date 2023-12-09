@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "@sentry/browser": "^7.85.0",
     "@sentry/react": "^7.86.0",
-    "@sentry/tracing": "^7.85.0",
+    "@sentry/tracing": "^7.86.0",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.1",
