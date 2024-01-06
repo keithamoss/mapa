@@ -289,15 +289,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.5":
-  version: 7.23.6
-  resolution: "@babel/runtime@npm:7.23.6"
-  dependencies:
-    regenerator-runtime: ^0.14.0
-  checksum: 1a8eaf3d3a103ef5227b60ca7ab5c589118c36ca65ef2d64e65380b32a98a3f3b5b3ef96660fa0471b079a18b619a8317f3e7f03ab2b930c45282a8b69ed9a16
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.23.6":
   version: 7.23.7
   resolution: "@babel/runtime@npm:7.23.7"
@@ -3998,7 +3989,7 @@ __metadata:
     react-router-dom: ^6.21.1
     typescript: 5.3.3
     usehooks-ts: ^2.9.1
-    vite: ^5.0.10
+    vite: ^5.0.11
     vite-plugin-checker: ^0.6.2
     vite-tsconfig-paths: ^4.2.3
     web-vitals: ^3.5.1
@@ -7011,9 +7002,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.0.10":
-  version: 5.0.10
-  resolution: "vite@npm:5.0.10"
+"vite@npm:^5.0.11":
+  version: 5.0.11
+  resolution: "vite@npm:5.0.11"
   dependencies:
     esbuild: ^0.19.3
     fsevents: ~2.3.3
@@ -7047,7 +7038,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: a1c96be1dc8bafb981c0874813a6b783ee9c4cd235188d7dc746133972d8992fe85111b7402365fee698ffcb626cd31b39bf2f2523140e50b07b81ce3c0139d1
+  checksum: 262e41f25ce0cc5fc3c2065b1796f64ec115d3ac2d9625dbfb36d6628ba10e63684ef5515bb2ff1aa8e34c6f89e9c10e8211cb88f6c7f0da6869362851345437
   languageName: node
   linkType: hard
 
