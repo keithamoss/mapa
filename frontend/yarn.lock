@@ -289,15 +289,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.5":
-  version: 7.23.6
-  resolution: "@babel/runtime@npm:7.23.6"
-  dependencies:
-    regenerator-runtime: ^0.14.0
-  checksum: 1a8eaf3d3a103ef5227b60ca7ab5c589118c36ca65ef2d64e65380b32a98a3f3b5b3ef96660fa0471b079a18b619a8317f3e7f03ab2b930c45282a8b69ed9a16
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.23.6":
   version: 7.23.7
   resolution: "@babel/runtime@npm:7.23.7"
@@ -779,12 +770,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "@hookform/resolvers@npm:3.3.3"
+"@hookform/resolvers@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "@hookform/resolvers@npm:3.3.4"
   peerDependencies:
     react-hook-form: ^7.0.0
-  checksum: bff681b15eaaea5d29da86e0dde81e4c3e46d50716ba10c702fbcb720c9b7685471258c83860aeb91517cf184e9a0578c8b3f0356352a287725c7bb20f58ac90
+  checksum: 7761e3340d23acd092dec4023344678e62b0c0ea0ed5aa3687cd315fc339b3b965e11124d643811292e6962683357423e6fe646fffabf9b96f8322f41903924d
   languageName: node
   linkType: hard
 
@@ -3947,7 +3938,7 @@ __metadata:
     "@emotion/react": ^11.11.3
     "@emotion/styled": ^11.10.6
     "@fortawesome/fontawesome-svg-core": ^6.5.1
-    "@hookform/resolvers": ^3.3.3
+    "@hookform/resolvers": ^3.3.4
     "@mui/icons-material": ^5.15.2
     "@mui/material": ^5.15.2
     "@mui/system": ^5.15.2
