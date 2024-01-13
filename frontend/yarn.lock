@@ -289,15 +289,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.6":
-  version: 7.23.7
-  resolution: "@babel/runtime@npm:7.23.7"
-  dependencies:
-    regenerator-runtime: ^0.14.0
-  checksum: eba85bd24d250abb5ae19b16cffc15a54d3894d8228ace40fa4c0e2f1938f28b38ad3e3430ebff9a1ef511eeb8c527e36044ac19076d6deafa52cef35d8624b9
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.23.7":
   version: 7.23.8
   resolution: "@babel/runtime@npm:7.23.8"
@@ -1020,11 +1011,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/icons-material@npm:^5.15.2":
-  version: 5.15.2
-  resolution: "@mui/icons-material@npm:5.15.2"
+"@mui/icons-material@npm:^5.15.4":
+  version: 5.15.4
+  resolution: "@mui/icons-material@npm:5.15.4"
   dependencies:
-    "@babel/runtime": ^7.23.6
+    "@babel/runtime": ^7.23.7
   peerDependencies:
     "@mui/material": ^5.0.0
     "@types/react": ^17.0.0 || ^18.0.0
@@ -1032,7 +1023,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: f1ff774daaa12b7a2ab7d007bff740a1b936d00cc549fe6ee66e3ff8678ea982d57863a44509446c76b2f1eddb7a5041e27a38ae332045b4fd98f2b39887815c
+  checksum: b83be073866f610c5a005cb5bcb92ad7b29a4b5c7b4888e594b7f3cc8f322b2384dfe5b9a9761c11b63d3c2c4cfe16f58c1aa37dbb8e307ebd483e9e4fb4bc11
   languageName: node
   linkType: hard
 
@@ -4146,7 +4137,7 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@fortawesome/fontawesome-svg-core": ^6.5.1
     "@hookform/resolvers": ^3.3.4
-    "@mui/icons-material": ^5.15.2
+    "@mui/icons-material": ^5.15.4
     "@mui/material": ^5.15.4
     "@mui/system": ^5.15.4
     "@mui/x-date-pickers": ^6.19.0
