@@ -4192,7 +4192,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-hook-form: ^7.49.3
-    react-redux: ^9.0.4
+    react-redux: ^9.1.0
     react-router-dom: ^6.21.2
     typescript: 5.3.3
     usehooks-ts: ^2.9.2
@@ -6089,9 +6089,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^9.0.4":
-  version: 9.0.4
-  resolution: "react-redux@npm:9.0.4"
+"react-redux@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "react-redux@npm:9.1.0"
   dependencies:
     "@types/use-sync-external-store": ^0.0.3
     use-sync-external-store: ^1.0.0
@@ -6107,7 +6107,7 @@ __metadata:
       optional: true
     redux:
       optional: true
-  checksum: acc69b85e003f4367e0fa9716ca441a2536aa513fcb1b9404e33188fa68938acf455806eba2ff639553fbba24c06b6e96982998178bb9a2669227e7e4bcd441e
+  checksum: 1b07714379ff0087b4fb43ffd138cc84efb7608c874d632a4e2162e1874f3e0f6b69a0a9b0f24f93cbf122c694ac9cfd315770676d4cabb167d159f1ef419560
   languageName: node
   linkType: hard
 
