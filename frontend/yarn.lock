@@ -1551,17 +1551,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/feedback@npm:7.93.0":
-  version: 7.93.0
-  resolution: "@sentry-internal/feedback@npm:7.93.0"
-  dependencies:
-    "@sentry/core": 7.93.0
-    "@sentry/types": 7.93.0
-    "@sentry/utils": 7.93.0
-  checksum: 6a6aff87ce41c2882951e2ba70127dbc38b5c5c451736f4ef45edebf68c798b1b901c0ea412d2b4e2234fa39e4feeee5700fe3c46131ba0c01380fdb476396d1
-  languageName: node
-  linkType: hard
-
 "@sentry-internal/feedback@npm:7.94.1":
   version: 7.94.1
   resolution: "@sentry-internal/feedback@npm:7.94.1"
@@ -1617,7 +1606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.94.1":
+"@sentry/browser@npm:7.94.1, @sentry/browser@npm:^7.94.1":
   version: 7.94.1
   resolution: "@sentry/browser@npm:7.94.1"
   dependencies:
@@ -1629,20 +1618,6 @@ __metadata:
     "@sentry/types": 7.94.1
     "@sentry/utils": 7.94.1
   checksum: 52f14319a4fca9706add2dc28bf366d0a69d84453bbf1e466700f7ab954947a90e8a4175fcffdde4f045b9632707aa73d9dc6b11c798ed9238668798973ff551
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:^7.93.0":
-  version: 7.93.0
-  resolution: "@sentry/browser@npm:7.93.0"
-  dependencies:
-    "@sentry-internal/feedback": 7.93.0
-    "@sentry-internal/tracing": 7.93.0
-    "@sentry/core": 7.93.0
-    "@sentry/replay": 7.93.0
-    "@sentry/types": 7.93.0
-    "@sentry/utils": 7.93.0
-  checksum: 420c9a76c55d72654b6afa767f72f25b50234b9e14724a6162c780b12e1eb14a1a52bba182bd73c17346a1bb5debac73cbfac497fc64d86e1fd1ec9c03b4fb44
   languageName: node
   linkType: hard
 
@@ -1803,18 +1778,6 @@ __metadata:
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
   checksum: 844288ab9ee4a2dc8526a022a04a9ba9675fecafaf6317615cba885f9310251a44f2966b6a993459bf23035747a2ec0691f00b4f3c37aea595693363707100e2
-  languageName: node
-  linkType: hard
-
-"@sentry/replay@npm:7.93.0":
-  version: 7.93.0
-  resolution: "@sentry/replay@npm:7.93.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.93.0
-    "@sentry/core": 7.93.0
-    "@sentry/types": 7.93.0
-    "@sentry/utils": 7.93.0
-  checksum: 683d946da88ff530d4f964e63e58cf07e4d662710595bf903ac8ac742ffd7105efe38f612ff411248250095901ea47c24301c774f05e68e6f54433a6383fb35d
   languageName: node
   linkType: hard
 
@@ -4156,7 +4119,7 @@ __metadata:
     "@mui/x-date-pickers": ^6.19.0
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^2.0.1
-    "@sentry/browser": ^7.93.0
+    "@sentry/browser": ^7.94.1
     "@sentry/react": ^7.94.1
     "@sentry/tracing": ^7.94.1
     "@sentry/vite-plugin": ^2.10.2
