@@ -4029,7 +4029,7 @@ __metadata:
     react-redux: ^9.1.0
     react-router-dom: ^6.21.2
     typescript: 5.3.3
-    usehooks-ts: ^2.9.2
+    usehooks-ts: ^2.9.5
     vite: ^5.0.12
     vite-plugin-checker: ^0.6.2
     vite-tsconfig-paths: ^4.2.3
@@ -6958,13 +6958,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.9.2":
-  version: 2.9.2
-  resolution: "usehooks-ts@npm:2.9.2"
+"usehooks-ts@npm:^2.9.5":
+  version: 2.9.5
+  resolution: "usehooks-ts@npm:2.9.5"
   peerDependencies:
     react: ^16.8.0  || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: 454bdefee51ac6be4cd03015ad4781856f8ce5b2558657a36c4ae0d7ce9dfc6d0229b5c8551eea0c4919ffe877454702b4e3b58ff1e82296e20ce33e65459115
+  checksum: fb78e5bdf076fca0f76e61d39ddbc34e45f00a417057a0622eb8e67cc26d516c33006ce81b4640f204a6191d5e816b461fd7aaf790ccaa97b7c279db17200b45
   languageName: node
   linkType: hard
 
