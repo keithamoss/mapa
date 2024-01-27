@@ -57,7 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@sentry/vite-plugin": "^2.10.2",
+    "@sentry/vite-plugin": "^2.10.3",
     "@types/autosuggest-highlight": "^3.2.3",
     "@types/jest": "^29.5.11",
     "@types/js-cookie": "^3.0.6",
