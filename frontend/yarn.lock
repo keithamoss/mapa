@@ -4178,7 +4178,7 @@ __metadata:
     react-redux: ^9.1.0
     react-router-dom: ^6.21.3
     typescript: 5.3.3
-    usehooks-ts: ^2.10.0
+    usehooks-ts: ^2.12.1
     vite: ^5.0.12
     vite-plugin-checker: ^0.6.2
     vite-tsconfig-paths: ^4.3.1
@@ -7107,13 +7107,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"usehooks-ts@npm:^2.10.0":
-  version: 2.10.0
-  resolution: "usehooks-ts@npm:2.10.0"
+"usehooks-ts@npm:^2.12.1":
+  version: 2.12.1
+  resolution: "usehooks-ts@npm:2.12.1"
+  dependencies:
+    lodash.debounce: ^4.0.8
   peerDependencies:
-    react: ^16.8.0  || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0  || ^17.0.0 || ^18.0.0
-  checksum: cf1315769a5e81c4f43e001079731d1e4f012d9982a92981e32a23c92441177e3aa1fd9bd42b4b91900aa6aa1b89e92998e968556946a84beb3a327cff576e24
+    react: ^16.8.0  || ^17 || ^18
+  checksum: 1e251c9a23521105bd1261541829bdf2aa21cc38ee38822164a5206a0d3a0e4c1b29231a9c3fd4f72b1bdddeb6c3125c8a4f70eab1c61ba5984202a46dbac553
   languageName: node
   linkType: hard
 
