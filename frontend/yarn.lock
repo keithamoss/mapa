@@ -1186,9 +1186,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^6.19.2":
-  version: 6.19.2
-  resolution: "@mui/x-date-pickers@npm:6.19.2"
+"@mui/x-date-pickers@npm:^6.19.3":
+  version: 6.19.3
+  resolution: "@mui/x-date-pickers@npm:6.19.3"
   dependencies:
     "@babel/runtime": ^7.23.2
     "@mui/base": ^5.0.0-beta.22
@@ -1230,7 +1230,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 0f3a6b569144f854e92a58e90d8674295f6aeecc7f662d09f1a4f6dbb917fc3b33be99eb13dc550e4d0cb4cde91bb292b86f2c4aa07e005abf94684da4328a1f
+  checksum: fd779b508e062eeebfc384f19655194fee46e07517e5d9751ecedf9a5a68534b74f030a5599b7cbdaec28f986ffd81bcc63dbffa7dd157af96fc0f76544f36b5
   languageName: node
   linkType: hard
 
@@ -4086,7 +4086,7 @@ __metadata:
     "@mui/icons-material": ^5.15.7
     "@mui/material": ^5.15.7
     "@mui/system": ^5.15.7
-    "@mui/x-date-pickers": ^6.19.2
+    "@mui/x-date-pickers": ^6.19.3
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^2.1.0
     "@sentry/browser": ^7.99.0
