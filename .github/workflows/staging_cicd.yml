@@ -28,7 +28,9 @@ jobs:
       - name: Test 2
         run: |
           aws --version
+          npm --version
 
       - name: Test 3
         run: |
+          npm install -g aws-cdk 
           cdk --version
