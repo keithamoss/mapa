@@ -34,3 +34,8 @@ jobs:
         run: |
           npm install -g aws-cdk 
           cdk --version
+          cd django/mapa-cdk-test
+
+      # - name: Test 4
+      #   run: |
+      #     cdk list --context env=staging
