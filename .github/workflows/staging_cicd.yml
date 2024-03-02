@@ -53,4 +53,5 @@ jobs:
 
       - name: Test 5
         run: |
+          pwd
           cdk list --context env=staging
