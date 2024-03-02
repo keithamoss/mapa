@@ -131,22 +131,29 @@ jobs:
       - name: Download artifacts for deployment
         uses: actions/download-artifact@v4
         with:
-          path: ./lib/s3-bucket-test-files-stating/
-          # path: ./
+          path: ./build/
+
+      - name: Move artifacts
+        run: |
+          mv ./build/build-frontend/frontend.tgz ./lib/s3-bucket-test-files-stating/frontend.tgz
+          mv ./build/build-django/django.tgz ./lib/s3-bucket-test-files-stating/django.tgz
+
+          cd ./lib/s3-bucket-test-files-stating/
+
+          mkdir frontend
+          tar -xvf frontend.tgz -directory ./frontend/
+
+          mkdir django
+          tar -xvf django.tgz --directory ./django/
 
       - name: Setup Debug Session
         uses: csexton/debugger-action@master
 
-      - name: Move artifacts
-        run: |
-          ls -l ./lib/s3-bucket-test-files-stating/
-          # mv ./build/build-frontend/frontend.tgz ./nginx-prod/build/frontend.tgz
-          # mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
-
       - name: Test 2
         run: |
+          cd ../../
           cdk list --context env=staging
+          # cdk deploy MapaInfraStack --context env=staging --require-approval never
           # cdk deploy MapaAppStack --context env=staging --require-approval never
           # cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
-          pwd
-          # aws lambda update-function-code --function-name mapa-prod-PollsApp-7hZSYRztxQZW --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/mapa-django:latest-production --region ap-southeast-2
+          # aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri arn:aws:lambda:ap-southeast-2:429260965153:function:Mapa-Staging-Django-Lambda:latest --region ap-southeast-2
