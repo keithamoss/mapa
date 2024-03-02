@@ -49,10 +49,6 @@ jobs:
       - name: Test 4
         run: |
           cd django/mapa-cdk-test
-          npm install typescript -g
-
-      - name: Test 5
-        run: |
-          cd django/mapa-cdk-test
           pwd
+          npm install typescript -g
           cdk list --context env=staging
