@@ -117,14 +117,14 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install CDK and deps
-        run: |
-          npm install -g aws-cdk
-          npm --version
-          aws --version
-          cdk --version
-          cd django/mapa-cdk-test
-          npm install .
+      # - name: Install CDK and deps
+      #   run: |
+      #     npm install -g aws-cdk
+      #     npm --version
+      #     aws --version
+      #     cdk --version
+      #     cd django/mapa-cdk-test
+      #     npm install .
 
       - name: Download artifacts for deployment
         uses: actions/download-artifact@v4
