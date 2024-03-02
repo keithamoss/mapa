@@ -72,7 +72,7 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION" or os.environ.get("ENVIRONMENT"
     DEBUG = os.environ.get("DJANGO_DEBUG") == "TRUE"
 
     # @TODO Point the static files at the GHPages-hosted static assets
-    # STATIC_ROOT = "/app/static"
+    STATIC_ROOT = "/app/static"
 
     # Only needed in the old-school "Run it on a Droplet/EC2" deployment scenario
     # LOGGING = {

@@ -99,7 +99,7 @@ jobs:
       - name: Containers - Push to AWS
         run: |
           aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com
-          docker push 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/staging/mapa-django-lambdas:latest --all-tags
+          docker push 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/staging/mapa-django-lambdas --all-tags
 
   deploy-app:
     runs-on: ubuntu-latest
@@ -146,3 +146,4 @@ jobs:
           # cdk deploy MapaAppStack --context env=staging --require-approval never
           # cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
           pwd
+          # aws lambda update-function-code --function-name mapa-prod-PollsApp-7hZSYRztxQZW --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/mapa-django:latest-production --region ap-southeast-2
