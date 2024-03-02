@@ -53,5 +53,6 @@ jobs:
 
       - name: Test 5
         run: |
+          cd django/mapa-cdk-test
           pwd
           cdk list --context env=staging
