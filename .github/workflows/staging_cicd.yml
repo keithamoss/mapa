@@ -127,31 +127,34 @@ jobs:
           cdk --version
           cd django/mapa-cdk-test
           npm install .
+          mkdir build
 
       - name: Download artifacts for deployment
         uses: actions/download-artifact@v4
         with:
-          path: ./build/
+          path: ./django/mapa-cdk-test/build/
 
       - name: Setup Debug Session
         uses: csexton/debugger-action@master
 
       - name: Move artifacts
         run: |
-          mv ./build/build-frontend/frontend.tgz ./lib/s3-bucket-test-files-stating/frontend.tgz
-          mv ./build/build-django/django.tgz ./lib/s3-bucket-test-files-stating/django.tgz
+          # mv ./build/build-frontend/frontend.tgz ./django/mapa-cdk-test/build/frontend.tgz
+          # mv ./build/build-django/django.tgz ./django/mapa-cdk-test/build/django.tgz
 
-          cd ./lib/s3-bucket-test-files-stating/
+          cd ./build
 
-          mkdir frontend
-          tar -xvf frontend.tgz -directory ./frontend/
+          # mkdir frontend
+          tar -xvf frontend.tgz
+          rm frontend.tgz
 
           mkdir django
           tar -xvf django.tgz --directory ./django/
+          rm django.tgz
 
       - name: Test 2
         run: |
-          cd ../../
+          cd ~/work/mapa/mapa/django/mapa-cdk-test
           cdk list --context env=staging
           # cdk deploy MapaInfraStack --context env=staging --require-approval never
           # cdk deploy MapaAppStack --context env=staging --require-approval never
