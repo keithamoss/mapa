@@ -149,7 +149,7 @@ jobs:
           # cdk deploy MapaInfraStack --context env=staging --require-approval never
           # cdk deploy MapaAppStack --context env=staging --require-approval never
           cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
-          # aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri arn:aws:lambda:ap-southeast-2:429260965153:function:Mapa-Staging-Django-Lambda:latest --region ap-southeast-2
+          # aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/staging/mapa-django-lambdas:latest --region ap-southeast-2
 
       - name: Setup Debug Session
         uses: csexton/debugger-action@master
