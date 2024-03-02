@@ -10,6 +10,7 @@ services:
       - ./logs/django:/app/logs:delegated
     environment:
       - BUILD=YES
+      - PYTHONPATH=/app
     env_file:
       - ./secrets/staging/web.staging.env
       - ./secrets/staging/web-db.staging.env
