@@ -37,19 +37,15 @@ jobs:
 
       - name: Test 1
         run: |
-          ls -l
-
-      - name: Test 2
-        run: |
           aws --version
           npm --version
 
-      - name: Test 3
+      - name: Test 2
         run: |
           npm install -g aws-cdk 
           cdk --version
 
-      - name: Test 4
+      - name: Test 3
         run: |
           cd django/mapa-cdk-test
           pwd
