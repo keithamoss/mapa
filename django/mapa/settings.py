@@ -74,6 +74,11 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION" or os.environ.get("ENVIRONMENT"
     # @TODO Point the static files at the GHPages-hosted static assets
     STATIC_ROOT = "/app/static"
 
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.10/howto/static-files/
+
+    STATIC_URL = 'https://mapa.keithmoss.me/api/' if os.environ.get("ENVIRONMENT") == "PRODUCTION" else 'https://mapa.staging.keithmoss.me/api/'
+
     # Only needed in the old-school "Run it on a Droplet/EC2" deployment scenario
     # LOGGING = {
     #     "version": 1,
@@ -107,6 +112,11 @@ else:
     ]
     for static_dir in STATICFILES_DIRS:
         pathlib.Path(static_dir).mkdir(exist_ok=True)
+    
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.10/howto/static-files/
+
+    STATIC_URL = '/api/static/'
 
 
 # Application definition
@@ -263,11 +273,6 @@ USE_TZ = True
 # Model defaults
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-
-STATIC_URL = '/api/static/'
 
 # Sentry SDK
 

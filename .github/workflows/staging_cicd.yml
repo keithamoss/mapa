@@ -140,26 +140,22 @@ jobs:
       - name: Move artifacts
         run: |
           cd ./django/mapa-cdk-test/build/
-          # mv ./build/build-frontend/frontend.tgz ./django/mapa-cdk-test/build/frontend.tgz
-          # mv ./build/build-django/django.tgz ./django/mapa-cdk-test/build/django.tgz
-
-          # cd ./build
 
           tar -xvf build-frontend/frontend.tgz
-          # rm frontend.tgz
           rm -rf ./build-frontend/
 
           mkdir api
           tar -xvf ./build-django/django.tgz --directory ./api/
-          # rm django.tgz
           rm -rf ./build-django/
 
       - name: Test 2
         run: |
           cd ./django/mapa-cdk-test
-          pwd
           cdk list --context env=staging
           # cdk deploy MapaInfraStack --context env=staging --require-approval never
           # cdk deploy MapaAppStack --context env=staging --require-approval never
           cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
-          # aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri arn:aws:lambda:ap-southeast-2:429260965153:function:Mapa-Staging-Django-Lambda:latest --region ap-southeast-2
+          aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri arn:aws:lambda:ap-southeast-2:429260965153:function:Mapa-Staging-Django-Lambda:latest --region ap-southeast-2
+
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
