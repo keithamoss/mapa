@@ -1,4 +1,4 @@
-from mapa.util import get_env
+from os import environ
 
 from django.contrib import admin
 from django.contrib.auth.models import User
@@ -26,12 +26,12 @@ def is_admin(user):
 
 
 def is_development():
-    return get_env("ENVIRONMENT") == "DEVELOPMENT"
+    return environ.get("ENVIRONMENT") == "DEVELOPMENT"
 
 
 def is_staging():
-    return get_env("ENVIRONMENT") == "STAGING"
+    return environ.get("ENVIRONMENT") == "STAGING"
 
 
 def is_production():
-    return get_env("ENVIRONMENT") == "PRODUCTION"
+    return environ.get("ENVIRONMENT") == "PRODUCTION"

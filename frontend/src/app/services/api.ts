@@ -7,12 +7,15 @@ import { getAPIBaseURL, isDevelopment } from '../utils';
 export const api = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: `${getAPIBaseURL()}/0.1/`,
+		credentials: 'include',
 		prepareHeaders: (headers) => {
 			const token = Cookies.get('csrftoken');
 			if (token) {
-				// file deepcode ignore WrongCsrfTokenHeader: <please specify a reason of ignoring this>
+				// https://docs.djangoproject.com/en/4.2/howto/csrf/
+				// deepcode ignore WrongCsrfTokenHeader: <please specify a reason of ignoring this>
 				headers.set('X-CSRFToken', token);
 			}
+
 			return headers;
 		},
 	}),

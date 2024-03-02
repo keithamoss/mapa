@@ -8,7 +8,6 @@ from mapa.app.models import Features, FeatureSchemas, Maps
 from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
                                   MapSerializer, UserSerializer)
-from mapa.util import make_logger
 from rest_framework import generics, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
@@ -19,8 +18,6 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponseNotFound
-
-logger = make_logger(__name__)
 
 
 def api_not_found(request):

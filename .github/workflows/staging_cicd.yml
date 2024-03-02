@@ -11,16 +11,91 @@ permissions:
   id-token: write
   contents: read
 
-env:
-  LATEST_IMAGE_TAG: latest-staging
-
 jobs:
-  test:
+  build-frontend:
     runs-on: ubuntu-latest
     environment: STAGING
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          mkdir secrets/staging
+          echo "${{secrets.WEB_STAGING_ENV }}" > secrets/staging/web.staging.env
+          echo "${{secrets.WEB_DB_STAGING_ENV }}" > secrets/staging/web-db.staging.env
+          echo "${{secrets.FRONTEND_STAGING_ENV }}" > secrets/staging/frontend.staging.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Frontend - Build
+        run: docker compose --file build_staging.yml run frontend
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-frontend
+          path: ./nginx-prod/build/frontend.tgz
+
+  build-django-static:
+    runs-on: ubuntu-latest
+    environment: STAGING
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Setup Env Vars
+        run: |
+          mkdir secrets
+          mkdir secrets/staging
+          echo "${{secrets.WEB_STAGING_ENV }}" > secrets/staging/web.staging.env
+          echo "${{secrets.WEB_DB_STAGING_ENV }}" > secrets/staging/web-db.staging.env
+          echo "${{secrets.FRONTEND_STAGING_ENV }}" > secrets/staging/frontend.staging.env
+
+      - name: Build - Prep
+        run: |
+          mkdir ./build
+          mkdir ./nginx-prod/build
+
+      - name: Django - Build
+        run: docker compose --file build_staging.yml run django
+
+      - name: Upload artifact for container build jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-django
+          path: ./nginx-prod/build/django.tgz
+
+  build-django:
+    runs-on: ubuntu-latest
+    environment: STAGING
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Containers - Build Django
+        run: docker build -t aws-keithmoss/staging/mapa-django-lambdas:$GITHUB_SHA -t aws-keithmoss/staging/mapa-django-lambdas:latest .
+        working-directory: django
+
+      - name: Containers - Push to AWS
+        run: |
+          aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com
+          docker push 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/staging/mapa-django-lambdas:latest --all-tags
+
+  deploy-app:
+    runs-on: ubuntu-latest
+    environment: STAGING
+    needs: [build-frontend, build-django-static, build-django]
+    steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -32,22 +107,32 @@ jobs:
         with:
           node-version: '20.x'
 
+      - name: Install CDK and deps
+        run: |
+          npm install -g aws-cdk
+          npm --version
+          aws --version
+          cdk --version
+          cd django/mapa-cdk-test
+          npm install .
+
+      - name: Download artifacts for deployment
+        uses: actions/download-artifact@v4
+        with:
+          path: ./lib/s3-bucket-test-files-stating/
+
       - name: Setup Debug Session
         uses: csexton/debugger-action@master
 
-      - name: Test 1
+      - name: Move artifacts
         run: |
-          aws --version
-          npm --version
+          ls -l ./lib/s3-bucket-test-files-stating/
+          # mv ./build/build-frontend/frontend.tgz ./nginx-prod/build/frontend.tgz
+          # mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
 
       - name: Test 2
         run: |
-          npm install -g aws-cdk 
-          cdk --version
-
-      - name: Test 3
-        run: |
-          cd django/mapa-cdk-test
-          pwd
-          npm install typescript -g
           cdk list --context env=staging
+          # cdk deploy MapaAppStack --context env=staging --require-approval never
+          # cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
+          pwd

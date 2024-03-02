@@ -1,14 +1,11 @@
 
 from mapa.app.enums import GeomType, ProfileSettings
-from mapa.util import make_logger
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.db.models import JSONField
-
-logger = make_logger(__name__)
 
 # Create your models here.
 

@@ -10,7 +10,7 @@ import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
-import { isInStandaloneMode } from './app/utils';
+import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
 import { selectActiveMapId } from './features/app/appSlice';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
@@ -49,7 +49,7 @@ function App() {
 					variant="contained"
 					size="large"
 					startIcon={<GoogleIcon />}
-					onClick={() => (window.location.href = '/api/login/google-oauth2/')}
+					onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
 				>
 					Login
 				</Button>

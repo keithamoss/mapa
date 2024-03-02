@@ -47,7 +47,8 @@ export class TrustStack extends cdk.Stack {
 						// branch of your repository. You can use wildcards here, but
 						// you should be careful about what you allow.
 						'token.actions.githubusercontent.com:sub': [
-							`repo:${githubOrg.valueAsString}/${githubRepo.valueAsString}:ref:refs/heads/main`,
+							// `repo:${githubOrg.valueAsString}/${githubRepo.valueAsString}:ref:refs/heads/main`,
+							`repo:${githubOrg.valueAsString}/${githubRepo.valueAsString}:ref:refs/*/*`,
 						],
 					},
 					// This specifies that the audience (aud) claim must be sts.amazonaws.com

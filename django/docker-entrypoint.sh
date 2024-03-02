@@ -27,6 +27,14 @@ waitfordb()
 
 CMD="$1"
 
+# AWS Lambda entrypoint (production)
+if [ "$CMD" = "lambda_gunicorn" ]; then
+  >&2 echo "Serving Lambda request via gunicorn"
+
+  gunicorn mapa.wsgi:application -c=gunicorn.conf.py
+  exit
+fi
+
 # Cron entrypoint (development and production)
 if [ "$CMD" != "build" ]; then
   waitfordb

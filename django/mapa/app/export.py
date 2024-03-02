@@ -2,6 +2,7 @@ import csv
 import datetime
 import os
 from datetime import datetime
+from os import environ
 from tempfile import NamedTemporaryFile
 
 import pytz
@@ -10,7 +11,6 @@ from googleapiclient import discovery
 from googleapiclient.http import MediaFileUpload
 from mapa.app.admin import is_production
 from mapa.app.models import Features, FeatureSchemas, Maps
-from mapa.util import get_env
 
 from django.conf import settings
 from django.utils.timezone import localtime, now
@@ -92,7 +92,7 @@ def export_to_google_drive(user, access_token, refresh_token):
       
       # Next, create a new data_* folder to hold this backup
       file = drive.files().create(body={
-          "name": f"data_{current_datetime}" if is_production() is True else f"data_{get_env('ENVIRONMENT')}_{current_datetime}",
+          "name": f"data_{current_datetime}" if is_production() is True else f"data_{environ.get('ENVIRONMENT')}_{current_datetime}",
           "mimeType": "application/vnd.google-apps.folder",
           "parents": [mapaFolderId],
           "appProperties": {

@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  django:
+    build: django/
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./django/:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+      - ./logs/django:/app/logs:delegated
+    environment:
+      - BUILD=YES
+    env_file:
+      - ./secrets/staging/web.staging.env
+      - ./secrets/staging/web-db.staging.env
+  frontend:
+    image: node:20-alpine3.16
+    entrypoint: /app/docker-entrypoint.sh
+    command: build
+    volumes:
+      - ./frontend:/app:delegated
+      - ./nginx-prod/build/:/build:delegated
+    env_file:
+      - secrets/staging/frontend.staging.env
