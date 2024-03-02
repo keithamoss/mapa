@@ -129,7 +129,8 @@ jobs:
       - name: Download artifacts for deployment
         uses: actions/download-artifact@v4
         with:
-          path: ./lib/s3-bucket-test-files-stating/
+          # path: ./lib/s3-bucket-test-files-stating/
+          path: ./
 
       - name: Setup Debug Session
         uses: csexton/debugger-action@master
