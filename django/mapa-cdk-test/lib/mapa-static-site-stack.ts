@@ -95,7 +95,7 @@ export class MapaStaticSiteStack extends cdk.Stack {
 		const deployment = new BucketDeployment(this, 'Website Deployment', {
 			// Here goes the path to your website files.
 			// The path is relative to the root folder of your CDK app.
-			sources: [Source.asset('./lib/s3-bucket-test-files-stating')],
+			sources: [Source.asset('./build/')],
 			destinationBucket: cloudFrontToS3.s3BucketInterface,
 			distribution: cloudFrontToS3.cloudFrontWebDistribution,
 			distributionPaths: ['/*'],
