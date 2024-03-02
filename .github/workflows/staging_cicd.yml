@@ -67,6 +67,9 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
+
       - name: Django - Build
         run: docker compose --file build_staging.yml run django
 
@@ -81,6 +84,13 @@ jobs:
     environment: STAGING
     steps:
       - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_TARGET_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Containers - Build Django
         run: docker build -t aws-keithmoss/staging/mapa-django-lambdas:$GITHUB_SHA -t aws-keithmoss/staging/mapa-django-lambdas:latest .
