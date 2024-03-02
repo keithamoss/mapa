@@ -19,6 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: STAGING
     steps:
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
+
       - uses: actions/checkout@v4
 
       - name: Configure AWS credentials
@@ -51,4 +54,3 @@ jobs:
           cd django/mapa-cdk-test
           pwd
           npm install typescript -g
-          cdk list --context env=staging
