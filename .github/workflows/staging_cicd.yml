@@ -133,6 +133,9 @@ jobs:
         with:
           path: ./build/
 
+      - name: Setup Debug Session
+        uses: csexton/debugger-action@master
+
       - name: Move artifacts
         run: |
           mv ./build/build-frontend/frontend.tgz ./lib/s3-bucket-test-files-stating/frontend.tgz
@@ -145,9 +148,6 @@ jobs:
 
           mkdir django
           tar -xvf django.tgz --directory ./django/
-
-      - name: Setup Debug Session
-        uses: csexton/debugger-action@master
 
       - name: Test 2
         run: |
