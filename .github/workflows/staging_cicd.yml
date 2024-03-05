@@ -139,7 +139,7 @@ jobs:
           tar -xvf ./build-django/django.tgz --directory ./api/
           rm -rf ./build-django/
 
-      - name: Test 2
+      - name: Test 2a
         run: |
           cd ./django/mapa-cdk-test
           cdk deploy MapaInfraStack --context env=staging --require-approval never
