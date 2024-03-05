@@ -3,8 +3,8 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
-import * as certificateArns from './config/certificate-arns.json';
 import { StackPropsWithContextEnv } from './utils/get-env-context';
+import { getCertificateArns } from './utils/utils';
 
 export class UsEastCertificateStack extends Stack {
 	constructor(scope: Construct, id: string, props: StackPropsWithContextEnv) {
@@ -23,7 +23,7 @@ export class UsEastCertificateStack extends Stack {
 				validation: acm.CertificateValidation.fromDns(zone),
 			});
 
-			// @ts-ignore
+			const certificateArns = getCertificateArns();
 			certificateArns[domainName] = certificate.certificateArn;
 			require('fs').writeFileSync(
 				__dirname + '/./config/certificate-arns.json',
