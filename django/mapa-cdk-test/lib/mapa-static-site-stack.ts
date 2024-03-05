@@ -1,6 +1,6 @@
 import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
 import * as cdk from 'aws-cdk-lib';
-import { CfnOutput } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
@@ -44,6 +44,7 @@ export class MapaStaticSiteStack extends cdk.Stack {
 				serverAccessLogsBucket: props.infraStack.s3LoggingBucket,
 				// Gets glued together with the default value for targetObjectKeyFormat, hence needing the trailing /
 				serverAccessLogsPrefix: 'mapa-static-site-s3-server-access-logging/',
+				removalPolicy: RemovalPolicy.DESTROY,
 			},
 			cloudFrontDistributionProps: {
 				// Overall distribution settings
@@ -63,11 +64,12 @@ export class MapaStaticSiteStack extends cdk.Stack {
 					compress: true,
 					viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
 					allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-					// @TODO Desired state = always cache files w/ hashes in their names, never cache anything else?
-					// @TODO Or cache everything and we'll use cache invalidation to nuke it each update?
-					// cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+					responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+					// BucketDeployment ensures that the appropriate invalidations are run when content is updated
+					cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
 				},
 			},
+			insertHttpSecurityHeaders: false,
 		});
 
 		new CfnOutput(this, 'S3StaticSiteBucket', { value: cloudFrontToS3.s3BucketInterface.bucketName });

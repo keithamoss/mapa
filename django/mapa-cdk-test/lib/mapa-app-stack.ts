@@ -114,19 +114,20 @@ export class MapaAppStack extends cdk.Stack {
 		const djangoLambdaFunctionURL = djangoLambda.addFunctionUrl({
 			authType: lambda.FunctionUrlAuthType.NONE,
 			invokeMode: lambda.InvokeMode.BUFFERED,
-			cors: {
-				allowedOrigins: ['*'],
-				allowedHeaders: ['x-csrftoken'],
-				allowedMethods: [
-					lambda.HttpMethod.HEAD,
-					lambda.HttpMethod.GET,
-					lambda.HttpMethod.POST,
-					lambda.HttpMethod.PUT,
-					lambda.HttpMethod.PATCH,
-					lambda.HttpMethod.DELETE,
-				],
-				allowCredentials: true,
-			},
+			// This is all handled by Django for the sake of portability between AWS and DO
+			// cors: {
+			// 	allowedOrigins: ['*'],
+			// 	allowedHeaders: ['x-csrftoken'],
+			// 	allowedMethods: [
+			// 		lambda.HttpMethod.HEAD,
+			// 		lambda.HttpMethod.GET,
+			// 		lambda.HttpMethod.POST,
+			// 		lambda.HttpMethod.PUT,
+			// 		lambda.HttpMethod.PATCH,
+			// 		lambda.HttpMethod.DELETE,
+			// 	],
+			// 	allowCredentials: true,
+			// },
 		});
 
 		// https://ad6iweh4stx5u53vjud245hbbi0snads.lambda-url.ap-southeast-2.on.aws/
@@ -171,7 +172,7 @@ export class MapaAppStack extends cdk.Stack {
 				allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
 				cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
 				originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-				responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT,
+				// responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT,
 			},
 		});
 
