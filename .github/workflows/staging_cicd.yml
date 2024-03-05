@@ -119,9 +119,6 @@ jobs:
       - name: Install CDK and deps
         run: |
           npm install -g aws-cdk
-          npm --version
-          aws --version
-          cdk --version
           cd ./django/mapa-cdk-test
           npm install .
           mkdir build
