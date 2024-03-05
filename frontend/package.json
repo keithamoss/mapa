@@ -84,5 +84,5 @@
     "vite-plugin-checker": "^0.6.2",
     "vite-tsconfig-paths": "^4.2.1"
   },
-  "packageManager": "yarn@3.7.0"
+  "packageManager": "yarn@3.8.1"
 }

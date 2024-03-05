@@ -69,6 +69,10 @@ export class MapaStaticSiteStack extends cdk.Stack {
 					cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
 				},
 			},
+			// We already use `cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS` above, so let's skip the even stricer
+			// security headers that this inserts for us.
+			// In our case, the strict Content Security Policy headers broke lots of things.
+			// We started shaving that yak, but it wasn't worth it!
 			insertHttpSecurityHeaders: false,
 		});
 
