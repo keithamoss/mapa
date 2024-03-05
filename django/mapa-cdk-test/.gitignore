@@ -8,4 +8,3 @@ node_modules
 cdk.out
 
 # Our config
-lib/config/certificate-arns.json
