@@ -145,13 +145,12 @@ jobs:
       - name: Test 2
         run: |
           cd ./django/mapa-cdk-test
-          cdk list --context env=staging
-          # cdk deploy MapaInfraStack --context env=staging --require-approval never
+          cdk deploy MapaInfraStack --context env=staging --require-approval never
           cdk deploy MapaAppStack --context env=staging --require-approval never
           cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
 
-      - name: Setup Debug Session
-        uses: csexton/debugger-action@master
+      # - name: Setup Debug Session
+      #   uses: csexton/debugger-action@master
 
       - name: Test 3
         run: |

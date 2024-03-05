@@ -71,11 +71,12 @@ if os.environ.get("AWS_LAMBDA_DEPLOYMENT") == "TRUE":
 if os.environ.get("ENVIRONMENT") == "PRODUCTION" or os.environ.get("ENVIRONMENT") == "STAGING":
     DEBUG = os.environ.get("DJANGO_DEBUG") == "TRUE"
 
-    # @TODO Point the static files at the GHPages-hosted static assets
-    STATIC_ROOT = "/app/static"
-
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.10/howto/static-files/
+
+    # @TODO Point the static files at the GHPages-hosted static assets
+    # The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment
+    STATIC_ROOT = "/app/static"
 
     STATIC_URL = 'https://mapa.keithmoss.me/api/' if os.environ.get("ENVIRONMENT") == "PRODUCTION" else 'https://mapa.staging.keithmoss.me/api/'
 
