@@ -115,8 +115,7 @@ export class MapaAppStack extends cdk.Stack {
 			description: `Mapa ${titleCase(contextProps.environment)} Django Cron Lambda`,
 			memorySize: 1024,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
-			timeout: cdk.Duration.minutes(15), // The current maximum. Way overkill for what we need, but whatevs.
-			// Environment variables
+			timeout: cdk.Duration.minutes(5), // Pretty excessive for our initial needs.
 			environment: contextProps.lambdaEnvironment,
 			// VPC config
 			vpc: props.infraStack.vpc,
