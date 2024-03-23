@@ -24,6 +24,7 @@ export class MapaInfraStack extends Stack {
 			imageTagMutability: ecr.TagMutability.MUTABLE,
 			imageScanOnPush: true,
 			encryption: ecr.RepositoryEncryption.KMS,
+			removalPolicy: RemovalPolicy.RETAIN,
 		});
 
 		new CfnOutput(this, 'DjangoLambdasECRRepository', { value: ecrRepo.repositoryArn });
