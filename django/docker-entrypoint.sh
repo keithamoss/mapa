@@ -28,7 +28,7 @@ waitfordb()
 
 CMD="$1"
 
-# AWS Lambda entrypoint (production)
+# AWS Lambda App entrypoint (production)
 if [ "$CMD" = "lambda_gunicorn" ]; then
   >&2 echo "Serving Lambda request via gunicorn"
 
@@ -36,7 +36,7 @@ if [ "$CMD" = "lambda_gunicorn" ]; then
   exit
 fi
 
-# AWS Lambda entrypoint (production)
+# AWS Lambda Cron entrypoint (production)
 if [ "$CMD" = "lambda_cron" ]; then
   >&2 echo "Initiating Lambda cron job"
 
