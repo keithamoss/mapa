@@ -44,7 +44,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV DJANGO_SETTINGS_MODULE="mapa.settings"
 
 # See https://github.com/awslabs/aws-lambda-web-adapter#usage
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.1 /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1 /lambda-adapter /opt/extensions/lambda-adapter
 
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y gdal-bin
