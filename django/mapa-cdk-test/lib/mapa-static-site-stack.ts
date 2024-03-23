@@ -7,7 +7,7 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { GetCertificate } from './modules/get-certificate';
-import { ContextEnvProps } from './utils/get-env-context';
+import { ContextEnvProps } from './utils/get-context';
 
 export interface InfraStackProps {
 	s3LoggingBucket: s3.Bucket;

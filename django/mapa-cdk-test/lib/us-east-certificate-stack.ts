@@ -3,7 +3,7 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
-import { StackPropsWithContextEnv } from './utils/get-env-context';
+import { StackPropsWithContextEnv } from './utils/get-context';
 import { getCertificateArns } from './utils/utils';
 
 export class UsEastCertificateStack extends Stack {

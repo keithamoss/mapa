@@ -5,14 +5,16 @@ import { HttpVersion, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
+import * as events from 'aws-cdk-lib/aws-events';
+import * as eventTargets from 'aws-cdk-lib/aws-events-targets';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
-import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import * as route35Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { GetCertificate } from './modules/get-certificate';
-import { ContextEnvProps } from './utils/get-env-context';
-import { titleCase } from './utils/utils';
+import { ContextEnvProps } from './utils/get-context';
+import { getDjangoAppLambdaFunctionName, getDjangoCronLambdaFunctionName, titleCase } from './utils/utils';
 
 export interface InfraStackProps {
 	vpc: ec2.Vpc;
@@ -38,21 +40,21 @@ export class MapaAppStack extends cdk.Stack {
 			props.infraStack.vpc.vpcDefaultSecurityGroup,
 		);
 
-		// Lambda function
-		const djangoLambda = new lambda.DockerImageFunction(this, 'DjangoApp', {
+		// Lambda function serving Django requests
+		const djangoAppLambda = new lambda.DockerImageFunction(this, 'DjangoApp', {
 			// Image config
 			code: lambda.DockerImageCode.fromEcr(props.infraStack.ecrRepo, {
 				tagOrDigest: 'latest',
 				cmd: ['lambda_gunicorn'],
 			}),
 			// General config
-			functionName: `Mapa-${titleCase(contextProps.environment)}-Django-Lambda`,
-			description: `Mapa ${titleCase(contextProps.environment)} Django Lambda`,
+			functionName: getDjangoAppLambdaFunctionName(contextProps.environment),
+			description: `Mapa ${titleCase(contextProps.environment)} Django App Lambda`,
 			memorySize: 1024,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.seconds(15),
 			// Environment variables
-			environment: contextProps.lmabdaEnvironment,
+			environment: contextProps.lambdaEnvironment,
 			// VPC config
 			vpc: props.infraStack.vpc,
 			vpcSubnets: { subnets: props.infraStack.vpc.publicSubnets },
@@ -70,13 +72,89 @@ export class MapaAppStack extends cdk.Stack {
 		// and modify the vpcConfig prop that isn't exposed yet
 		// FIXME: There's a brand new PR that will let us set this directly when creating the lambda
 		// https://github.com/aws/aws-cdk/pull/28059
-		const djangoLambdaEscapeHatch = djangoLambda.node.defaultChild as lambda.CfnFunction;
-		djangoLambdaEscapeHatch.vpcConfig = {
-			...djangoLambdaEscapeHatch.vpcConfig,
+		const djangoAppLambdaEscapeHatch = djangoAppLambda.node.defaultChild as lambda.CfnFunction;
+		djangoAppLambdaEscapeHatch.vpcConfig = {
+			...djangoAppLambdaEscapeHatch.vpcConfig,
 			ipv6AllowedForDualStack: true,
 		};
 
-		new CfnOutput(this, 'Lambda', { value: djangoLambda.functionArn });
+		new CfnOutput(this, 'DjangoAppLambda', { value: djangoAppLambda.functionArn });
+
+		// Lambda function URL
+		const djangoLambdaFunctionURL = djangoAppLambda.addFunctionUrl({
+			authType: lambda.FunctionUrlAuthType.NONE,
+			invokeMode: lambda.InvokeMode.BUFFERED,
+			// This is all handled by Django for the sake of portability between AWS and DO
+			// cors: {
+			// 	allowedOrigins: ['*'],
+			// 	allowedHeaders: ['x-csrftoken'],
+			// 	allowedMethods: [
+			// 		lambda.HttpMethod.HEAD,
+			// 		lambda.HttpMethod.GET,
+			// 		lambda.HttpMethod.POST,
+			// 		lambda.HttpMethod.PUT,
+			// 		lambda.HttpMethod.PATCH,
+			// 		lambda.HttpMethod.DELETE,
+			// 	],
+			// 	allowCredentials: true,
+			// },
+		});
+
+		// https://ad6iweh4stx5u53vjud245hbbi0snads.lambda-url.ap-southeast-2.on.aws/
+		new CfnOutput(this, 'LambdaFunctionURL', { value: djangoLambdaFunctionURL.url });
+
+		// Lambda function handling our Django-based cron job to export user data
+		const djangoCronLambda = new lambda.DockerImageFunction(this, 'DjangoCron', {
+			// Image config
+			code: lambda.DockerImageCode.fromEcr(props.infraStack.ecrRepo, {
+				tagOrDigest: 'latest',
+				cmd: ['lambda_cron'],
+			}),
+			// General config
+			functionName: getDjangoCronLambdaFunctionName(contextProps.environment),
+			description: `Mapa ${titleCase(contextProps.environment)} Django Cron Lambda`,
+			memorySize: 1024,
+			ephemeralStorageSize: cdk.Size.mebibytes(512),
+			timeout: cdk.Duration.minutes(15), // The current maximum. Way overkill for what we need, but whatevs.
+			// Environment variables
+			environment: contextProps.lambdaEnvironment,
+			// VPC config
+			vpc: props.infraStack.vpc,
+			vpcSubnets: { subnets: props.infraStack.vpc.publicSubnets },
+			securityGroups: [defaultSecurityGroup],
+			allowPublicSubnet: true,
+			// Monitoring and operations tools
+			logFormat: 'JSON',
+			applicationLogLevel: 'DEBUG',
+			systemLogLevel: 'INFO',
+			logGroup: props.infraStack.logGroup,
+			tracing: lambda.Tracing.ACTIVE,
+		});
+
+		// Use the "Modifying the AWS CloudFormation resource behind AWS constructs" pattern to duck behind the scenes
+		// and modify the vpcConfig prop that isn't exposed yet
+		// FIXME: There's a brand new PR that will let us set this directly when creating the lambda
+		// https://github.com/aws/aws-cdk/pull/28059
+		const djangoCronLambdaEscapeHatch = djangoCronLambda.node.defaultChild as lambda.CfnFunction;
+		djangoCronLambdaEscapeHatch.vpcConfig = {
+			...djangoCronLambdaEscapeHatch.vpcConfig,
+			ipv6AllowedForDualStack: true,
+		};
+
+		new CfnOutput(this, 'DjangoCronLambda', { value: djangoCronLambda.functionArn });
+
+		const eventRule = new events.Rule(this, 'midnightUTCRule', {
+			schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Midnight UTC / 8AM AWST
+			targets: [
+				new eventTargets.LambdaFunction(djangoCronLambda, {
+					event: events.RuleTargetInput.fromObject({}),
+				}),
+			],
+		});
+
+		eventTargets.addLambdaPermission(eventRule, djangoCronLambda);
+
+		new CfnOutput(this, 'EventRule', { value: eventRule.ruleArn });
 
 		// This appears to be current best practice for managing secrets.
 		// i.e. Allow CDK to create the skeleton of the secrets, wire that in to services that need it, then come in
@@ -102,36 +180,18 @@ export class MapaAppStack extends cdk.Stack {
 			},
 		});
 
-		if (djangoLambda.role === undefined) {
-			throw new Error(`The role for the Django Lambda is undefined. This shouldn't happen!`);
+		if (djangoAppLambda.role === undefined) {
+			throw new Error(`The role for the Django App Lambda is undefined. This shouldn't happen!`);
 		}
 
-		secret.grantRead(djangoLambda.role);
+		if (djangoCronLambda.role === undefined) {
+			throw new Error(`The role for the Django Cron Lambda is undefined. This shouldn't happen!`);
+		}
+
+		secret.grantRead(djangoAppLambda.role);
+		secret.grantRead(djangoCronLambda.role);
 
 		new CfnOutput(this, 'Secret', { value: secret.secretArn });
-
-		// Lambda function URL
-		const djangoLambdaFunctionURL = djangoLambda.addFunctionUrl({
-			authType: lambda.FunctionUrlAuthType.NONE,
-			invokeMode: lambda.InvokeMode.BUFFERED,
-			// This is all handled by Django for the sake of portability between AWS and DO
-			// cors: {
-			// 	allowedOrigins: ['*'],
-			// 	allowedHeaders: ['x-csrftoken'],
-			// 	allowedMethods: [
-			// 		lambda.HttpMethod.HEAD,
-			// 		lambda.HttpMethod.GET,
-			// 		lambda.HttpMethod.POST,
-			// 		lambda.HttpMethod.PUT,
-			// 		lambda.HttpMethod.PATCH,
-			// 		lambda.HttpMethod.DELETE,
-			// 	],
-			// 	allowCredentials: true,
-			// },
-		});
-
-		// https://ad6iweh4stx5u53vjud245hbbi0snads.lambda-url.ap-southeast-2.on.aws/
-		new CfnOutput(this, 'LambdaFunctionURL', { value: djangoLambdaFunctionURL.url });
 
 		// Grab our certificate from us-east-1 that the other stack nicely made for us
 		const certificate = new GetCertificate(this, {
@@ -185,7 +245,7 @@ export class MapaAppStack extends cdk.Stack {
 		new CfnOutput(this, 'Zone', { value: zone.hostedZoneArn });
 
 		const record = new route53.ARecord(this, 'CloudFrontAliasRecord', {
-			target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+			target: route53.RecordTarget.fromAlias(new route35Targets.CloudFrontTarget(distribution)),
 			zone: zone,
 			recordName: contextProps.domainNameDjangoApp,
 		});

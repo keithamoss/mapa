@@ -7,7 +7,7 @@ import { MapaInfraStack } from '../lib/mapa-infra-stack';
 import { MapaStaticSiteStack } from '../lib/mapa-static-site-stack';
 import { TrustStack } from '../lib/trust-stack';
 import { UsEastCertificateStack } from '../lib/us-east-certificate-stack';
-import { getEnvContext } from '../lib/utils/get-env-context';
+import { getEnvContext } from '../lib/utils/get-context';
 import { titleCase } from '../lib/utils/utils';
 
 const app = new cdk.App();
@@ -19,8 +19,6 @@ const envContext = getEnvContext(app);
 // Ref: https://medium.com/@mhkafadar/a-practical-aws-cdk-walkthrough-deploying-multiple-websites-to-s3-and-cloudfront-7caaabc9c327
 const trustStack = new TrustStack(app, 'TrustStack', {
 	env: { account: '429260965153', region: 'ap-southeast-2' },
-	// crossRegionReferences: true,
-	// context: envContext,
 });
 
 // Ref: https://github.com/aws/aws-cdk/issues/9274

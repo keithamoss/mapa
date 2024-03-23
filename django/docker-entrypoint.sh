@@ -7,7 +7,8 @@ import sys
 import psycopg2
 try:
     conn = psycopg2.connect(dbname="$DB_NAME", user="$DB_USERNAME", password="$DB_PASSWORD", host="$DB_HOST")
-except psycopg2.OperationalError:
+except psycopg2.OperationalError as e:
+    print(e)
     sys.exit(-1)
 sys.exit(0)
 END
@@ -35,8 +36,16 @@ if [ "$CMD" = "lambda_gunicorn" ]; then
   exit
 fi
 
-# Cron entrypoint (development and production)
-if [ "$CMD" != "build" ]; then
+# AWS Lambda entrypoint (production)
+if [ "$CMD" = "lambda_cron" ]; then
+  >&2 echo "Initiating Lambda cron job"
+
+  python /app/mapa/app/cron/cron.py
+  exit
+fi
+
+# Cron entrypoint for DigitalOcean and local dev (development and production)
+if [ "$CMD" != "build" -a "$CMD" != "lambda_cron" ]; then
   waitfordb
 
   >&2 echo "Starting crond in the background"
@@ -88,4 +97,5 @@ if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then
   exit
 fi
 
-exec "$@"
+# Not sure this actually does...anything
+# exec "$@"

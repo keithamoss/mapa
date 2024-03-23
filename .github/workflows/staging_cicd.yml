@@ -85,9 +85,6 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          # aws-region: ${{ secrets.AWS_TARGET_REGION }}
-          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
           aws-region: ${{ secrets.AWS_TARGET_REGION }}
           role-session-name: 'GitHubActions-DeployLayerStack'
@@ -111,9 +108,6 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          # aws-region: ${{ secrets.AWS_TARGET_REGION }}
-          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
           aws-region: ${{ secrets.AWS_TARGET_REGION }}
           role-session-name: 'GitHubActions-DeployLayerStack'
@@ -158,38 +152,3 @@ jobs:
 
       # - name: Setup Debug Session
       #   uses: csexton/debugger-action@master
-
-  # test-gha-auth:
-  #   runs-on: ubuntu-latest
-  #   environment: STAGING
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
-  #         aws-region: ${{ secrets.AWS_TARGET_REGION }}
-  #         role-session-name: 'GitHubActions-DeployLayerStack'
-
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20.x'
-
-  #     - name: Install CDK and deps
-  #       run: |
-  #         npm install -g aws-cdk
-  #         cd ./django/mapa-cdk-test
-  #         npm install .
-  #         mkdir build
-
-  #     - name: Setup Debug Session
-  #       uses: csexton/debugger-action@master
-
-  #     # - name: Deploy CDK stacks
-  #     #   run: |
-  #     #     cd ./django/mapa-cdk-test
-
-  #     # - name: Update lambda function code
-  #     #   run: |
-  #     #     aws lambda update-function-code --function-name Mapa-Staging-Django-Lambda --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/staging/mapa-django-lambdas:latest --region ap-southeast-2

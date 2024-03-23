@@ -5,8 +5,8 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { StackPropsWithContextEnv } from './utils/get-env-context';
-import { titleCase } from './utils/utils';
+import { StackPropsWithContextEnv } from './utils/get-context';
+import { getECRRepoName, titleCase } from './utils/utils';
 
 export class MapaInfraStack extends Stack {
 	public readonly ecrRepo: ecr.Repository;
@@ -20,7 +20,7 @@ export class MapaInfraStack extends Stack {
 		super(scope, id, ogProps);
 
 		const ecrRepo = new ecr.Repository(this, 'DjangoLambdaECRRepo', {
-			repositoryName: `aws-keithmoss/${contextProps.environment}/mapa-django-lambdas`,
+			repositoryName: getECRRepoName(contextProps.environment),
 			imageTagMutability: ecr.TagMutability.MUTABLE,
 			imageScanOnPush: true,
 			encryption: ecr.RepositoryEncryption.KMS,
