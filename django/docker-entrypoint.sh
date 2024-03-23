@@ -33,6 +33,7 @@ if [ "$CMD" = "lambda_gunicorn" ]; then
   >&2 echo "Beginning lambda start-up sequence"
 
   >&2 echo "Running migrations"
+  export PATH="/app/:$PATH"
   django-admin migrate
 
   >&2 echo "Serving Lambda request via gunicorn"
