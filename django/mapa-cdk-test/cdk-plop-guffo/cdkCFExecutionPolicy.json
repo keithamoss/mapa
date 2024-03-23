@@ -1,0 +1,47 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:*",
+        "logs:*",
+        "ec2:*",
+        "ecr:*",
+        "lambda:*",
+        "s3:*",
+        "kms:*",
+        "secretsmanager:*",
+        "ssm:GetParameters"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestedRegion": "ap-southeast-2"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:*",
+        "route53:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:*Role*",
+        "iam:GetPolicy",
+        "iam:CreatePolicy",
+        "iam:DeletePolicy",
+        "iam:*PolicyVersion*"
+      ],
+      "NotResource": [
+        "arn:aws:iam::*:role/cdk-*",
+        "arn:aws:iam::*:policy/cdkCFExecutionPolicy"
+      ]
+    }
+  ]
+}
