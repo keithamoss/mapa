@@ -49,6 +49,18 @@ def export_to_google_drive(user, access_token, refresh_token):
 
     def get_latest_update_date(maps, schemas, features):
         return max([maps.latest("last_updated_date").last_updated_date, schemas.latest("last_updated_date").last_updated_date, features.latest("last_updated_date").last_updated_date])
+
+    def is_backup_required(last_gdrive_backup):
+        if last_gdrive_backup is None:
+            print("Reason: Backing up because we've never backed up before")
+            return True
+        if localtime(now()).strftime("%d") == "01":
+            print("Reason: Backing up because it's the first of the month")
+            return True
+        if latest_update_date >= last_gdrive_backup:
+            print("Reason: Backing up because data has changed since the last backup")
+            return True
+        return False
     
     print(f"Last Backup Date: {user.profile.last_gdrive_backup}")
 
@@ -59,7 +71,7 @@ def export_to_google_drive(user, access_token, refresh_token):
     latest_update_date = get_latest_update_date(maps, schemas, features)
     print(f"Latest Update Date: {latest_update_date}")
 
-    if user.profile.last_gdrive_backup is None or localtime(now()).strftime("%d") == "01" or latest_update_date >= user.profile.last_gdrive_backup:
+    if is_backup_required(user.profile.last_gdrive_backup) is True:
       current_datetime = localtime(now()).strftime("%Y-%m-%dT%H:%M:%S%z")  
       mapaGoogleDriveFolderName = "mapa.keithmoss.me"
 
