@@ -135,7 +135,7 @@ export class MapaInfraStack extends Stack {
 			projectsDatabaseSecurityGroup.addIngressRule(
 				ec2.Peer.ipv6(cfnSubnet.ipv6CidrBlock),
 				ec2.Port.tcp(5432),
-				'Allow IPv6 PostgreSQL (5432) inbound from the Mapa Lambdas VPC',
+				'[CDK] Allow IPv6 PostgreSQL (5432) inbound from the Mapa Lambdas VPC',
 			);
 		});
 
