@@ -2,9 +2,9 @@ from rest_framework import routers
 
 from django.urls import include, re_path
 
-from .views import (CurrentUserView, FeatureSchemasViewSet, FeaturesViewSet,
-                    LogoutUserView, ManagementViewSet, MapsViewSet,
-                    ProfileViewSet, UserViewSet, api_not_found)
+from .views import (CurrentUserView, EventsView, FeatureSchemasViewSet,
+                    FeaturesViewSet, LogoutUserView, ManagementViewSet,
+                    MapsViewSet, ProfileViewSet, UserViewSet, api_not_found)
 
 router = routers.DefaultRouter()
 router.register(r'management', ManagementViewSet, 'ManagementViewSet')
@@ -20,6 +20,7 @@ router.register(r'schemas', FeatureSchemasViewSet, 'FeatureSchemasViewSet')
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
 urlpatterns = [
+    re_path(r'^events$', EventsView.as_view(), name='api-events'),
     re_path(r'^0.1/', include(router.urls)),
     re_path(r'^0.1/self$', CurrentUserView.as_view(), name='api-self'),
     re_path(r'^0.1/logout$', LogoutUserView.as_view(), name='api-logout'),

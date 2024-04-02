@@ -26,6 +26,22 @@ def api_not_found(request):
     return HttpResponseNotFound()
 
 
+class EventsView(APIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request):
+        print("Testing")
+        return Response({
+            "foobar": True,
+        })
+
+    def post(self, request):
+        print("Testing")
+        return Response({
+            "foobarish": True,
+        })
+
+
 class ManagementViewSet(viewsets.ViewSet):
     """
     API endpoint that allows management actions to be undertaken
