@@ -3,10 +3,11 @@ from rest_framework import routers
 from django.urls import include, re_path
 
 from .views import (CurrentUserView, FeatureSchemasViewSet, FeaturesViewSet,
-                    LogoutUserView, MapsViewSet, ProfileViewSet, UserViewSet,
-                    api_not_found)
+                    LogoutUserView, ManagementViewSet, MapsViewSet,
+                    ProfileViewSet, UserViewSet, api_not_found)
 
 router = routers.DefaultRouter()
+router.register(r'management', ManagementViewSet, 'ManagementViewSet')
 router.register(r'users', UserViewSet)
 router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 router.register(r'maps', MapsViewSet, 'MapsViewSet')

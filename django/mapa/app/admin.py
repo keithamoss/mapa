@@ -35,3 +35,8 @@ def is_staging():
 
 def is_production():
     return environ.get("ENVIRONMENT") == "PRODUCTION"
+
+
+def are_management_tasks_allowed():
+    return environ.get("ALLOW_MANAGEMENT_API") == "TRUE"
+

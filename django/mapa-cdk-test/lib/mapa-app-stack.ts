@@ -108,7 +108,7 @@ export class MapaAppStack extends cdk.Stack {
 			// Image config
 			code: lambda.DockerImageCode.fromEcr(props.infraStack.ecrRepo, {
 				tagOrDigest: 'latest',
-				cmd: ['lambda_cron'],
+				cmd: ['lambda_gunicorn'],
 			}),
 			// General config
 			functionName: getDjangoCronLambdaFunctionName(contextProps.environment),
@@ -116,7 +116,7 @@ export class MapaAppStack extends cdk.Stack {
 			memorySize: 1024,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.minutes(5), // Pretty excessive for our initial needs.
-			environment: contextProps.lambdaEnvironment,
+			environment: { ...contextProps.lambdaEnvironment, ALLOW_MANAGEMENT_API: 'TRUE' },
 			// VPC config
 			vpc: props.infraStack.vpc,
 			vpcSubnets: { subnets: props.infraStack.vpc.publicSubnets },
