@@ -1,9 +1,11 @@
+import os
 from copy import deepcopy
 from datetime import datetime
 from http.client import BAD_REQUEST
 
 import pytz
-from mapa.app.admin import get_admins, is_admin
+from mapa.app.admin import are_management_tasks_allowed, get_admins, is_admin
+from mapa.app.export import orchestrate_google_drive_backup
 from mapa.app.models import Features, FeatureSchemas, Maps
 from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
@@ -22,6 +24,24 @@ from django.http import HttpResponseNotFound
 
 def api_not_found(request):
     return HttpResponseNotFound()
+
+
+class ManagementViewSet(viewsets.ViewSet):
+    """
+    API endpoint that allows management actions to be undertaken
+    by the lambda/cron jobs responsible for those.
+    e.g. The daily "cron" job that ensures user data is backed up
+    to their Google Drive.
+    """
+    permission_classes = (AllowAny,)
+
+    @action(detail=False, methods=["GET"])
+    def backup_to_google_drive(self, request):
+        if are_management_tasks_allowed() is False:
+            orchestrate_google_drive_backup()
+            print(os.environ)
+            return Response({})
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CurrentUserView(APIView):

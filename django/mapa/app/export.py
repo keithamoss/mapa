@@ -1,6 +1,7 @@
 import csv
 import datetime
 import os
+import traceback
 from datetime import datetime
 from os import environ
 from tempfile import NamedTemporaryFile
@@ -9,11 +10,37 @@ import pytz
 from google.oauth2.credentials import Credentials
 from googleapiclient import discovery
 from googleapiclient.http import MediaFileUpload
-from mapa.app.admin import is_production
+from mapa.app.admin import get_admins, is_production
 from mapa.app.models import Features, FeatureSchemas, Maps
+from social_django.models import UserSocialAuth
 
 from django.conf import settings
 from django.utils.timezone import localtime, now
+
+
+def orchestrate_google_drive_backup():
+    print("")
+    print("###########")
+    print("Google Drive backup management task beginning")
+    print(localtime(now()))
+    print("###########")
+    print("")
+
+    for socialAuthUser in UserSocialAuth.objects.all() if is_production() is True else UserSocialAuth.objects.filter(id__in=get_admins()):
+        try:
+            print(f"User: {socialAuthUser.user}")
+
+            export_to_google_drive(socialAuthUser.user, socialAuthUser.extra_data["access_token"], socialAuthUser.extra_data["refresh_token"])
+        except:
+            traceback.print_exc()
+
+        print("")
+        print("------------")
+        print("")
+
+    print("###########")
+    print("Google Drive backup management task finished")
+    print("###########")
 
 
 def write_to_temp_csv_file(data):
