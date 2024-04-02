@@ -37,6 +37,7 @@ class ManagementViewSet(viewsets.ViewSet):
 
     @action(detail=False, methods=["GET", "POST"])
     def backup_to_google_drive(self, request):
+        print("begin backup_to_google_drive")
         if are_management_tasks_allowed() is False:
             orchestrate_google_drive_backup()
             print(os.environ)
