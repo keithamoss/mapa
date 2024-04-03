@@ -39,15 +39,21 @@ class ManagementEventsView(APIView):
     def post(self, request):
         print("begin backup_to_google_drive")
         print("request is")
-        print(request)
+        print(request.data)
         print("are management tasks allowed?")
         if are_management_tasks_allowed() is True:
             print("they are!")
             print("environs are")
             print(os.environ)
-            print("begin backup")
-            orchestrate_google_drive_backup()
-            print("backup done")
+            eventType = request.data["event_type"] if "event_type" in request.data else None
+            print(eventType)
+            
+            if eventType == "backup_to_google_drive":
+                print("begin backup")
+                orchestrate_google_drive_backup()
+                print("backup done")
+            else:
+                raise Exception(f"Unknown event type '{eventType}'")
             return Response({})
         print("they aren't!")
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
