@@ -2,7 +2,6 @@ import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { StackPropsWithContextEnv } from './utils/get-context';
@@ -11,7 +10,6 @@ import { getECRRepoName, titleCase } from './utils/utils';
 export class MapaInfraStack extends Stack {
 	public readonly ecrRepo: ecr.Repository;
 	public readonly vpc: ec2.Vpc;
-	public readonly logGroup: logs.LogGroup;
 	public readonly s3LoggingBucket: s3.Bucket;
 
 	constructor(scope: Construct, id: string, props: StackPropsWithContextEnv) {
@@ -28,14 +26,6 @@ export class MapaInfraStack extends Stack {
 		});
 
 		new CfnOutput(this, 'DjangoLambdasECRRepository', { value: ecrRepo.repositoryArn });
-
-		// CloudWatch log group
-		const logGroup = new logs.LogGroup(this, 'DjangoLambdaLogGroup', {
-			logGroupName: `/aws/lambda/${contextProps.environment}/MapaDjangoLambdas`,
-			retention: logs.RetentionDays.INFINITE,
-		});
-
-		new CfnOutput(this, 'DjangoLambdasLogGroup', { value: logGroup.logGroupArn });
 
 		// Well this was a fun adventure - learnt a lot more about how AWS networking fits together.
 		// Ref. The original step-by-step guide I used to create the first working version by hand:
@@ -153,7 +143,6 @@ export class MapaInfraStack extends Stack {
 		new CfnOutput(this, 'S3CloudFrontLoggingBucket', { value: s3LoggingBucket.bucketName });
 
 		this.vpc = vpc;
-		this.logGroup = logGroup;
 		this.ecrRepo = ecrRepo;
 		this.s3LoggingBucket = s3LoggingBucket;
 	}

@@ -57,7 +57,6 @@ const mapaAppStack = new MapaAppStack(app, 'MapaAppStack', {
 	// Ref. https://bobbyhadz.com/blog/aws-cdk-share-resources-between-stacks
 	infraStack: {
 		vpc: infraStack.vpc,
-		logGroup: infraStack.logGroup,
 		ecrRepo: infraStack.ecrRepo,
 		s3LoggingBucket: infraStack.s3LoggingBucket,
 	},

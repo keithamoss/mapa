@@ -18,7 +18,6 @@ import { getDjangoAppLambdaFunctionName, getDjangoCronLambdaFunctionName, titleC
 
 export interface InfraStackProps {
 	vpc: ec2.Vpc;
-	logGroup: logs.LogGroup;
 	ecrRepo: ecr.Repository;
 	s3LoggingBucket: s3.Bucket;
 }
@@ -64,7 +63,12 @@ export class MapaAppStack extends cdk.Stack {
 			logFormat: 'JSON',
 			applicationLogLevel: 'DEBUG',
 			systemLogLevel: 'INFO',
-			logGroup: props.infraStack.logGroup,
+			logGroup: new logs.LogGroup(this, 'DjangoAppLambdaLogGroup', {
+				logGroupName: `/aws/lambda/${contextProps.environment}/${getDjangoAppLambdaFunctionName(
+					contextProps.environment,
+				)}`,
+				retention: logs.RetentionDays.INFINITE,
+			}),
 			tracing: lambda.Tracing.ACTIVE,
 		});
 
@@ -126,7 +130,12 @@ export class MapaAppStack extends cdk.Stack {
 			logFormat: 'JSON',
 			applicationLogLevel: 'DEBUG',
 			systemLogLevel: 'INFO',
-			logGroup: props.infraStack.logGroup,
+			logGroup: new logs.LogGroup(this, 'DjangoCronLambdaLogGroup', {
+				logGroupName: `/aws/lambda/${contextProps.environment}/${getDjangoCronLambdaFunctionName(
+					contextProps.environment,
+				)}`,
+				retention: logs.RetentionDays.INFINITE,
+			}),
 			tracing: lambda.Tracing.ACTIVE,
 		});
 
