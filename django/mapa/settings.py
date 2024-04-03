@@ -31,27 +31,28 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = get_secret_from_ssm_or_local_env_var("SECRET_KEY")
 
 # Security
-SECURE_SSL_REDIRECT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # https://stackoverflow.com/a/22284717
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-X_FRAME_OPTIONS = "DENY"
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https') # https://stackoverflow.com/a/22284717
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SESSION_COOKIE_SECURE = True
+# X_FRAME_OPTIONS = "DENY"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
+# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = ["*"]
 
-SESSION_COOKIE_DOMAIN = os.environ.get("SESSION_COOKIE_DOMAIN")
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 400 # Chrome limits cookies to expiring no more than 400 days in the future
+# SESSION_COOKIE_DOMAIN = os.environ.get("SESSION_COOKIE_DOMAIN")
+# SESSION_COOKIE_AGE = 60 * 60 * 24 * 400 # Chrome limits cookies to expiring no more than 400 days in the future
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(",")
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = os.environ.get("CSRF_COOKIE_DOMAIN")
+# CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS").split(",")
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_DOMAIN = os.environ.get("CSRF_COOKIE_DOMAIN")
 
-CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS").split(",")
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = default_headers + (
-    "Content-Disposition",
-)
+# CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS").split(",")
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = default_headers + (
+#     "Content-Disposition",
+# )
 
 CONN_MAX_AGE = 10
 

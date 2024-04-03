@@ -43,7 +43,7 @@
         "CSRF_TRUSTED_ORIGINS": "https://mapa.staging.keithmoss.me",
         "SENTRY_SITE_NAME": "Mapa",
         "POWERTOOLS_DEBUG": "1",
-        "POWERTOOLS_LOG_LEVEL": "INFO",
+        "POWERTOOLS_LOG_LEVEL": "DEBUG",
         "POWERTOOLS_SERVICE_NAME": "Mapa-Django-Staging"
       }
     },
