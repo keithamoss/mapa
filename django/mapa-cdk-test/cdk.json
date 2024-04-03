@@ -33,6 +33,7 @@
         "AWS_LWA_ENABLE_COMPRESSION": "true",
         "AWS_LWA_PORT": "8000",
         "AWS_SECRETS_NAME": "/mapa/staging/",
+        "AWS_LWA_PASS_THROUGH_PATH": "/0.1/management/events",
         "DJANGO_DEBUG": "TRUE",
         "PUBLIC_API_BASE_URL": "https://api.mapa.staging.keithmoss.me",
         "PUBLIC_SITE_URL": "https://mapa.staging.keithmoss.me",

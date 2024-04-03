@@ -10,7 +10,8 @@ import pytz
 from google.oauth2.credentials import Credentials
 from googleapiclient import discovery
 from googleapiclient.http import MediaFileUpload
-from mapa.app.admin import get_admins, is_production
+from mapa.app.admin import get_admins
+from mapa.app.envs import is_production
 from mapa.app.models import Features, FeatureSchemas, Maps
 from social_django.models import UserSocialAuth
 

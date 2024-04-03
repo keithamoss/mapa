@@ -4,13 +4,14 @@ from datetime import datetime
 from http.client import BAD_REQUEST
 
 import pytz
-from mapa.app.admin import are_management_tasks_allowed, get_admins, is_admin
+from mapa.app.admin import is_admin
+from mapa.app.envs import are_management_tasks_allowed
 from mapa.app.export import orchestrate_google_drive_backup
 from mapa.app.models import Features, FeatureSchemas, Maps
 from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
                                   MapSerializer, UserSerializer)
-from rest_framework import generics, mixins, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -26,23 +27,7 @@ def api_not_found(request):
     return HttpResponseNotFound()
 
 
-class EventsView(APIView):
-    permission_classes = (AllowAny,)
-
-    def get(self, request):
-        print("Testing")
-        return Response({
-            "foobar": True,
-        })
-
-    def post(self, request):
-        print("Testing")
-        return Response({
-            "foobarish": True,
-        })
-
-
-class ManagementViewSet(viewsets.ViewSet):
+class ManagementEventsView(APIView):
     """
     API endpoint that allows management actions to be undertaken
     by the lambda/cron jobs responsible for those.
@@ -51,9 +36,9 @@ class ManagementViewSet(viewsets.ViewSet):
     """
     permission_classes = (AllowAny,)
 
-    @action(detail=False, methods=["GET", "POST"])
-    def backup_to_google_drive(self, request):
+    def post(self, request):
         print("begin backup_to_google_drive")
+        print(request)
         if are_management_tasks_allowed() is False:
             orchestrate_google_drive_backup()
             print(os.environ)

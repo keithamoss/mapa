@@ -2,9 +2,11 @@
 from multiprocessing import cpu_count
 from os import environ
 
+from mapa.app.envs import is_running_in_aws_lambda
+
 
 def max_workers():
-    return 1 if environ.get("AWS_LAMBDA_DEPLOYMENT") == "TRUE" else (2 * cpu_count()) + 1
+    return 1 if is_running_in_aws_lambda() is True else (2 * cpu_count()) + 1
 
 
 bind = "0.0.0.0:" + environ.get("PORT", "8000")

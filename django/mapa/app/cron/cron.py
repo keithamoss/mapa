@@ -1,3 +1,4 @@
+import os
 import sys
 
 # Needed for running as a Lambda, otherwise we run into "ModuleNotFoundError: No module named 'mapa'" during django.setup()
