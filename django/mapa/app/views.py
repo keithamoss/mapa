@@ -41,7 +41,11 @@ class ManagementEventsView(APIView):
         print("request is")
         print(request)
         print("are management tasks allowed?")
+<<<<<<< HEAD
         if are_management_tasks_allowed() is True:
+=======
+        if are_management_tasks_allowed() is False:
+>>>>>>> 358c5e0b636671044fc5b3c8b04be1e2a8d09584
             print("they are!")
             print("environs are")
             print(os.environ)
