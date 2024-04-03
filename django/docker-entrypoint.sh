@@ -42,16 +42,8 @@ if [ "$CMD" = "lambda_gunicorn" ]; then
   exit
 fi
 
-# AWS Lambda Cron entrypoint (production)
-if [ "$CMD" = "lambda_cron" ]; then
-  >&2 echo "Initiating Lambda cron job"
-
-  python /app/mapa/app/cron/cron.py
-  exit
-fi
-
 # Cron entrypoint for DigitalOcean and local dev (development and production)
-if [ "$CMD" != "build" -a "$CMD" != "lambda_cron" ]; then
+if [ "$CMD" != "build" ]; then
   waitfordb
 
   >&2 echo "Starting crond in the background"
