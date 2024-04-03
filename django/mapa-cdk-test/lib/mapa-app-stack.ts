@@ -146,7 +146,9 @@ export class MapaAppStack extends cdk.Stack {
 			schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Midnight UTC / 8AM AWST
 			targets: [
 				new eventTargets.LambdaFunction(djangoCronLambda, {
-					event: events.RuleTargetInput.fromObject({}),
+					event: events.RuleTargetInput.fromObject({
+						event_type: 'backup_to_google_drive',
+					}),
 				}),
 			],
 		});
