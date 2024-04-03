@@ -38,11 +38,18 @@ class ManagementEventsView(APIView):
 
     def post(self, request):
         print("begin backup_to_google_drive")
+        print("request is")
         print(request)
+        print("are management tasks allowed?")
         if are_management_tasks_allowed() is False:
-            orchestrate_google_drive_backup()
+            print("they are!")
+            print("environs are")
             print(os.environ)
+            print("begin backup")
+            orchestrate_google_drive_backup()
+            print("backup done")
             return Response({})
+        print("they aren't!")
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
