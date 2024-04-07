@@ -25,22 +25,16 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
-	console.log('Load App');
 	const location = useLocation();
 
 	const theme = useTheme();
 
 	const mapId = useAppSelector(selectActiveMapId);
 
-	console.log('Get user');
 	const user = useAppSelector(selectUser);
-	console.log('user is', user);
 
-	console.log('Get isLoggedIn');
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
-	console.log('isLoggedIn is', isLoggedIn);
 
-	console.log('Remove loader...');
 	const loader = document.getElementById('loader-container');
 	loader?.remove();
 
