@@ -35,12 +35,12 @@ function App() {
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
-	const loader = document.getElementById('loader-container');
-	loader?.remove();
-
 	if (isLoggedIn === undefined) {
 		return null;
 	}
+
+	const loader = document.getElementById('loader-container');
+	loader?.remove();
 
 	if (user === null) {
 		return (
