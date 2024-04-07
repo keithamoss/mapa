@@ -142,9 +142,7 @@ jobs:
       - name: Deploy CDK stacks
         run: |
           cd ./django/mapa-cdk-test
-          cdk deploy MapaInfraStack --context env=staging --require-approval never
-          cdk deploy MapaAppStack --context env=staging --require-approval never
-          cdk deploy MapaStaticSiteStack --context env=staging --require-approval never
+          cdk deploy MapaInfraStack MapaAppStack MapaStaticSiteStack --context env=staging --require-approval never
 
       - name: Update lambda function code
         run: |
