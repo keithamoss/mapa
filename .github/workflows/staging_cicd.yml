@@ -119,18 +119,18 @@ jobs:
       - name: Install CDK and deps
         run: |
           npm install -g aws-cdk
-          cd ./django/mapa-cdk-test
+          cd ./cdk
           npm install .
           mkdir build
 
       - name: Download artifacts for deployment
         uses: actions/download-artifact@v4
         with:
-          path: ./django/mapa-cdk-test/build/
+          path: ./cdk/build/
 
       - name: Move artifacts
         run: |
-          cd ./django/mapa-cdk-test/build/
+          cd ./cdk/build/
 
           tar -xvf build-frontend/frontend.tgz
           rm -rf ./build-frontend/
@@ -141,7 +141,7 @@ jobs:
 
       - name: Deploy CDK stacks
         run: |
-          cd ./django/mapa-cdk-test
+          cd ./cdk
           cdk deploy MapaInfraStack MapaAppStack MapaStaticSiteStack --context env=staging --require-approval never
 
       - name: Update lambda function code

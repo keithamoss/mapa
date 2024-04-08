@@ -5,8 +5,8 @@ import 'source-map-support/register';
 import { MapaAppStack } from '../lib/mapa-app-stack';
 import { MapaInfraStack } from '../lib/mapa-infra-stack';
 import { MapaStaticSiteStack } from '../lib/mapa-static-site-stack';
+import { UsEastCertificateStack } from '../lib/mapa-us-east-certificate-stack';
 import { TrustStack } from '../lib/trust-stack';
-import { UsEastCertificateStack } from '../lib/us-east-certificate-stack';
 import { getEnvContext } from '../lib/utils/get-context';
 import { titleCase } from '../lib/utils/utils';
 

@@ -1,8 +1,8 @@
 {
-  "name": "mapa-cdk-test",
+  "name": "mapa-cdk",
   "version": "0.1.0",
   "bin": {
-    "mapa-cdk-test": "bin/mapa-cdk-test.js"
+    "mapa-cdk": "bin/cdk-stack.js"
   },
   "scripts": {
     "build": "tsc",
