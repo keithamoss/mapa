@@ -79,7 +79,7 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION" or os.environ.get("ENVIRONMENT"
     # The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment
     STATIC_ROOT = "/app/static"
 
-    STATIC_URL = f"{os.environ.get("PUBLIC_SITE_URL")}/api/"
+    STATIC_URL = f"{os.environ.get('PUBLIC_SITE_URL')}/api/"
 
     # Only needed in the old-school "Run it on a Droplet/EC2" deployment scenario
     # LOGGING = {
