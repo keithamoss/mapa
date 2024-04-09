@@ -49,7 +49,7 @@ export class MapaAppStack extends cdk.Stack {
 			// General config
 			functionName: getDjangoAppLambdaFunctionName(contextProps.environment),
 			description: `Mapa ${titleCase(contextProps.environment)} Django App Lambda`,
-			memorySize: 1024,
+			memorySize: 2048,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.seconds(15),
 			// Environment variables
