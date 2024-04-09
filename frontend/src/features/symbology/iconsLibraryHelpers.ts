@@ -1,5 +1,5 @@
 import { upperFirst } from 'lodash-es';
-import MiniSearch from 'minisearch';
+import MiniSearch, { SearchResult } from 'minisearch';
 import { defaultSymbolIconStyle } from './symbologyHelpers';
 
 import {
@@ -46,13 +46,7 @@ export const getIconLabelByName = (iconName: string) => {
 	return icon !== null ? icon.label : 'Unnamed icon';
 };
 
-export interface IconSearchResult {
-	id: string;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
+export interface IconSearchResult extends SearchResult {
 	name: string;
 	label: string;
 	'search.terms': string[];

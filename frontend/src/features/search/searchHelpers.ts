@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dayjs from 'dayjs';
-import MiniSearch from 'minisearch';
+import MiniSearch, { SearchResult } from 'minisearch';
 import { Feature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
 import { SearchField } from '../app/appSlice';
@@ -11,13 +11,7 @@ import { getSymbolNameBySymbolId } from '../symbology/symbologyHelpers';
 
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
 
-export interface FeatureSearchResult {
-	id: number;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
+export interface FeatureSearchResult extends SearchResult {
 	map_id: number;
 	schema_id: number;
 	symbol_id: number;
@@ -99,13 +93,7 @@ export const searchFeatures = (
 	return miniSearch.search(search_term) as FeatureSearchResult[];
 };
 
-export interface SymbolSearchResult {
-	id: number;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
+export interface SymbolSearchResult extends SearchResult {
 	'prop.name': string;
 }
 
