@@ -151,6 +151,7 @@ jobs:
 
       - name: Run Django migrations
         run: |
+          aws lambda wait function-updated-v2 --function-name Mapa-Staging-Django-Cron-Lambda --region ap-southeast-2
           aws events put-events --entries '[ { "DetailType": "Run Django Migrations", "Detail": "{ \"event_type\": \"run_migrations\" }", "Resources": [], "Source": "mapa" } ]'
 
       # - name: Setup Debug Session
