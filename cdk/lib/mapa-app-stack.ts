@@ -258,7 +258,7 @@ export class MapaAppStack extends cdk.Stack {
 				allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
 				cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
 				originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-				// responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.CORS_ALLOW_ALL_ORIGINS_WITH_PREFLIGHT,
+				responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
 			},
 		});
 
