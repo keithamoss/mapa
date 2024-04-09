@@ -74,7 +74,7 @@ export { initialState as initialFeaturesState };
 // This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeatures: builder.query<EntityState<Feature>, void>({
+		getFeatures: builder.query<EntityState<Feature, number>, void>({
 			query: () => `maps/features/`,
 			transformResponse: (res: FeaturesResponse) => {
 				return featuresAdapter.setAll(initialState, res);

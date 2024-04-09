@@ -211,7 +211,7 @@ export { initialState as initialFeatureSchemasState };
 
 export const featureSchemasApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeatureSchemas: builder.query<EntityState<FeatureSchema>, void>({
+		getFeatureSchemas: builder.query<EntityState<FeatureSchema, number>, void>({
 			query: () => 'schemas/',
 			transformResponse: (res: FeatureSchemasResponse) => {
 				return featureSchemasAdapter.setAll(initialState, res);
