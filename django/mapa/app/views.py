@@ -37,7 +37,6 @@ class ManagementEventsView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        print(request.data)
         if are_management_tasks_allowed() is True:
             eventType = request.data["event_type"] if "event_type" in request.data else None
 

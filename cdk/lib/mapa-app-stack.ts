@@ -117,7 +117,7 @@ export class MapaAppStack extends cdk.Stack {
 			// General config
 			functionName: getDjangoCronLambdaFunctionName(contextProps.environment),
 			description: `Mapa ${titleCase(contextProps.environment)} Django Cron Lambda`,
-			memorySize: 1024,
+			memorySize: 2048,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.minutes(5), // Pretty excessive for our initial needs.
 			environment: { ...contextProps.lambdaEnvironment, ALLOW_MANAGEMENT_API: 'TRUE' },
