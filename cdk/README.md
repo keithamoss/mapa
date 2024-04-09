@@ -13,7 +13,7 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 - `npx cdk diff` compare deployed stack with current state
 - `npx cdk synth` emits the synthesized CloudFormation template
 
-## First time setup
+## First time CDK setup
 
 ```
 cd ~/.aws/credentials
