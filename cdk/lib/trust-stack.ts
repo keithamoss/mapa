@@ -51,11 +51,11 @@ export class TrustStack extends cdk.Stack {
 		});
 
 		// Policy to allow GitHub Actions to update the version of the Django Docker container used by the lambdas
-		const policyUpdateDjangoLambdasFunctionCode = new ManagedPolicy(this, 'UpdateDjangoLambdasFunctionCode', {
+		const policyManageDjangoLambdaFunctions = new ManagedPolicy(this, 'ManageDjangoLambdaFunctions', {
 			statements: [
 				new PolicyStatement({
 					effect: Effect.ALLOW,
-					actions: ['lambda:UpdateFunctionCode'],
+					actions: ['lambda:UpdateFunctionCode', 'lambda:GetFunction'],
 					resources: [
 						`arn:aws:lambda:${props.env.region}:${props.env.account}:function:${getDjangoAppLambdaFunctionName('*')}`,
 						`arn:aws:lambda:${props.env.region}:${props.env.account}:function:${getDjangoCronLambdaFunctionName('*')}`,
@@ -79,7 +79,7 @@ export class TrustStack extends cdk.Stack {
 			managedPolicyArns: [
 				iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryReadOnly').managedPolicyArn,
 				policyPushImageToECRRepo.managedPolicyArn,
-				policyUpdateDjangoLambdasFunctionCode.managedPolicyArn,
+				policyManageDjangoLambdaFunctions.managedPolicyArn,
 				policyPutManagementEvents.managedPolicyArn,
 			],
 			policies: [
