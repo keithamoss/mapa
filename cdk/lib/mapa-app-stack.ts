@@ -151,7 +151,7 @@ export class MapaAppStack extends cdk.Stack {
 
 		new CfnOutput(this, 'DjangoCronLambda', { value: djangoCronLambda.functionArn });
 
-		const eventRule = new events.Rule(this, 'midnightUTCRule', {
+		const dailyBackupRule = new events.Rule(this, 'midnightUTCRule', {
 			schedule: events.Schedule.cron({ minute: '0', hour: '0' }), // Midnight UTC / 8AM AWST
 			targets: [
 				new eventTargets.LambdaFunction(djangoCronLambda, {
@@ -162,9 +162,25 @@ export class MapaAppStack extends cdk.Stack {
 			],
 		});
 
-		eventTargets.addLambdaPermission(eventRule, djangoCronLambda);
+		eventTargets.addLambdaPermission(dailyBackupRule, djangoCronLambda);
 
-		new CfnOutput(this, 'EventRule', { value: eventRule.ruleArn });
+		new CfnOutput(this, 'DailyBackupRule', { value: dailyBackupRule.ruleArn });
+
+		const managementEventsRule = new events.Rule(this, 'managementEventsRule', {
+			eventPattern: {
+				source: ['mapa'],
+			},
+			targets: [
+				new eventTargets.LambdaFunction(djangoCronLambda, {
+					// Event detail will contain at least the key `event_type`
+					event: events.RuleTargetInput.fromEventPath('$.detail'),
+				}),
+			],
+		});
+
+		eventTargets.addLambdaPermission(managementEventsRule, djangoCronLambda);
+
+		new CfnOutput(this, 'ManagementEventsRule', { value: managementEventsRule.ruleArn });
 
 		// This appears to be current best practice for managing secrets.
 		// i.e. Allow CDK to create the skeleton of the secrets, wire that in to services that need it, then come in

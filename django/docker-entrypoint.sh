@@ -30,13 +30,6 @@ CMD="$1"
 
 # AWS Lambda App entrypoint (production)
 if [ "$CMD" = "lambda_gunicorn" ]; then
-  >&2 echo "Beginning lambda start-up sequence"
-
-  >&2 echo "Running migrations"
-  # Just for Lambda so it knows to import from mapa as the base, not django.mapa
-  export PYTHONPATH="/app/"
-  django-admin migrate
-
   >&2 echo "Serving Lambda request via gunicorn"
   gunicorn mapa.wsgi:application -c=gunicorn.conf.py
   exit

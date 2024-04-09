@@ -43,6 +43,9 @@ class ManagementEventsView(APIView):
 
             if eventType == "backup_to_google_drive":
                 orchestrate_google_drive_backup()
+            elif eventType == "run_migrations":
+                from django.core.management import execute_from_command_line
+                execute_from_command_line(['manage.py', 'migrate'])
             else:
                 raise Exception(f"Unknown event type '{eventType}'")
             return Response({})

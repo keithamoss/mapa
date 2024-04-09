@@ -64,11 +64,23 @@ export class TrustStack extends cdk.Stack {
 			],
 		});
 
+		// Policy to allow GitHub Actions to throw an event at EventBridge that triggers management events (e.g. Django migrations)
+		const policyPutManagementEvents = new ManagedPolicy(this, 'PutManagementEvents', {
+			statements: [
+				new PolicyStatement({
+					effect: Effect.ALLOW,
+					actions: ['events:PutEvents'],
+					resources: [`arn:aws:events:${props.env.region}:${props.env.account}:event-bus/default`],
+				}),
+			],
+		});
+
 		const githubActionsRole = new iam.CfnRole(this, 'GitHubActionsRole', {
 			managedPolicyArns: [
 				iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonEC2ContainerRegistryReadOnly').managedPolicyArn,
 				policyPushImageToECRRepo.managedPolicyArn,
 				policyUpdateDjangoLambdasFunctionCode.managedPolicyArn,
+				policyPutManagementEvents.managedPolicyArn,
 			],
 			policies: [
 				// -- A policy to permit assumption of the default AWS CDK roles. --
