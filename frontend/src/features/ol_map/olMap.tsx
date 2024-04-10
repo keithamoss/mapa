@@ -1,10 +1,11 @@
 import { Alert, AlertTitle } from '@mui/material';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
+import { default as olFeature } from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
-import { Geometry, Point } from 'ol/geom';
+import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
@@ -81,7 +82,9 @@ function OLMap(props: Props) {
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
 
 	const vectorLayer = useRef<
-		VectorImageLayer<VectorSource<Geometry>> | WebGLPointsLayer<VectorSource<Point>> | undefined
+		| VectorImageLayer<VectorSource<olFeature<Geometry>>>
+		| WebGLPointsLayer<VectorSource<olFeature<Geometry>>>
+		| undefined
 	>(undefined);
 	// ######################
 	// OpenLayers Map (End)
@@ -346,7 +349,7 @@ function OLMap(props: Props) {
 
 				manageVectorImageLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
-					vectorLayer.current as VectorImageLayer<VectorSource<Geometry>>,
+					vectorLayer.current as VectorImageLayer<VectorSource<olFeature<Geometry>>>,
 				);
 			}
 		} else if (mapRef.current !== undefined && mapRenderer === MapRenderer.WebGLPointsLayer) {
@@ -367,7 +370,7 @@ function OLMap(props: Props) {
 				vectorLayer.current = manageWebGLPointsLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
 					featuresAndSpriteSheet.spriteSheet,
-					vectorLayer.current as WebGLPointsLayer<VectorSource<Point>>,
+					vectorLayer.current as WebGLPointsLayer<VectorSource<olFeature<Geometry>>>,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
 					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),

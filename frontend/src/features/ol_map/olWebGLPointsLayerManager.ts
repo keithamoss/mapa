@@ -1,7 +1,7 @@
 import { Map } from 'ol';
-
+import { default as olFeature } from 'ol/Feature';
 import BaseEvent from 'ol/events/Event';
-import { Geometry, Point } from 'ol/geom';
+import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
@@ -182,7 +182,7 @@ export const createWebGLPointsLayer = (
 			attributions: [
 				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
 			],
-		}) as VectorSource<Point>,
+		}) /* as VectorSource<FeatureLike>*/,
 		style:
 			spriteSheet !== undefined
 				? {
@@ -191,14 +191,14 @@ export const createWebGLPointsLayer = (
 						'icon-scale': 0.5,
 						'icon-offset': spriteSheet.iconOffset,
 						'icon-size': spriteSheet.iconSize,
-				  }
+					}
 				: {
 						'circle-radius': 12,
 						'circle-rotate-with-view': false,
 						'circle-fill-color': mapaThemePrimaryGreen,
 						'circle-stroke-width': 1.5,
 						'circle-stroke-color': 'white',
-				  },
+					},
 		properties: {
 			id: 'data-layer',
 		},
@@ -218,7 +218,7 @@ export const manageWebGLPointsLayerCreation = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
+		vectorLayer as unknown as VectorLayer<VectorSource<olFeature<Geometry>>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);
@@ -231,7 +231,7 @@ export const manageWebGLPointsLayerCreation = (
 export const manageWebGLPointsLayerUpdate = (
 	features: GeoJSONFeatureCollection,
 	spriteSheet: WebGLLayerSpriteSheet | undefined,
-	vectorLayer: WebGLPointsLayer<VectorSource<Point>>,
+	vectorLayer: WebGLPointsLayer<VectorSource<olFeature<Geometry>>>,
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
@@ -266,7 +266,7 @@ export const manageWebGLPointsLayerUpdate = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		newVectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
+		newVectorLayer as unknown as VectorLayer<VectorSource<olFeature<Geometry>>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);

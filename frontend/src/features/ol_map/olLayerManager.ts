@@ -1,18 +1,18 @@
 import omitBy from 'lodash-es/omitBy';
+import { default as olFeature } from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
 import { getTopLeft, getWidth } from 'ol/extent.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Geometry, Point } from 'ol/geom';
 import { Modify } from 'ol/interaction';
+import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/WebGLTile';
 import 'ol/ol.css';
 import { Projection, get as getProjection, toLonLat } from 'ol/proj';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS.js';
-
-import Layer from 'ol/layer/Layer';
 import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
@@ -126,13 +126,13 @@ export const convertFeaturesToGeoJSON = async (
 											coordinates: feature.geom.coordinates,
 										},
 									};
-							  })
+								})
 							: [],
-			  }
+				}
 			: {
 					type: 'FeatureCollection',
 					features: [],
-			  };
+				};
 
 	return {
 		geoJSON,
@@ -215,7 +215,7 @@ export const createVectorLayerForUserPosition = (latitude: number, longitude: nu
 export const updateVectorLayerForUserPosition = (
 	latitude: number,
 	longitude: number,
-	vectorLayer: VectorLayer<VectorSource<Geometry>>,
+	vectorLayer: VectorLayer<VectorSource<olFeature<Geometry>>>,
 ) => {
 	const vectorSource = vectorLayer.getSource();
 	if (vectorSource !== null) {

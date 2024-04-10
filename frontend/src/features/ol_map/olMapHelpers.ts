@@ -24,7 +24,7 @@ export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Infinity,
-		  });
+			});
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {
 	const markerEl = document.createElement('div');
@@ -41,7 +41,9 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
 	if (position !== undefined) {
 		const markerOverlay = map.getOverlayById(geolocationMarkerOvelayerId);
-		markerOverlay.setPosition(fromLonLat(position));
+		if (markerOverlay !== null) {
+			markerOverlay.setPosition(fromLonLat(position));
+		}
 
 		if (centreOnMarker === true) {
 			const view = map.getView();
