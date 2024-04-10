@@ -1,8 +1,8 @@
-import { default as OLFeature } from 'ol/Feature';
+import Feature from 'ol/Feature';
 import { Icon } from 'ol/style';
 import Style from 'ol/style/Style';
 
-import { Feature } from '../../app/services/features';
+import { MapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, SymbologyProps } from '../../app/services/schemas';
 import { getFeatureDataItemForSchemaField, getSymbolValueForFeatureDataItem } from '../features/featureHelpers';
 import { getSchemaForFeature, isFieldDefinitionSymbology, isSchemaDataItemToBeUsed } from '../schemas/schemaHelpers';
@@ -14,7 +14,7 @@ import {
 
 const styleCache: { [key: string]: Style } = {};
 
-export const getIconForSymbologyConfig = (olFeature: OLFeature, symbologyConfig: Partial<SymbologyProps>) => {
+export const getIconForSymbologyConfig = (olFeature: Feature, symbologyConfig: Partial<SymbologyProps>) => {
 	const icon = getFontAwesomeIconForSymbolAsSVGString(symbologyConfig);
 
 	if (icon === null) {
@@ -32,10 +32,10 @@ export const getIconForSymbologyConfig = (olFeature: OLFeature, symbologyConfig:
 	});
 };
 
-export const olStyleFunction = (olFeature: OLFeature) => {
+export const olStyleFunction = (olFeature: Feature) => {
 	// Note this isn't strictly speaking one of our Features, because we don't have our 'geom' field (but we don't need it, so...)
 	// @TODO Build the feature from the untyped props from scratch (so we can detect anything missing) or find a way to make OL geometry TypeScript typed.
-	const feature = olFeature.getProperties() as Feature;
+	const feature = olFeature.getProperties() as MapaFeature;
 
 	if (feature.symbolCacheKey !== undefined && styleCache[feature.symbolCacheKey] !== undefined) {
 		// console.log("cache hit");
@@ -56,7 +56,7 @@ export const olStyleFunction = (olFeature: OLFeature) => {
 };
 
 export const determineSymbolForFeature = (
-	feature: Feature,
+	feature: MapaFeature,
 	defaultMapSymbology: SymbologyProps | null,
 	featureSchemas: FeatureSchema[],
 ) => {

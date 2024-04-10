@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dayjs from 'dayjs';
 import MiniSearch, { SearchResult } from 'minisearch';
-import { Feature } from '../../app/services/features';
+import { MapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
 import { SearchField } from '../app/appSlice';
 import { getFeatureDataItemForSchemaField } from '../features/featureHelpers';
@@ -20,7 +20,7 @@ export interface FeatureSearchResult extends SearchResult {
 }
 
 export const searchFeatures = (
-	features: Feature[],
+	features: MapaFeature[],
 	schemas: FeatureSchema[],
 	search_term: string,
 	search_fields: SearchField[],
@@ -74,8 +74,8 @@ export const searchFeatures = (
 							return dataItem !== undefined && typeof dataItem.value === 'string'
 								? dayjs(dataItem.value).format('DD/MM/YYYY')
 								: typeof f.default_value === 'string'
-								? dayjs(f.default_value).format('DD/MM/YYYY')
-								: '';
+									? dayjs(f.default_value).format('DD/MM/YYYY')
+									: '';
 						});
 				}
 

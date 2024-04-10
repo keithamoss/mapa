@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Feature, useUpdateFeatureMutation } from '../../app/services/features';
+import { MapaFeature, useUpdateFeatureMutation } from '../../app/services/features';
 import { selectActiveMapId } from '../app/appSlice';
 import FeatureForm from './featureForm';
 import { selectFeatureById } from './featuresSlice';
@@ -36,7 +36,7 @@ function FeatureEditorEntrypointLayer2(props: { mapId: number; featureId: number
 
 interface Props {
 	mapId: number;
-	feature: Feature;
+	feature: MapaFeature;
 }
 
 function FeatureEditor(props: Props) {
@@ -60,7 +60,7 @@ function FeatureEditor(props: Props) {
 	}, [isUpdatingFeatureSuccessful, navigate]);
 
 	const onDoneEditing = useCallback(
-		(feature: Feature) => {
+		(feature: MapaFeature) => {
 			updateFeature(feature);
 		},
 		[updateFeature],

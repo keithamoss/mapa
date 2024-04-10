@@ -31,7 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { searchFormValidationSchema } from '../../app/forms/searchForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { Feature } from '../../app/services/features';
+import { MapaFeature } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import {
 	SearchField,
@@ -65,7 +65,7 @@ function SearchManagerEntrypointLayer2(props: { mapId: number }) {
 
 interface Props {
 	mapId: number;
-	features: Feature[];
+	features: MapaFeature[];
 }
 
 function SearchManager(props: Props) {

@@ -9,7 +9,7 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
-import { Feature } from '../../app/services/features';
+import { MapaFeature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
@@ -100,13 +100,13 @@ export const onGeolocationError =
 		}
 	};
 
-export const onMapClick = (callback: (features: Feature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
-	const features: Feature[] = [];
+export const onMapClick = (callback: (features: MapaFeature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
+	const features: MapaFeature[] = [];
 
 	evt.map.forEachFeatureAtPixel(
 		evt.pixel,
 		(feature) => {
-			features.push(feature.getProperties() as Feature);
+			features.push(feature.getProperties() as MapaFeature);
 		},
 		{
 			layerFilter: (layer) => isDataVectorLayer(layer),
@@ -128,7 +128,7 @@ export const setModifyInteractionStatus = (map: Map | undefined, status: boolean
 };
 
 export const onModifyInteractionStartEnd =
-	(callback: (feature: Partial<Feature>) => void) => (evt: BaseEvent | Event) => {
+	(callback: (feature: Partial<MapaFeature>) => void) => (evt: BaseEvent | Event) => {
 		const target = document.getElementById(mapTargetElementId);
 
 		if (target !== null) {
@@ -140,7 +140,7 @@ export const onModifyInteractionStartEnd =
 					const point = feature.getGeometry() as Point;
 
 					if (point.getType() === 'Point') {
-						const { id, geom_type, map_id } = feature.getProperties() as Feature;
+						const { id, geom_type, map_id } = feature.getProperties() as MapaFeature;
 						callback({
 							id,
 							geom: getPointGeoJSONFromCoordinates(point),

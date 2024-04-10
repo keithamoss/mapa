@@ -1,4 +1,4 @@
-import { Feature, FeatureDataItem } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature } from '../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionCollection,
@@ -19,5 +19,5 @@ export const getSymbolValueForFeatureDataItem = (
 
 export const getFeatureDataItemForSchemaField = (
 	fieldDefinition: FeatureSchemaFieldDefinitionCollection,
-	feature: Feature,
+	feature: MapaFeature,
 ) => feature.data.find((featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id);

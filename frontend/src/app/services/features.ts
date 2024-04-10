@@ -44,7 +44,7 @@ export type FeatureDataItem =
 	| FeatureDataItemSymbologyBooleanField
 	| FeatureDataItemDateField;
 
-export interface Feature {
+export interface MapaFeature {
 	id: number;
 	geom: Geom;
 	geom_type: GeomType;
@@ -59,11 +59,11 @@ export interface Feature {
 	import_job: string;
 }
 
-export type NewFeature = Omit<Feature, 'id'>;
+export type NewMapaFeature = Omit<MapaFeature, 'id'>;
 
-type FeaturesResponse = Feature[];
+type FeaturesResponse = MapaFeature[];
 
-export const featuresAdapter = createEntityAdapter<Feature>();
+export const featuresAdapter = createEntityAdapter<MapaFeature>();
 
 const initialState = featuresAdapter.getInitialState();
 export { initialState as initialFeaturesState };
@@ -74,7 +74,7 @@ export { initialState as initialFeaturesState };
 // This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeatures: builder.query<EntityState<Feature, number>, void>({
+		getFeatures: builder.query<EntityState<MapaFeature, number>, void>({
 			query: () => `maps/features/`,
 			transformResponse: (res: FeaturesResponse) => {
 				return featuresAdapter.setAll(initialState, res);
@@ -84,7 +84,7 @@ export const featuresApi = api.injectEndpoints({
 				dispatch(prepareFeaturesForMap());
 			},
 		}),
-		addFeatureToMap: builder.mutation<Feature, NewFeature>({
+		addFeatureToMap: builder.mutation<MapaFeature, NewMapaFeature>({
 			query: (initialFeature) => ({
 				url: 'features/',
 				method: 'POST',
@@ -111,7 +111,7 @@ export const featuresApi = api.injectEndpoints({
 				}
 			},
 		}),
-		updateFeature: builder.mutation<Feature, Partial<Feature>>({
+		updateFeature: builder.mutation<MapaFeature, Partial<MapaFeature>>({
 			query: (feature) => ({
 				url: `features/${feature.id}/`,
 				method: 'PUT',

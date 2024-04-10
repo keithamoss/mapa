@@ -1,6 +1,6 @@
 import { Alert, AlertTitle } from '@mui/material';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
-import { default as olFeature } from 'ol/Feature';
+import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
-import { Feature, useUpdateFeatureMutation } from '../../app/services/features';
+import { MapaFeature, useUpdateFeatureMutation } from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -82,9 +82,7 @@ function OLMap(props: Props) {
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
 
 	const vectorLayer = useRef<
-		| VectorImageLayer<VectorSource<olFeature<Geometry>>>
-		| WebGLPointsLayer<VectorSource<olFeature<Geometry>>>
-		| undefined
+		VectorImageLayer<VectorSource<Feature<Geometry>>> | WebGLPointsLayer<VectorSource<Feature<Geometry>>> | undefined
 	>(undefined);
 	// ######################
 	// OpenLayers Map (End)
@@ -268,7 +266,7 @@ function OLMap(props: Props) {
 
 			initialMap.on(
 				'click',
-				onMapClick((features: Feature[]) => {
+				onMapClick((features: MapaFeature[]) => {
 					dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
 
 					if (features.length === 1) {
@@ -341,7 +339,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.geoJSON,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -349,7 +347,7 @@ function OLMap(props: Props) {
 
 				manageVectorImageLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
-					vectorLayer.current as VectorImageLayer<VectorSource<olFeature<Geometry>>>,
+					vectorLayer.current as VectorImageLayer<VectorSource<Feature<Geometry>>>,
 				);
 			}
 		} else if (mapRef.current !== undefined && mapRenderer === MapRenderer.WebGLPointsLayer) {
@@ -361,7 +359,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.spriteSheet,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -370,10 +368,10 @@ function OLMap(props: Props) {
 				vectorLayer.current = manageWebGLPointsLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
 					featuresAndSpriteSheet.spriteSheet,
-					vectorLayer.current as WebGLPointsLayer<VectorSource<olFeature<Geometry>>>,
+					vectorLayer.current as WebGLPointsLayer<VectorSource<Feature<Geometry>>>,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			}

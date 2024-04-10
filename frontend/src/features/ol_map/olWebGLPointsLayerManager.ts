@@ -1,5 +1,5 @@
 import { Map } from 'ol';
-import { default as olFeature } from 'ol/Feature';
+import Feature from 'ol/Feature';
 import BaseEvent from 'ol/events/Event';
 import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
@@ -218,7 +218,7 @@ export const manageWebGLPointsLayerCreation = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		vectorLayer as unknown as VectorLayer<VectorSource<olFeature<Geometry>>>,
+		vectorLayer as unknown as VectorLayer<VectorSource<Feature<Geometry>>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);
@@ -231,7 +231,7 @@ export const manageWebGLPointsLayerCreation = (
 export const manageWebGLPointsLayerUpdate = (
 	features: GeoJSONFeatureCollection,
 	spriteSheet: WebGLLayerSpriteSheet | undefined,
-	vectorLayer: WebGLPointsLayer<VectorSource<olFeature<Geometry>>>,
+	vectorLayer: WebGLPointsLayer<VectorSource<Feature<Geometry>>>,
 	map: Map,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
@@ -266,7 +266,7 @@ export const manageWebGLPointsLayerUpdate = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		newVectorLayer as unknown as VectorLayer<VectorSource<olFeature<Geometry>>>,
+		newVectorLayer as unknown as VectorLayer<VectorSource<Feature<Geometry>>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);

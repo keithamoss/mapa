@@ -10,7 +10,7 @@ import {
 } from '../../app/forms/schemaFieldsForms';
 import { useAppSelector } from '../../app/hooks/store';
 import { usePrevious } from '../../app/hooks/usePrevious';
-import { Feature, NewFeature } from '../../app/services/features';
+import { MapaFeature, NewMapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
@@ -21,7 +21,7 @@ import SchemaDataEntryTextField from './TextField/schemaDataEntryTextField';
 
 interface PropsEntrypoint {
 	schemaId: number;
-	feature: Feature | NewFeature;
+	feature: MapaFeature | NewMapaFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
 	touchedFieldsRef: React.MutableRefObject<
 		| Partial<
@@ -60,7 +60,7 @@ export interface SchemaFormFieldsFormValues {
 
 interface Props {
 	schema: FeatureSchema;
-	feature: Feature | NewFeature;
+	feature: MapaFeature | NewMapaFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
 	touchedFieldsRef: React.MutableRefObject<
 		| Partial<

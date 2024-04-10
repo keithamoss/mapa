@@ -19,7 +19,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { Feature, FeatureDataItem, NewFeature, useDeleteFeatureMutation } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature, NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -36,9 +36,9 @@ import { getSchemasAvailableForMap, selectFeatureSchemaById } from '../schemas/s
 
 interface Props {
 	mapId: number;
-	feature: Feature | NewFeature;
-	onDoneAdding?: (feature: NewFeature, schema: FeatureSchema | undefined) => void;
-	onDoneEditing?: (feature: Feature) => void;
+	feature: MapaFeature | NewMapaFeature;
+	onDoneAdding?: (feature: NewMapaFeature, schema: FeatureSchema | undefined) => void;
+	onDoneEditing?: (feature: MapaFeature) => void;
 }
 
 function FeatureForm(props: Props) {
@@ -237,7 +237,7 @@ function FeatureForm(props: Props) {
 		onSaveAndCreateOrUpdateFeature(updateFeatureDataFromForm(localFeature, dataFiltered));
 	};
 
-	const updateFeatureDataFromForm = (feature: Feature | NewFeature, data: SchemaFormFieldsFormValues) => {
+	const updateFeatureDataFromForm = (feature: MapaFeature | NewMapaFeature, data: SchemaFormFieldsFormValues) => {
 		const featureData: FeatureDataItem[] = [];
 
 		// Rebuild the feature's data from the contents of the form.
@@ -257,12 +257,12 @@ function FeatureForm(props: Props) {
 		};
 	};
 
-	const onSaveAndCreateOrUpdateFeature = (feature: Feature | NewFeature) => {
+	const onSaveAndCreateOrUpdateFeature = (feature: MapaFeature | NewMapaFeature) => {
 		if (onDoneAdding !== undefined) {
-			const featureData: NewFeature = { ...feature };
+			const featureData: NewMapaFeature = { ...feature };
 			onDoneAdding(featureData, schema);
 		} else if ('id' in feature && onDoneEditing !== undefined) {
-			const featureData: Feature = { ...feature };
+			const featureData: MapaFeature = { ...feature };
 			onDoneEditing(featureData);
 		}
 

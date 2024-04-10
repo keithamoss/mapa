@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
 import { authApi } from '../../app/services/auth';
-import { Feature, featuresApi } from '../../app/services/features';
+import { featuresApi, MapaFeature } from '../../app/services/features';
 import { RootState } from '../../app/store';
 import { selectMapsResult } from '../maps/mapsSlice';
 import { convertFeaturesToGeoJSON, GeoJSONFeatureCollection } from '../ol_map/olLayerManager';
@@ -165,7 +165,7 @@ export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap
 		const featuresResult = featuresApi.endpoints.getFeatures.select()(state);
 
 		if (activeMap !== undefined && featuresResult.data !== undefined) {
-			const features = (Object.values(featuresResult.data.entities) as Feature[]) || [];
+			const features = (Object.values(featuresResult.data.entities) as MapaFeature[]) || [];
 
 			const geoJSONFeatures = await convertFeaturesToGeoJSON(
 				features,

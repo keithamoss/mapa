@@ -1,11 +1,11 @@
-import { Feature, FeatureDataItem } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature } from '../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionCollection,
 	FeatureSchemaFieldType,
 } from '../../app/services/schemas';
 
-export const getSchemaForFeature = (feature: Feature, schemas: FeatureSchema[]) =>
+export const getSchemaForFeature = (feature: MapaFeature, schemas: FeatureSchema[]) =>
 	schemas.find((schema) => schema.id === feature.schema_id);
 
 export const isSchemaDataItemToBeUsed = (
