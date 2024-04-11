@@ -17,15 +17,16 @@ updates:
       timezone: Australia/Perth
     open-pull-requests-limit: 99
   ignore:
-  - dependency-name: "react-hook-form"
-    versions:
-    - 7.44.3
-  - dependency-name: "@hookform/resolvers"
-    versions:
-    - 3.1.0
-  - dependency-name: "yup"
-    versions:
-    - 1.2.0
-  - dependency-name: "7.4.0"
-    versions:
-    - 7.4.0
+  # ESLint 8 => 9 ecosystem is way too brittle and fiddly to configure all of the plugins
+  # Not a yak worth shaving.
+  - dependency-name: "@typescript-eslint/eslint-plugin"
+  - dependency-name: "eslint"
+  - dependency-name: "eslint-config-airbnb"
+  - dependency-name: "eslint-config-airbnb-typescript"
+  - dependency-name: "eslint-config-prettier"
+  - dependency-name: "eslint-import-resolver-typescript"
+  - dependency-name: "eslint-plugin-import"
+  - dependency-name: "eslint-plugin-jsx-a11y"
+  - dependency-name: "eslint-plugin-prettier"
+  - dependency-name: "eslint-plugin-react"
+  - dependency-name: "eslint-plugin-react-hooks"
