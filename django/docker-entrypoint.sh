@@ -83,6 +83,9 @@ fi
 if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then
   waitfordb
 
+  # So we know to import from mapa as the base, not django.mapa
+  export PYTHONPATH="/app/"
+
   django-admin migrate
   django-admin runserver "0.0.0.0:8000"
   exit
