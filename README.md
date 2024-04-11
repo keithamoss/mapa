@@ -54,6 +54,8 @@ yarn install
 
 First, the backstory. Then we'll get on to the step-by-step instructions.
 
+To begin with, this will all initially inspired by a search that lead us to [https://github.com/fun-with-serverless/serverless-django/tree/main](serverless-django).
+
 ## Getting IPv6 working so the Lambdas have a defined range that we control
 
 We needed the lambdas to have a defined IP range so we could safely lock down the PostgreSQL EC2.
