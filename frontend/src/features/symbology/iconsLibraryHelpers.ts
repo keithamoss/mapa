@@ -47,6 +47,7 @@ export const getIconLabelByName = (iconName: string) => {
 };
 
 export interface IconSearchResult extends SearchResult {
+	id: number;
 	name: string;
 	label: string;
 	'search.terms': string[];

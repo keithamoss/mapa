@@ -416,7 +416,7 @@ const iconDefs = [
 	},
 ];
 
-const flatIconDefs = [
+export const flatIconDefs = [
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"circle-question","modifierColour":"rgba(0, 0, 0, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"apple-fruits7","iconStyle":"coloured"}',
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"","modifierColour":"rgba(24, 49, 83, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"berry-fruits8","iconStyle":"coloured"}',
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(152, 150, 150, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"circle-question","modifierColour":"rgba(0, 0, 0, 1)","modifierOpacity":1,"width":54,"height":54,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"almond-nature2","iconStyle":"coloured"}',

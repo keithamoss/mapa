@@ -12,6 +12,7 @@ import { getSymbolNameBySymbolId } from '../symbology/symbologyHelpers';
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
 
 export interface FeatureSearchResult extends SearchResult {
+	id: number;
 	map_id: number;
 	schema_id: number;
 	symbol_id: number;
@@ -94,6 +95,7 @@ export const searchFeatures = (
 };
 
 export interface SymbolSearchResult extends SearchResult {
+	id: number;
 	'prop.name': string;
 }
 

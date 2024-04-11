@@ -25,7 +25,7 @@ export const getStringOrEmptyStringForSchemasFieldsFormField = (
 	schemaField === undefined || schemaField === null || schemaField[fieldName] === undefined
 		? ''
 		: // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-		  `${schemaField[fieldName]}`;
+			`${schemaField[fieldName]}`;
 
 export const getNumberOrZeroForSchemasFieldsFormField = (
 	schemaField: Partial<FeatureSchemaFieldDefinitionCollection> | null | undefined,

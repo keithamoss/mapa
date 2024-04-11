@@ -91,7 +91,7 @@ function SettingsManager() {
 									hour: 'numeric',
 									minute: 'numeric',
 									second: 'numeric',
-							  })
+								})
 							: 'Never backed up 😬'}
 					</FormControl>
 

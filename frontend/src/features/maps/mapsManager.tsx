@@ -108,13 +108,13 @@ function MapManager() {
 								{map.hero_icon !== null
 									? getFontAwesomeIconForSymbolPreview(map.hero_icon, {
 											size: defaultSymbolSizeForFormFields,
-									  })
+										})
 									: getFontAwesomeIconForSymbolPreview({
 											icon: defaultMapHeroIcon,
 											colour: defaultMapHeroIconColour,
 											opacity: defaultMapHeroIconOpacity,
 											size: defaultSymbolSizeForFormFields,
-									  })}
+										})}
 							</ListItemIcon>
 
 							<ListItemButton onClick={onClickMap(map.id)} sx={{ pl: 0 }}>

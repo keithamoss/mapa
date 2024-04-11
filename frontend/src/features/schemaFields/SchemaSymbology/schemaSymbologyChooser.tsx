@@ -63,7 +63,7 @@ const getSymbolOptions = (mapId: number, schema: FeatureSchema, symbology: Featu
 							? {
 									symbol,
 									option_group: 'Most recently added',
-							  }
+								}
 							: undefined;
 					})
 					// Ref: https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
