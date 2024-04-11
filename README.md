@@ -42,6 +42,14 @@ yarn set version 3.x
 yarn install
 ```
 
+To dump all deps en masse:
+
+```
+npm install -g npm-check-updates
+npm-check-updates -u
+yarn install
+```
+
 # AWS deployment backstory (Production and Staging)
 
 First, the backstory. Then we'll get on to the step-by-step instructions.
