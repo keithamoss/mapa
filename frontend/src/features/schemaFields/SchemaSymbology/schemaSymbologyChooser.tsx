@@ -168,7 +168,7 @@ function SchemaSymbologyChooser(props: Props) {
 	return (
 		<React.Fragment>
 			<DialogWithTransition themeColour={defaultNakedDialogColour}>
-				<AppBar color="transparent" elevation={0} sx={{ position: 'sticky' }}>
+				<AppBar elevation={0} sx={{ position: 'sticky', backgroundColor: 'white' }}>
 					<Toolbar>
 						<div style={{ width: '100%' }}>
 							<StyledOutlinedInput
