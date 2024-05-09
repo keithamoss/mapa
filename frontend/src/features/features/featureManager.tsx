@@ -29,7 +29,6 @@ function FeatureManager() {
 		// If we happen to reload the page we'll have no features for editing, so just pop right back to the map
 		if (features.length === 0) {
 			navigate('/');
-			// return null;
 		}
 	}, [features, navigate]);
 
@@ -41,12 +40,9 @@ function FeatureManager() {
 	};
 
 	return (
-		<DialogWithTransition
-			// For some reason this was causing the dialog to close as soon as it opened
-			// onClose={onClose}
-			dialogProps={{ fullScreen: false, fullWidth: true }}
-		>
+		<DialogWithTransition onClose={onClose} dialogProps={{ fullScreen: false, fullWidth: true }}>
 			<DialogTitle>Edit Features</DialogTitle>
+
 			<DialogContent>
 				<List>
 					{features.map((feature) => (
@@ -70,6 +66,7 @@ function FeatureManager() {
 					))}
 				</List>
 			</DialogContent>
+
 			<DialogActions>
 				<Button onClick={onClose}>Cancel</Button>
 			</DialogActions>
