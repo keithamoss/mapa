@@ -1,5 +1,6 @@
 import { EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
+import { Point } from 'ol/geom';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
@@ -57,6 +58,12 @@ export interface MapaFeature {
 	symbol?: Partial<SymbologyProps>;
 	// symbolCacheKeyWebGL?: string;
 	import_job: string;
+}
+
+// convertFeaturesToGeoJSON() omits the `geom` property because OpenLayers needs `geometry`
+// OpenLayers makes `geometry` into an OpenLayers Geom Point object
+export interface MapaOpenLayersFeature extends Omit<MapaFeature, 'geom'> {
+	geometry: Point;
 }
 
 export type NewMapaFeature = Omit<MapaFeature, 'id'>;

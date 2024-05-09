@@ -7,6 +7,7 @@ import {
 	List,
 	ListItem,
 	ListItemButton,
+	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
 import React from 'react';
@@ -14,13 +15,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { getFeaturesAvailableForEditing, setFeaturesAvailableForEditing } from '../app/appSlice';
+import { defaultSymbolSizeForFormFields, getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
+import { getFeatureLabel } from './featureHelpers';
 
 function FeatureManager() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 
-	const featureIds = useAppSelector(getFeaturesAvailableForEditing);
+	const features = useAppSelector(getFeaturesAvailableForEditing);
 
 	const onClickFeature = (featureId: number) => () => navigate(`/FeatureManager/Edit/${featureId}/`);
 
@@ -35,14 +38,22 @@ function FeatureManager() {
 			// onClose={onClose}
 			dialogProps={{ fullScreen: false, fullWidth: true }}
 		>
-			<DialogTitle>Features</DialogTitle>
+			<DialogTitle>Edit Features</DialogTitle>
 			<DialogContent>
 				<List>
-					{featureIds.map((featureId) => (
-						<React.Fragment key={featureId}>
+					{features.map((feature) => (
+						<React.Fragment key={feature.id}>
 							<ListItem disablePadding>
-								<ListItemButton onClick={onClickFeature(featureId)}>
-									<ListItemText primary={`# ${featureId}`} />
+								<ListItemIcon sx={{ minWidth: defaultSymbolSizeForFormFields }}>
+									{getFontAwesomeIconForSymbolPreview(
+										{ ...feature.symbol },
+										{
+											size: defaultSymbolSizeForFormFields,
+										},
+									)}
+								</ListItemIcon>
+								<ListItemButton onClick={onClickFeature(feature.id)}>
+									<ListItemText primary={getFeatureLabel(feature) || <em>Unnamed feature</em>} />
 								</ListItemButton>
 							</ListItem>
 

@@ -9,7 +9,7 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
-import { MapaFeature } from '../../app/services/features';
+import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
@@ -100,22 +100,23 @@ export const onGeolocationError =
 		}
 	};
 
-export const onMapClick = (callback: (features: MapaFeature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
-	const features: MapaFeature[] = [];
+export const onMapClick =
+	(callback: (features: MapaOpenLayersFeature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
+		const features: MapaOpenLayersFeature[] = [];
 
-	evt.map.forEachFeatureAtPixel(
-		evt.pixel,
-		(feature) => {
-			features.push(feature.getProperties() as MapaFeature);
-		},
-		{
-			layerFilter: (layer) => isDataVectorLayer(layer),
-			hitTolerance: 5,
-		},
-	);
+		evt.map.forEachFeatureAtPixel(
+			evt.pixel,
+			(feature) => {
+				features.push(feature.getProperties() as MapaOpenLayersFeature);
+			},
+			{
+				layerFilter: (layer) => isDataVectorLayer(layer),
+				hitTolerance: 5,
+			},
+		);
 
-	callback(features);
-};
+		callback(features);
+	};
 
 export const setModifyInteractionStatus = (map: Map | undefined, status: boolean) => {
 	if (map !== undefined) {

@@ -10,13 +10,13 @@ import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } fro
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, transform } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
-import { MapaFeature, useUpdateFeatureMutation } from '../../app/services/features';
+import { MapaFeature, MapaOpenLayersFeature, useUpdateFeatureMutation } from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -266,8 +266,22 @@ function OLMap(props: Props) {
 
 			initialMap.on(
 				'click',
-				onMapClick((features: MapaFeature[]) => {
-					dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
+				onMapClick((features: MapaOpenLayersFeature[]) => {
+					dispatch(
+						setFeaturesAvailableForEditing(
+							features.map((f) => {
+								const { geometry, ...rest } = f;
+
+								return {
+									...rest,
+									geom: {
+										type: 'Point',
+										coordinates: transform(geometry.getCoordinates(), 'EPSG:3857', 'EPSG:4326'),
+									},
+								};
+							}),
+						),
+					);
 
 					if (features.length === 1) {
 						navigate(`/FeatureManager/Edit/${features[0].id}`);
