@@ -10,7 +10,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -24,6 +24,14 @@ function FeatureManager() {
 	const dispatch = useAppDispatch();
 
 	const features = useAppSelector(getFeaturesAvailableForEditing);
+
+	useEffect(() => {
+		// If we happen to reload the page we'll have no features for editing, so just pop right back to the map
+		if (features.length === 0) {
+			navigate('/');
+			// return null;
+		}
+	}, [features, navigate]);
 
 	const onClickFeature = (featureId: number) => () => navigate(`/FeatureManager/Edit/${featureId}/`);
 
