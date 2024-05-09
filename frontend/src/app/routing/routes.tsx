@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from '../../App';
 import AboutPage from '../../features/about/aboutPage';
-import DebugView from '../../features/app/debugView';
+import SymbolsDebugView from '../../features/app/symbolsDebugView';
 import FeatureCreator from '../../features/features/featureCreator';
 import FeatureEditor from '../../features/features/featureEditor';
 import FeatureManager from '../../features/features/featureManager';
@@ -26,8 +26,8 @@ export const router = sentryCreateBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: 'DebugView',
-				element: <DebugView />,
+				path: 'SymbolsDebugView',
+				element: <SymbolsDebugView />,
 			},
 			{
 				path: 'MapManager',

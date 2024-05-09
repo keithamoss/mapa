@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import CloseIcon from '@mui/icons-material/Close';
-import { AppBar, FormControl, FormGroup, IconButton, ListItem, Toolbar, Typography } from '@mui/material';
+import { AppBar, FormControl, FormGroup, IconButton, ListItem, ListItemText, Toolbar, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -591,7 +591,7 @@ export const flatIconDefs = [
 	'{"iconProps":{"colour":"rgba(24, 49, 83, 1)","opacity":1,"secondaryColour":"rgba(79, 132, 181, 1)","secondaryOpacity":0.4,"tertiaryColour":"rgba(166, 166, 166, 1)","tertiaryOpacity":1,"modifierIcon":"","modifierColour":"rgba(24, 49, 83, 1)","modifierOpacity":1,"width":27,"height":27,"rotation":0,"backgroundColour":"rgba(255, 255, 255, 0.012)"},"iconName":"faucet-drip","iconStyle":"duotone"}',
 ];
 
-function DebugView() {
+function SymbolsDebugView() {
 	const user = useAppSelector(selectUser);
 
 	const navigate = useNavigate();
@@ -624,6 +624,7 @@ function DebugView() {
 									// size: defaultSymbolSizeForFormFields,
 									size: 75,
 								})}
+								<ListItemText primary={iconDef.props.name}></ListItemText>
 							</ListItem>
 						);
 					})}
@@ -832,4 +833,4 @@ function DebugView() {
 	);
 }
 
-export default DebugView;
+export default SymbolsDebugView;
