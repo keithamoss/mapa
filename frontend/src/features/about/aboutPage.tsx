@@ -26,7 +26,7 @@ function AboutPage() {
 
 				<Paper elevation={0} sx={{ m: 3 }}>
 					<Box sx={{ mb: 3 }}>
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For H, with ❤️
 						</Typography>
 					</Box>
@@ -34,12 +34,12 @@ function AboutPage() {
 					<Box sx={{ mb: 3 }}>
 						<FormSectionHeading>The Map</FormSectionHeading>
 
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For the map, many many thanks for the amazing team behind the{' '}
 							<a href="https://openlayers.org/">OpenLayers</a>, the interactive web mapping library par excellence.
 						</Typography>
 
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For the basemap, an equally massive thanks to everyone who contributes to{' '}
 							<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> - and to the folks at{' '}
 							<a href="https://www.mapbox.com/map-feedback/">Mapbox</a> who make it a breeze to design and publish
@@ -50,19 +50,19 @@ function AboutPage() {
 					<Box sx={{ mb: 3 }}>
 						<FormSectionHeading>The Icons</FormSectionHeading>
 
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For the majority of our icons, a big shout out to the folks at{' '}
 							<a href="https://fontawesome.com/">Font Awesome</a> for the single most beautifully designed library of
 							icons on the planet.
 						</Typography>
 
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For our coloured icons of fruits, vegetables, and the like thanks are owed to{' '}
 							<a href="https://www.flaticon.com/">Flaticon</a> and the wonderful community of creators who publish icons
 							there.
 						</Typography>
 
-						<Typography variant="body2" sx={{ mb: 1 }}>
+						<Typography variant="body1" sx={{ mb: 1 }}>
 							For specific credits, check out{' '}
 							<a href="https://github.com/keithamoss/mapa/blob/main/frontend/src/features/symbology/flaticon/icons/working-space/PACKS.md">
 								PACKS.md
