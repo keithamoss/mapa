@@ -64,6 +64,7 @@ export default defineConfig(({ command, mode }) => {
 		optimizeDeps: {
 			include: [
 				'@mui/icons-material',
+				'@mui/lab',
 				// '@mui/material',
 				// '@mui/system',
 				// '@mui/x-date-pickers',
