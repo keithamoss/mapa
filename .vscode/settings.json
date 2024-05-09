@@ -1,0 +1,34 @@
+{
+  "eslint.workingDirectories": [
+    "./frontend"
+  ],
+  "prettier.configPath": "./frontend/.prettierrc.json",
+  "prettier.prettierPath": "./frontend/.yarn/sdks/prettier/index.cjs",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": "./frontend/.yarn/sdks",
+  "typescript.tsdk": "./frontend/.yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "errorLens.onSave": true,
+  "[xml]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+  "spellright.language": [
+    "en_AU"
+  ],
+  "spellright.documentTypes": [
+    "markdown",
+    "latex",
+    "plaintext",
+    "github-actions-workflow"
+  ],
+  "spellright.parserByClass": {
+    "github-actions-workflow": {
+      "parser": "code"
+    }
+  },
+}
