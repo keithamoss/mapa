@@ -41,6 +41,8 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	background: rgba(34, 105, 146, 0.9);
 	box-shadow: 0 0 0 0 rgba(34, 105, 146, 1);
 	animation: pulse-marker 2s infinite;
+	/* Hopefully this fixes the 'long pressing on the geolocation marker highlights the whole map like it's a block of text' bug */
+	pointer-events: none;
 }
 
 @keyframes pulse-marker {
