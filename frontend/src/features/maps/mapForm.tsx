@@ -1,8 +1,7 @@
-import CloseIcon from '@mui/icons-material/Close';
-
-import TuneIcon from '@mui/icons-material/Tune';
-
 import { yupResolver } from '@hookform/resolvers/yup';
+import CloseIcon from '@mui/icons-material/Close';
+import TuneIcon from '@mui/icons-material/Tune';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	AppBar,
 	Box,
@@ -40,12 +39,13 @@ import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 
 interface Props {
 	map?: Map;
+	isMapSaving: boolean;
 	onDoneAdding?: (map: NewMap) => void;
 	onDoneEditing?: (map: Map) => void;
 }
 
 function MapForm(props: Props) {
-	const { map, onDoneAdding, onDoneEditing } = props;
+	const { map, isMapSaving, onDoneAdding, onDoneEditing } = props;
 
 	const navigate = useNavigate();
 
@@ -173,12 +173,15 @@ function MapForm(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onCancelForm}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Map
 						</Typography>
-						<Button color="inherit" onClick={onClickSave}>
-							Save
-						</Button>
+
+						<LoadingButton loading={isMapSaving} color="inherit" onClick={onClickSave}>
+							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+							<span>Save</span>
+						</LoadingButton>
 					</Toolbar>
 				</AppBar>
 

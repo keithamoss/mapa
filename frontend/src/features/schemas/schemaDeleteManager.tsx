@@ -1,11 +1,10 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	Alert,
 	AlertTitle,
 	AppBar,
-	Button,
 	FormControl,
 	IconButton,
 	List,
@@ -17,11 +16,11 @@ import {
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
 import { useDeleteSchemaMutation, useLazyCheckCanDeleteFeatureSchemaQuery } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import NotFound from '../../NotFound';
 import { selectAllMaps } from '../maps/mapsSlice';
 
 function SchemaDeleteManagerEntrypoint() {
@@ -52,7 +51,8 @@ function SchemaDeleteManager(props: Props) {
 		trigger(schemaId);
 	}
 
-	const [deleteSchema, { isSuccess: isDeleteSchemaSuccessful, error: deleteError }] = useDeleteSchemaMutation();
+	const [deleteSchema, { isLoading: isDeleteSchemaLoading, isSuccess: isDeleteSchemaSuccessful, error: deleteError }] =
+		useDeleteSchemaMutation();
 
 	// See note in MapEditor about usage of useEffect
 	useEffect(() => {
@@ -82,6 +82,7 @@ function SchemaDeleteManager(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onClose}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Delete Schema
 						</Typography>
@@ -104,15 +105,18 @@ function SchemaDeleteManager(props: Props) {
 							</Alert>
 
 							<FormControl sx={{ mt: 3 }} component="fieldset" variant="outlined">
-								<Button
+								<LoadingButton
+									loading={isDeleteSchemaLoading}
+									loadingPosition="start"
 									variant="outlined"
 									color="error"
 									startIcon={<DeleteIcon color="error" />}
 									onClick={onDelete}
 									sx={{ maxWidth: 350 }}
 								>
-									Delete
-								</Button>
+									{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+									<span>Delete</span>
+								</LoadingButton>
 							</FormControl>
 						</React.Fragment>
 					)}

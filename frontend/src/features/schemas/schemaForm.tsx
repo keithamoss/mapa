@@ -1,9 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FlightIcon from '@mui/icons-material/Flight';
 import TuneIcon from '@mui/icons-material/Tune';
-
-import { yupResolver } from '@hookform/resolvers/yup';
-import CloseIcon from '@mui/icons-material/Close';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	Alert,
 	AlertTitle,
@@ -66,6 +66,7 @@ import { getNextSchemaFieldId } from './schemasSlice';
 
 interface Props {
 	schema?: FeatureSchema;
+	isSchemaSaving: boolean;
 	onDoneAdding?: (schema: NewFeatureSchema) => void;
 	onDoneEditing?: (schema: FeatureSchema) => void;
 	onCancel?: () => void;
@@ -76,7 +77,7 @@ function SchemaForm(props: Props) {
 
 	const mapId = useAppSelector(selectActiveMapId);
 
-	const { schema, onDoneAdding, onDoneEditing, onCancel } = props;
+	const { schema, isSchemaSaving, onDoneAdding, onDoneEditing, onCancel } = props;
 
 	const {
 		watch,
@@ -283,12 +284,15 @@ function SchemaForm(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onCancelForm}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Schema
 						</Typography>
-						<Button color="inherit" onClick={onClickSave}>
-							Save
-						</Button>
+
+						<LoadingButton loading={isSchemaSaving} color="inherit" onClick={onClickSave}>
+							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+							<span>Save</span>
+						</LoadingButton>
 					</Toolbar>
 				</AppBar>
 

@@ -42,8 +42,14 @@ function FeatureCreator(props: Props) {
 
 	const navigate = useNavigate();
 
-	const [addFeatureToMap, { isSuccess: isAddingFeatureSuccessful, isUninitialized: isAddingFeatureUninitialised }] =
-		useAddFeatureToMapMutation();
+	const [
+		addFeatureToMap,
+		{
+			isLoading: isAddingFeatureLoading,
+			isSuccess: isAddingFeatureSuccessful,
+			isUninitialized: isAddingFeatureUninitialised,
+		},
+	] = useAddFeatureToMapMutation();
 
 	const [patchSchema, { isSuccess: isPatchingSchemaSuccessful }] = usePatchFeatureSchemaMutation();
 
@@ -82,7 +88,9 @@ function FeatureCreator(props: Props) {
 		[addFeatureToMap, mapId, patchSchema],
 	);
 
-	return <FeatureForm mapId={mapId} feature={feature} onDoneAdding={onDoneAdding} />;
+	return (
+		<FeatureForm mapId={mapId} feature={feature} isFeatureSaving={isAddingFeatureLoading} onDoneAdding={onDoneAdding} />
+	);
 }
 
 export default FeatureCreatorEntrypoint;

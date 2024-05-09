@@ -42,13 +42,8 @@ export function SchemaEditor(props: Props) {
 		}
 	});
 
-	const [
-		updateSchema,
-		{
-			isSuccess: isUpdatingSchemaSuccessful,
-			// isLoading: isUpdatingSchemaLoading,
-		},
-	] = useUpdateFeatureSchemaMutation();
+	const [updateSchema, { isLoading: isUpdatingSchemaLoading, isSuccess: isUpdatingSchemaSuccessful }] =
+		useUpdateFeatureSchemaMutation();
 
 	// See note in MapEditor about usage of useEffect
 	useEffect(() => {
@@ -77,7 +72,14 @@ export function SchemaEditor(props: Props) {
 		return null;
 	}
 
-	return <SchemaForm schema={schema} onDoneEditing={onDoneEditing} onCancel={onCancelEditing} />;
+	return (
+		<SchemaForm
+			schema={schema}
+			isSchemaSaving={isUpdatingSchemaLoading}
+			onDoneEditing={onDoneEditing}
+			onCancel={onCancelEditing}
+		/>
+	);
 }
 
 export default SchemaEditorEntrypoint;

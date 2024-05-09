@@ -1,10 +1,10 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
 import ImageIcon from '@mui/icons-material/Image';
-
-import { yupResolver } from '@hookform/resolvers/yup';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	Alert,
 	AlertTitle,
@@ -234,6 +234,7 @@ interface EntrypointProps {
 	schemaDefaultSymbology?: SymbologyProps | null;
 	mapId?: number;
 	symbol?: SymbologyProps | null;
+	isSaving?: boolean;
 	onDone: (symbolField: SymbologyProps, groupId: number) => void;
 	onCancel: () => void;
 	groups?: FeatureSchemaSymbologyGroup[];
@@ -278,6 +279,7 @@ function SymbologyFieldEditor(props: Props) {
 		schemaDefaultSymbology,
 		map,
 		symbol,
+		isSaving,
 		onDone,
 		onCancel,
 		groups,
@@ -636,9 +638,16 @@ function SymbologyFieldEditor(props: Props) {
 							Symbol
 						</Typography>
 
-						<Button color="inherit" onClick={onClickSave}>
-							Save
-						</Button>
+						{isSaving === undefined ? (
+							<Button color="inherit" onClick={onClickSave}>
+								Save
+							</Button>
+						) : (
+							<LoadingButton loading={isSaving} color="inherit" onClick={onClickSave}>
+								{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+								<span>Save</span>
+							</LoadingButton>
+						)}
 					</Toolbar>
 				</AppBar>
 

@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FlightIcon from '@mui/icons-material/Flight';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	AppBar,
 	Button,
@@ -37,6 +38,7 @@ import { getSchemasAvailableForMap, selectFeatureSchemaById } from '../schemas/s
 interface Props {
 	mapId: number;
 	feature: MapaFeature | NewMapaFeature;
+	isFeatureSaving: boolean;
 	onDoneAdding?: (feature: NewMapaFeature, schema: FeatureSchema | undefined) => void;
 	onDoneEditing?: (feature: MapaFeature) => void;
 }
@@ -44,7 +46,7 @@ interface Props {
 function FeatureForm(props: Props) {
 	const navigate = useNavigate();
 
-	const { mapId, feature, onDoneAdding, onDoneEditing } = props;
+	const { mapId, feature, isFeatureSaving, onDoneAdding, onDoneEditing } = props;
 
 	const [localFeature, setLocalFeature] = useState(feature);
 
@@ -345,12 +347,15 @@ function FeatureForm(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onCancelForEditor}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Edit Feature
 						</Typography>
-						<Button color="inherit" onClick={onSave}>
-							Save
-						</Button>
+
+						<LoadingButton loading={isFeatureSaving} color="inherit" onClick={onSave}>
+							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+							<span>Save</span>
+						</LoadingButton>
 					</Toolbar>
 				</AppBar>
 

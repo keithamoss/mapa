@@ -44,13 +44,8 @@ function FeatureEditor(props: Props) {
 
 	const navigate = useNavigate();
 
-	const [
-		updateFeature,
-		{
-			isSuccess: isUpdatingFeatureSuccessful,
-			// isLoading: isUpdatingFeatureLoading,
-		},
-	] = useUpdateFeatureMutation();
+	const [updateFeature, { isLoading: isUpdatingFeatureLoading, isSuccess: isUpdatingFeatureSuccessful }] =
+		useUpdateFeatureMutation();
 
 	// See note in MapEditor about usage of useEffect
 	useEffect(() => {
@@ -66,7 +61,14 @@ function FeatureEditor(props: Props) {
 		[updateFeature],
 	);
 
-	return <FeatureForm mapId={mapId} feature={feature} onDoneEditing={onDoneEditing} />;
+	return (
+		<FeatureForm
+			mapId={mapId}
+			feature={feature}
+			isFeatureSaving={isUpdatingFeatureLoading}
+			onDoneEditing={onDoneEditing}
+		/>
+	);
 }
 
 export default FeatureEditorEntrypoint;

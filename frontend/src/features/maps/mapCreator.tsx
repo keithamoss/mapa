@@ -11,7 +11,7 @@ function MapCreator() {
 
 	const maps = useAppSelector(selectAllMaps);
 
-	const [addMap, { isSuccess: isAddingMapSuccessful /*, isLoading: isAddingMapLoading*/ }] = useAddMapMutation();
+	const [addMap, { isLoading: isAddingMapLoading, isSuccess: isAddingMapSuccessful }] = useAddMapMutation();
 
 	const [
 		updateUserProfile,
@@ -47,7 +47,7 @@ function MapCreator() {
 		[addMap, updateUserProfile],
 	);
 
-	return <MapForm onDoneAdding={onDoneAdding} />;
+	return <MapForm isMapSaving={isAddingMapLoading} onDoneAdding={onDoneAdding} />;
 }
 
 export default MapCreator;
