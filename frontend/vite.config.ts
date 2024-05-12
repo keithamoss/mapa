@@ -65,7 +65,7 @@ export default defineConfig(({ command, mode }) => {
 			include: [
 				'@mui/icons-material',
 				'@mui/lab',
-				// '@mui/material',
+				'@mui/material',
 				// '@mui/system',
 				// '@mui/x-date-pickers',
 				// '@emotion/react',

@@ -1,3 +1,5 @@
+import { startCase, toLower } from 'lodash-es';
+
 export enum eAppEnv {
 	DEVELOPMENT = 1,
 	TEST = 2,
@@ -37,3 +39,5 @@ export const isInStandaloneMode = () =>
 	window.matchMedia('(display-mode: standalone)').matches ||
 	('standalone' in window.navigator && window.navigator.standalone) ||
 	document.referrer.includes('android-app://');
+
+export const titleCase = (string: string) => startCase(toLower(string));

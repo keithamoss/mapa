@@ -87,6 +87,7 @@ function App() {
 						}}
 					>
 						<SpeedDialNavigation />
+
 						<AddFeatureButton mapId={mapId} />
 					</Box>
 				</React.Fragment>

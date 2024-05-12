@@ -1,0 +1,45 @@
+[
+  {
+    "version": "Silly Putty",
+    "date": "10 May, 2024",
+    "summary": "Foobar",
+    "changes": {
+      "highlights": [
+        [
+          "What's New",
+          "Added this page to record what's changed in each version."
+        ],
+        [
+          "Easier feature editing",
+          "When choosing features to edit, we now show the feature's symbol and symbol name instead of just it's internal identifier."
+        ],
+        [
+          "Saving indicators",
+          "When saving maps, schemas, features (et cetera), we now show a loading indicator so you know something is happening. This is particularly helpful if you're out and about and only have a few bars of connectivity."
+        ]
+      ],
+      "bugs fixed": [
+        [
+          "Begone, weird highligting bug",
+          "Long-pressing on the part of the map where your GPS location marker is shown no longer weirdly highlights the whole map as if it was a piece of text."
+        ],
+        [
+          "Missing heros",
+          "Making changes to a map with no hero icon no longer sets an invisible hero icon."
+        ],
+        [
+          "Feature editing",
+          "You can now also close the 'Choose which feature to edit' screen by tapping on the map behind it."
+        ],
+        [
+          "Feature editing",
+          "Reloading the page when on the 'Choose which feature to edit' screen no longer shows a list of blank features on reload."
+        ],
+        [
+          "Symbol searching",
+          "When searching for symbols, the list of symbols no longer appears to scroll and up underneath the search bar."
+        ]
+      ]
+    }
+  }
+]

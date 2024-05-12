@@ -8,13 +8,14 @@ from django.contrib.auth.models import User
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
-        fields = ('is_approved', 'settings', 'last_gdrive_backup')
+        fields = ('is_approved', 'settings', 'last_gdrive_backup', 'whats_new_release_count')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     is_approved = serializers.BooleanField(source='profile.is_approved')
     settings = serializers.JSONField(source='profile.settings')
     last_gdrive_backup = serializers.DateTimeField(source='profile.last_gdrive_backup')
+    whats_new_release_count = serializers.IntegerField(source='profile.whats_new_release_count')
 
     name = serializers.SerializerMethodField()
     initials = serializers.SerializerMethodField()
@@ -40,7 +41,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'groups',
             'is_approved',
             'settings',
-            'last_gdrive_backup')
+            'last_gdrive_backup',
+            'whats_new_release_count')
 
 
 class MapSerializer(serializers.ModelSerializer):

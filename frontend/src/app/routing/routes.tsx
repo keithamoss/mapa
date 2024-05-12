@@ -17,6 +17,7 @@ import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
 import SettingsManager from '../../features/settings/settingsManager';
+import WhatsNewPage from '../../features/whatsNew/whatsNew';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -88,6 +89,10 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'SettingsManager',
 				element: <SettingsManager />,
+			},
+			{
+				path: 'WhatsNew',
+				element: <WhatsNewPage />,
 			},
 			{
 				path: 'About',

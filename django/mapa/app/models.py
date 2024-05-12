@@ -1,4 +1,3 @@
-
 from mapa.app.enums import GeomType, ProfileSettings
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
@@ -26,6 +25,7 @@ class Profile(models.Model):
     is_approved = models.BooleanField(default=False)
     settings = JSONField(default=default_profile_settings, blank=True)
     last_gdrive_backup = models.DateTimeField(null=True)
+    whats_new_release_count = models.IntegerField(blank=False, null=False)
 
     tracker = FieldTracker()
 

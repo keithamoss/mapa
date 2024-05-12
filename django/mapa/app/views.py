@@ -1,3 +1,4 @@
+import numbers
 import os
 from copy import deepcopy
 from datetime import datetime
@@ -104,6 +105,14 @@ class ProfileViewSet(viewsets.ViewSet):
         request.user.profile.merge_settings(request.data)
         request.user.profile.save()
         return Response(request.user.profile.settings)
+
+    @action(detail=False, methods=["POST"])
+    def update_what_new_view_count(self, request):
+        if "viewCount" in request.data and isinstance(request.data["viewCount"], numbers.Number) is True:
+            request.user.profile.whats_new_release_count = request.data["viewCount"]
+            request.user.profile.save()
+            return Response(None, status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MapsViewSet(viewsets.ModelViewSet):

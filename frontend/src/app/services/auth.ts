@@ -40,6 +40,7 @@ export interface User {
 	is_approved: boolean;
 	settings: UserProfileSettings;
 	last_gdrive_backup: string | null;
+	whats_new_release_count: number;
 }
 
 type UserAuthStatusResponse = {
@@ -66,7 +67,15 @@ export const authApi = api.injectEndpoints({
 				dispatch(featuresApi.endpoints.getFeatures.initiate(undefined, { forceRefetch: true }));
 			},
 		}),
+		updateWhatsNewViewCount: builder.mutation<null, number>({
+			query: (viewCount) => ({
+				url: 'profile/update_what_new_view_count/',
+				method: 'POST',
+				body: { viewCount },
+			}),
+			invalidatesTags: ['User'],
+		}),
 	}),
 });
 
-export const { useCheckLoginStatusQuery, useUpdateUserProfileMutation } = authApi;
+export const { useCheckLoginStatusQuery, useUpdateUserProfileMutation, useUpdateWhatsNewViewCountMutation } = authApi;
