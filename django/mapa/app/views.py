@@ -157,7 +157,7 @@ class MapsViewSet(viewsets.ModelViewSet):
         # Requires a lot of UI rework to support it though.
         # e.g. Some uses of useGetFeaturesQuery will need to think about filtering the result by map and whatnot.
         
-        if request.user.profile.settings is not None and request.user.profile.settings["last_map_id"] is not None:
+        if request.user.profile.settings is not None and "last_map_id" in request.user.profile.settings and request.user.profile.settings["last_map_id"] is not None:
             mapIds = Maps.objects.filter(deleted_at=None, owner_id=request.user.id, id=request.user.profile.settings["last_map_id"]).values_list("id", flat=True)
 
             serializer = FeatureSerializer(Features.objects.filter(deleted_at=None, map_id__in=list(mapIds)), many=True)
