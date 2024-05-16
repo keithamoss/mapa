@@ -265,6 +265,7 @@ export const findIconsAvailableForUseAsModifiers = () => {
 		'circle-half-stroke',
 		'circle-notch',
 		'circles-overlap',
+		'circle-wifi-circle-wifi',
 	];
 
 	const allowList = ['circle', 'pen-circle'];
@@ -340,6 +341,7 @@ export const getCircularModifierIconNames = () => [
 	'circle-exclamation',
 	'circle-f',
 	'circle-g',
+	'circle-gf',
 	'circle-h',
 	'circle-heart',
 	'circle-i',
@@ -384,6 +386,7 @@ export const getCircularModifierIconNames = () => [
 	'circle-video',
 	'circle-w',
 	'circle-waveform-lines',
+	'circle-wifi',
 	'circle-x',
 	'circle-xmark',
 	'circle-y',
