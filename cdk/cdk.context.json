@@ -1,15 +1,19 @@
 {
-  "hosted-zone:account=429260965153:domainName=mapa.staging.keithmoss.me:region=us-east-1": {
-    "Id": "/hostedzone/Z00375771II44AJSWHW1L",
-    "Name": "mapa.staging.keithmoss.me."
-  },
   "availability-zones:account=429260965153:region=ap-southeast-2": [
     "ap-southeast-2a",
     "ap-southeast-2b",
     "ap-southeast-2c"
   ],
-  "hosted-zone:account=429260965153:domainName=mapa.staging.keithmoss.me:region=ap-southeast-2": {
+  "hosted-zone:account=429260965153:domainName=mapa.keithmoss.me:region=us-east-1": {
+    "Id": "/hostedzone/Z09854553QXJ0MRWQOP2D",
+    "Name": "mapa.keithmoss.me."
+  },
+  "hosted-zone:account=429260965153:domainName=mapa.staging.keithmoss.me:region=us-east-1": {
     "Id": "/hostedzone/Z00375771II44AJSWHW1L",
     "Name": "mapa.staging.keithmoss.me."
+  },
+  "hosted-zone:account=429260965153:domainName=mapa.keithmoss.me:region=ap-southeast-2": {
+    "Id": "/hostedzone/Z09854553QXJ0MRWQOP2D",
+    "Name": "mapa.keithmoss.me."
   }
 }

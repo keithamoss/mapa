@@ -11,6 +11,7 @@ export interface BaseStackProps extends StackProps {
 
 export enum MapaEnvironment {
 	STAGING = 'staging',
+	PRODUCTION = 'production',
 }
 
 export interface ContextProps {

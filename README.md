@@ -17,7 +17,7 @@ mkcert mapa.test.keithmoss.me
 mkcert api.mapa.test.keithmoss.me
 ```
 
-# Database initialistion
+# Database initialisation
 
 ```sql
 CREATE SCHEMA mapa;
@@ -70,7 +70,7 @@ This involved setting up the EC2 again and choosing the "Auto-assign IPv6 IP" op
 
 [Announcing AWS Lambda’s support for Internet Protocol Version 6 (IPv6) for outbound connections in VPC](https://aws.amazon.com/about-aws/whats-new/2023/10/aws-lambda-ipv6-outbound-connections-vpc/)
 
-> Previously, Lambda functions configured with an IPv4-only or dual-stack VPC could access VPC resources only over IPv4. To work around the constrained number of IPv4 addresses in VPC, customers modernizing their applications were required to build complex architectures or use network translation mechanisms. With today’s launch, Lambda functions can access resources in dual-stack VPC over IPv6 and get virtually unlimited scale, using a simple function level switch. You can also enable VPC-configured Lambda functions to access the internet using egress-only internet gateway.
+> Previously, Lambda functions configured with an IPv4-only or dual-stack VPC could access VPC resources only over IPv4. To work around the constrained number of IPv4 addresses in VPC, customers modernising their applications were required to build complex architectures or use network translation mechanisms. With today’s launch, Lambda functions can access resources in dual-stack VPC over IPv6 and get virtually unlimited scale, using a simple function level switch. You can also enable VPC-configured Lambda functions to access the internet using egress-only internet gateway.
 
 Further reading: https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html
 
@@ -94,7 +94,7 @@ Firstly, let's get access setup.
 
 This approached is based on [https://medium.com/@mylesloffler/using-github-actions-to-deploy-a-cdk-application-f28b7f792f12](Using GitHub Actions to deploy a CDK application).
 
-A key part of this is deploying our `TrustStack` which takes care of connecting GitHub Actions and AWS, creating policies to allow roles to modify the Mapa stack, and creating a role to allow GitHub Actions to run automated deploymenst for us (as well as our own `mapa-cdk` user for manual deployments).
+A key part of this is deploying our `TrustStack` which takes care of connecting GitHub Actions and AWS, creating policies to allow roles to modify the Mapa stack, and creating a role to allow GitHub Actions to run automated deployments for us (as well as our own `mapa-cdk` user for manual deployments).
 
 Ref: https://stackoverflow.com/questions/57118082/what-iam-permissions-are-needed-to-use-cdk-deploy
 
@@ -128,7 +128,7 @@ source_profile=mapa-cdk
 
 Righto, let's start at the top - giving AWS what it needs to run DNS for the static site and API.
 
-We need to manually establish a hosted zone in Route 53 to give AWS delegated permissions to manage DNS for everything in, and under, the `mapa[.staging].keithmoss.me` namespace. This means we can use AWS TO create SSL certificates and associate CloudFront distributions with our domain name.
+We need to manually establish a hosted zone in Route 53 to give AWS delegated permissions to manage DNS for everything in, and under, the `mapa[.staging].keithmoss.me` namespace. This means we can use AWS to create SSL certificates and associate CloudFront distributions with our domain name.
 
 Approach inspired by:
 
@@ -143,21 +143,22 @@ Approach inspired by:
 
 For deployment to a blank environment to work, we need to deploy in two stages: Infrastructure first, pushing the Docker image, and finally deployment of the application.
 
-1. Deploy UsEastCert and InfraStack `cdk deploy UsEastCertificateStack MapaInfraStack --context env=[env] --profile mapa-cdk-role`
-2. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
-3. Now deploy the application itself `cdk deploy MapaAppStack MapaStaticSiteStack --context env=[env] --profile mapa-cdk-role`
-4. Lastly, we can now add the application secrets in Secrets Manager (ref. `aws-secrets.[env].json` templates locally in this repo)
+1. Update `cdk.json` with the relevant context for the new environment
+2. Deploy UsEastCert and InfraStack `cdk deploy UsEastCertificateStack MapaInfraStack --context env=[env] --profile mapa-cdk-role`
+3. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
+4. Now deploy the application itself `cdk deploy MapaAppStack MapaStaticSiteStack --context env=[env] --profile mapa-cdk-role`
+5. Lastly, we can now add the application secrets in Secrets Manager (ref. `aws-secrets.[env].json` templates locally in this repo)
 
 # Destroying a stack
 
-If we need to completely destory a stack (for redeployment or otherwise), there's a few steps to go through:
+If we need to completely destroy a stack (for redeployment or otherwise), there's a few steps to go through:
 
 1. Empty the StaticSiteS3Bucket that contains the application assets first. (If you don't, CDK will complain it can't delete it. No need to archive it, if you redeploy the stack it'll all get rebuilt anyway.)
 2. Now you can safely destroy everything `cdk destroy UsEastCertificateStack MapaInfraStack MapaAppStack MapaStaticSiteStack --context env=[env] --profile mapa-cdk-role`
 3. Lastly, there's a few things that need cleaning up by hand that CDK doesn't take care of for us:
    3.1 Delete the ECR repo
-   3.2 Delete the relevant CloudWach Log Groups
-   3.3 Delete (and archive) the contents of thr S3 logging bucket
+   3.2 Delete the relevant CloudWatch Log Groups
+   3.3 Delete (and archive) the contents of the S3 logging bucket
    3.4 Delete the StaticSiteS3Bucket
 
 # GitHub Actions
