@@ -349,7 +349,7 @@ function FeatureForm(props: Props) {
 						</IconButton>
 
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-							Edit Feature
+							{onDoneAdding !== undefined ? 'Add Feature' : 'Edit Feature'}
 						</Typography>
 
 						<LoadingButton loading={isFeatureSaving} color="inherit" onClick={onSave}>
