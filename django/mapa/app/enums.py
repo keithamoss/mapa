@@ -12,6 +12,8 @@ class ProfileSettings(str, EnumBase):
     MapRenderer = "map_renderer"
     Basemap = "basemap"
     BasemapStyle = "basemap_style"
+    QuickAddMode = "quick_add_mode"
+    QuickAddSymbolCount = "quick_add_symbol_count"
 
 
 class GeomType(str, EnumBase):

@@ -5,6 +5,12 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 
+# https://stackoverflow.com/a/26100964/7368493
+class TimestampReadOnlyField(serializers.ReadOnlyField):
+    def to_representation(self, value):
+        return round(value.timestamp() * 1000)
+
+
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
@@ -50,11 +56,12 @@ class MapSerializer(serializers.ModelSerializer):
         model = Maps
         fields = ("id", "name", "owner_id", "default_symbology", "hero_icon", "available_schema_ids", "last_used_schema_id")
 
-
 class FeatureSerializer(serializers.ModelSerializer):
+    creation_date = TimestampReadOnlyField(required=False)
+
     class Meta:
         model = Features
-        fields = ("id", "geom", "geom_type", "map_id", "schema_id", "symbol_id", "data", "import_job")
+        fields = ("id", "geom", "geom_type", "map_id", "schema_id", "symbol_id", "creation_date", "data", "import_job")
 
 
 class FeatureSchemaSerializer(serializers.ModelSerializer):

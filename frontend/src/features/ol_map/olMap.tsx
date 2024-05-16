@@ -24,7 +24,9 @@ import {
 	setFeaturesAvailableForEditing,
 	setMapView,
 } from '../app/appSlice';
-import FeatureMovementButton from './featureMovementButton';
+import FeatureMovementButton from './controls/featureMovementButton';
+import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
+import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
 import './olMap.css';
 import {
@@ -43,7 +45,6 @@ import {
 } from './olMapHelpers';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './olWebGLPointsLayerManager';
-import SnapToGPSButton from './snapToGPSButton';
 
 // Inspo:
 // https://taylor.callsen.me/using-openlayers-with-react-functional-components/
@@ -422,6 +423,8 @@ function OLMap(props: Props) {
 						onFeatureMovementEnabled={onFeatureMovementEnabled}
 						onFeatureMovementDisabled={onFeatureMovementDisabled}
 					/>
+
+					<QuickAddSymbolsControl />
 				</React.Fragment>
 			) : (
 				<React.Fragment></React.Fragment>

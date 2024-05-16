@@ -1,12 +1,47 @@
-import { FeatureDataItem, MapaFeature } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionCollection,
 	FeatureSchemaFieldType,
 } from '../../app/services/schemas';
 
-export const getSchemaForFeature = (feature: MapaFeature, schemas: FeatureSchema[]) =>
-	schemas.find((schema) => schema.id === feature.schema_id);
+export const getSchemaById = (schemaId: number | null, schemas: FeatureSchema[]) =>
+	schemas.find((schema) => schema.id === schemaId && schemaId !== null);
+
+export const getSchemaIdsUsedByFeatures = (features: MapaFeature[]) =>
+	Array.from(
+		new Set(
+			Object.values(features || [])
+				.map((f) => f.schema_id)
+				.filter((schemaId): schemaId is number => typeof schemaId === 'number'),
+		),
+	);
+
+export const getSchemasUsedByFeatures = (features: MapaFeature[], schemas: FeatureSchema[]) => {
+	const schemaIdssUsedByFeatures = getSchemaIdsUsedByFeatures(features);
+	return schemas.filter((s) => schemaIdssUsedByFeatures.includes(s.id));
+};
+
+export const updateSchemaRecentlyUsedSymbols = (
+	feature: NewMapaFeature,
+	schema: FeatureSchema | undefined,
+	mapId: number,
+) => {
+	if (schema !== undefined && feature.symbol_id !== null) {
+		const recentlyUsedSymbols = { ...schema.recently_used_symbols };
+
+		if (recentlyUsedSymbols[mapId] === undefined) {
+			recentlyUsedSymbols[mapId] = [];
+		}
+
+		recentlyUsedSymbols[mapId] = [
+			feature.symbol_id,
+			...recentlyUsedSymbols[mapId].filter((id) => id != feature.symbol_id),
+		].slice(0, 3);
+
+		return recentlyUsedSymbols;
+	}
+};
 
 export const isSchemaDataItemToBeUsed = (
 	fieldDefinition: FeatureSchemaFieldDefinitionCollection,

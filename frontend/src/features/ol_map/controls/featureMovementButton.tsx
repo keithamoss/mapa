@@ -2,7 +2,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Avatar, IconButton, styled } from '@mui/material';
 import { memo } from 'react';
-import { mapaThemeWarningPurple } from '../../app/ui/theme';
+import { mapaThemeWarningPurple } from '../../../app/ui/theme';
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',

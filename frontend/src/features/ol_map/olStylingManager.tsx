@@ -5,7 +5,7 @@ import Style from 'ol/style/Style';
 import { MapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, SymbologyProps } from '../../app/services/schemas';
 import { getFeatureDataItemForSchemaField, getSymbolValueForFeatureDataItem } from '../features/featureHelpers';
-import { getSchemaForFeature, isFieldDefinitionSymbology, isSchemaDataItemToBeUsed } from '../schemas/schemaHelpers';
+import { getSchemaById, isFieldDefinitionSymbology, isSchemaDataItemToBeUsed } from '../schemas/schemaHelpers';
 import {
 	getAppDefaultSymbologyConfig,
 	getFontAwesomeIconForSymbolAsSVGString,
@@ -65,7 +65,7 @@ export const determineSymbolForFeature = (
 		...defaultMapSymbology,
 	};
 
-	const schema = getSchemaForFeature(feature, featureSchemas);
+	const schema = getSchemaById(feature.schema_id, featureSchemas);
 
 	if (schema !== undefined) {
 		if (schema.default_symbology !== null) {

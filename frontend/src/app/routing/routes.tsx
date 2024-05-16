@@ -16,6 +16,7 @@ import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
+import QuickAddSymbolsSettingsManager from '../../features/settings/quickAddSymbolsSettingsManager';
 import SettingsManager from '../../features/settings/settingsManager';
 import WhatsNewPage from '../../features/whatsNew/whatsNew';
 
@@ -89,6 +90,10 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'SettingsManager',
 				element: <SettingsManager />,
+			},
+			{
+				path: 'QuickAddSymbolsSettingsManager',
+				element: <QuickAddSymbolsSettingsManager />,
 			},
 			{
 				path: 'WhatsNew',

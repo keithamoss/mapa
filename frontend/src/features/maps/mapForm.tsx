@@ -34,6 +34,7 @@ import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { selectAllFeatures } from '../features/featuresSlice';
+import { getSchemaIdsUsedByFeatures } from '../schemas/schemaHelpers';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 
@@ -112,7 +113,7 @@ function MapForm(props: Props) {
 	// ######################
 	const features = useAppSelector(selectAllFeatures);
 
-	const schemasUsedOnMap = Array.from(new Set(Object.values(features || []).map((f) => f.schema_id)));
+	const schemaIdsUsedOnMap = getSchemaIdsUsedByFeatures(features);
 	// ######################
 	// Schema Removal Guard (End)
 	// ######################
@@ -293,7 +294,7 @@ function MapForm(props: Props) {
 											)}
 										>
 											{schemas.map((schema) => (
-												<MenuItem key={schema.id} value={schema.id} disabled={schemasUsedOnMap.includes(schema.id)}>
+												<MenuItem key={schema.id} value={schema.id} disabled={schemaIdsUsedOnMap.includes(schema.id)}>
 													<Checkbox checked={available_schema_ids.includes(schema.id) === true} />
 													<ListItemText primary={schema.name} />
 												</MenuItem>

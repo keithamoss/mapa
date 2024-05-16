@@ -34,6 +34,7 @@ import {
 	getFontAwesomeIconForSymbolPreview,
 	getSymbolGroups,
 	getSymbologyGroupById,
+	getSymbolsFavouritedForMap,
 } from '../../symbology/symbologyHelpers';
 
 const StyledOutlinedInput = styled(OutlinedInput)(({ theme }) => ({
@@ -49,9 +50,10 @@ interface SymbologyAutocompleteOption {
 }
 
 const getSymbolOptions = (mapId: number, schema: FeatureSchema, symbology: FeatureSchemaSymbology) => {
-	const favouritedSymbols = symbology.symbols
-		.filter((symbol) => symbol.favourited_map_ids.includes(mapId))
-		.map((symbol) => ({ symbol, option_group: 'Favourites' }));
+	const favouritedSymbols = getSymbolsFavouritedForMap(symbology, mapId).map((symbol) => ({
+		symbol,
+		option_group: 'Favourites',
+	}));
 
 	const mostRecentlyAdded =
 		schema.recently_used_symbols[mapId] !== undefined

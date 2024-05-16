@@ -52,6 +52,7 @@ export interface MapaFeature {
 	map_id: number;
 	schema_id: number | null;
 	symbol_id: number | null;
+	creation_date: number;
 	data: FeatureDataItem[];
 	// These three are inserted by buildGeoJSONFromFeatures()
 	symbolCacheKey?: string;
@@ -66,7 +67,7 @@ export interface MapaOpenLayersFeature extends Omit<MapaFeature, 'geom'> {
 	geometry: Point;
 }
 
-export type NewMapaFeature = Omit<MapaFeature, 'id'>;
+export type NewMapaFeature = Omit<MapaFeature, 'id' | 'creation_date'>;
 
 type FeaturesResponse = MapaFeature[];
 

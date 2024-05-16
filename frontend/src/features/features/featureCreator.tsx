@@ -4,6 +4,7 @@ import { useAppSelector } from '../../app/hooks/store';
 import { NewMapaFeature, useAddFeatureToMapMutation } from '../../app/services/features';
 import { FeatureSchema, usePatchFeatureSchemaMutation } from '../../app/services/schemas';
 import { selectActiveMapId } from '../app/appSlice';
+import { updateSchemaRecentlyUsedSymbols } from '../schemas/schemaHelpers';
 import FeatureForm from './featureForm';
 
 interface LocationState {
@@ -67,18 +68,8 @@ function FeatureCreator(props: Props) {
 		(feature: NewMapaFeature, schema: FeatureSchema | undefined) => {
 			addFeatureToMap(feature);
 
-			if (schema !== undefined && feature.symbol_id !== null) {
-				const recentlyUsedSymbols = { ...schema.recently_used_symbols };
-
-				if (recentlyUsedSymbols[mapId] === undefined) {
-					recentlyUsedSymbols[mapId] = [];
-				}
-
-				recentlyUsedSymbols[mapId] = [
-					feature.symbol_id,
-					...recentlyUsedSymbols[mapId].filter((id) => id != feature.symbol_id),
-				].slice(0, 3);
-
+			const recentlyUsedSymbols = updateSchemaRecentlyUsedSymbols(feature, schema, mapId);
+			if (schema !== undefined && recentlyUsedSymbols !== undefined) {
 				patchSchema({
 					id: schema.id,
 					recently_used_symbols: recentlyUsedSymbols,

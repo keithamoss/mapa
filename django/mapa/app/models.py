@@ -78,6 +78,7 @@ class Maps(models.Model):
 
 
 class Features(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
     last_updated_date = models.DateTimeField(auto_now=True)
     geom = models.PointField(geography=True)
     geom_type = models.TextField(choices=[(tag, tag.value) for tag in GeomType])
