@@ -7,12 +7,11 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { User } from '../../../app/services/auth';
 import { MapaFeature, useAddFeatureToMapMutation } from '../../../app/services/features';
 import { Map } from '../../../app/services/maps';
-import { FeatureSchemaSymbologySymbolsValue, usePatchFeatureSchemaMutation } from '../../../app/services/schemas';
+import { FeatureSchemaSymbologySymbolsValue } from '../../../app/services/schemas';
 import { selectActiveMapId } from '../../app/appSlice';
 import { selectUser } from '../../auth/authSlice';
 import { initFeatureAtMapCentreWithKnownSchema, selectAllFeatures } from '../../features/featuresSlice';
 import { selectMapsResult } from '../../maps/mapsSlice';
-import { getSchemaById, updateSchemaRecentlyUsedSymbols } from '../../schemas/schemaHelpers';
 import { selectAllFeatureSchemas } from '../../schemas/schemasSlice';
 import {
 	getQuickAddModeOrDefault,
@@ -71,7 +70,6 @@ function QuickAddSymbolsControl(props: Props) {
 	const schemas = useAppSelector(selectAllFeatureSchemas);
 
 	const [addFeatureToMap] = useAddFeatureToMapMutation();
-	const [patchSchema] = usePatchFeatureSchemaMutation();
 
 	const onClickSettings = useCallback(() => navigate('QuickAddSymbolsSettingsManager'), [navigate]);
 
@@ -80,26 +78,13 @@ function QuickAddSymbolsControl(props: Props) {
 			const featureBase = dispatch(initFeatureAtMapCentreWithKnownSchema(map.id, schemaId));
 
 			if (featureBase !== undefined) {
-				const feature = {
+				addFeatureToMap({
 					...featureBase,
 					symbol_id: symbol.id,
-				};
-				// console.log('feature', feature);
-
-				addFeatureToMap(feature);
-
-				const recentlyUsedSymbols = updateSchemaRecentlyUsedSymbols(feature, getSchemaById(schemaId, schemas), map.id);
-
-				if (recentlyUsedSymbols !== undefined) {
-					// console.log('recentlyUsedSymbols', recentlyUsedSymbols);
-					patchSchema({
-						id: schemaId,
-						recently_used_symbols: recentlyUsedSymbols,
-					});
-				}
+				});
 			}
 		},
-		[addFeatureToMap, dispatch, map.id, patchSchema, schemas],
+		[addFeatureToMap, dispatch, map.id],
 	);
 
 	const symbolsToShow = getQuickAddSymbols(
@@ -109,7 +94,6 @@ function QuickAddSymbolsControl(props: Props) {
 		schemas,
 		map.id,
 	);
-	console.log('symbolsToShow', symbolsToShow);
 
 	return (
 		<StyledBox>

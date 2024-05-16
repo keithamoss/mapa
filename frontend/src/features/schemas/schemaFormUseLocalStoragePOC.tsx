@@ -103,7 +103,6 @@
 // 				},
 // 				default_symbology: schema?.default_symbology || undefined,
 // 				definition: schema?.definition,
-// 				recently_used_symbols: schema?.recently_used_symbols,
 // 			},
 // 			// ...formValuesLocalStorage,
 // 		},
@@ -119,7 +118,7 @@
 // 	// 	}
 // 	// });
 
-// 	const { symbology, default_symbology, definition, recently_used_symbols } = watch();
+// 	const { symbology, default_symbology, definition } = watch();
 
 // 	// console.log('getValues', getValues());
 
@@ -203,12 +202,6 @@
 // 	const onDeleteSymbol = (symbolId: number) => {
 // 		const local_symbology = removeSymbol(symbolId, symbology);
 // 		setValue('symbology', local_symbology, { shouldDirty: true });
-
-// 		const local_recently_used_symbols: FeatureSchemaModifiableProps['recently_used_symbols'] = {};
-// 		Object.entries(recently_used_symbols).forEach(
-// 			([mapId, symbolIds]) => (local_recently_used_symbols[Number(mapId)] = symbolIds.filter((id) => id !== symbolId)),
-// 		);
-// 		setValue('recently_used_symbols', local_recently_used_symbols, { shouldDirty: true });
 // 	};
 
 // 	const onFavouriteSymbol = (symbolId: number) => {

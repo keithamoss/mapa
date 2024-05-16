@@ -2,9 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { NewMapaFeature, useAddFeatureToMapMutation } from '../../app/services/features';
-import { FeatureSchema, usePatchFeatureSchemaMutation } from '../../app/services/schemas';
 import { selectActiveMapId } from '../app/appSlice';
-import { updateSchemaRecentlyUsedSymbols } from '../schemas/schemaHelpers';
 import FeatureForm from './featureForm';
 
 interface LocationState {
@@ -52,31 +50,18 @@ function FeatureCreator(props: Props) {
 		},
 	] = useAddFeatureToMapMutation();
 
-	const [patchSchema, { isSuccess: isPatchingSchemaSuccessful }] = usePatchFeatureSchemaMutation();
-
 	// See note in MapEditor about usage of useEffect
 	useEffect(() => {
-		if (
-			(isAddingFeatureSuccessful === true && isAddingFeatureUninitialised === false) ||
-			isPatchingSchemaSuccessful === true
-		) {
+		if (isAddingFeatureSuccessful === true && isAddingFeatureUninitialised === false) {
 			navigate('/');
 		}
-	}, [isAddingFeatureSuccessful, isAddingFeatureUninitialised, isPatchingSchemaSuccessful, navigate]);
+	}, [isAddingFeatureSuccessful, isAddingFeatureUninitialised, navigate]);
 
 	const onDoneAdding = useCallback(
-		(feature: NewMapaFeature, schema: FeatureSchema | undefined) => {
+		(feature: NewMapaFeature) => {
 			addFeatureToMap(feature);
-
-			const recentlyUsedSymbols = updateSchemaRecentlyUsedSymbols(feature, schema, mapId);
-			if (schema !== undefined && recentlyUsedSymbols !== undefined) {
-				patchSchema({
-					id: schema.id,
-					recently_used_symbols: recentlyUsedSymbols,
-				});
-			}
 		},
-		[addFeatureToMap, mapId, patchSchema],
+		[addFeatureToMap],
 	);
 
 	return (

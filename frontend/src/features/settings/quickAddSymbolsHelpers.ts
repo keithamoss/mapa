@@ -1,29 +1,22 @@
 import { sortBy } from 'lodash-es';
 import { QuickAddMode, UserProfileSettings } from '../../app/services/auth';
 import { MapaFeature } from '../../app/services/features';
-import { FeatureSchema, FeatureSchemaSymbologySymbolsValue } from '../../app/services/schemas';
+import { FeatureSchema } from '../../app/services/schemas';
 import { getSchemaById, getSchemasUsedByFeatures } from '../schemas/schemaHelpers';
-import { getSymbolFromSchemaSymbology, getSymbolsFavouritedForMap } from '../symbology/symbologyHelpers';
+import {
+	SchemaIdAndSymbolId,
+	SchemaIdAndSymbolIdWithCount,
+	SymbolAndSchema,
+	getSomeRecentlyAddedSymbols,
+	getSymbolFromSchemaSymbology,
+	getSymbolsFavouritedForMap,
+} from '../symbology/symbologyHelpers';
 
 export const getQuickAddModeOrDefault = (userProfileSettings: UserProfileSettings) =>
 	userProfileSettings.quick_add_mode || QuickAddMode.Recent;
 
 export const getQuickAddSymbolCountOrDefault = (userProfileSettings: UserProfileSettings) =>
 	userProfileSettings.quick_add_symbol_count || 4;
-
-interface SchemaIdAndSymbolId {
-	schemaId: number;
-	symbolId: number;
-}
-
-interface SchemaIdAndSymbolIdWithCount extends SchemaIdAndSymbolId {
-	count: number;
-}
-
-interface SymbolAndSchema {
-	symbol: FeatureSchemaSymbologySymbolsValue;
-	schema: FeatureSchema;
-}
 
 const getSymbolsAndSchemaFromIds = (data: SchemaIdAndSymbolId[], schemas: FeatureSchema[]) =>
 	data
@@ -42,32 +35,8 @@ const getSymbolsAndSchemaFromIds = (data: SchemaIdAndSymbolId[], schemas: Featur
 		})
 		.filter((item): item is SymbolAndSchema => item !== undefined);
 
-const getRecentlyAddedSymbols = (quickAddSymbolCount: number, features: MapaFeature[], schemas: FeatureSchema[]) => {
-	// Sort features by the date they were added
-	const featuresByDateAdded = sortBy(features, ['creation_date']).reverse();
-
-	// Tally up the number of uses of each reecently added symbol (until we hit our quota)
-	const recentlyAddedSymbolsRanked: { [key: string]: SchemaIdAndSymbolId } = {};
-
-	for (const f of featuresByDateAdded) {
-		if (f.schema_id !== null && f.symbol_id !== null) {
-			const key = `${f.schema_id}.${f.symbol_id}`;
-
-			if (recentlyAddedSymbolsRanked[key] === undefined) {
-				recentlyAddedSymbolsRanked[key] = {
-					schemaId: f.schema_id,
-					symbolId: f.symbol_id,
-				};
-			}
-
-			if (Object.keys(recentlyAddedSymbolsRanked).length >= quickAddSymbolCount) {
-				break;
-			}
-		}
-	}
-
-	return getSymbolsAndSchemaFromIds(Object.values(recentlyAddedSymbolsRanked), schemas);
-};
+const getRecentlyAddedSymbols = (quickAddSymbolCount: number, features: MapaFeature[], schemas: FeatureSchema[]) =>
+	getSymbolsAndSchemaFromIds(Object.values(getSomeRecentlyAddedSymbols(quickAddSymbolCount, features)), schemas);
 
 const getPopularSymbols = (quickAddSymbolCount: number, features: MapaFeature[], schemas: FeatureSchema[]) => {
 	// Tally up the number of uses of each symbol on the map

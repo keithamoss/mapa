@@ -14,7 +14,6 @@ export const schemaFormValidationSchema: ObjectSchema<FeatureSchemaModifiablePro
 			})
 			.required(),
 		default_symbology: symbologyFormValidationSchema(false, false),
-		recently_used_symbols: yup.object({}).defined(),
 	})
 	.required();
 

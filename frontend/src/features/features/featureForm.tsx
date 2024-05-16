@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { FeatureDataItem, MapaFeature, NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
+import { FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
@@ -39,7 +39,7 @@ interface Props {
 	mapId: number;
 	feature: MapaFeature | NewMapaFeature;
 	isFeatureSaving: boolean;
-	onDoneAdding?: (feature: NewMapaFeature, schema: FeatureSchema | undefined) => void;
+	onDoneAdding?: (feature: NewMapaFeature) => void;
 	onDoneEditing?: (feature: MapaFeature) => void;
 }
 
@@ -262,7 +262,7 @@ function FeatureForm(props: Props) {
 	const onSaveAndCreateOrUpdateFeature = (feature: MapaFeature | NewMapaFeature) => {
 		if (onDoneAdding !== undefined) {
 			const featureData: NewMapaFeature = { ...feature };
-			onDoneAdding(featureData, schema);
+			onDoneAdding(featureData);
 		} else if ('id' in feature && onDoneEditing !== undefined) {
 			const featureData: MapaFeature = { ...feature };
 			onDoneEditing(featureData);

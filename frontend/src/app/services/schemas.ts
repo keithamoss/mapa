@@ -58,9 +58,6 @@ export interface FeatureSchemaModifiableProps {
 	definition: FeatureSchemaFieldDefinitionCollection[];
 	symbology: FeatureSchemaSymbology;
 	default_symbology: SymbologyProps | null;
-	recently_used_symbols: {
-		[key: number]: number[];
-	};
 }
 
 export type NewFeatureSchema = FeatureSchemaModifiableProps;
