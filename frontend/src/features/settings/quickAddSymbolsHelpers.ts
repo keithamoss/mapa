@@ -46,7 +46,7 @@ const getPopularSymbols = (quickAddSymbolCount: number, features: MapaFeature[],
 
 	features.forEach((f) => {
 		if (f.schema_id !== null && f.symbol_id !== null) {
-			const key = f.symbol_id;
+			const key = `${f.schema_id}.${f.symbol_id}`;
 
 			if (symbolsTally[key] === undefined) {
 				symbolsTally[key] = {
