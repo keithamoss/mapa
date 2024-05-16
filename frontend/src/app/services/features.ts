@@ -58,7 +58,6 @@ export interface MapaFeature {
 	symbolCacheKey?: string;
 	symbol?: Partial<SymbologyProps>;
 	// symbolCacheKeyWebGL?: string;
-	import_job: string;
 }
 
 // convertFeaturesToGeoJSON() omits the `geom` property because OpenLayers needs `geometry`

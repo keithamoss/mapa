@@ -70,7 +70,6 @@ export const createNewMapaFeatureObject = (
 			schema_id: schemaId,
 			symbol_id: null,
 			data: [],
-			import_job: '',
 		};
 	}
 };
