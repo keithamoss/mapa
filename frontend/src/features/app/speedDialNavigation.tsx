@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Avatar, SpeedDialIcon, styled } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
-import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDial, { CloseReason } from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import * as React from 'react';
 import { useState } from 'react';
@@ -70,7 +70,14 @@ export default function SpeedDialNavigation() {
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 
-	const handleClose = () => {
+	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
+		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
+		if (reason !== 'mouseLeave') {
+			setOpen(false);
+		}
+	};
+
+	const handleBackdropClick = () => {
 		setOpen(false);
 	};
 
@@ -83,7 +90,7 @@ export default function SpeedDialNavigation() {
 
 	return (
 		<React.Fragment>
-			<Backdrop open={open} />
+			<Backdrop open={open} onClick={handleBackdropClick} />
 
 			<StyledSpeedDial
 				ariaLabel="The primary navigation element for the app"
