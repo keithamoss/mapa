@@ -1,6 +1,5 @@
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Avatar, Box, IconButton, styled } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
@@ -8,6 +7,7 @@ import { User } from '../../../app/services/auth';
 import { MapaFeature, useAddFeatureToMapMutation } from '../../../app/services/features';
 import { Map } from '../../../app/services/maps';
 import { FeatureSchemaSymbologySymbolsValue } from '../../../app/services/schemas';
+import { mapaThemeMapButtonControlGrey } from '../../../app/ui/theme';
 import { selectActiveMapId } from '../../app/appSlice';
 import { selectUser } from '../../auth/authSlice';
 import { initFeatureAtMapCentreWithKnownSchema, selectAllFeatures } from '../../features/featuresSlice';
@@ -98,14 +98,14 @@ function QuickAddSymbolsControl(props: Props) {
 	return (
 		<StyledBox>
 			<IconButton onClick={onClickSettings} size="small">
-				<Avatar sx={{ bgcolor: grey[400] }}>
+				<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
 					<SettingsIcon />
 				</Avatar>
 			</IconButton>
 
 			{symbolsToShow.map((v) => (
 				<IconButton key={`${v.schema.id}.${v.symbol.id}`} onClick={onQuickAdd(v.symbol, v.schema.id)} size="small">
-					<Avatar sx={{ bgcolor: grey[400] }}>
+					<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
 						{getFontAwesomeIconForSymbolPreview(
 							{
 								...getAppDefaultSymbologyConfig(),
