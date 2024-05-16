@@ -57,7 +57,7 @@ const actions = [
 	{
 		linkTo: '/WhatsNew',
 		icon: <NewReleasesIcon color="primary" />,
-		name: 'What&apos;s New',
+		name: "What's New",
 	},
 	{
 		linkTo: '/About',
@@ -119,8 +119,7 @@ export default function SpeedDialNavigation() {
 			>
 				{actions.map((action) => {
 					const highlightIcon =
-						(highlightSearchFilter && action.name === 'Search') ||
-						(highlightWhatsNew && action.name === 'What&apos;s New')
+						(highlightSearchFilter && action.name === 'Search') || (highlightWhatsNew && action.name === "What's New")
 							? true
 							: false;
 
