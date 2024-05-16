@@ -6,7 +6,7 @@ import { mapaThemeMapButtonControlGrey, mapaThemeWarningPurple } from '../../../
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
 	position: 'absolute',
-	top: theme.spacing(8),
+	top: theme.spacing(14),
 	right: theme.spacing(2),
 }));
 

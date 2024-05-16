@@ -25,6 +25,7 @@ import {
 	setMapView,
 } from '../app/appSlice';
 import FeatureMovementButton from './controls/featureMovementButton';
+import FollowHeadingButton from './controls/followHeadingButton';
 import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
@@ -32,7 +33,12 @@ import './olMap.css';
 import {
 	createGeolocationMarkerOverlay,
 	defaultZoomLevel,
-	geolocationMarkerOvelayerId,
+	disableGeolocationHeadingMarkerFollowing,
+	disableGeolocationMarkerAndHeadingFollowing,
+	enableGeolocationMarkerAndMaybeHeadingFollowing,
+	geolocationMarkerHeadingBackgroundTriangleOvelayId,
+	geolocationMarkerHeadingForegroundTriangleOvelayId,
+	geolocationMarkerOverlayId,
 	getBasemap,
 	mapTargetElementId,
 	onGeolocationChangePosition,
@@ -115,22 +121,79 @@ function OLMap(props: Props) {
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
+	const [isFollowingHeading, setIsFollowingHeading] = useState(true);
+	const isFollowingHeadingRef = useRef<boolean>(isFollowingHeading);
+	isFollowingHeadingRef.current = isFollowingHeading;
+
+	const [isFollowingHeadingPrevious, setIsFollowingHeadingPrevious] = useState(true);
+	const isFollowingHeadingPreviousRef = useRef<boolean>(isFollowingHeadingPrevious);
+	isFollowingHeadingPreviousRef.current = isFollowingHeadingPrevious;
+
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
+		setIsFollowingHeading(isFollowingHeadingPreviousRef.current);
 
-		// When we re-enable location following, grab the current location and snap the map to it
+		enableGeolocationMarkerAndMaybeHeadingFollowing(isFollowingHeadingPreviousRef.current);
+
+		// When we re-enable location following, grab the current location and snap the map to it.
+		// If we're following the user's heading as well, then let's re-orient to that.
 		if (mapRef.current !== undefined) {
-			const curerentPosition = geolocation.current.getPosition();
-			if (curerentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, curerentPosition, true);
+			const currentPosition = geolocation.current.getPosition();
+			const currentHeading = isFollowingHeadingPreviousRef.current === true ? geolocation.current.getHeading() : 0;
+
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
 			}
 		}
 	}, []);
-	const onFollowGPSDisabled = useCallback(() => setIsFollowingGPS(false), []);
+
+	const onFollowGPSDisabled = useCallback(() => {
+		setIsFollowingGPS(false);
+		setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
+		setIsFollowingHeading(false);
+
+		disableGeolocationMarkerAndHeadingFollowing();
+
+		if (mapRef.current !== undefined) {
+			const view = mapRef.current.getView();
+			view.setRotation(0);
+		}
+	}, []);
+
+	const onFollowHeadingEnabled = useCallback(() => {
+		setIsFollowingGPS(true);
+		setIsFollowingHeadingPrevious(false);
+		setIsFollowingHeading(true);
+
+		enableGeolocationMarkerAndMaybeHeadingFollowing(true);
+
+		// When we re-enable heading following, grab the current location and heading and snap and re-orient the map to them.
+		if (mapRef.current !== undefined) {
+			const currentPosition = geolocation.current.getPosition();
+			const currentHeading = geolocation.current.getHeading();
+
+			// No need to check currentHeading here as it's always undefined on devices without the right hardware (e.g. laptops)
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
+			}
+		}
+	}, []);
+
+	const onFollowHeadingDisabled = useCallback(() => {
+		setIsFollowingHeadingPrevious(true);
+		setIsFollowingHeading(false);
+
+		disableGeolocationHeadingMarkerFollowing();
+
+		if (mapRef.current !== undefined) {
+			const view = mapRef.current.getView();
+			view.setRotation(0);
+		}
+	}, []);
 	// ######################
 	// Geolocation (End)
 	// ######################
@@ -168,7 +231,7 @@ function OLMap(props: Props) {
 			// console.log('making a map');
 
 			geolocation.current.setTracking(true);
-			const curerentPosition = geolocation.current.getPosition();
+			const currentPosition = geolocation.current.getPosition();
 
 			let isScrollZooming = false;
 
@@ -189,15 +252,17 @@ function OLMap(props: Props) {
 				layers: [getBasemap(basemap, basemap_style)],
 				controls: [new Attribution({ collapsible: false })],
 				view:
-					curerentPosition !== undefined
-						? new View({ zoom: defaultZoomLevel, center: fromLonLat(curerentPosition) })
+					currentPosition !== undefined
+						? new View({ zoom: defaultZoomLevel, center: fromLonLat(currentPosition) })
 						: undefined,
 			});
 
 			// ######################
 			// Geolocation
 			// ######################
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOvelayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOvelayId));
 
 			const geolocationEventKeys = [
 				geolocation.current.on(
@@ -207,6 +272,7 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
+						isFollowingHeadingRef,
 						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
@@ -246,6 +312,10 @@ function OLMap(props: Props) {
 					geolocation.current.getTracking() === true
 				) {
 					setIsFollowingGPS(false);
+					setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
+					setIsFollowingHeading(false);
+
+					disableGeolocationMarkerAndHeadingFollowing();
 				}
 
 				isDragging = false;
@@ -416,6 +486,12 @@ function OLMap(props: Props) {
 						isFollowingGPS={isFollowingGPS}
 						onFollowGPSEnabled={onFollowGPSEnabled}
 						onFollowGPSDisabled={onFollowGPSDisabled}
+					/>
+
+					<FollowHeadingButton
+						isFollowingHeading={isFollowingHeading}
+						onFollowHeadingEnabled={onFollowHeadingEnabled}
+						onFollowHeadingDisabled={onFollowHeadingDisabled}
 					/>
 
 					<FeatureMovementButton

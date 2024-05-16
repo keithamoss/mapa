@@ -40,6 +40,7 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	transform: scale(1);
 	background: rgba(34, 105, 146, 0.9);
 	box-shadow: 0 0 0 0 rgba(34, 105, 146, 1);
+	/* If changing this, update olMapHelpers.ts */
 	animation: pulse-marker 2s infinite;
 	/* Hopefully this fixes the 'long pressing on the geolocation marker highlights the whole map like it's a block of text' bug */
 	pointer-events: none;
@@ -60,6 +61,36 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 		transform: scale(0.95);
 		box-shadow: 0 0 0 0 rgba(34, 105, 146, 0);
 	}
+}
+
+#geolocation_marker_heading_foreground_triangle {
+	position: absolute;
+	/* https://codepen.io/stoumann/full/abZxoOM */
+	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
+	top: -37px;
+	left: -10px;
+	height: 20px;
+	width: 20px;
+	transform: scale(1);
+	background: rgba(34, 105, 146, 0.9);
+	box-shadow: 0 0 0 0 rgba(34, 105, 146, 1);
+	/* Allow clicking features directly below the indicator */
+	pointer-events: none;
+}
+
+#geolocation_marker_heading_background_triangle {
+	position: absolute;
+	/* https://codepen.io/stoumann/full/abZxoOM */
+	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
+	top: -42px;
+	left: -14px;
+	height: 28px;
+	width: 28px;
+	transform: scale(1);
+	background-color: rgba(255, 255, 255, 0.9);
+	box-shadow: 0 0 0 0 rgba(34, 105, 146, 1);
+	/* Allow clicking features directly below the indicator */
+	pointer-events: none;
 }
 
 #centre_of_the_map {

@@ -26,7 +26,7 @@ import {
 
 const StyledBox = styled(Box)(({ theme }) => ({
 	position: 'absolute',
-	top: theme.spacing(14),
+	top: theme.spacing(20),
 	right: theme.spacing(2),
 	width: 50,
 }));
