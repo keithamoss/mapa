@@ -25,7 +25,7 @@ class Profile(models.Model):
     is_approved = models.BooleanField(default=False)
     settings = JSONField(default=default_profile_settings, blank=True)
     last_gdrive_backup = models.DateTimeField(null=True)
-    whats_new_release_count = models.IntegerField(blank=False, null=False)
+    whats_new_release_count = models.IntegerField(default=0)
 
     tracker = FieldTracker()
 
