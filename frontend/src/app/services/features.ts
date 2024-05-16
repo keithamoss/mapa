@@ -54,10 +54,9 @@ export interface MapaFeature {
 	symbol_id: number | null;
 	creation_date: number;
 	data: FeatureDataItem[];
-	// These three are inserted by buildGeoJSONFromFeatures()
+	// These two are inserted by buildGeoJSONFromFeatures()
 	symbolCacheKey?: string;
 	symbol?: Partial<SymbologyProps>;
-	// symbolCacheKeyWebGL?: string;
 }
 
 // convertFeaturesToGeoJSON() omits the `geom` property because OpenLayers needs `geometry`
