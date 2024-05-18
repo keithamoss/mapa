@@ -5,7 +5,7 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { StackPropsWithContextEnv } from './utils/get-context';
-import { getECRRepoName, titleCase } from './utils/utils';
+import { getECRRepoName } from './utils/utils';
 
 export class MapaInfraStack extends Stack {
 	public readonly ecrRepo: ecr.Repository;
@@ -130,7 +130,7 @@ export class MapaInfraStack extends Stack {
 		});
 
 		// S3 bucket for CloudFront logs
-		const s3LoggingBucket = new s3.Bucket(this, `Mapa-${titleCase(contextProps.environment)}-Logs`, {
+		const s3LoggingBucket = new s3.Bucket(this, `S3LoggingBucket`, {
 			bucketName: `mapa-${contextProps.environment}-logs`,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 			objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
