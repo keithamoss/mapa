@@ -13,15 +13,7 @@ export class UsEastCertificateStack extends Stack {
 			domainName: 'mapa.keithmoss.me',
 		});
 
-		const zoneStaging = route53.HostedZone.fromLookup(this, 'USEastHostedZoneStaging', {
-			domainName: 'mapa.staging.keithmoss.me',
-		});
-
-		[
-			// Domains need to be hard-coded rather than using contextProps values because otherwise certificate-arns.json ends up with the same pairs tokens used across all environments.
-			'mapa.keithmoss.me',
-			'api.mapa.keithmoss.me',
-		].forEach((domainName) => {
+		['mapa.keithmoss.me', 'api.mapa.keithmoss.me'].forEach((domainName) => {
 			const certificate = new Certificate(this, `Certificate-${domainName}`, {
 				certificateName: `Certificate-${domainName}`,
 				domainName,
@@ -29,11 +21,11 @@ export class UsEastCertificateStack extends Stack {
 			});
 		});
 
-		[
-			// Domains need to be hard-coded rather than using contextProps values because otherwise certificate-arns.json ends up with the same pairs tokens used across all environments.
-			'mapa.staging.keithmoss.me',
-			'api.mapa.staging.keithmoss.me',
-		].forEach((domainName) => {
+		const zoneStaging = route53.HostedZone.fromLookup(this, 'USEastHostedZoneStaging', {
+			domainName: 'mapa.staging.keithmoss.me',
+		});
+
+		['mapa.staging.keithmoss.me', 'api.mapa.staging.keithmoss.me'].forEach((domainName) => {
 			const certificate = new Certificate(this, `Certificate-${domainName}`, {
 				certificateName: `Certificate-${domainName}`,
 				domainName,
