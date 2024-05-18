@@ -113,7 +113,7 @@ region=ap-southeast-2
 output=json
 ```
 
-3. Deploy TrustStack `cdk deploy TrustStack --context env=[env] --profile mapa-cdk-role`
+3. Deploy TrustStack `cdk deploy TrustStack --app "npx ts-node --prefer-ts-exts bin/cdk-trust-stack.ts" --context env=[env] --profile mapa-cdk-role`
 4. Update `~/.aws/credentials` and add an entry for our `mapa-cdk-role`
 
 ```

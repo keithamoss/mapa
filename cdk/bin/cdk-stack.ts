@@ -5,7 +5,6 @@ import 'source-map-support/register';
 import { MapaAppStack } from '../lib/mapa-app-stack';
 import { MapaInfraStack } from '../lib/mapa-infra-stack';
 import { MapaStaticSiteStack } from '../lib/mapa-static-site-stack';
-import { TrustStack } from '../lib/trust-stack';
 import { getEnvContext } from '../lib/utils/get-context';
 import { titleCase } from '../lib/utils/utils';
 
@@ -13,12 +12,6 @@ const app = new cdk.App();
 
 // https://rehanvdm.com/blog/4-methods-to-configure-multiple-environments-in-the-aws-cdk
 const envContext = getEnvContext(app);
-
-// Ref: https://github.com/aws/aws-cdk/issues/9274
-// Ref: https://medium.com/@mhkafadar/a-practical-aws-cdk-walkthrough-deploying-multiple-websites-to-s3-and-cloudfront-7caaabc9c327
-const trustStack = new TrustStack(app, 'TrustStack', {
-	env: { account: '429260965153', region: 'ap-southeast-2' },
-});
 
 // https://bobbyhadz.com/blog/aws-cdk-share-resources-between-stacks
 const infraStack = new MapaInfraStack(app, 'MapaInfraStack', {
