@@ -4,7 +4,6 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
 import { BaseStackProps } from './utils/get-context';
-import { getCertificateArns } from './utils/utils';
 
 export class UsEastCertificateStack extends Stack {
 	constructor(scope: Construct, id: string, props: BaseStackProps) {
@@ -28,13 +27,6 @@ export class UsEastCertificateStack extends Stack {
 				domainName,
 				validation: acm.CertificateValidation.fromDns(zoneProduction),
 			});
-
-			const certificateArns = getCertificateArns();
-			certificateArns[domainName] = certificate.certificateArn;
-			require('fs').writeFileSync(
-				__dirname + '/./config/certificate-arns.json',
-				JSON.stringify(certificateArns, null, 2),
-			);
 		});
 
 		[
@@ -47,13 +39,6 @@ export class UsEastCertificateStack extends Stack {
 				domainName,
 				validation: acm.CertificateValidation.fromDns(zoneStaging),
 			});
-
-			const certificateArns = getCertificateArns();
-			certificateArns[domainName] = certificate.certificateArn;
-			require('fs').writeFileSync(
-				__dirname + '/./config/certificate-arns.json',
-				JSON.stringify(certificateArns, null, 2),
-			);
 		});
 	}
 }
