@@ -26,9 +26,9 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/production
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.production.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.production.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.production.env
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.prod.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.prod.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.prod.env
 
       - name: Build - Prep
         run: |
@@ -58,9 +58,9 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/production
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.production.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.production.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.production.env
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.prod.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.prod.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.prod.env
 
       - name: Build - Prep
         run: |
