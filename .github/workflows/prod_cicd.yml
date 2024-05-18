@@ -25,10 +25,10 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          mkdir secrets/production
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.prod.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.prod.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.prod.env
+          mkdir secrets/prod
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/prod/web-db.prod.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
 
       - name: Build - Prep
         run: |
@@ -57,10 +57,10 @@ jobs:
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          mkdir secrets/production
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.prod.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.prod.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.prod.env
+          mkdir secrets/prod
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/prod/web-db.prod.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
 
       - name: Build - Prep
         run: |
