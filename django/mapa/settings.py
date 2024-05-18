@@ -39,7 +39,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
 X_FRAME_OPTIONS = "DENY"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS_AND_WHITELIST").split(",")
 
 SESSION_COOKIE_DOMAIN = os.environ.get("SESSION_COOKIE_DOMAIN")
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 400 # Chrome limits cookies to expiring no more than 400 days in the future
