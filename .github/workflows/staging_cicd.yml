@@ -26,9 +26,9 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/staging
-          echo "${{secrets.WEB_STAGING_ENV }}" > secrets/staging/web.staging.env
-          echo "${{secrets.WEB_DB_STAGING_ENV }}" > secrets/staging/web-db.staging.env
-          echo "${{secrets.FRONTEND_STAGING_ENV }}" > secrets/staging/frontend.staging.env
+          echo "${{ secrets.WEB_ENV }}" > secrets/staging/web.staging.env
+          echo "${{ secrets.WEB_DB_ENV }}" > secrets/staging/web-db.staging.env
+          echo "${{ secrets.FRONTEND_ENV }}" > secrets/staging/frontend.staging.env
 
       - name: Build - Prep
         run: |
@@ -58,9 +58,9 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/staging
-          echo "${{secrets.WEB_STAGING_ENV }}" > secrets/staging/web.staging.env
-          echo "${{secrets.WEB_DB_STAGING_ENV }}" > secrets/staging/web-db.staging.env
-          echo "${{secrets.FRONTEND_STAGING_ENV }}" > secrets/staging/frontend.staging.env
+          echo "${{ secrets.WEB_ENV }}" > secrets/staging/web.staging.env
+          echo "${{ secrets.WEB_DB_ENV }}" > secrets/staging/web-db.staging.env
+          echo "${{ secrets.FRONTEND_ENV }}" > secrets/staging/frontend.staging.env
 
       - name: Build - Prep
         run: |

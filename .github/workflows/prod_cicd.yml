@@ -26,9 +26,9 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/prod
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/prod/web-db.prod.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+          echo "${{ secrets.WEB_ENV }}" > secrets/prod/web.prod.env
+          echo "${{ secrets.WEB_DB_ENV }}" > secrets/prod/web-db.prod.env
+          echo "${{ secrets.FRONTEND_ENV }}" > secrets/prod/frontend.prod.env
 
       - name: Build - Prep
         run: |
@@ -58,17 +58,14 @@ jobs:
         run: |
           mkdir secrets
           mkdir secrets/prod
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
-          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/prod/web-db.prod.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+          echo "${{ secrets.WEB_ENV }}" > secrets/prod/web.prod.env
+          echo "${{ secrets.WEB_DB_ENV }}" > secrets/prod/web-db.prod.env
+          echo "${{ secrets.FRONTEND_ENV }}" > secrets/prod/frontend.prod.env
 
       - name: Build - Prep
         run: |
           mkdir ./build
           mkdir ./nginx-prod/build
-
-      # - name: Setup Debug Session
-      #   uses: csexton/debugger-action@master
 
       - name: Django - Build
         run: docker compose --file build_production.yml run django

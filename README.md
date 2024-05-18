@@ -172,9 +172,11 @@ The only manual configuration required is populating the relevant secrets in Git
 
 - AWS_GITHUB_ACTIONS_ROLE: The ARN of the role created by `TrustStack`
 - AWS_TARGET_REGION: ap-southeast-2
-- FRONTEND\_[ENV]\_ENV
-- WEB*DB*[ENV]\_ENV
-- WEB\_[ENV]\_ENV
+- FRONTEND_ENV
+- WEB_DB_ENV
+- WEB_ENV
+
+Note: `WEB_DB_ENV` just needs to exist and contain the standard DEV environment variables. We don't actually need to connect to the database.
 
 # Tips
 
