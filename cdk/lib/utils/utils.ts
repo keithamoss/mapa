@@ -9,12 +9,4 @@ export const getDjangoAppLambdaFunctionName = (environment: MapaEnvironment | '*
 export const getDjangoCronLambdaFunctionName = (environment: MapaEnvironment | '*') =>
 	`Mapa-${titleCase(environment)}-Django-Cron-Lambda`;
 
-export const getCertificateArns = () => {
-	try {
-		return require('./../config/certificate-arns.json');
-	} catch (error) {
-		return {};
-	}
-};
-
 export const titleCase = (str: string) => `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
