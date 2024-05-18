@@ -81,30 +81,30 @@ if os.environ.get("ENVIRONMENT") == "PRODUCTION" or os.environ.get("ENVIRONMENT"
     STATIC_URL = f"{os.environ.get('PUBLIC_SITE_URL')}/api/"
 
     # Only needed in the old-school "Run it on a Droplet/EC2" deployment scenario
-    # LOGGING = {
-    #     "version": 1,
-    #     "disable_existing_loggers": False,
-    #     "formatters": {
-    #         "verbose": {
-    #             "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-    #         },
-    #     },
-    #     "handlers": {
-    #         "file": {
-    #             "level": "INFO",
-    #             "class": "logging.FileHandler",
-    #             "filename": "/app/logs/django.log",
-    #             "formatter": "verbose",
-    #         },
-    #     },
-    #     "loggers": {
-    #         "django": {
-    #             "handlers": ["file"],
-    #             "level": "INFO",
-    #             "propagate": True,
-    #         },
-    #     },
-    # }
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+            },
+        },
+        "handlers": {
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "/app/logs/django.log",
+                "formatter": "verbose",
+            },
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["file"],
+                "level": "INFO",
+                "propagate": True,
+            },
+        },
+    }
 else:
     DEBUG = True
 
