@@ -143,11 +143,12 @@ Approach inspired by:
 
 For deployment to a blank environment to work, we need to deploy in two stages: Infrastructure first, pushing the Docker image, and finally deployment of the application.
 
-1. Update `cdk.json` with the relevant context for the new environment
-2. Deploy UsEastCert and InfraStack `cdk deploy UsEastCertificateStack MapaInfraStack --context env=[env] --profile mapa-cdk-role`
-3. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
-4. Now deploy the application itself `cdk deploy MapaAppStack MapaStaticSiteStack --context env=[env] --profile mapa-cdk-role`
-5. Lastly, we can now add the application secrets in Secrets Manager (ref. `aws-secrets.[env].json` templates locally in this repo)
+1. Add the new domain names for your new environment to `UsEastCertificateStack` and deploy the new certs `cdk deploy --app "npx ts-node --prefer-ts-exts bin/cdk-cert-stack.ts" UsEastCertificateStack --profile mapa-cdk-role`
+2. Add the context for the new environment to `cdk.json` (including the Arns for the new certs we just made)
+3. Deploy InfraStack `cdk deploy MapaInfraStack --context env=[env] --profile mapa-cdk-role`
+4. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
+5. Now deploy the application itself `cdk deploy MapaAppStack MapaStaticSiteStack --context env=[env] --profile mapa-cdk-role`
+6. Lastly, we can now add the application secrets in Secrets Manager (ref. `aws-secrets.[env].json` templates locally in this repo)
 
 # Destroying a stack
 
