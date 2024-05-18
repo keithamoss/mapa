@@ -14,7 +14,7 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 
 RUN apt-get update && apt-get -y upgrade
 # Only needed in the old-school "Run it on a Droplet/EC2" deployment scenario
-# RUN apt-get install -y supervisor
+RUN apt-get install -y supervisor
 
 # Poetry for Python deps management
 RUN apt-get install -y curl
