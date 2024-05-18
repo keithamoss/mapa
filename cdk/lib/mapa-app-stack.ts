@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { CfnOutput } from 'aws-cdk-lib';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import { HttpVersion, PriceClass } from 'aws-cdk-lib/aws-cloudfront';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
@@ -12,7 +13,6 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route35Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import { GetCertificate } from './modules/get-certificate';
 import { ContextEnvProps } from './utils/get-context';
 import { getDjangoAppLambdaFunctionName, getDjangoCronLambdaFunctionName, titleCase } from './utils/utils';
 
@@ -219,10 +219,12 @@ export class MapaAppStack extends cdk.Stack {
 
 		new CfnOutput(this, 'Secret', { value: secret.secretArn });
 
-		// Grab our certificate from us-east-1 that the other stack nicely made for us
-		const certificate = new GetCertificate(this, {
-			domainName: contextProps.domainNameDjangoApp,
-		}).cert;
+		// Grab our certificate from us-east-1 that the standalone cert stack nicely made for us
+		const certificate = Certificate.fromCertificateArn(
+			this,
+			`${contextProps.domainNameDjangoApp}-Cert`,
+			contextProps.certificateArnDjangoApp,
+		) as Certificate;
 
 		new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
 

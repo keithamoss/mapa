@@ -2,35 +2,33 @@ name: Production CI/CD
 
 on:
   push:
-    # branches: [production]
-    branches: [main]
+    branches: [production]
   pull_request:
-    # branches: [production]
-    branches: [main]
+    branches: [production]
     types: [closed]
 
-env:
-  LATEST_IMAGE_TAG: latest-production
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-frontend:
     runs-on: ubuntu-latest
     environment: PRODUCTION
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          mkdir secrets/prod
-          mkdir secrets/dev
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
-          echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+          mkdir secrets/production
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.production.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.production.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.production.env
 
       - name: Build - Prep
         run: |
@@ -41,7 +39,7 @@ jobs:
         run: docker compose --file build_production.yml run frontend
 
       - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-frontend
           path: ./nginx-prod/build/frontend.tgz
@@ -50,20 +48,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: PRODUCTION
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: '20.x'
 
       - name: Setup Env Vars
         run: |
           mkdir secrets
-          mkdir secrets/prod
-          mkdir secrets/dev
-          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/prod/web.prod.env
-          echo "${{secrets.WEB_DB_DEV_ENV }}" > secrets/dev/web-db.dev.env
-          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/prod/frontend.prod.env
+          mkdir secrets/production
+          echo "${{secrets.WEB_PRODUCTION_ENV }}" > secrets/production/web.production.env
+          echo "${{secrets.WEB_DB_PRODUCTION_ENV }}" > secrets/production/web-db.production.env
+          echo "${{secrets.FRONTEND_PRODUCTION_ENV }}" > secrets/production/frontend.production.env
 
       - name: Build - Prep
         run: |
@@ -74,79 +71,88 @@ jobs:
         run: docker compose --file build_production.yml run django
 
       - name: Upload artifact for container build jobs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-django
           path: ./nginx-prod/build/django.tgz
-
-  build-nginx:
-    runs-on: ubuntu-latest
-    environment: PRODUCTION
-    needs: [build-frontend, build-django-static]
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build - Prep
-        run: |
-          mkdir ./build
-          mkdir ./nginx-prod/build
-
-      - name: Download artifacts for container building
-        uses: actions/download-artifact@v3
-        with:
-          path: ./build/
-
-      - name: Move artifacts
-        run: |
-          mv ./build/build-frontend/frontend.tgz ./nginx-prod/build/frontend.tgz
-          mv ./build/build-django/django.tgz ./nginx-prod/build/django.tgz
-
-      - name: Containers - Build Nginx
-        run: docker build -t keithmoss/mapa-nginx:production-$GITHUB_SHA -t keithmoss/mapa-nginx:${{ env.LATEST_IMAGE_TAG }} .
-        working-directory: nginx-prod
-
-      - name: Containers - Push to Docker Hub
-        run: |
-          docker push keithmoss/mapa-nginx --all-tags
 
   build-django:
     runs-on: ubuntu-latest
     environment: PRODUCTION
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
+          aws-region: ${{ secrets.AWS_TARGET_REGION }}
+          role-session-name: 'GitHubActions-DeployLayerStack'
 
       - name: Containers - Build Django
-        run: docker build -t keithmoss/mapa-django:production-$GITHUB_SHA -t keithmoss/mapa-django:${{ env.LATEST_IMAGE_TAG }} .
+        run: docker build -t 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/production/mapa-django-lambdas:$GITHUB_SHA -t 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/production/mapa-django-lambdas:latest .
         working-directory: django
 
-      - name: Containers - Push to Docker Hub
+      - name: Containers - Push to AWS
         run: |
-          docker push keithmoss/mapa-django --all-tags
+          aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com
+          docker push 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/production/mapa-django-lambdas --all-tags
 
   deploy-app:
     runs-on: ubuntu-latest
     environment: PRODUCTION
-    needs: [build-nginx, build-django]
+    needs: [build-frontend, build-django-static, build-django]
     steps:
-      - name: Deploy to Digital Ocean droplet via SSH action
-        uses: appleboy/ssh-action@v0.1.10
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          host: ${{ secrets.SSH_PRODUCTION_HOST }}
-          username: ${{ secrets.SSH_PRODUCTION_USERNAME }}
-          key: ${{ secrets.SSH_PRODUCTION_KEY }}
-          passphrase: ${{ secrets.SSH_PRODUCTION_KEY_PASSPHRASE }}
-          script: |
-            cd /apps/mapa/
-            ./mapa-production-redeploy.sh
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
+          aws-region: ${{ secrets.AWS_TARGET_REGION }}
+          role-session-name: 'GitHubActions-DeployLayerStack'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install CDK and deps
+        run: |
+          npm install -g aws-cdk
+          cd ./cdk
+          npm install .
+          mkdir build
+
+      - name: Download artifacts for deployment
+        uses: actions/download-artifact@v4
+        with:
+          path: ./cdk/build/
+
+      - name: Move artifacts
+        run: |
+          cd ./cdk/build/
+
+          tar -xvf build-frontend/frontend.tgz
+          rm -rf ./build-frontend/
+
+          mkdir api
+          tar -xvf ./build-django/django.tgz --directory ./api/
+          rm -rf ./build-django/
+
+      - name: Deploy CDK stacks
+        run: |
+          cd ./cdk
+          cdk deploy MapaInfraStack MapaAppStack MapaStaticSiteStack --context env=production --require-approval never
+
+      - name: Update lambda function code
+        run: |
+          aws lambda update-function-code --function-name Mapa-Production-Django-App-Lambda --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/production/mapa-django-lambdas:latest --region ap-southeast-2
+          aws lambda update-function-code --function-name Mapa-Production-Django-Cron-Lambda --image-uri 429260965153.dkr.ecr.ap-southeast-2.amazonaws.com/aws-keithmoss/production/mapa-django-lambdas:latest --region ap-southeast-2
+
+      - name: Run Django migrations
+        run: |
+          aws lambda wait function-updated-v2 --function-name Mapa-Production-Django-Cron-Lambda --region ap-southeast-2
+          aws events put-events --entries '[ { "DetailType": "Run Django Migrations", "Detail": "{ \"event_type\": \"run_migrations\" }", "Resources": [], "Source": "mapa" } ]'
+
+      # - name: Setup Debug Session
+      #   uses: csexton/debugger-action@master

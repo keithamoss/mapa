@@ -1,12 +1,12 @@
 import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
 import * as cdk from 'aws-cdk-lib';
 import { CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
-import { GetCertificate } from './modules/get-certificate';
 import { ContextEnvProps } from './utils/get-context';
 
 export interface InfraStackProps {
@@ -26,10 +26,12 @@ export class MapaStaticSiteStack extends cdk.Stack {
 
 		new CfnOutput(this, 'S3LoggingBucketFromInfraStack', { value: props.infraStack.s3LoggingBucket.bucketName });
 
-		// Grab our certificate from us-east-1 that the other stack nicely made for us
-		const certificate = new GetCertificate(this, {
-			domainName: contextProps.domainName,
-		}).cert;
+		// Grab our certificate from us-east-1 that the standalone cert stack nicely made for us
+		const certificate = Certificate.fromCertificateArn(
+			this,
+			`${contextProps.domainName}-Cert`,
+			contextProps.certificateArnStaticSite,
+		) as Certificate;
 
 		new CfnOutput(this, 'StaticSiteCertificate', { value: certificate.certificateArn });
 

@@ -25,6 +25,8 @@
     "staging": {
       "domainName": "mapa.staging.keithmoss.me",
       "domainNameDjangoApp": "api.mapa.staging.keithmoss.me",
+      "certificateArnStaticSite": "arn:aws:acm:us-east-1:429260965153:certificate/9b66e8c3-92bf-49e7-a502-854f1f6edeb4",
+      "certificateArnDjangoApp": "arn:aws:acm:us-east-1:429260965153:certificate/28e133cb-751a-4f44-a7d3-79c52f74394f",
       "lambdaEnvironment": {
         "ENVIRONMENT": "STAGING",
         "PORT": "8000",
@@ -52,6 +54,8 @@
     "production": {
       "domainName": "mapa.keithmoss.me",
       "domainNameDjangoApp": "api.mapa.keithmoss.me",
+      "certificateArnStaticSite": "arn:aws:acm:us-east-1:429260965153:certificate/b06d0d7c-4156-4b74-bce3-52abbf175286",
+      "certificateArnDjangoApp": "arn:aws:acm:us-east-1:429260965153:certificate/ecaf60d5-f748-4f63-b420-f24ef97e8f4b",
       "lambdaEnvironment": {
         "ENVIRONMENT": "PRODUCTION",
         "PORT": "8000",

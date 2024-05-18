@@ -17,6 +17,8 @@ export enum MapaEnvironment {
 export interface ContextProps {
 	domainName: string;
 	domainNameDjangoApp: string;
+	certificateArnStaticSite: string;
+	certificateArnDjangoApp: string;
 	lambdaEnvironment: { [key: string]: string };
 }
 

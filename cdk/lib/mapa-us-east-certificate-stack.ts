@@ -3,14 +3,12 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import { Construct } from 'constructs';
-import { StackPropsWithContextEnv } from './utils/get-context';
+import { BaseStackProps } from './utils/get-context';
 import { getCertificateArns } from './utils/utils';
 
 export class UsEastCertificateStack extends Stack {
-	constructor(scope: Construct, id: string, props: StackPropsWithContextEnv) {
-		// https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html#typescript-cdk-idioms
-		const { context: contextProps, ...ogProps } = props;
-		super(scope, id, ogProps);
+	constructor(scope: Construct, id: string, props: BaseStackProps) {
+		super(scope, id, props);
 
 		const zoneProduction = route53.HostedZone.fromLookup(this, 'USEastHostedZoneProduction', {
 			domainName: 'mapa.keithmoss.me',
