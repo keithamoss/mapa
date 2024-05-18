@@ -1,6 +1,6 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, styled, useTheme } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import WelcomeUser from './WelcomeUser';
@@ -34,6 +34,17 @@ function App() {
 	const user = useAppSelector(selectUser);
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
+
+	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in QuickAddSymbolsControlEntrypoint, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below the QuickAdd symbols.
+	// tl;dr Toggle the zIndex of the SpeedDial depending on whether its open or not.
+	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
+	const onSpeedDialOpen = useCallback(() => {
+		setBoxZIndex(`${theme.zIndex.speedDial + 2}`);
+	}, [theme.zIndex.speedDial]);
+
+	const onSpeedDialClose = useCallback(() => {
+		setBoxZIndex(undefined);
+	}, []);
 
 	if (isLoggedIn === undefined) {
 		return null;
@@ -81,12 +92,13 @@ function App() {
 					<Box
 						sx={{
 							position: 'absolute',
+							zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
 							right: theme.spacing(2),
 							// right: theme.spacing(isInStandaloneMode() === false ? 2 : 4),
 						}}
 					>
-						<SpeedDialNavigation />
+						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
 
 						<AddFeatureButton mapId={mapId} />
 					</Box>
