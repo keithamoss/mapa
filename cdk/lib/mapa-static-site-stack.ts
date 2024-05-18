@@ -24,8 +24,6 @@ export class MapaStaticSiteStack extends cdk.Stack {
 		const { context: contextProps, ...ogProps } = props;
 		super(scope, id, ogProps);
 
-		new CfnOutput(this, 'S3LoggingBucketFromInfraStack', { value: props.infraStack.s3LoggingBucket.bucketName });
-
 		// Grab our certificate from us-east-1 that the standalone cert stack nicely made for us
 		const certificate = Certificate.fromCertificateArn(
 			this,
