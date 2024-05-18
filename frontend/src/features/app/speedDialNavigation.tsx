@@ -66,23 +66,37 @@ const actions = [
 	},
 ];
 
-export default function SpeedDialNavigation() {
+interface Props {
+	onSpeedDialOpen: () => void;
+	onSpeedDialClose: () => void;
+}
+
+export default function SpeedDialNavigation(props: Props) {
+	const { onSpeedDialOpen, onSpeedDialClose } = props;
+
 	const [open, setOpen] = useState(false);
-	const handleOpen = () => setOpen(true);
+
+	const handleOpen = () => {
+		setOpen(true);
+		onSpeedDialOpen();
+	};
 
 	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
 		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
 		if (reason !== 'mouseLeave') {
 			setOpen(false);
+			onSpeedDialClose();
 		}
 	};
 
 	const handleBackdropClick = () => {
 		setOpen(false);
+		onSpeedDialClose();
 	};
 
 	const onActionClick = () => {
 		setOpen(false);
+		onSpeedDialClose();
 	};
 
 	const highlightSearchFilter = useAppSelector(getCountOfFilteredFeatureIds) >= 1;
