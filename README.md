@@ -27,7 +27,7 @@ CREATE SCHEMA mapa;
 
 Add yourself to the app_allowedusers table before trying to login.
 
-https://mapa.test.keithmoss.me/api/login/google-oauth2/
+https://api.mapa.test.keithmoss.me/login/google-oauth2/
 
 # Local development setup
 
@@ -167,13 +167,13 @@ GitHub Actions runs CI/CD for our staging and prod environments.
 
 The `TrustStack` deployed via CDK takes care of setting up a relationship between GitHub and AWS to allow Actions to run CloudFormation and modify our deployment.
 
-The only manualy configuration required is populating the relevant secrets in GitHub Actions:
+The only manual configuration required is populating the relevant secrets in GitHub Actions:
 
 - AWS_GITHUB_ACTIONS_ROLE: The ARN of the role created by `TrustStack`
 - AWS_TARGET_REGION: ap-southeast-2
-- FRONTEND_STAGING_ENV
-- WEB_DB_STAGING_ENV
-- WEB_STAGING_ENV
+- FRONTEND\_[ENV]\_ENV
+- WEB*DB*[ENV]\_ENV
+- WEB\_[ENV]\_ENV
 
 # Tips
 
