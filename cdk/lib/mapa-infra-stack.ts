@@ -140,8 +140,6 @@ export class MapaInfraStack extends Stack {
 			removalPolicy: RemovalPolicy.RETAIN,
 		});
 
-		new CfnOutput(this, 'S3CloudFrontLoggingBucket', { value: s3LoggingBucket.bucketName });
-
 		this.vpc = vpc;
 		this.ecrRepo = ecrRepo;
 		this.s3LoggingBucket = s3LoggingBucket;
