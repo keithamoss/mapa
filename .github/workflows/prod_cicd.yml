@@ -67,8 +67,8 @@ jobs:
           mkdir ./build
           mkdir ./nginx-prod/build
 
-      - name: Setup Debug Session
-        uses: csexton/debugger-action@master
+      # - name: Setup Debug Session
+      #   uses: csexton/debugger-action@master
 
       - name: Django - Build
         run: docker compose --file build_production.yml run django

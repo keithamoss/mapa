@@ -72,7 +72,9 @@ fi
 if [ "$CMD" = "build" ]; then
   rm -rf /app/static
   mkdir -p /app/static
-  
+
+  export PYTHONPATH=/app/
+
   django-admin collectstatic --noinput
 
   cd /app/static && tar czvf /build/django.tgz .
