@@ -1,14 +1,10 @@
-
 from mapa.app.enums import GeomType, ProfileSettings
-from mapa.util import make_logger
 from model_utils import FieldTracker
 from simple_history.models import HistoricalRecords
 
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.db.models import JSONField
-
-logger = make_logger(__name__)
 
 # Create your models here.
 
@@ -29,6 +25,7 @@ class Profile(models.Model):
     is_approved = models.BooleanField(default=False)
     settings = JSONField(default=default_profile_settings, blank=True)
     last_gdrive_backup = models.DateTimeField(null=True)
+    whats_new_release_count = models.IntegerField(default=0)
 
     tracker = FieldTracker()
 
@@ -61,7 +58,6 @@ class FeatureSchemas(models.Model):
     # definition = JSONField(default=None, blank=True, validators=[JSONSchemaValidator(limit_value=noms_schema)])
     symbology = JSONField(default=dict, blank=True)
     default_symbology = JSONField(null=True)
-    recently_used_symbols = JSONField(default=dict, blank=True)
     deleted_at = models.DateTimeField(null=True)
 
     history = HistoricalRecords()
@@ -81,6 +77,7 @@ class Maps(models.Model):
 
 
 class Features(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
     last_updated_date = models.DateTimeField(auto_now=True)
     geom = models.PointField(geography=True)
     geom_type = models.TextField(choices=[(tag, tag.value) for tag in GeomType])

@@ -12,20 +12,27 @@ import unicodedata
 from urllib.parse import quote
 
 import pytz
+from aws_lambda_powertools.utilities import parameters
+
+# For some reason this was causing that weird Google complete login SSL session context infinite redirect error
+# that was itself due to a gevent MonkeyPatchWarning:
+# /usr/local/lib/python3.11/site-packages/gunicorn/workers/ggevent.py:39: MonkeyPatchWarning: 
+# Monkey-patching ssl after ssl has already been imported may lead to errors, including RecursionError on Python 3.6. It may also silently lead to incorrect behaviour on Python 3.7. Please monkey-patch earlier. See https://github.com/gevent/gevent/issues/1016. Modules that had direct imports (NOT patched): ['urllib3.util.ssl_ (/usr/local/lib/python3.11/site-packages/urllib3/util/ssl_.py)', 'botocore.httpsession (/usr/local/lib/python3.11/site-packages/botocore/httpsession.py)', 'urllib3.util (/usr/local/lib/python3.11/site-packages/urllib3/util/__init__.py)']
+# We fixed it in this case by removing our get_env() utility function and using os.environ.get() directly (the functionality was the same anyway, so not sure why we even had a utility function!)
 from django.conf import settings
 
-
-def make_logger(name, handler=logging.StreamHandler(), formatter=None):
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-    # handler = logging.StreamHandler()
-    if formatter is None:
-        fmt = logging.Formatter("%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)")
-    else:
-        fmt = formatter
-    handler.setFormatter(fmt)
-    logger.addHandler(handler)
-    return logger
+# Doesn't actually seem to be needed in DEV, and in PROD we have aws_lambda_powertools.Logger
+# def make_logger(name, handler=logging.StreamHandler(), formatter=None):
+#     logger = logging.getLogger(name)
+#     logger.setLevel(logging.DEBUG)
+#     # handler = logging.StreamHandler()
+#     if formatter is None:
+#         fmt = logging.Formatter("%(asctime)s [%(levelname)s] [P:%(process)d] [%(threadName)s] %(message)s (%(pathname)s %(funcName)s() line=%(lineno)d)")
+#     else:
+#         fmt = formatter
+#     handler.setFormatter(fmt)
+#     logger.addHandler(handler)
+#     return logger
 
 
 class LogLevelFilter(object):
@@ -48,13 +55,6 @@ def deepupdate(original, update):
         elif isinstance(value, dict):
             deepupdate(value, update[key])
     return update
-
-
-def get_env(k, d=None):
-    if k not in os.environ:
-        return d
-    v = os.environ[k]
-    return v
 
 
 def timeit(method):
@@ -236,3 +236,11 @@ def get_stracktrace_string_for_current_exception():
         stack_trace.append("File \"%s\", line : %d, in \"%s\", message: %s" % (trace[0], trace[1], trace[2], trace[3]))
 
     return "\r\n".join(stack_trace)
+
+def get_secret_from_ssm_or_local_env_var(secret_name):
+    try :
+        secrets = parameters.get_secret(os.environ.get("AWS_SECRETS_NAME"), transform="json")
+        return secrets[secret_name]
+    except Exception:
+        # For local dev and the old-school "Run it on a Droplet/EC2" deployment scenario
+        return os.environ.get(secret_name)

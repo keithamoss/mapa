@@ -7,7 +7,8 @@ import sys
 import psycopg2
 try:
     conn = psycopg2.connect(dbname="$DB_NAME", user="$DB_USERNAME", password="$DB_PASSWORD", host="$DB_HOST")
-except psycopg2.OperationalError:
+except psycopg2.OperationalError as e:
+    print(e)
     sys.exit(-1)
 sys.exit(0)
 END
@@ -27,7 +28,14 @@ waitfordb()
 
 CMD="$1"
 
-# Cron entrypoint (development and production)
+# AWS Lambda App entrypoint (production)
+if [ "$CMD" = "lambda_gunicorn" ]; then
+  >&2 echo "Serving Lambda request via gunicorn"
+  gunicorn mapa.wsgi:application -c=gunicorn.conf.py
+  exit
+fi
+
+# Cron entrypoint for DigitalOcean and local dev (development and production)
 if [ "$CMD" != "build" ]; then
   waitfordb
 
@@ -75,9 +83,13 @@ fi
 if [ "$ENVIRONMENT" = "DEVELOPMENT" ]; then
   waitfordb
 
+  # So we know to import from mapa as the base, not django.mapa
+  export PYTHONPATH="/app/"
+
   django-admin migrate
   django-admin runserver "0.0.0.0:8000"
   exit
 fi
 
-exec "$@"
+# Not sure this actually does...anything
+# exec "$@"

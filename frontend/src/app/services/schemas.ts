@@ -58,9 +58,6 @@ export interface FeatureSchemaModifiableProps {
 	definition: FeatureSchemaFieldDefinitionCollection[];
 	symbology: FeatureSchemaSymbology;
 	default_symbology: SymbologyProps | null;
-	recently_used_symbols: {
-		[key: number]: number[];
-	};
 }
 
 export type NewFeatureSchema = FeatureSchemaModifiableProps;
@@ -211,7 +208,7 @@ export { initialState as initialFeatureSchemasState };
 
 export const featureSchemasApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeatureSchemas: builder.query<EntityState<FeatureSchema>, void>({
+		getFeatureSchemas: builder.query<EntityState<FeatureSchema, number>, void>({
 			query: () => 'schemas/',
 			transformResponse: (res: FeatureSchemasResponse) => {
 				return featureSchemasAdapter.setAll(initialState, res);

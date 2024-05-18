@@ -39,7 +39,7 @@ function MapHeroIconEditor(props: Props) {
 
 	const navigate = useNavigate();
 
-	const [updateMap, { isSuccess: isUpdatingMapSuccessful }] = useUpdateMapMutation();
+	const [updateMap, { isLoading: isUpdatingMapLoading, isSuccess: isUpdatingMapSuccessful }] = useUpdateMapMutation();
 
 	useEffect(() => {
 		if (isUpdatingMapSuccessful === true) {
@@ -61,6 +61,7 @@ function MapHeroIconEditor(props: Props) {
 	return (
 		<SymbologyFieldEditor
 			symbol={map.hero_icon || undefined}
+			isSaving={isUpdatingMapLoading}
 			onDone={onDoneSettingMapHeroIcon}
 			onCancel={onCancelSettingMapHeroIcon}
 			nameFieldRequired={false}

@@ -29,8 +29,7 @@ function MapEditor(props: Props) {
 
 	const map = useAppSelector((state) => selectMapById(state, mapId));
 
-	const [updateMap, { isSuccess: isUpdatingMapSuccessful /*, isLoading: isUpdatingMapLoading*/ }] =
-		useUpdateMapMutation();
+	const [updateMap, { isLoading: isUpdatingMapLoading, isSuccess: isUpdatingMapSuccessful }] = useUpdateMapMutation();
 
 	// We need to use the useEffect approach, rather than the
 	// naked if approach (below) because otherwise this will
@@ -59,7 +58,7 @@ function MapEditor(props: Props) {
 		return null;
 	}
 
-	return <MapForm map={map} onDoneEditing={onDoneEditing} />;
+	return <MapForm map={map} isMapSaving={isUpdatingMapLoading} onDoneEditing={onDoneEditing} />;
 }
 
 export default MapEditorEntrypoint;

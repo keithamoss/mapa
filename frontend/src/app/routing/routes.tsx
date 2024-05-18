@@ -2,21 +2,23 @@ import * as Sentry from '@sentry/react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from '../../App';
+import AboutPage from '../../features/about/aboutPage';
+import SymbolsDebugView from '../../features/app/symbolsDebugView';
+import FeatureCreator from '../../features/features/featureCreator';
+import FeatureEditor from '../../features/features/featureEditor';
 import FeatureManager from '../../features/features/featureManager';
 import MapCreator from '../../features/maps/mapCreator';
 import MapEditor from '../../features/maps/mapEditor';
+import MapHeroIconEditor from '../../features/maps/mapHeroIconEditor';
 import MapManager from '../../features/maps/mapsManager';
 import SchemaCreator from '../../features/schemas/schemaCreator';
 import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
-// eslint-disable-next-line import/no-named-as-default
-import DebugView from '../../features/app/debugView';
-import FeatureCreator from '../../features/features/featureCreator';
-import FeatureEditor from '../../features/features/featureEditor';
-import MapHeroIconEditor from '../../features/maps/mapHeroIconEditor';
 import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
 import SearchManager from '../../features/search/searchManager';
+import QuickAddSymbolsSettingsManager from '../../features/settings/quickAddSymbolsSettingsManager';
 import SettingsManager from '../../features/settings/settingsManager';
+import WhatsNewPage from '../../features/whatsNew/whatsNew';
 
 const sentryCreateBrowserRouter = Sentry.wrapCreateBrowserRouter(createBrowserRouter);
 
@@ -26,8 +28,8 @@ export const router = sentryCreateBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: 'DebugView',
-				element: <DebugView />,
+				path: 'SymbolsDebugView',
+				element: <SymbolsDebugView />,
 			},
 			{
 				path: 'MapManager',
@@ -88,6 +90,18 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'SettingsManager',
 				element: <SettingsManager />,
+			},
+			{
+				path: 'QuickAddSymbolsSettingsManager',
+				element: <QuickAddSymbolsSettingsManager />,
+			},
+			{
+				path: 'WhatsNew',
+				element: <WhatsNewPage />,
+			},
+			{
+				path: 'About',
+				element: <AboutPage />,
 			},
 		],
 	},

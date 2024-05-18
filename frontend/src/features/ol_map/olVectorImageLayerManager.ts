@@ -1,5 +1,5 @@
 import { Map } from 'ol';
-import { default as OLFeature } from 'ol/Feature';
+import Feature from 'ol/Feature';
 import BaseEvent from 'ol/events/Event';
 import { Geometry } from 'ol/geom';
 import VectorLayer from 'ol/layer/Vector';
@@ -11,11 +11,14 @@ import { olStyleFunction } from './olStylingManager';
 
 export const createVectorImageLayer = (features: GeoJSONFeatureCollection) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const styleFunction = (feature: OLFeature, resolution: number) => olStyleFunction(feature);
+	const styleFunction = (feature: Feature, resolution: number) => olStyleFunction(feature);
 	return new VectorImageLayer({
 		source: new VectorSource({
 			format: geoJSONFormat,
 			features: geoJSONFormat.readFeatures(features),
+			attributions: [
+				'© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+			],
 		}),
 		style: styleFunction as StyleFunction,
 		imageRatio: window.location.href.includes('imageRatio15') === true ? 1.5 : 1,
@@ -37,7 +40,7 @@ export const manageVectorImageLayerCreation = (
 
 	const modify = setupModifyInteraction(
 		// Not sure why this was complaining
-		vectorLayer as unknown as VectorLayer<VectorSource<Geometry>>,
+		vectorLayer as unknown as VectorLayer<VectorSource<Feature<Geometry>>>,
 		onModifyInteractionStartEnd,
 		onModifyInteractionAddRemoveFeature,
 	);
@@ -49,10 +52,10 @@ export const manageVectorImageLayerCreation = (
 
 export const manageVectorImageLayerUpdate = (
 	features: GeoJSONFeatureCollection,
-	vectorLayer: VectorImageLayer<VectorSource<Geometry>>,
+	vectorLayer: VectorImageLayer<VectorSource<Feature<Geometry>>>,
 ) => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const styleFunction = (feature: OLFeature, resolution: number) => olStyleFunction(feature);
+	const styleFunction = (feature: Feature, resolution: number) => olStyleFunction(feature);
 
 	const vectorSource = vectorLayer.getSource();
 	if (vectorSource !== null) {

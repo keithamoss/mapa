@@ -6,7 +6,9 @@ import {
 	SymbologyProps,
 } from '../../app/services/schemas';
 
+import { sortBy } from 'lodash-es';
 import { hextoRGBACSS } from '../../app/colourUtils';
+import { MapaFeature } from '../../app/services/features';
 import { isDevelopment } from '../../app/utils';
 import { IconStyle } from './iconsLibrary';
 import { getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibraryHelpers';
@@ -436,4 +438,47 @@ export const getSymbolNameBySymbolId = (symbolId: number, schema: FeatureSchema)
 	const symbol = getSymbolFromSchemaSymbology(symbolId, schema.symbology);
 
 	return symbol !== undefined ? symbol.props.name : null;
+};
+
+export const getSymbolsFavouritedForMap = (symbology: FeatureSchemaSymbology, mapId: number) =>
+	symbology.symbols.filter((symbol) => symbol.favourited_map_ids.includes(mapId));
+
+export interface SchemaIdAndSymbolId {
+	schemaId: number;
+	symbolId: number;
+}
+
+export interface SchemaIdAndSymbolIdWithCount extends SchemaIdAndSymbolId {
+	count: number;
+}
+
+export interface SymbolAndSchema {
+	symbol: FeatureSchemaSymbologySymbolsValue;
+	schema: FeatureSchema;
+}
+export const getSomeRecentlyAddedSymbols = (maxSymbolCount: number, features: MapaFeature[]) => {
+	// Sort features by the date they were added
+	const featuresByDateAdded = sortBy(features, ['creation_date']).reverse();
+
+	// Tally up the number of uses of each reecently added symbol (until we hit our quota)
+	const recentlyAddedSymbolsRanked: { [key: string]: SchemaIdAndSymbolId } = {};
+
+	for (const f of featuresByDateAdded) {
+		if (f.schema_id !== null && f.symbol_id !== null) {
+			const key = `${f.schema_id}.${f.symbol_id}`;
+
+			if (recentlyAddedSymbolsRanked[key] === undefined) {
+				recentlyAddedSymbolsRanked[key] = {
+					schemaId: f.schema_id,
+					symbolId: f.symbol_id,
+				};
+			}
+
+			if (Object.keys(recentlyAddedSymbolsRanked).length >= maxSymbolCount) {
+				break;
+			}
+		}
+	}
+
+	return Object.values(recentlyAddedSymbolsRanked);
 };

@@ -1,19 +1,47 @@
 import csv
 import datetime
 import os
+import traceback
 from datetime import datetime
+from os import environ
 from tempfile import NamedTemporaryFile
 
 import pytz
 from google.oauth2.credentials import Credentials
 from googleapiclient import discovery
 from googleapiclient.http import MediaFileUpload
-from mapa.app.admin import is_production
+from mapa.app.admin import get_admins
+from mapa.app.envs import is_production
 from mapa.app.models import Features, FeatureSchemas, Maps
-from mapa.util import get_env
+from social_django.models import UserSocialAuth
 
 from django.conf import settings
 from django.utils.timezone import localtime, now
+
+
+def orchestrate_google_drive_backup():
+    print("")
+    print("###########")
+    print("Google Drive backup management task beginning")
+    print(localtime(now()))
+    print("###########")
+    print("")
+
+    for socialAuthUser in UserSocialAuth.objects.all() if is_production() is True else UserSocialAuth.objects.filter(id__in=get_admins()):
+        try:
+            print(f"User: {socialAuthUser.user}")
+
+            export_to_google_drive(socialAuthUser.user, socialAuthUser.extra_data["access_token"], socialAuthUser.extra_data["refresh_token"])
+        except:
+            traceback.print_exc()
+
+        print("")
+        print("------------")
+        print("")
+
+    print("###########")
+    print("Google Drive backup management task finished")
+    print("###########")
 
 
 def write_to_temp_csv_file(data):
@@ -49,6 +77,18 @@ def export_to_google_drive(user, access_token, refresh_token):
 
     def get_latest_update_date(maps, schemas, features):
         return max([maps.latest("last_updated_date").last_updated_date, schemas.latest("last_updated_date").last_updated_date, features.latest("last_updated_date").last_updated_date])
+
+    def is_backup_required(last_gdrive_backup):
+        if last_gdrive_backup is None:
+            print("Reason: Backing up because we've never backed up before")
+            return True
+        if localtime(now()).strftime("%d") == "01":
+            print("Reason: Backing up because it's the first of the month")
+            return True
+        if latest_update_date >= last_gdrive_backup:
+            print("Reason: Backing up because data has changed since the last backup")
+            return True
+        return False
     
     print(f"Last Backup Date: {user.profile.last_gdrive_backup}")
 
@@ -59,7 +99,7 @@ def export_to_google_drive(user, access_token, refresh_token):
     latest_update_date = get_latest_update_date(maps, schemas, features)
     print(f"Latest Update Date: {latest_update_date}")
 
-    if user.profile.last_gdrive_backup is None or localtime(now()).strftime("%d") == "01" or latest_update_date >= user.profile.last_gdrive_backup:
+    if is_backup_required(user.profile.last_gdrive_backup) is True:
       current_datetime = localtime(now()).strftime("%Y-%m-%dT%H:%M:%S%z")  
       mapaGoogleDriveFolderName = "mapa.keithmoss.me"
 
@@ -92,7 +132,7 @@ def export_to_google_drive(user, access_token, refresh_token):
       
       # Next, create a new data_* folder to hold this backup
       file = drive.files().create(body={
-          "name": f"data_{current_datetime}" if is_production() is True else f"data_{get_env('ENVIRONMENT')}_{current_datetime}",
+          "name": f"data_{current_datetime}" if is_production() is True else f"data_{environ.get('ENVIRONMENT')}_{current_datetime}",
           "mimeType": "application/vnd.google-apps.folder",
           "parents": [mapaFolderId],
           "appProperties": {

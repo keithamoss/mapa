@@ -1,15 +1,18 @@
+import numbers
+import os
 from copy import deepcopy
 from datetime import datetime
 from http.client import BAD_REQUEST
 
 import pytz
-from mapa.app.admin import get_admins, is_admin
+from mapa.app.admin import is_admin
+from mapa.app.envs import are_management_tasks_allowed
+from mapa.app.export import orchestrate_google_drive_backup
 from mapa.app.models import Features, FeatureSchemas, Maps
 from mapa.app.permissions import IsAuthenticatedAndOwnsEntityPermissions
 from mapa.app.serializers import (FeatureSchemaSerializer, FeatureSerializer,
                                   MapSerializer, UserSerializer)
-from mapa.util import make_logger
-from rest_framework import generics, mixins, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -20,11 +23,33 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponseNotFound
 
-logger = make_logger(__name__)
-
 
 def api_not_found(request):
     return HttpResponseNotFound()
+
+
+class ManagementEventsView(APIView):
+    """
+    API endpoint that allows management actions to be undertaken
+    by the lambda "cron" jobs responsible for those.
+    e.g. The daily "cron" job that ensures user data is backed up
+    to their Google Drive.
+    """
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        if are_management_tasks_allowed() is True:
+            eventType = request.data["event_type"] if "event_type" in request.data else None
+
+            if eventType == "backup_to_google_drive":
+                orchestrate_google_drive_backup()
+            elif eventType == "run_migrations":
+                from django.core.management import execute_from_command_line
+                execute_from_command_line(['manage.py', 'migrate'])
+            else:
+                raise Exception(f"Unknown event type '{eventType}'")
+            return Response({})
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CurrentUserView(APIView):
@@ -81,6 +106,14 @@ class ProfileViewSet(viewsets.ViewSet):
         request.user.profile.save()
         return Response(request.user.profile.settings)
 
+    @action(detail=False, methods=["POST"])
+    def update_what_new_view_count(self, request):
+        if "viewCount" in request.data and isinstance(request.data["viewCount"], numbers.Number) is True:
+            request.user.profile.whats_new_release_count = request.data["viewCount"]
+            request.user.profile.save()
+            return Response(None, status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MapsViewSet(viewsets.ModelViewSet):
     """
@@ -124,7 +157,7 @@ class MapsViewSet(viewsets.ModelViewSet):
         # Requires a lot of UI rework to support it though.
         # e.g. Some uses of useGetFeaturesQuery will need to think about filtering the result by map and whatnot.
         
-        if request.user.profile.settings is not None and request.user.profile.settings["last_map_id"] is not None:
+        if request.user.profile.settings is not None and "last_map_id" in request.user.profile.settings and request.user.profile.settings["last_map_id"] is not None:
             mapIds = Maps.objects.filter(deleted_at=None, owner_id=request.user.id, id=request.user.profile.settings["last_map_id"]).values_list("id", flat=True)
 
             serializer = FeatureSerializer(Features.objects.filter(deleted_at=None, map_id__in=list(mapIds)), many=True)

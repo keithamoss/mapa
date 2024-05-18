@@ -13,7 +13,8 @@ function SchemaCreator() {
 	const mapId = useAppSelector(selectActiveMapId);
 	const map = useAppSelector((state) => (mapId !== undefined ? selectMapById(state, mapId) : undefined));
 
-	const [addSchema, { isSuccess: isAddingSchemaSuccessful }] = useAddFeatureSchemaMutation();
+	const [addSchema, { isLoading: isAddingSchemaLoading, isSuccess: isAddingSchemaSuccessful }] =
+		useAddFeatureSchemaMutation();
 
 	useEffect(() => {
 		if (isAddingSchemaSuccessful === true && mapId === undefined) {
@@ -43,7 +44,7 @@ function SchemaCreator() {
 		[addSchema, map, mapId, patchMap],
 	);
 
-	return <SchemaForm onDoneAdding={onDoneAdding} />;
+	return <SchemaForm isSchemaSaving={isAddingSchemaLoading} onDoneAdding={onDoneAdding} />;
 }
 
 export default SchemaCreator;

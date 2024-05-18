@@ -9,13 +9,15 @@ import { ModifyEvent } from 'ol/interaction/Modify';
 import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
-import { Feature } from '../../app/services/features';
+import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
 export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
-export const geolocationMarkerOvelayerId = 'geolocation_marker';
+export const geolocationMarkerOverlayId = 'geolocation_marker';
+export const geolocationMarkerHeadingForegroundTriangleOvelayId = 'geolocation_marker_heading_foreground_triangle';
+export const geolocationMarkerHeadingBackgroundTriangleOvelayId = 'geolocation_marker_heading_background_triangle';
 
 export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
 	basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
@@ -24,7 +26,7 @@ export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Infinity,
-		  });
+			});
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {
 	const markerEl = document.createElement('div');
@@ -38,14 +40,91 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 	});
 };
 
-export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
+export const enableGeolocationMarkerAndMaybeHeadingFollowing = (followingHeading: boolean) => {
+	const markerOverlay = document.getElementById(geolocationMarkerOverlayId);
+	if (markerOverlay !== null) {
+		// If changing this, update olMap.css
+		markerOverlay.style.setProperty('animation', 'pulse-marker 2s infinite');
+	}
+
+	if (followingHeading === true) {
+		enableGeolocationHeadingMarkerFollowing();
+	}
+};
+
+export const enableGeolocationHeadingMarkerFollowing = () => {
+	const markerOverlayHeadingForegroundTriangle = document.getElementById(
+		geolocationMarkerHeadingForegroundTriangleOvelayId,
+	);
+	if (markerOverlayHeadingForegroundTriangle !== null) {
+		markerOverlayHeadingForegroundTriangle.style.setProperty('display', 'block');
+	}
+
+	const markerOverlayHeadingBackgroundTriangle = document.getElementById(
+		geolocationMarkerHeadingBackgroundTriangleOvelayId,
+	);
+	if (markerOverlayHeadingBackgroundTriangle !== null) {
+		markerOverlayHeadingBackgroundTriangle.style.setProperty('display', 'block');
+	}
+};
+
+export const disableGeolocationMarkerAndHeadingFollowing = () => {
+	const markerOverlay = document.getElementById(geolocationMarkerOverlayId);
+	if (markerOverlay !== null) {
+		markerOverlay.style.setProperty('animation', 'none');
+	}
+
+	disableGeolocationHeadingMarkerFollowing();
+};
+
+export const disableGeolocationHeadingMarkerFollowing = () => {
+	const markerOverlayHeadingForegroundTriangle = document.getElementById(
+		geolocationMarkerHeadingForegroundTriangleOvelayId,
+	);
+	if (markerOverlayHeadingForegroundTriangle !== null) {
+		markerOverlayHeadingForegroundTriangle.style.setProperty('display', 'none');
+	}
+
+	const markerOverlayHeadingBackgroundTriangle = document.getElementById(
+		geolocationMarkerHeadingBackgroundTriangleOvelayId,
+	);
+	if (markerOverlayHeadingBackgroundTriangle !== null) {
+		markerOverlayHeadingBackgroundTriangle.style.setProperty('display', 'none');
+	}
+};
+
+export const degreesToRadians = (deg: number) => (deg * Math.PI * 2) / 360;
+
+export const updateMapWithGPSPosition = (
+	map: Map,
+	position: Coordinate | undefined,
+	heading: number | undefined,
+	centreOnMarker: boolean,
+) => {
 	if (position !== undefined) {
-		const markerOverlay = map.getOverlayById(geolocationMarkerOvelayerId);
-		markerOverlay.setPosition(fromLonLat(position));
+		const markerOverlay = map.getOverlayById(geolocationMarkerOverlayId);
+		if (markerOverlay !== null) {
+			markerOverlay.setPosition(fromLonLat(position));
+		}
+
+		const markerOverlayHeadingForegroundTriangle = map.getOverlayById(
+			geolocationMarkerHeadingForegroundTriangleOvelayId,
+		);
+		if (markerOverlayHeadingForegroundTriangle !== null) {
+			markerOverlayHeadingForegroundTriangle.setPosition(fromLonLat(position));
+		}
+
+		const markerOverlayHeadingBackgroundTriangle = map.getOverlayById(
+			geolocationMarkerHeadingBackgroundTriangleOvelayId,
+		);
+		if (markerOverlayHeadingBackgroundTriangle !== null) {
+			markerOverlayHeadingBackgroundTriangle.setPosition(fromLonLat(position));
+		}
 
 		if (centreOnMarker === true) {
 			const view = map.getView();
 			view.setCenter(fromLonLat(position));
+			view.setRotation(degreesToRadians(heading || 0));
 			view.setZoom(defaultZoomLevel);
 			map.setView(view);
 		}
@@ -58,6 +137,7 @@ export const onGeolocationChangePosition =
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		isFollowingGPSRef: React.MutableRefObject<boolean>,
+		isFollowingHeadingRef: React.MutableRefObject<boolean>,
 		isUserMovingTheMapRef: React.MutableRefObject<boolean>,
 		geolocationHasErrorRef: React.MutableRefObject<false | GeolocationError>,
 		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
@@ -65,7 +145,12 @@ export const onGeolocationChangePosition =
 	(evt: BaseEvent) => {
 		// Don't snap to the user's location if they're actively moving the map
 		if (isUserMovingTheMapRef.current === false) {
-			updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
+			updateMapWithGPSPosition(
+				map,
+				(evt.target as Geolocation).getPosition(),
+				isFollowingHeadingRef.current === true ? (evt.target as Geolocation).getHeading() : 0,
+				isFollowingGPSRef.current,
+			);
 		}
 
 		if (mapHasPositionRef.current === false) {
@@ -98,22 +183,23 @@ export const onGeolocationError =
 		}
 	};
 
-export const onMapClick = (callback: (features: Feature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
-	const features: Feature[] = [];
+export const onMapClick =
+	(callback: (features: MapaOpenLayersFeature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
+		const features: MapaOpenLayersFeature[] = [];
 
-	evt.map.forEachFeatureAtPixel(
-		evt.pixel,
-		(feature) => {
-			features.push(feature.getProperties() as Feature);
-		},
-		{
-			layerFilter: (layer) => isDataVectorLayer(layer),
-			hitTolerance: 5,
-		},
-	);
+		evt.map.forEachFeatureAtPixel(
+			evt.pixel,
+			(feature) => {
+				features.push(feature.getProperties() as MapaOpenLayersFeature);
+			},
+			{
+				layerFilter: (layer) => isDataVectorLayer(layer),
+				hitTolerance: 5,
+			},
+		);
 
-	callback(features);
-};
+		callback(features);
+	};
 
 export const setModifyInteractionStatus = (map: Map | undefined, status: boolean) => {
 	if (map !== undefined) {
@@ -126,7 +212,7 @@ export const setModifyInteractionStatus = (map: Map | undefined, status: boolean
 };
 
 export const onModifyInteractionStartEnd =
-	(callback: (feature: Partial<Feature>) => void) => (evt: BaseEvent | Event) => {
+	(callback: (feature: Partial<MapaFeature>) => void) => (evt: BaseEvent | Event) => {
 		const target = document.getElementById(mapTargetElementId);
 
 		if (target !== null) {
@@ -138,7 +224,7 @@ export const onModifyInteractionStartEnd =
 					const point = feature.getGeometry() as Point;
 
 					if (point.getType() === 'Point') {
-						const { id, geom_type, map_id } = feature.getProperties() as Feature;
+						const { id, geom_type, map_id } = feature.getProperties() as MapaFeature;
 						callback({
 							id,
 							geom: getPointGeoJSONFromCoordinates(point),

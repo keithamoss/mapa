@@ -20,6 +20,8 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { groupBy, sortBy } from 'lodash-es';
 import React, { startTransition, useState } from 'react';
+import { useAppSelector } from '../../../app/hooks/store';
+import { MapaFeature } from '../../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaSymbology,
@@ -27,13 +29,16 @@ import {
 } from '../../../app/services/schemas';
 import { DialogWithTransition } from '../../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../../app/ui/theme';
+import { selectAllFeatures } from '../../features/featuresSlice';
 import { SymbolSearchResult, isSearchingYet, searchSymbols } from '../../search/searchHelpers';
 import {
 	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,
 	getFontAwesomeIconForSymbolPreview,
+	getSomeRecentlyAddedSymbols,
 	getSymbolGroups,
 	getSymbologyGroupById,
+	getSymbolsFavouritedForMap,
 } from '../../symbology/symbologyHelpers';
 
 const StyledOutlinedInput = styled(OutlinedInput)(({ theme }) => ({
@@ -48,27 +53,30 @@ interface SymbologyAutocompleteOption {
 	option_group: string;
 }
 
-const getSymbolOptions = (mapId: number, schema: FeatureSchema, symbology: FeatureSchemaSymbology) => {
-	const favouritedSymbols = symbology.symbols
-		.filter((symbol) => symbol.favourited_map_ids.includes(mapId))
-		.map((symbol) => ({ symbol, option_group: 'Favourites' }));
+const getSymbolOptions = (
+	mapId: number,
+	schema: FeatureSchema,
+	symbology: FeatureSchemaSymbology,
+	features: MapaFeature[],
+) => {
+	const favouritedSymbols = getSymbolsFavouritedForMap(symbology, mapId).map((symbol) => ({
+		symbol,
+		option_group: 'Favourites',
+	}));
 
-	const mostRecentlyAdded =
-		schema.recently_used_symbols[mapId] !== undefined
-			? schema.recently_used_symbols[mapId]
-					.map((symbolId) => {
-						const symbol = symbology.symbols.find((symbol) => symbol.id === symbolId);
+	const mostRecentlyAdded = getSomeRecentlyAddedSymbols(3, features)
+		.map((item) => {
+			const symbol = symbology.symbols.find((symbol) => symbol.id === item.symbolId);
 
-						return symbol !== undefined
-							? {
-									symbol,
-									option_group: 'Most recently added',
-							  }
-							: undefined;
-					})
-					// Ref: https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
-					.filter((symbol): symbol is SymbologyAutocompleteOption => !!symbol)
-			: [];
+			return symbol !== undefined
+				? {
+						symbol,
+						option_group: 'Most recently added',
+					}
+				: undefined;
+		})
+		// Ref: https://www.benmvp.com/blog/filtering-undefined-elements-from-array-typescript/
+		.filter((symbol): symbol is SymbologyAutocompleteOption => !!symbol);
 
 	const availableSymbols = sortBy([...symbology.symbols], (i) => i.group_id).map((symbol) => ({
 		symbol,
@@ -140,7 +148,7 @@ interface Props {
 function SchemaSymbologyChooser(props: Props) {
 	const { mapId, schema, symbology, onChoose, onClose } = props;
 
-	const optionsGrouped = getSymbolOptions(mapId, schema, symbology);
+	const optionsGrouped = getSymbolOptions(mapId, schema, symbology, useAppSelector(selectAllFeatures));
 
 	const onClickSymbol = (symbol: FeatureSchemaSymbologySymbolsValue) => () => onChoose(symbol);
 
@@ -168,7 +176,7 @@ function SchemaSymbologyChooser(props: Props) {
 	return (
 		<React.Fragment>
 			<DialogWithTransition themeColour={defaultNakedDialogColour}>
-				<AppBar color="transparent" elevation={0} sx={{ position: 'sticky' }}>
+				<AppBar elevation={0} sx={{ position: 'sticky', backgroundColor: 'white' }}>
 					<Toolbar>
 						<div style={{ width: '100%' }}>
 							<StyledOutlinedInput

@@ -1,12 +1,26 @@
-import { Feature, FeatureDataItem } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature } from '../../app/services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionCollection,
 	FeatureSchemaFieldType,
 } from '../../app/services/schemas';
 
-export const getSchemaForFeature = (feature: Feature, schemas: FeatureSchema[]) =>
-	schemas.find((schema) => schema.id === feature.schema_id);
+export const getSchemaById = (schemaId: number | null, schemas: FeatureSchema[]) =>
+	schemas.find((schema) => schema.id === schemaId && schemaId !== null);
+
+export const getSchemaIdsUsedByFeatures = (features: MapaFeature[]) =>
+	Array.from(
+		new Set(
+			Object.values(features || [])
+				.map((f) => f.schema_id)
+				.filter((schemaId): schemaId is number => typeof schemaId === 'number'),
+		),
+	);
+
+export const getSchemasUsedByFeatures = (features: MapaFeature[], schemas: FeatureSchema[]) => {
+	const schemaIdssUsedByFeatures = getSchemaIdsUsedByFeatures(features);
+	return schemas.filter((s) => schemaIdssUsedByFeatures.includes(s.id));
+};
 
 export const isSchemaDataItemToBeUsed = (
 	fieldDefinition: FeatureSchemaFieldDefinitionCollection,

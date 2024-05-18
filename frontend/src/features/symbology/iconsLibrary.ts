@@ -101,6 +101,7 @@ export type IconStyle =
 	| 'sharp-solid'
 	| 'sharp-regular'
 	| 'sharp-light'
+	| 'sharp-thin'
 	| 'brands'
 	// # FlatIcon Only
 	| 'coloured'

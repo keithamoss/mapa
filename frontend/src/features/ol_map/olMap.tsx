@@ -1,20 +1,22 @@
 import { Alert, AlertTitle } from '@mui/material';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
+import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
-import { Geometry, Point } from 'ol/geom';
+import Attribution from 'ol/control/Attribution';
+import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, transform } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
-import { Feature, useUpdateFeatureMutation } from '../../app/services/features';
+import { MapaFeature, MapaOpenLayersFeature, useUpdateFeatureMutation } from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -22,13 +24,21 @@ import {
 	setFeaturesAvailableForEditing,
 	setMapView,
 } from '../app/appSlice';
-import FeatureMovementButton from './featureMovementButton';
+import FeatureMovementButton from './controls/featureMovementButton';
+import FollowHeadingButton from './controls/followHeadingButton';
+import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
+import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
 import './olMap.css';
 import {
 	createGeolocationMarkerOverlay,
 	defaultZoomLevel,
-	geolocationMarkerOvelayerId,
+	disableGeolocationHeadingMarkerFollowing,
+	disableGeolocationMarkerAndHeadingFollowing,
+	enableGeolocationMarkerAndMaybeHeadingFollowing,
+	geolocationMarkerHeadingBackgroundTriangleOvelayId,
+	geolocationMarkerHeadingForegroundTriangleOvelayId,
+	geolocationMarkerOverlayId,
 	getBasemap,
 	mapTargetElementId,
 	onGeolocationChangePosition,
@@ -41,7 +51,6 @@ import {
 } from './olMapHelpers';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './olWebGLPointsLayerManager';
-import SnapToGPSButton from './snapToGPSButton';
 
 // Inspo:
 // https://taylor.callsen.me/using-openlayers-with-react-functional-components/
@@ -80,7 +89,7 @@ function OLMap(props: Props) {
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
 
 	const vectorLayer = useRef<
-		VectorImageLayer<VectorSource<Geometry>> | WebGLPointsLayer<VectorSource<Point>> | undefined
+		VectorImageLayer<VectorSource<Feature<Geometry>>> | WebGLPointsLayer<VectorSource<Feature<Geometry>>> | undefined
 	>(undefined);
 	// ######################
 	// OpenLayers Map (End)
@@ -112,22 +121,79 @@ function OLMap(props: Props) {
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
+	const [isFollowingHeading, setIsFollowingHeading] = useState(true);
+	const isFollowingHeadingRef = useRef<boolean>(isFollowingHeading);
+	isFollowingHeadingRef.current = isFollowingHeading;
+
+	const [isFollowingHeadingPrevious, setIsFollowingHeadingPrevious] = useState(true);
+	const isFollowingHeadingPreviousRef = useRef<boolean>(isFollowingHeadingPrevious);
+	isFollowingHeadingPreviousRef.current = isFollowingHeadingPrevious;
+
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
+		setIsFollowingHeading(isFollowingHeadingPreviousRef.current);
 
-		// When we re-enable location following, grab the current location and snap the map to it
+		enableGeolocationMarkerAndMaybeHeadingFollowing(isFollowingHeadingPreviousRef.current);
+
+		// When we re-enable location following, grab the current location and snap the map to it.
+		// If we're following the user's heading as well, then let's re-orient to that.
 		if (mapRef.current !== undefined) {
-			const curerentPosition = geolocation.current.getPosition();
-			if (curerentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, curerentPosition, true);
+			const currentPosition = geolocation.current.getPosition();
+			const currentHeading = isFollowingHeadingPreviousRef.current === true ? geolocation.current.getHeading() : 0;
+
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
 			}
 		}
 	}, []);
-	const onFollowGPSDisabled = useCallback(() => setIsFollowingGPS(false), []);
+
+	const onFollowGPSDisabled = useCallback(() => {
+		setIsFollowingGPS(false);
+		setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
+		setIsFollowingHeading(false);
+
+		disableGeolocationMarkerAndHeadingFollowing();
+
+		if (mapRef.current !== undefined) {
+			const view = mapRef.current.getView();
+			view.setRotation(0);
+		}
+	}, []);
+
+	const onFollowHeadingEnabled = useCallback(() => {
+		setIsFollowingGPS(true);
+		setIsFollowingHeadingPrevious(false);
+		setIsFollowingHeading(true);
+
+		enableGeolocationMarkerAndMaybeHeadingFollowing(true);
+
+		// When we re-enable heading following, grab the current location and heading and snap and re-orient the map to them.
+		if (mapRef.current !== undefined) {
+			const currentPosition = geolocation.current.getPosition();
+			const currentHeading = geolocation.current.getHeading();
+
+			// No need to check currentHeading here as it's always undefined on devices without the right hardware (e.g. laptops)
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
+			}
+		}
+	}, []);
+
+	const onFollowHeadingDisabled = useCallback(() => {
+		setIsFollowingHeadingPrevious(true);
+		setIsFollowingHeading(false);
+
+		disableGeolocationHeadingMarkerFollowing();
+
+		if (mapRef.current !== undefined) {
+			const view = mapRef.current.getView();
+			view.setRotation(0);
+		}
+	}, []);
 	// ######################
 	// Geolocation (End)
 	// ######################
@@ -165,7 +231,7 @@ function OLMap(props: Props) {
 			// console.log('making a map');
 
 			geolocation.current.setTracking(true);
-			const curerentPosition = geolocation.current.getPosition();
+			const currentPosition = geolocation.current.getPosition();
 
 			let isScrollZooming = false;
 
@@ -184,17 +250,19 @@ function OLMap(props: Props) {
 					}),
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
-				controls: [],
+				controls: [new Attribution({ collapsible: false })],
 				view:
-					curerentPosition !== undefined
-						? new View({ zoom: defaultZoomLevel, center: fromLonLat(curerentPosition) })
+					currentPosition !== undefined
+						? new View({ zoom: defaultZoomLevel, center: fromLonLat(currentPosition) })
 						: undefined,
 			});
 
 			// ######################
 			// Geolocation
 			// ######################
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOvelayerId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOvelayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOvelayId));
 
 			const geolocationEventKeys = [
 				geolocation.current.on(
@@ -204,6 +272,7 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
+						isFollowingHeadingRef,
 						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
@@ -243,6 +312,10 @@ function OLMap(props: Props) {
 					geolocation.current.getTracking() === true
 				) {
 					setIsFollowingGPS(false);
+					setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
+					setIsFollowingHeading(false);
+
+					disableGeolocationMarkerAndHeadingFollowing();
 				}
 
 				isDragging = false;
@@ -264,13 +337,32 @@ function OLMap(props: Props) {
 
 			initialMap.on(
 				'click',
-				onMapClick((features: Feature[]) => {
-					dispatch(setFeaturesAvailableForEditing(features.map((f) => f.id)));
+				onMapClick((features: MapaOpenLayersFeature[]) => {
+					dispatch(
+						setFeaturesAvailableForEditing(
+							features.map((f) => {
+								const { geometry, ...rest } = f;
+
+								return {
+									...rest,
+									geom: {
+										type: 'Point',
+										coordinates: transform(geometry.getCoordinates(), 'EPSG:3857', 'EPSG:4326'),
+									},
+								};
+							}),
+						),
+					);
 
 					if (features.length === 1) {
 						navigate(`/FeatureManager/Edit/${features[0].id}`);
 					} else if (features.length > 1) {
-						navigate('/FeatureManager');
+						// Without this, for some reason the <DialogWithTransition> in FeatureManager was closing its dialog
+						// due to a click on the background as soon as it opened. i.e. we see a brief flash of it appearing and then gone.
+						// I guess somehow it was comimg up so fast while the map was being was clicked and the same event triggered it?
+						window.setTimeout(() => {
+							navigate('/FeatureManager');
+						}, 50);
 					}
 				}),
 			);
@@ -337,7 +429,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.geoJSON,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -345,7 +437,7 @@ function OLMap(props: Props) {
 
 				manageVectorImageLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
-					vectorLayer.current as VectorImageLayer<VectorSource<Geometry>>,
+					vectorLayer.current as VectorImageLayer<VectorSource<Feature<Geometry>>>,
 				);
 			}
 		} else if (mapRef.current !== undefined && mapRenderer === MapRenderer.WebGLPointsLayer) {
@@ -357,7 +449,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.spriteSheet,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -366,10 +458,10 @@ function OLMap(props: Props) {
 				vectorLayer.current = manageWebGLPointsLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
 					featuresAndSpriteSheet.spriteSheet,
-					vectorLayer.current as WebGLPointsLayer<VectorSource<Point>>,
+					vectorLayer.current as WebGLPointsLayer<VectorSource<Feature<Geometry>>>,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<Feature>) => updateFeature(feature)),
+					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
 					onModifyInteractionAddRemoveFeature,
 				);
 			}
@@ -396,11 +488,19 @@ function OLMap(props: Props) {
 						onFollowGPSDisabled={onFollowGPSDisabled}
 					/>
 
+					<FollowHeadingButton
+						isFollowingHeading={isFollowingHeading}
+						onFollowHeadingEnabled={onFollowHeadingEnabled}
+						onFollowHeadingDisabled={onFollowHeadingDisabled}
+					/>
+
 					<FeatureMovementButton
 						isFeatureMovementAllowed={isFeatureMovementAllowed}
 						onFeatureMovementEnabled={onFeatureMovementEnabled}
 						onFeatureMovementDisabled={onFeatureMovementDisabled}
 					/>
+
+					<QuickAddSymbolsControl />
 				</React.Fragment>
 			) : (
 				<React.Fragment></React.Fragment>

@@ -1,8 +1,6 @@
-from mapa.util import get_env, make_logger
+from os import environ
 
 from django.apps import AppConfig
-
-logger = make_logger(__name__)
 
 
 class MyAppConfig(AppConfig):
@@ -13,5 +11,5 @@ class MyAppConfig(AppConfig):
 
         # from mapa.app.admin import is_production
         # # Otherwise this would run every time Django reloads due to code changes in development
-        # if is_production() is True and get_env("BUILD") != "YES":
+        # if is_production() is True and environ.get("BUILD") != "YES":
         #     pass

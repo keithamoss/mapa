@@ -1,5 +1,5 @@
 import { upperFirst } from 'lodash-es';
-import MiniSearch from 'minisearch';
+import MiniSearch, { SearchResult } from 'minisearch';
 import { defaultSymbolIconStyle } from './symbologyHelpers';
 
 import {
@@ -46,13 +46,8 @@ export const getIconLabelByName = (iconName: string) => {
 	return icon !== null ? icon.label : 'Unnamed icon';
 };
 
-export interface IconSearchResult {
-	id: string;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
+export interface IconSearchResult extends SearchResult {
+	id: number;
 	name: string;
 	label: string;
 	'search.terms': string[];
@@ -270,6 +265,7 @@ export const findIconsAvailableForUseAsModifiers = () => {
 		'circle-half-stroke',
 		'circle-notch',
 		'circles-overlap',
+		'circle-wifi-circle-wifi',
 	];
 
 	const allowList = ['circle', 'pen-circle'];
@@ -345,6 +341,7 @@ export const getCircularModifierIconNames = () => [
 	'circle-exclamation',
 	'circle-f',
 	'circle-g',
+	'circle-gf',
 	'circle-h',
 	'circle-heart',
 	'circle-i',
@@ -389,6 +386,7 @@ export const getCircularModifierIconNames = () => [
 	'circle-video',
 	'circle-w',
 	'circle-waveform-lines',
+	'circle-wifi',
 	'circle-x',
 	'circle-xmark',
 	'circle-y',

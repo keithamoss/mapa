@@ -1,0 +1,65 @@
+[
+  {
+    "version": "Cradle of Fur",
+    "date": "17 May, 2024",
+    "summary": "Several major new features, a few smaller features, and a whole pile of bug fixes.",
+    "changes": {
+      "highlights": [
+        [
+          "What's new",
+          "Added this page to record what's changed in each new version of Mapa."
+        ],
+        [
+          "Quicker adding of symbols",
+          "You can now quickly add symbols right from the map. Choose from symbols you've recently added, your most popular and often used symbols, or symbols you've favourited."
+        ],
+        [
+          "Head west, young lady",
+          "The map now lets you choose whether you want to follow your heading / compass bearing (the default), or whether the map should stay pointed to the north."
+        ],
+        [
+          "Easier feature editing",
+          "When choosing features to edit, we now show the feature's symbol and symbol name instead of just it's internal identifier."
+        ],
+        [
+          "Saving indicators",
+          "When saving maps, schemas, features (et cetera), we now show a loading indicator so you know something is happening. This is particularly helpful if you're out and about and only have a few bars of connectivity."
+        ]
+      ],
+      "bugs fixed": [
+        [
+          "Begone, weird highlighting bug",
+          "Long-pressing on the part of the map where your GPS location marker is shown no longer weirdly highlights the whole map as if it was a piece of text."
+        ],
+        [
+          "Missing heros",
+          "Making changes to a map with no hero icon no longer sets an invisible hero icon."
+        ],
+        [
+          "Feature editing",
+          "You can now also close the 'Choose which feature to edit' screen by tapping on the map behind it."
+        ],
+        [
+          "Feature editing",
+          "Reloading the page when on the 'Choose which feature to edit' screen no longer shows a list of blank features on reload."
+        ],
+        [
+          "Symbol searching",
+          "When searching for symbols, the list of symbols no longer appears to scroll and up underneath the search bar."
+        ],
+        [
+          "First time user hiccups",
+          "Squashed a few crashing bugs relating to profile and user settings for brand new first time users."
+        ],
+        [
+          "What's in a name?",
+          "When adding a feature, the title will now be 'Add Feature', not the mysterious 'Edit Feature' title we've had until now."
+        ],
+        [
+          "No menu for you",
+          "Mapa is now actually usable on the desktop - you can now open the hamburger menu without it disappearing as soon as you leave the area of the button."
+        ]
+      ]
+    }
+  }
+]

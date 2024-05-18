@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FlightIcon from '@mui/icons-material/Flight';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	AppBar,
 	Button,
@@ -19,9 +20,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { Feature, FeatureDataItem, NewFeature, useDeleteFeatureMutation } from '../../app/services/features';
+import { FeatureDataItem, MapaFeature, NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
+import { FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
@@ -36,15 +37,16 @@ import { getSchemasAvailableForMap, selectFeatureSchemaById } from '../schemas/s
 
 interface Props {
 	mapId: number;
-	feature: Feature | NewFeature;
-	onDoneAdding?: (feature: NewFeature, schema: FeatureSchema | undefined) => void;
-	onDoneEditing?: (feature: Feature) => void;
+	feature: MapaFeature | NewMapaFeature;
+	isFeatureSaving: boolean;
+	onDoneAdding?: (feature: NewMapaFeature) => void;
+	onDoneEditing?: (feature: MapaFeature) => void;
 }
 
 function FeatureForm(props: Props) {
 	const navigate = useNavigate();
 
-	const { mapId, feature, onDoneAdding, onDoneEditing } = props;
+	const { mapId, feature, isFeatureSaving, onDoneAdding, onDoneEditing } = props;
 
 	const [localFeature, setLocalFeature] = useState(feature);
 
@@ -237,7 +239,7 @@ function FeatureForm(props: Props) {
 		onSaveAndCreateOrUpdateFeature(updateFeatureDataFromForm(localFeature, dataFiltered));
 	};
 
-	const updateFeatureDataFromForm = (feature: Feature | NewFeature, data: SchemaFormFieldsFormValues) => {
+	const updateFeatureDataFromForm = (feature: MapaFeature | NewMapaFeature, data: SchemaFormFieldsFormValues) => {
 		const featureData: FeatureDataItem[] = [];
 
 		// Rebuild the feature's data from the contents of the form.
@@ -257,12 +259,12 @@ function FeatureForm(props: Props) {
 		};
 	};
 
-	const onSaveAndCreateOrUpdateFeature = (feature: Feature | NewFeature) => {
+	const onSaveAndCreateOrUpdateFeature = (feature: MapaFeature | NewMapaFeature) => {
 		if (onDoneAdding !== undefined) {
-			const featureData: NewFeature = { ...feature };
-			onDoneAdding(featureData, schema);
+			const featureData: NewMapaFeature = { ...feature };
+			onDoneAdding(featureData);
 		} else if ('id' in feature && onDoneEditing !== undefined) {
-			const featureData: Feature = { ...feature };
+			const featureData: MapaFeature = { ...feature };
 			onDoneEditing(featureData);
 		}
 
@@ -345,12 +347,15 @@ function FeatureForm(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onCancelForEditor}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-							Edit Feature
+							{onDoneAdding !== undefined ? 'Add Feature' : 'Edit Feature'}
 						</Typography>
-						<Button color="inherit" onClick={onSave}>
-							Save
-						</Button>
+
+						<LoadingButton loading={isFeatureSaving} color="inherit" onClick={onSave}>
+							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+							<span>Save</span>
+						</LoadingButton>
 					</Toolbar>
 				</AppBar>
 

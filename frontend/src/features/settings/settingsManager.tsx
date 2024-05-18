@@ -91,7 +91,7 @@ function SettingsManager() {
 									hour: 'numeric',
 									minute: 'numeric',
 									second: 'numeric',
-							  })
+								})
 							: 'Never backed up 😬'}
 					</FormControl>
 
@@ -135,6 +135,22 @@ function SettingsManager() {
 								</MenuItem>
 							))}
 						</Select>
+					</FormControl>
+
+					<FormControl sx={{ mb: 3 }} fullWidth>
+						<FormLabel>Version debugging</FormLabel>
+
+						{performance
+							.getEntriesByType('resource')
+							// .filter((e) => e.initiatorType === 'script')
+							.map((e: any) => {
+								console.log(e);
+								return (
+									<div>
+										{e.initiatorType} | {e.entryType} | {e.deliveryType}: {e.name}
+									</div>
+								);
+							})}
 					</FormControl>
 				</Paper>
 			</DialogWithTransition>

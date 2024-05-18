@@ -1,24 +1,24 @@
 import omitBy from 'lodash-es/omitBy';
+import Feature from 'ol/Feature';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
 import { getTopLeft, getWidth } from 'ol/extent.js';
 import GeoJSON from 'ol/format/GeoJSON';
 import { Geometry, Point } from 'ol/geom';
 import { Modify } from 'ol/interaction';
+import Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/WebGLTile';
 import 'ol/ol.css';
 import { Projection, get as getProjection, toLonLat } from 'ol/proj';
 import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS.js';
-
-import Layer from 'ol/layer/Layer';
 import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
 import { BasemapStyle } from '../../app/services/auth';
-import { Feature } from '../../app/services/features';
+import { MapaFeature } from '../../app/services/features';
 import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
 import { mapaThemeSecondaryBlueRGB } from '../../app/ui/theme';
 import { determineSymbolForFeature } from './olStylingManager';
@@ -92,7 +92,7 @@ export const getWMTSTileLayer = (basemap_style: BasemapStyle) => {
 };
 
 export const convertFeaturesToGeoJSON = async (
-	features: Feature[],
+	features: MapaFeature[],
 	defaultMapSymbology: SymbologyProps | null,
 	featureSchemas: FeatureSchema[],
 ): Promise<{
@@ -126,13 +126,13 @@ export const convertFeaturesToGeoJSON = async (
 											coordinates: feature.geom.coordinates,
 										},
 									};
-							  })
+								})
 							: [],
-			  }
+				}
 			: {
 					type: 'FeatureCollection',
 					features: [],
-			  };
+				};
 
 	return {
 		geoJSON,
@@ -215,7 +215,7 @@ export const createVectorLayerForUserPosition = (latitude: number, longitude: nu
 export const updateVectorLayerForUserPosition = (
 	latitude: number,
 	longitude: number,
-	vectorLayer: VectorLayer<VectorSource<Geometry>>,
+	vectorLayer: VectorLayer<VectorSource<Feature<Geometry>>>,
 ) => {
 	const vectorSource = vectorLayer.getSource();
 	if (vectorSource !== null) {

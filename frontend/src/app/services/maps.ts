@@ -32,7 +32,7 @@ export { initialState as initialMapsState };
 
 export const mapsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getMaps: builder.query<EntityState<Map>, void>({
+		getMaps: builder.query<EntityState<Map, number>, void>({
 			query: () => 'maps/',
 			transformResponse: (res: MapsResponse) => {
 				return mapsAdapter.setAll(initialState, res);

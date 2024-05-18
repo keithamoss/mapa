@@ -3,7 +3,7 @@ import SpeedDial from '@mui/material/SpeedDial';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../app/hooks/store';
-import { initFeatureFromMapCentre } from '../features/featuresSlice';
+import { initFeatureAtMapCentre } from '../features/featuresSlice';
 
 interface Props {
 	mapId?: number;
@@ -19,7 +19,7 @@ export default function AddFeatureButton(props: Props) {
 	const onAddFeature = useCallback(() => {
 		if (mapId !== undefined) {
 			navigate('/FeatureManager/Create', {
-				state: { feature: dispatch(initFeatureFromMapCentre(mapId)) },
+				state: { feature: dispatch(initFeatureAtMapCentre(mapId)) },
 			});
 		}
 	}, [dispatch, mapId, navigate]);

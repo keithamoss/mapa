@@ -62,7 +62,6 @@ function SchemaManager() {
 				definition: schemaToFork.definition,
 				symbology: schemaToFork.symbology,
 				default_symbology: schemaToFork.default_symbology,
-				recently_used_symbols: schemaToFork.recently_used_symbols,
 			};
 
 			const newSchema = await addSchema(forkedSchema).unwrap();

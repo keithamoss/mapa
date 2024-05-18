@@ -3,8 +3,8 @@ from rest_framework import routers
 from django.urls import include, re_path
 
 from .views import (CurrentUserView, FeatureSchemasViewSet, FeaturesViewSet,
-                    LogoutUserView, MapsViewSet, ProfileViewSet, UserViewSet,
-                    api_not_found)
+                    LogoutUserView, ManagementEventsView, MapsViewSet,
+                    ProfileViewSet, UserViewSet, api_not_found)
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -19,9 +19,10 @@ router.register(r'schemas', FeatureSchemasViewSet, 'FeatureSchemasViewSet')
 # router.register(r'profile', ProfileViewSet, 'ProfileViewSet')
 
 urlpatterns = [
-    re_path(r'^api/0.1/', include(router.urls)),
-    re_path(r'^api/0.1/self$', CurrentUserView.as_view(), name='api-self'),
-    re_path(r'^api/0.1/logout$', LogoutUserView.as_view(), name='api-logout'),
+    re_path(r'^0.1/', include(router.urls)),
+    re_path(r'^0.1/management/events$', ManagementEventsView.as_view(), name='api-management-events'),
+    re_path(r'^0.1/self$', CurrentUserView.as_view(), name='api-self'),
+    re_path(r'^0.1/logout$', LogoutUserView.as_view(), name='api-logout'),
     # make sure that the API never serves up the react app
-    re_path(r'^api/0.1/.*', api_not_found),
+    re_path(r'^0.1/.*', api_not_found),
 ]

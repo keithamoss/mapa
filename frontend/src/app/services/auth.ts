@@ -19,11 +19,20 @@ export enum BasemapStyle {
 	Satellite = 'clokslfco002b01r728815x4k',
 }
 
+export enum QuickAddMode {
+	Recent = 'Recent',
+	Popular = 'Popular',
+	Favourite = 'Favourite',
+	Off = 'Off',
+}
+
 export interface UserProfileSettings {
 	last_map_id?: number;
 	map_renderer?: MapRenderer;
 	basemap?: Basemap;
 	basemap_style?: BasemapStyle;
+	quick_add_mode?: QuickAddMode;
+	quick_add_symbol_count?: number;
 }
 
 export interface User {
@@ -40,6 +49,7 @@ export interface User {
 	is_approved: boolean;
 	settings: UserProfileSettings;
 	last_gdrive_backup: string | null;
+	whats_new_release_count: number;
 }
 
 type UserAuthStatusResponse = {
@@ -60,13 +70,23 @@ export const authApi = api.injectEndpoints({
 				body,
 			}),
 			invalidatesTags: ['User'],
-			// This ensures that features are refreshed when the user's active map changes.
 			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-				await queryFulfilled;
-				dispatch(featuresApi.endpoints.getFeatures.initiate(undefined, { forceRefetch: true }));
+				// We only need to re-fetch features if we're switching maps
+				if ('last_map_id' in arg) {
+					await queryFulfilled;
+					dispatch(featuresApi.endpoints.getFeatures.initiate(undefined, { forceRefetch: true }));
+				}
 			},
+		}),
+		updateWhatsNewViewCount: builder.mutation<null, number>({
+			query: (viewCount) => ({
+				url: 'profile/update_what_new_view_count/',
+				method: 'POST',
+				body: { viewCount },
+			}),
+			invalidatesTags: ['User'],
 		}),
 	}),
 });
 
-export const { useCheckLoginStatusQuery, useUpdateUserProfileMutation } = authApi;
+export const { useCheckLoginStatusQuery, useUpdateUserProfileMutation, useUpdateWhatsNewViewCountMutation } = authApi;

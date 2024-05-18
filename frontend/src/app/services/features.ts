@@ -1,5 +1,6 @@
 import { EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
+import { Point } from 'ol/geom';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
@@ -44,26 +45,31 @@ export type FeatureDataItem =
 	| FeatureDataItemSymbologyBooleanField
 	| FeatureDataItemDateField;
 
-export interface Feature {
+export interface MapaFeature {
 	id: number;
 	geom: Geom;
 	geom_type: GeomType;
 	map_id: number;
 	schema_id: number | null;
 	symbol_id: number | null;
+	creation_date: number;
 	data: FeatureDataItem[];
-	// These three are inserted by buildGeoJSONFromFeatures()
+	// These two are inserted by buildGeoJSONFromFeatures()
 	symbolCacheKey?: string;
 	symbol?: Partial<SymbologyProps>;
-	// symbolCacheKeyWebGL?: string;
-	import_job: string;
 }
 
-export type NewFeature = Omit<Feature, 'id'>;
+// convertFeaturesToGeoJSON() omits the `geom` property because OpenLayers needs `geometry`
+// OpenLayers makes `geometry` into an OpenLayers Geom Point object
+export interface MapaOpenLayersFeature extends Omit<MapaFeature, 'geom'> {
+	geometry: Point;
+}
 
-type FeaturesResponse = Feature[];
+export type NewMapaFeature = Omit<MapaFeature, 'id' | 'creation_date'>;
 
-export const featuresAdapter = createEntityAdapter<Feature>();
+type FeaturesResponse = MapaFeature[];
+
+export const featuresAdapter = createEntityAdapter<MapaFeature>();
 
 const initialState = featuresAdapter.getInitialState();
 export { initialState as initialFeaturesState };
@@ -74,7 +80,7 @@ export { initialState as initialFeaturesState };
 // This let's us avoid having to refetch potentially thousands of features each time when only one has been modified.
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getFeatures: builder.query<EntityState<Feature>, void>({
+		getFeatures: builder.query<EntityState<MapaFeature, number>, void>({
 			query: () => `maps/features/`,
 			transformResponse: (res: FeaturesResponse) => {
 				return featuresAdapter.setAll(initialState, res);
@@ -84,7 +90,7 @@ export const featuresApi = api.injectEndpoints({
 				dispatch(prepareFeaturesForMap());
 			},
 		}),
-		addFeatureToMap: builder.mutation<Feature, NewFeature>({
+		addFeatureToMap: builder.mutation<MapaFeature, NewMapaFeature>({
 			query: (initialFeature) => ({
 				url: 'features/',
 				method: 'POST',
@@ -111,7 +117,7 @@ export const featuresApi = api.injectEndpoints({
 				}
 			},
 		}),
-		updateFeature: builder.mutation<Feature, Partial<Feature>>({
+		updateFeature: builder.mutation<MapaFeature, Partial<MapaFeature>>({
 			query: (feature) => ({
 				url: `features/${feature.id}/`,
 				method: 'PUT',

@@ -7,20 +7,30 @@ import {
 	List,
 	ListItem,
 	ListItemButton,
+	ListItemIcon,
 	ListItemText,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { getFeaturesAvailableForEditing, setFeaturesAvailableForEditing } from '../app/appSlice';
+import { defaultSymbolSizeForFormFields, getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
+import { getFeatureLabel } from './featureHelpers';
 
 function FeatureManager() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 
-	const featureIds = useAppSelector(getFeaturesAvailableForEditing);
+	const features = useAppSelector(getFeaturesAvailableForEditing);
+
+	useEffect(() => {
+		// If we happen to reload the page we'll have no features for editing, so just pop right back to the map
+		if (features.length === 0) {
+			navigate('/');
+		}
+	}, [features, navigate]);
 
 	const onClickFeature = (featureId: number) => () => navigate(`/FeatureManager/Edit/${featureId}/`);
 
@@ -30,19 +40,24 @@ function FeatureManager() {
 	};
 
 	return (
-		<DialogWithTransition
-			// For some reason this was causing the dialog to close as soon as it opened
-			// onClose={onClose}
-			dialogProps={{ fullScreen: false, fullWidth: true }}
-		>
-			<DialogTitle>Features</DialogTitle>
+		<DialogWithTransition onClose={onClose} dialogProps={{ fullScreen: false, fullWidth: true }}>
+			<DialogTitle>Edit Features</DialogTitle>
+
 			<DialogContent>
 				<List>
-					{featureIds.map((featureId) => (
-						<React.Fragment key={featureId}>
+					{features.map((feature) => (
+						<React.Fragment key={feature.id}>
 							<ListItem disablePadding>
-								<ListItemButton onClick={onClickFeature(featureId)}>
-									<ListItemText primary={`# ${featureId}`} />
+								<ListItemIcon sx={{ minWidth: defaultSymbolSizeForFormFields }}>
+									{getFontAwesomeIconForSymbolPreview(
+										{ ...feature.symbol },
+										{
+											size: defaultSymbolSizeForFormFields,
+										},
+									)}
+								</ListItemIcon>
+								<ListItemButton onClick={onClickFeature(feature.id)}>
+									<ListItemText primary={getFeatureLabel(feature) || <em>Unnamed feature</em>} />
 								</ListItemButton>
 							</ListItem>
 
@@ -51,6 +66,7 @@ function FeatureManager() {
 					))}
 				</List>
 			</DialogContent>
+
 			<DialogActions>
 				<Button onClick={onClose}>Cancel</Button>
 			</DialogActions>

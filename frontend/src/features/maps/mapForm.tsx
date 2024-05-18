@@ -1,8 +1,7 @@
-import CloseIcon from '@mui/icons-material/Close';
-
-import TuneIcon from '@mui/icons-material/Tune';
-
 import { yupResolver } from '@hookform/resolvers/yup';
+import CloseIcon from '@mui/icons-material/Close';
+import TuneIcon from '@mui/icons-material/Tune';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
 	AppBar,
 	Box,
@@ -35,17 +34,19 @@ import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 import { selectAllFeatures } from '../features/featuresSlice';
+import { getSchemaIdsUsedByFeatures } from '../schemas/schemaHelpers';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 
 interface Props {
 	map?: Map;
+	isMapSaving: boolean;
 	onDoneAdding?: (map: NewMap) => void;
 	onDoneEditing?: (map: Map) => void;
 }
 
 function MapForm(props: Props) {
-	const { map, onDoneAdding, onDoneEditing } = props;
+	const { map, isMapSaving, onDoneAdding, onDoneEditing } = props;
 
 	const navigate = useNavigate();
 
@@ -112,7 +113,7 @@ function MapForm(props: Props) {
 	// ######################
 	const features = useAppSelector(selectAllFeatures);
 
-	const schemasUsedOnMap = Array.from(new Set(Object.values(features || []).map((f) => f.schema_id)));
+	const schemaIdsUsedOnMap = getSchemaIdsUsedByFeatures(features);
 	// ######################
 	// Schema Removal Guard (End)
 	// ######################
@@ -130,7 +131,14 @@ function MapForm(props: Props) {
 				const mapData: NewMap = { ...data };
 				onDoneAdding(mapData);
 			} else if (map !== undefined && onDoneEditing !== undefined) {
-				const mapData: Map = { ...map, ...data };
+				const mapData: Map = {
+					...map,
+					...data,
+					// For some reason when we were saving a Map, MapForm was turning a null hero_icon into an empty {} object, rather than retaining it as null.
+					// No amount of playing with the Yup Resolver that was possibly causing this could get us to make it return null rather than {}.
+					// So oh well, this hack will do.
+					hero_icon: JSON.stringify(data.hero_icon) !== '{}' ? data.hero_icon : null,
+				};
 				onDoneEditing(mapData);
 			}
 		}
@@ -173,12 +181,15 @@ function MapForm(props: Props) {
 						<IconButton edge="start" color="inherit" onClick={onCancelForm}>
 							<CloseIcon />
 						</IconButton>
+
 						<Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
 							Map
 						</Typography>
-						<Button color="inherit" onClick={onClickSave}>
-							Save
-						</Button>
+
+						<LoadingButton loading={isMapSaving} color="inherit" onClick={onClickSave}>
+							{/* See the note re browser crashes when translating pages: https://mui.com/material-ui/react-button/#loading-button */}
+							<span>Save</span>
+						</LoadingButton>
 					</Toolbar>
 				</AppBar>
 
@@ -283,7 +294,7 @@ function MapForm(props: Props) {
 											)}
 										>
 											{schemas.map((schema) => (
-												<MenuItem key={schema.id} value={schema.id} disabled={schemasUsedOnMap.includes(schema.id)}>
+												<MenuItem key={schema.id} value={schema.id} disabled={schemaIdsUsedOnMap.includes(schema.id)}>
 													<Checkbox checked={available_schema_ids.includes(schema.id) === true} />
 													<ListItemText primary={schema.name} />
 												</MenuItem>

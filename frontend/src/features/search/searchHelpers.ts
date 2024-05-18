@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dayjs from 'dayjs';
-import MiniSearch from 'minisearch';
-import { Feature } from '../../app/services/features';
+import MiniSearch, { SearchResult } from 'minisearch';
+import { MapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
 import { SearchField } from '../app/appSlice';
 import { getFeatureDataItemForSchemaField } from '../features/featureHelpers';
@@ -11,13 +11,8 @@ import { getSymbolNameBySymbolId } from '../symbology/symbologyHelpers';
 
 export const isSearchingYet = (search_term: string) => search_term.length >= 3;
 
-export interface FeatureSearchResult {
+export interface FeatureSearchResult extends SearchResult {
 	id: number;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
 	map_id: number;
 	schema_id: number;
 	symbol_id: number;
@@ -26,7 +21,7 @@ export interface FeatureSearchResult {
 }
 
 export const searchFeatures = (
-	features: Feature[],
+	features: MapaFeature[],
 	schemas: FeatureSchema[],
 	search_term: string,
 	search_fields: SearchField[],
@@ -80,8 +75,8 @@ export const searchFeatures = (
 							return dataItem !== undefined && typeof dataItem.value === 'string'
 								? dayjs(dataItem.value).format('DD/MM/YYYY')
 								: typeof f.default_value === 'string'
-								? dayjs(f.default_value).format('DD/MM/YYYY')
-								: '';
+									? dayjs(f.default_value).format('DD/MM/YYYY')
+									: '';
 						});
 				}
 
@@ -99,13 +94,8 @@ export const searchFeatures = (
 	return miniSearch.search(search_term) as FeatureSearchResult[];
 };
 
-export interface SymbolSearchResult {
+export interface SymbolSearchResult extends SearchResult {
 	id: number;
-	match: {
-		[key: string]: string[];
-	};
-	score: number;
-	terms: string[];
 	'prop.name': string;
 }
 
