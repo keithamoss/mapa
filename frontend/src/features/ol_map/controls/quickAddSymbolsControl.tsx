@@ -107,7 +107,7 @@ function QuickAddSymbolsControl(props: Props) {
 
 			{symbolsToShow.map((v) => (
 				<IconButton key={`${v.schema.id}.${v.symbol.id}`} onClick={onQuickAdd(v.symbol, v.schema.id)} size="small">
-					<Avatar sx={{ bgcolor: 'white' }}>
+					<Avatar sx={{ bgcolor: 'red' }}>
 						{getFontAwesomeIconForSymbolPreview(
 							{
 								...getAppDefaultSymbologyConfig(),
