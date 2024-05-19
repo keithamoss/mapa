@@ -1,6 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
 	AppBar,
+	Button,
 	FormControl,
 	FormControlLabel,
 	FormLabel,
@@ -139,6 +140,10 @@ function SettingsManager() {
 
 					<FormControl sx={{ mb: 3 }} fullWidth>
 						<FormLabel>Version debugging</FormLabel>
+
+						<Button variant="contained" sx={{ mt: 2, mb: 2 }} onClick={() => window.location.reload()}>
+							Reload
+						</Button>
 
 						{performance
 							.getEntriesByType('resource')
