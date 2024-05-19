@@ -50,6 +50,16 @@ npm-check-updates -u
 yarn install
 ```
 
+# Testing local dev on a real physical device
+
+1. Install [Proxyman](https://proxyman.io/) (the free version is sufficient)
+2. Follow its instructions for [installing the Proxyman certificate on an iOS device](https://docs.proxyman.io/debug-devices/ios-device)
+3. Visit https://api.mapa.test.keithmoss.me and https://mapa.test.keithmoss.me in Safari on the device and accept the unsigned certificate for both domains.
+4. Set the proxy server for your WiFi network to go through Proxyman (per the above link). So long as you're on the same WiFi network as the laptop, all of the phone's traffic will now go through Proxyman - and this includes taking advantage of the entires we have locally in `/etc/hosts` on our laptop
+5. Now everything will just work! And you don't even need the phone and laptop to be connected via a cable for it to all work.
+
+Tip: Don't forget to turn the WiFi proxy settings off when you're finished.
+
 # AWS deployment backstory (Production and Staging)
 
 First, the backstory. Then we'll get on to the step-by-step instructions.
