@@ -142,7 +142,7 @@ jobs:
       - name: Deploy CDK stacks
         run: |
           cd ./cdk
-          cdk deploy MapaInfraStack MapaAppStack MapaStaticSiteStack --context env=staging --require-approval never
+          cdk deploy MapaInfraStackStaging MapaAppStackStaging MapaStaticSiteStackStaging --require-approval never
 
       - name: Update lambda function code
         run: |

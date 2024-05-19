@@ -2,16 +2,20 @@ import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Effect, ManagedPolicy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-import { BaseStackProps, getTrustStackContext } from './utils/get-context';
+import { BaseStackProps } from './utils/stack-props';
 import { getDjangoAppLambdaFunctionName, getDjangoCronLambdaFunctionName, getECRRepoName } from './utils/utils';
 
 // Ref: https://medium.com/@mylesloffler/using-github-actions-to-deploy-a-cdk-application-f28b7f792f12
 
-export class TrustStack extends cdk.Stack {
-	constructor(scope: Construct, id: string, props: BaseStackProps) {
-		super(scope, id, props);
+export interface TrustStackProps extends BaseStackProps {
+	githubOrg: string;
+	githubRepo: string;
+	iamUsername: string;
+}
 
-		const contextProps = getTrustStackContext(scope);
+export class TrustStack extends cdk.Stack {
+	constructor(scope: Construct, id: string, props: TrustStackProps) {
+		super(scope, id, props);
 
 		// -- Defines an OpenID Connect (OIDC) provider for GitHub Actions. --
 		// This provider will be used by the GitHub Actions workflow to
@@ -122,7 +126,7 @@ export class TrustStack extends cdk.Stack {
 						Effect: iam.Effect.ALLOW,
 						Action: ['sts:AssumeRole'],
 						Principal: {
-							AWS: `arn:aws:iam::${props.env.account}:user/${contextProps.iamUsername}`,
+							AWS: `arn:aws:iam::${props.env.account}:user/${props.iamUsername}`,
 						},
 					},
 					// -- Defines a role that can be assumed by GitHub Actions. --
@@ -141,7 +145,7 @@ export class TrustStack extends cdk.Stack {
 								// you should be careful about what you allow.
 								'token.actions.githubusercontent.com:sub': [
 									// `repo:${githubOrg.valueAsString}/${githubRepo.valueAsString}:ref:refs/heads/main`,
-									`repo:${contextProps.githubOrg}/${contextProps.githubRepo}:*`,
+									`repo:${props.githubOrg}/${props.githubRepo}:*`,
 								],
 							},
 							// This specifies that the audience (aud) claim must be sts.amazonaws.com

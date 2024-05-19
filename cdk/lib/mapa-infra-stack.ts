@@ -4,21 +4,21 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { StackPropsWithContextEnv } from './utils/get-context';
+import { BaseStackPropsWithEnvironment } from './utils/stack-props';
 import { getECRRepoName } from './utils/utils';
+
+export interface MapaInfraStackProps extends BaseStackPropsWithEnvironment {}
 
 export class MapaInfraStack extends Stack {
 	public readonly ecrRepo: ecr.Repository;
 	public readonly vpc: ec2.Vpc;
 	public readonly s3LoggingBucket: s3.Bucket;
 
-	constructor(scope: Construct, id: string, props: StackPropsWithContextEnv) {
-		// https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html#typescript-cdk-idioms
-		const { context: contextProps, ...ogProps } = props;
-		super(scope, id, ogProps);
+	constructor(scope: Construct, id: string, props: MapaInfraStackProps) {
+		super(scope, id, props);
 
 		const ecrRepo = new ecr.Repository(this, 'DjangoLambdaECRRepo', {
-			repositoryName: getECRRepoName(contextProps.environment),
+			repositoryName: getECRRepoName(props.environment),
 			imageTagMutability: ecr.TagMutability.MUTABLE,
 			imageScanOnPush: true,
 			encryption: ecr.RepositoryEncryption.KMS,
@@ -37,7 +37,7 @@ export class MapaInfraStack extends Stack {
 
 		// VPC
 		const vpc = new ec2.Vpc(this, 'DjangoLambdasVPC', {
-			vpcName: `mapa-${contextProps.environment}-lambda`,
+			vpcName: `mapa-${props.environment}-lambda`,
 			ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
 			maxAzs: 2,
 			natGateways: 0,
@@ -131,7 +131,7 @@ export class MapaInfraStack extends Stack {
 
 		// S3 bucket for CloudFront logs
 		const s3LoggingBucket = new s3.Bucket(this, `S3LoggingBucket`, {
-			bucketName: `mapa-${contextProps.environment}-logs`,
+			bucketName: `mapa-${props.environment}-logs`,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 			objectOwnership: s3.ObjectOwnership.OBJECT_WRITER,
 			encryption: s3.BucketEncryption.S3_MANAGED,
