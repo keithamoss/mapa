@@ -3,9 +3,9 @@ name: Production CI/CD
 on:
   push:
     branches: [production]
-  pull_request:
-    branches: [production]
-    types: [closed]
+  # pull_request:
+  #   branches: [production]
+  #   types: [closed]
 
 permissions:
   id-token: write
