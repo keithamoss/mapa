@@ -7,35 +7,32 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
-import { ContextEnvProps } from './utils/get-context';
+import { BaseStackPropsWithEnvironment } from './utils/stack-props';
 
-export interface InfraStackProps {
-	s3LoggingBucket: s3.Bucket;
-}
-
-export interface MapaStaticSiteStackPropsWithContextEnv extends cdk.StackProps {
-	context: ContextEnvProps;
-	infraStack: InfraStackProps;
+export interface MapaStaticSiteStackProps extends BaseStackPropsWithEnvironment {
+	infraStack: {
+		s3LoggingBucket: s3.Bucket;
+	};
+	domainName: string;
+	certificateArnStaticSite: string;
 }
 
 export class MapaStaticSiteStack extends cdk.Stack {
-	constructor(scope: cdk.App, id: string, props: MapaStaticSiteStackPropsWithContextEnv) {
-		// https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html#typescript-cdk-idioms
-		const { context: contextProps, ...ogProps } = props;
-		super(scope, id, ogProps);
+	constructor(scope: cdk.App, id: string, props: MapaStaticSiteStackProps) {
+		super(scope, id, props);
 
 		// Grab our certificate from us-east-1 that the standalone cert stack nicely made for us
 		const certificate = Certificate.fromCertificateArn(
 			this,
-			`${contextProps.domainName}-Cert`,
-			contextProps.certificateArnStaticSite,
+			`${props.domainName}-Cert`,
+			props.certificateArnStaticSite,
 		) as Certificate;
 
 		new CfnOutput(this, 'StaticSiteCertificate', { value: certificate.certificateArn });
 
 		const cloudFrontToS3 = new CloudFrontToS3(this, 'S3BucketStaticSite', {
 			bucketProps: {
-				bucketName: contextProps.domainName,
+				bucketName: props.domainName,
 				publicReadAccess: false,
 				blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 				encryption: s3.BucketEncryption.S3_MANAGED,
@@ -48,10 +45,10 @@ export class MapaStaticSiteStack extends cdk.Stack {
 			},
 			cloudFrontDistributionProps: {
 				// Overall distribution settings
-				comment: contextProps.domainName,
+				comment: props.domainName,
 				priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
 				certificate: certificate,
-				domainNames: [contextProps.domainName],
+				domainNames: [props.domainName],
 				minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
 				httpVersion: cloudfront.HttpVersion.HTTP2,
 				enableLogging: true,
@@ -84,7 +81,7 @@ export class MapaStaticSiteStack extends cdk.Stack {
 
 		// Route 53 - Update to point at our CloudFront distribution
 		const zone = route53.HostedZone.fromLookup(this, 'MapaHostedZone', {
-			domainName: contextProps.domainName,
+			domainName: props.domainName,
 		});
 
 		new CfnOutput(this, 'Zone', { value: zone.hostedZoneArn });
@@ -92,7 +89,7 @@ export class MapaStaticSiteStack extends cdk.Stack {
 		const record = new route53.ARecord(this, 'CloudFrontAliasRecord', {
 			target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(cloudFrontToS3.cloudFrontWebDistribution)),
 			zone: zone,
-			recordName: contextProps.domainName,
+			recordName: props.domainName,
 		});
 
 		new CfnOutput(this, 'DNSRecord', { value: record.toString() });

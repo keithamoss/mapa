@@ -43,7 +43,8 @@ function App() {
 	}, [theme.zIndex.speedDial]);
 
 	const onSpeedDialClose = useCallback(() => {
-		setBoxZIndex(undefined);
+		// A slight delay to allow the SpeedDial to have closed first
+		window.setTimeout(() => setBoxZIndex(undefined), 500);
 	}, []);
 
 	if (isLoggedIn === undefined) {

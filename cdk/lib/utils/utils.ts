@@ -1,4 +1,4 @@
-import { MapaEnvironment } from './get-context';
+import { MapaEnvironment } from './stack-props';
 
 export const getECRRepoName = (environment: MapaEnvironment | '*') =>
 	`aws-keithmoss/${environment}/mapa-django-lambdas`;

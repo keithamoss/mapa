@@ -13,25 +13,46 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route35Targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import { ContextEnvProps } from './utils/get-context';
+import { BaseStackPropsWithEnvironment } from './utils/stack-props';
 import { getDjangoAppLambdaFunctionName, getDjangoCronLambdaFunctionName, titleCase } from './utils/utils';
 
-export interface InfraStackProps {
-	vpc: ec2.Vpc;
-	ecrRepo: ecr.Repository;
-	s3LoggingBucket: s3.Bucket;
-}
-
-export interface MapaAppStackPropsWithContextEnv extends cdk.StackProps {
-	context: ContextEnvProps;
-	infraStack: InfraStackProps;
+export interface MapaAppStackProps extends BaseStackPropsWithEnvironment {
+	infraStack: {
+		vpc: ec2.Vpc;
+		ecrRepo: ecr.Repository;
+		s3LoggingBucket: s3.Bucket;
+	};
+	domainName: string;
+	domainNameDjangoApp: string;
+	certificateArnDjangoApp: string;
+	lambdaEnvironment: {
+		ENVIRONMENT: string;
+		PORT: string;
+		ALLOWED_HOSTS: string;
+		RUST_LOG: string;
+		AWS_LAMBDA_DEPLOYMENT: string;
+		AWS_LWA_ENABLE_COMPRESSION: string;
+		AWS_LWA_PORT: string;
+		AWS_SECRETS_NAME: string;
+		AWS_LWA_PASS_THROUGH_PATH: string;
+		DJANGO_DEBUG: string;
+		PUBLIC_API_BASE_URL: string;
+		PUBLIC_SITE_URL: string;
+		SITE_BASE_URL: string;
+		SESSION_COOKIE_DOMAIN: string;
+		CORS_ALLOWED_ORIGINS: string;
+		CSRF_COOKIE_DOMAIN: string;
+		CSRF_TRUSTED_ORIGINS: string;
+		SENTRY_SITE_NAME: string;
+		POWERTOOLS_DEBUG: string;
+		POWERTOOLS_LOG_LEVEL: string;
+		POWERTOOLS_SERVICE_NAME: string;
+	};
 }
 
 export class MapaAppStack extends cdk.Stack {
-	constructor(scope: cdk.App, id: string, props: MapaAppStackPropsWithContextEnv) {
-		// https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html#typescript-cdk-idioms
-		const { context: contextProps, ...ogProps } = props;
-		super(scope, id, ogProps);
+	constructor(scope: cdk.App, id: string, props: MapaAppStackProps) {
+		super(scope, id, props);
 
 		const defaultSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
 			props.infraStack.vpc,
@@ -47,13 +68,13 @@ export class MapaAppStack extends cdk.Stack {
 				cmd: ['lambda_gunicorn'],
 			}),
 			// General config
-			functionName: getDjangoAppLambdaFunctionName(contextProps.environment),
-			description: `Mapa ${titleCase(contextProps.environment)} Django App Lambda`,
+			functionName: getDjangoAppLambdaFunctionName(props.environment),
+			description: `Mapa ${titleCase(props.environment)} Django App Lambda`,
 			memorySize: 2048,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.seconds(15),
 			// Environment variables
-			environment: contextProps.lambdaEnvironment,
+			environment: props.lambdaEnvironment,
 			// VPC config
 			vpc: props.infraStack.vpc,
 			vpcSubnets: { subnets: props.infraStack.vpc.publicSubnets },
@@ -64,9 +85,7 @@ export class MapaAppStack extends cdk.Stack {
 			applicationLogLevel: 'DEBUG',
 			systemLogLevel: 'INFO',
 			logGroup: new logs.LogGroup(this, 'DjangoAppLambdaLogGroup', {
-				logGroupName: `/aws/lambda/${contextProps.environment}/${getDjangoAppLambdaFunctionName(
-					contextProps.environment,
-				)}`,
+				logGroupName: `/aws/lambda/${props.environment}/${getDjangoAppLambdaFunctionName(props.environment)}`,
 				retention: logs.RetentionDays.INFINITE,
 			}),
 			tracing: lambda.Tracing.ACTIVE,
@@ -115,12 +134,12 @@ export class MapaAppStack extends cdk.Stack {
 				cmd: ['lambda_gunicorn'],
 			}),
 			// General config
-			functionName: getDjangoCronLambdaFunctionName(contextProps.environment),
-			description: `Mapa ${titleCase(contextProps.environment)} Django Cron Lambda`,
+			functionName: getDjangoCronLambdaFunctionName(props.environment),
+			description: `Mapa ${titleCase(props.environment)} Django Cron Lambda`,
 			memorySize: 2048,
 			ephemeralStorageSize: cdk.Size.mebibytes(512),
 			timeout: cdk.Duration.minutes(5), // Pretty excessive for our initial needs.
-			environment: { ...contextProps.lambdaEnvironment, ALLOW_MANAGEMENT_API: 'TRUE' },
+			environment: { ...props.lambdaEnvironment, ALLOW_MANAGEMENT_API: 'TRUE' },
 			// VPC config
 			vpc: props.infraStack.vpc,
 			vpcSubnets: { subnets: props.infraStack.vpc.publicSubnets },
@@ -131,9 +150,7 @@ export class MapaAppStack extends cdk.Stack {
 			applicationLogLevel: 'DEBUG',
 			systemLogLevel: 'INFO',
 			logGroup: new logs.LogGroup(this, 'DjangoCronLambdaLogGroup', {
-				logGroupName: `/aws/lambda/${contextProps.environment}/${getDjangoCronLambdaFunctionName(
-					contextProps.environment,
-				)}`,
+				logGroupName: `/aws/lambda/${props.environment}/${getDjangoCronLambdaFunctionName(props.environment)}`,
 				retention: logs.RetentionDays.INFINITE,
 			}),
 			tracing: lambda.Tracing.ACTIVE,
@@ -190,7 +207,7 @@ export class MapaAppStack extends cdk.Stack {
 		// So far, this seems to work perfectly.
 		// Ref. https://stackoverflow.com/questions/70849198/why-is-it-recommended-to-manually-provision-pre-existing-secrets-in-aws-secretsm
 		const secret = new cdk.aws_secretsmanager.Secret(this, 'DjangoAppSecrets', {
-			secretName: `/mapa/${contextProps.environment}/`,
+			secretName: `/mapa/${props.environment}/`,
 			description: 'Secrets for the Mapa Django Lambda app',
 			secretObjectValue: {
 				DB_HOST: cdk.SecretValue.unsafePlainText(''),
@@ -222,8 +239,8 @@ export class MapaAppStack extends cdk.Stack {
 		// Grab our certificate from us-east-1 that the standalone cert stack nicely made for us
 		const certificate = Certificate.fromCertificateArn(
 			this,
-			`${contextProps.domainNameDjangoApp}-Cert`,
-			contextProps.certificateArnDjangoApp,
+			`${props.domainNameDjangoApp}-Cert`,
+			props.certificateArnDjangoApp,
 		) as Certificate;
 
 		new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
@@ -231,9 +248,9 @@ export class MapaAppStack extends cdk.Stack {
 		// CloudFront distribution
 		const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
 			// Overall distribution settings
-			comment: contextProps.domainNameDjangoApp,
+			comment: props.domainNameDjangoApp,
 			priceClass: PriceClass.PRICE_CLASS_ALL,
-			domainNames: [contextProps.domainNameDjangoApp],
+			domainNames: [props.domainNameDjangoApp],
 			certificate: certificate,
 			minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
 			httpVersion: HttpVersion.HTTP2,
@@ -249,7 +266,7 @@ export class MapaAppStack extends cdk.Stack {
 					protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
 					originSslProtocols: [cloudfront.OriginSslPolicy.TLS_V1_2],
 					customHeaders: {
-						'X-Forwarded-Host': contextProps.domainNameDjangoApp,
+						'X-Forwarded-Host': props.domainNameDjangoApp,
 					},
 					// No caching please, we need fresh responses
 					originShieldEnabled: false,
@@ -268,14 +285,14 @@ export class MapaAppStack extends cdk.Stack {
 		new CfnOutput(this, 'DistributionDomainname', { value: distribution.distributionDomainName });
 
 		// Route 53 - Update to point at our CloudFront distribution
-		const zone = route53.HostedZone.fromLookup(this, 'MapaHostedZone', { domainName: contextProps.domainName });
+		const zone = route53.HostedZone.fromLookup(this, 'MapaHostedZone', { domainName: props.domainName });
 
 		new CfnOutput(this, 'Zone', { value: zone.hostedZoneArn });
 
 		const record = new route53.ARecord(this, 'CloudFrontAliasRecord', {
 			target: route53.RecordTarget.fromAlias(new route35Targets.CloudFrontTarget(distribution)),
 			zone: zone,
-			recordName: contextProps.domainNameDjangoApp,
+			recordName: props.domainNameDjangoApp,
 		});
 
 		new CfnOutput(this, 'DNSRecord', { value: record.toString() });
