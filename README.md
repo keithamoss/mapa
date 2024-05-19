@@ -144,7 +144,7 @@ Approach inspired by:
 For deployment to a blank environment to work, we need to deploy in two stages: Infrastructure first, pushing the Docker image, and finally deployment of the application.
 
 1. Add the new domain names for your new environment to `UsEastCertificateStack` and deploy the new certs `cdk deploy --app "npx ts-node --prefer-ts-exts bin/cdk-cert-stack.ts" UsEastCertificateStack --profile mapa-cdk-role`
-2. Add the context for the new environment to `cdk.json` (including the Arns for the new certs we just made)
+2. Add your new environment's config to `cdk-stack.ts` (including the Arns for the new certs we just made)
 3. Deploy InfraStack `cdk deploy MapaInfraStack[Env] --profile mapa-cdk-role`
 4. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
 5. Now deploy the application itself `cdk deploy MapaAppStack[Env] MapaStaticSiteStack[Env] --profile mapa-cdk-role`
