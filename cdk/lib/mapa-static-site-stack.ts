@@ -60,7 +60,7 @@ export class MapaStaticSiteStack extends cdk.Stack {
 					{
 						httpStatus: 403,
 						responseHttpStatus: 200,
-						responsePagePath: 'index.html',
+						responsePagePath: '/index.html',
 						ttl: cdk.Duration.seconds(10),
 					},
 				],
