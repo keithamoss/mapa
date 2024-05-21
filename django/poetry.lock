@@ -35,17 +35,17 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "p
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.36.0"
+version = "2.38.1"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "aws_lambda_powertools-2.36.0-py3-none-any.whl", hash = "sha256:2891e6f0ef7af2bced5f936490857dd1542c2fc7b813be345fbbe54aa6ce1d92"},
-    {file = "aws_lambda_powertools-2.36.0.tar.gz", hash = "sha256:533a992aad6d088467a6e6f1fc86f1bfc3ecfe299282bef82f0e7f9934a91d45"},
+    {file = "aws_lambda_powertools-2.38.1-py3-none-any.whl", hash = "sha256:4235f517a8429a0e4dd2f76ac3f2d0a77b4a8061fd75ca9da013e7a1b4d17699"},
+    {file = "aws_lambda_powertools-2.38.1.tar.gz", hash = "sha256:3e25a51c0dc022b4ab733582ab4f39764831b31369a56424ac9f07139b5e96b3"},
 ]
 
 [package.dependencies]
-typing-extensions = ">=4.6.2,<5.0.0"
+typing-extensions = ">=4.11.0,<5.0.0"
 
 [package.extras]
 all = ["aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "pydantic (>=1.8.2,<2.0.0)"]
@@ -1507,4 +1507,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "e9074c4b4ac168271fd627f805a91b1bab44d4af93afad9d5db6ecf7fece4491"
+content-hash = "1316cf60e78db3f004de2ce5aa0d247063ce9f9d8633d97acbc6bac3c4237fa6"
