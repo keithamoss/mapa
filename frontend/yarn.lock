@@ -475,12 +475,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.24.0, @babel/runtime@npm:^7.24.4":
+"@babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.24.4":
   version: 7.24.4
   resolution: "@babel/runtime@npm:7.24.4"
   dependencies:
     regenerator-runtime: ^0.14.0
   checksum: 2f27d4c0ffac7ae7999ac0385e1106f2a06992a8bdcbf3da06adcac7413863cd08c198c2e4e970041bbea849e17f02e1df18875539b6afba76c781b6b59a07c3
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.24.5":
+  version: 7.24.6
+  resolution: "@babel/runtime@npm:7.24.6"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: 44d95ca743898fed31b4cefef31de6fd3cf7906e94493368e9d6538289cc52c6c46185205d9c01d38466a5b3f673550f80892d30b1ed02a2c13e704863a8cc48
   languageName: node
   linkType: hard
 
@@ -1437,16 +1446,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "@mui/x-date-pickers@npm:7.1.1"
+"@mui/x-date-pickers@npm:^7.5.1":
+  version: 7.5.1
+  resolution: "@mui/x-date-pickers@npm:7.5.1"
   dependencies:
-    "@babel/runtime": ^7.24.0
+    "@babel/runtime": ^7.24.5
     "@mui/base": ^5.0.0-beta.40
     "@mui/system": ^5.15.14
     "@mui/utils": ^5.15.14
     "@types/react-transition-group": ^4.4.10
-    clsx: ^2.1.0
+    clsx: ^2.1.1
     prop-types: ^15.8.1
     react-transition-group: ^4.4.5
   peerDependencies:
@@ -1454,7 +1463,7 @@ __metadata:
     "@emotion/styled": ^11.8.1
     "@mui/material": ^5.15.14
     date-fns: ^2.25.0 || ^3.2.0
-    date-fns-jalali: ^2.13.0-0
+    date-fns-jalali: ^2.13.0-0 || ^3.2.0-0
     dayjs: ^1.10.7
     luxon: ^3.0.2
     moment: ^2.29.4
@@ -1481,7 +1490,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 0deac4b1a2d279fcc8273c1edb5620d8ac1ac4495f2d1f51e091dca17888ed2a09c6a2c9b068f4430d1840515e394523f71c87e5df8eaca56bb8cede955e09fe
+  checksum: 83fa5bd37cff01303e19193007eb1f4a406df60a8f9524c4b749c0378f2b9a2c6b088ec6b61450e39aef37c3466de8d55efe1cd3a7e73b3578098d94d61258ce
   languageName: node
   linkType: hard
 
@@ -3227,6 +3236,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: acd3e1ab9d8a433ecb3cc2f6a05ab95fe50b4a3cfc5ba47abb6cbf3754585fcb87b84e90c822a1f256c4198e3b41c7f6c391577ffc8678ad587fc0976b24fd57
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
@@ -4448,7 +4464,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.170
     "@mui/material": ^5.15.18
     "@mui/system": ^5.15.15
-    "@mui/x-date-pickers": ^7.1.1
+    "@mui/x-date-pickers": ^7.5.1
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^2.2.5
     "@sentry/browser": ^8.4.0
