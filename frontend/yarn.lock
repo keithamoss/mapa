@@ -2207,13 +2207,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.2.75":
-  version: 18.2.75
-  resolution: "@types/react@npm:18.2.75"
+"@types/react@npm:^18.3.3":
+  version: 18.3.3
+  resolution: "@types/react@npm:18.3.3"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
-  checksum: f77322720744beba6650462c0d75ccc0be27c176bd7b2aff32039ea30e498a78fe6dbce4a1c3fdbf592ccc01286059f332a294a3b6975dbb0d8d5999718ece38
+  checksum: c63d6a78163244e2022b01ef79b0baec4fe4da3475dc4a90bb8accefad35ef0c43560fd0312e5974f92a0f1108aa4d669ac72d73d66396aa060ea03b5d2e3873
   languageName: node
   linkType: hard
 
@@ -4238,7 +4238,7 @@ __metadata:
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
     "@types/node": ^20.12.12
-    "@types/react": ^18.2.75
+    "@types/react": ^18.3.3
     "@types/react-dom": ^18.2.24
     "@typescript-eslint/eslint-plugin": ^7.10.0
     "@typescript-eslint/parser": ^7.10.0
@@ -4263,7 +4263,7 @@ __metadata:
     ol: ^9.1.0
     ol-mapbox-style: ^12.3.0
     prettier: ^3.2.5
-    react: ^18.2.0
+    react: ^18.3.1
     react-dom: ^18.2.0
     react-hook-form: ^7.51.5
     react-redux: ^9.1.2
@@ -6350,12 +6350,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
+"react@npm:^18.3.1":
+  version: 18.3.1
+  resolution: "react@npm:18.3.1"
   dependencies:
     loose-envify: ^1.1.0
-  checksum: 88e38092da8839b830cda6feef2e8505dec8ace60579e46aa5490fc3dc9bba0bd50336507dc166f43e3afc1c42939c09fe33b25fae889d6f402721dcd78fca1b
+  checksum: a27bcfa8ff7c15a1e50244ad0d0c1cb2ad4375eeffefd266a64889beea6f6b64c4966c9b37d14ee32d6c9fcd5aa6ba183b6988167ab4d127d13e7cb5b386a376
   languageName: node
   linkType: hard
 
