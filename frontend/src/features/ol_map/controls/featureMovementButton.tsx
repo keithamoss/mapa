@@ -1,14 +1,8 @@
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import { Avatar, IconButton, styled } from '@mui/material';
+import { Avatar, IconButton } from '@mui/material';
 import { memo } from 'react';
 import { mapaThemeMapButtonControlGrey, mapaThemeWarningPurple } from '../../../app/ui/theme';
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-	position: 'absolute',
-	top: theme.spacing(14),
-	right: theme.spacing(2),
-}));
 
 interface Props {
 	isFeatureMovementAllowed: boolean;
@@ -28,7 +22,7 @@ function FeatureMovementButton(props: Props) {
 	};
 
 	return (
-		<StyledIconButton onClick={handleClick} size="small">
+		<IconButton onClick={handleClick} size="small">
 			{isFeatureMovementAllowed === true ? (
 				<Avatar
 					sx={{
@@ -42,7 +36,7 @@ function FeatureMovementButton(props: Props) {
 					<LockIcon />
 				</Avatar>
 			)}
-		</StyledIconButton>
+		</IconButton>
 	);
 }
 

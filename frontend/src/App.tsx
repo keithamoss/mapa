@@ -35,7 +35,7 @@ function App() {
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
-	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in QuickAddSymbolsControlEntrypoint, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below the QuickAdd symbols.
+	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in OLMap, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below all of the on-map buttons.
 	// tl;dr Toggle the zIndex of the SpeedDial depending on whether its open or not.
 	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
 	const onSpeedDialOpen = useCallback(() => {
