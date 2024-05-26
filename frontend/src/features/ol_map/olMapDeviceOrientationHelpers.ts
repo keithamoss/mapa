@@ -1,6 +1,6 @@
 import { Map } from 'ol';
+import { toRadians } from 'ol/math';
 import { isDevelopment } from '../../app/utils';
-import { degreesToRadians } from './olMapHelpers';
 
 export enum MapHeadingStatus {
 	Off = 'Off',
@@ -254,9 +254,14 @@ export const setOverlayElementRotation = (
 export const setMapRotation = (map: Map | undefined, compass: number) => {
 	if (map !== undefined) {
 		const view = map.getView();
-		const compassHeadingInRadians = degreesToRadians(compass);
+		const compassHeadingInRadians = toRadians(compass);
+		// 0 = 0
+		// 90 = 1.57
+		// 180 = 3.14
+		// 270 = 4.71
+		// 360 = 6.28
 		if (view !== undefined && view.getRotation() !== compassHeadingInRadians) {
-			view.setRotation(compassHeadingInRadians);
+			view.setRotation(-compassHeadingInRadians);
 		}
 	}
 };

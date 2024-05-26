@@ -84,8 +84,6 @@ export const hideCompassHeadingMarker = () => {
 	}
 };
 
-export const degreesToRadians = (deg: number) => (deg * Math.PI * 2) / 360;
-
 export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
 	if (position !== undefined) {
 		const markerOverlay = map.getOverlayById(geolocationMarkerOverlayId);
