@@ -32,12 +32,24 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 	const markerEl = document.createElement('div');
 	markerEl.setAttribute('id', markerElementOverlayId);
 
+	const markerElContainer = document.createElement('div');
+	markerElContainer.setAttribute('id', `container_${markerElementOverlayId}`);
+	markerElContainer.append(markerEl);
+
 	return new Overlay({
 		id: markerElementOverlayId,
 		positioning: 'center-center',
-		element: markerEl,
+		element: markerElContainer,
 		stopEvent: false,
 	});
+};
+
+export const getMapOverlayElementAsDiv = (elementId: string) => {
+	const geolocationMarkerHeadingForegroundTriangleOvelay = document.getElementById(elementId);
+
+	return geolocationMarkerHeadingForegroundTriangleOvelay !== null
+		? (geolocationMarkerHeadingForegroundTriangleOvelay as HTMLDivElement)
+		: undefined;
 };
 
 export const showCompassHeadingMarker = () => {

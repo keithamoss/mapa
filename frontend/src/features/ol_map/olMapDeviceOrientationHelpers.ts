@@ -227,19 +227,27 @@ export class DeviceOrientationListenerManager {
 	}
 }
 
-export const setOverlayElementRotation = (compass: number) => {
-	const overlayContainer = document.getElementsByClassName('ol-overlaycontainer');
-	const firstOverlayContainer = overlayContainer.item(0);
+export const setOverlayElementRotation = (
+	compass: number,
+	geolocationMarkerHeadingForegroundTriangleOvelayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+	geolocationMarkerHeadingBackroundTriangleOvelayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+) => {
+	const newCompassHeadingTransform = `rotate(${compass}deg)`;
 
-	if (firstOverlayContainer !== null) {
-		const div = firstOverlayContainer as HTMLDivElement;
-		const currentCompassHeadingTransform = div.style.getPropertyValue('transform');
+	// Presmably the browser won't repaint if we set the same transform property...
 
-		const newCompassHeadingTransform = `rotate(${compass}deg)`;
+	if (geolocationMarkerHeadingForegroundTriangleOvelayDiv.current !== undefined) {
+		geolocationMarkerHeadingForegroundTriangleOvelayDiv.current.style.setProperty(
+			'transform',
+			newCompassHeadingTransform,
+		);
+	}
 
-		if (newCompassHeadingTransform !== currentCompassHeadingTransform) {
-			div.style.setProperty('transform', newCompassHeadingTransform);
-		}
+	if (geolocationMarkerHeadingBackroundTriangleOvelayDiv.current !== undefined) {
+		geolocationMarkerHeadingBackroundTriangleOvelayDiv.current.style.setProperty(
+			'transform',
+			newCompassHeadingTransform,
+		);
 	}
 };
 

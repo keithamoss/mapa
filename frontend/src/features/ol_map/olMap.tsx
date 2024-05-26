@@ -44,6 +44,7 @@ import {
 	geolocationMarkerHeadingForegroundTriangleOvelayId,
 	geolocationMarkerOverlayId,
 	getBasemap,
+	getMapOverlayElementAsDiv,
 	hideCompassHeadingMarker,
 	mapTargetElementId,
 	onGeolocationChangePosition,
@@ -127,6 +128,9 @@ function OLMap(props: Props) {
 	const isFollowingHeadingStatusRef = useRef<MapHeadingStatus>(isFollowingHeadingStatus);
 	isFollowingHeadingStatusRef.current = isFollowingHeadingStatus;
 
+	const geolocationMarkerHeadingForegroundTriangleOvelayDiv = useRef<HTMLDivElement | undefined>(undefined);
+	const geolocationMarkerHeadingBackgroundTriangleOvelayDiv = useRef<HTMLDivElement | undefined>(undefined);
+
 	// Once Safari on iOS supports the 'checkVisibility' part of Intersection Observer v2 we might be able to use that to pause RAF when the map is not visible.
 	// We went down a short rabbit hole of using <DialogWithTransition>, but then realised we'd have to rejig all of our many uses of the component to contain the <AppBar> that fires onClose() as well.
 	// So far now, we're just leaving RAF being called all of the time and hoping that's OK.
@@ -141,7 +145,11 @@ function OLMap(props: Props) {
 			// fakeDataGenerationRef.current?.push(compassHeading);
 
 			if (isFollowingHeadingStatusRef.current === MapHeadingStatus.On) {
-				setOverlayElementRotation(compassHeading);
+				setOverlayElementRotation(
+					compassHeading,
+					geolocationMarkerHeadingForegroundTriangleOvelayDiv,
+					geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+				);
 			} else if (isFollowingHeadingStatusRef.current === MapHeadingStatus.OnAndMapFollowing) {
 				setMapRotation(mapRef.current, compassHeading);
 			}
@@ -200,14 +208,22 @@ function OLMap(props: Props) {
 		setIsFollowingHeadingStatus(MapHeadingStatus.OnAndMapFollowing);
 
 		// Set the compass heading marker back to north now that the map itself is following the compass
-		setOverlayElementRotation(0);
+		setOverlayElementRotation(
+			0,
+			geolocationMarkerHeadingForegroundTriangleOvelayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+		);
 	}, []);
 
 	const onFollowHeadingOff = useCallback(() => {
 		setIsFollowingHeadingStatus(MapHeadingStatus.Off);
 
 		// Set the compass heading marker and the map back to point to north
-		setOverlayElementRotation(0);
+		setOverlayElementRotation(
+			0,
+			geolocationMarkerHeadingForegroundTriangleOvelayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+		);
 		setMapRotation(mapRef.current, 0);
 
 		// console.log('fakeDataGenerationRef.current', fakeDataGenerationRef.current);
@@ -345,6 +361,13 @@ function OLMap(props: Props) {
 			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
 			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOvelayId));
 			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOvelayId));
+
+			geolocationMarkerHeadingForegroundTriangleOvelayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingForegroundTriangleOvelayId}`,
+			);
+			geolocationMarkerHeadingBackgroundTriangleOvelayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingBackgroundTriangleOvelayId}`,
+			);
 
 			const geolocationEventKeys = [
 				geolocation.current.on(
