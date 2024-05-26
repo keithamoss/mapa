@@ -155,8 +155,8 @@ export class DeviceOrientationListenerManager {
 							debugEvents = [...rest, first];
 
 							deviceOrientationCompassHeadingRef.current = first;
-							// 60 FPS
-						}, 1000 / 60);
+							// 30 FPS
+						}, 1000 / 30);
 					}
 				},
 				() => {},
