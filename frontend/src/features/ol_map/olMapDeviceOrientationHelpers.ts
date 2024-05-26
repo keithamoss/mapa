@@ -229,22 +229,22 @@ export class DeviceOrientationListenerManager {
 
 export const setOverlayElementRotation = (
 	compass: number,
-	geolocationMarkerHeadingForegroundTriangleOvelayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
-	geolocationMarkerHeadingBackroundTriangleOvelayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+	geolocationMarkerHeadingForegroundTriangleOverlayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
+	geolocationMarkerHeadingBackroundTriangleOverlayDiv: React.MutableRefObject<HTMLDivElement | undefined>,
 ) => {
 	const newCompassHeadingTransform = `rotate(${compass}deg)`;
 
 	// Presmably the browser won't repaint if we set the same transform property...
 
-	if (geolocationMarkerHeadingForegroundTriangleOvelayDiv.current !== undefined) {
-		geolocationMarkerHeadingForegroundTriangleOvelayDiv.current.style.setProperty(
+	if (geolocationMarkerHeadingForegroundTriangleOverlayDiv.current !== undefined) {
+		geolocationMarkerHeadingForegroundTriangleOverlayDiv.current.style.setProperty(
 			'transform',
 			newCompassHeadingTransform,
 		);
 	}
 
-	if (geolocationMarkerHeadingBackroundTriangleOvelayDiv.current !== undefined) {
-		geolocationMarkerHeadingBackroundTriangleOvelayDiv.current.style.setProperty(
+	if (geolocationMarkerHeadingBackroundTriangleOverlayDiv.current !== undefined) {
+		geolocationMarkerHeadingBackroundTriangleOverlayDiv.current.style.setProperty(
 			'transform',
 			newCompassHeadingTransform,
 		);

@@ -40,8 +40,8 @@ import {
 import {
 	createGeolocationMarkerOverlay,
 	defaultZoomLevel,
-	geolocationMarkerHeadingBackgroundTriangleOvelayId,
-	geolocationMarkerHeadingForegroundTriangleOvelayId,
+	geolocationMarkerHeadingBackgroundTriangleOverlayId,
+	geolocationMarkerHeadingForegroundTriangleOverlayId,
 	geolocationMarkerOverlayId,
 	getBasemap,
 	getMapOverlayElementAsDiv,
@@ -128,8 +128,8 @@ function OLMap(props: Props) {
 	const isFollowingHeadingStatusRef = useRef<MapHeadingStatus>(isFollowingHeadingStatus);
 	isFollowingHeadingStatusRef.current = isFollowingHeadingStatus;
 
-	const geolocationMarkerHeadingForegroundTriangleOvelayDiv = useRef<HTMLDivElement | undefined>(undefined);
-	const geolocationMarkerHeadingBackgroundTriangleOvelayDiv = useRef<HTMLDivElement | undefined>(undefined);
+	const geolocationMarkerHeadingForegroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
+	const geolocationMarkerHeadingBackgroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
 
 	// Once Safari on iOS supports the 'checkVisibility' part of Intersection Observer v2 we might be able to use that to pause RAF when the map is not visible.
 	// We went down a short rabbit hole of using <DialogWithTransition>, but then realised we'd have to rejig all of our many uses of the component to contain the <AppBar> that fires onClose() as well.
@@ -147,8 +147,8 @@ function OLMap(props: Props) {
 			if (isFollowingHeadingStatusRef.current === MapHeadingStatus.On) {
 				setOverlayElementRotation(
 					compassHeading,
-					geolocationMarkerHeadingForegroundTriangleOvelayDiv,
-					geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+					geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+					geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
 				);
 			} else if (isFollowingHeadingStatusRef.current === MapHeadingStatus.OnAndMapFollowing) {
 				setMapRotation(mapRef.current, compassHeading);
@@ -210,8 +210,8 @@ function OLMap(props: Props) {
 		// Set the compass heading marker back to north now that the map itself is following the compass
 		setOverlayElementRotation(
 			0,
-			geolocationMarkerHeadingForegroundTriangleOvelayDiv,
-			geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
 		);
 	}, []);
 
@@ -221,8 +221,8 @@ function OLMap(props: Props) {
 		// Set the compass heading marker and the map back to point to north
 		setOverlayElementRotation(
 			0,
-			geolocationMarkerHeadingForegroundTriangleOvelayDiv,
-			geolocationMarkerHeadingBackgroundTriangleOvelayDiv,
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
 		);
 		setMapRotation(mapRef.current, 0);
 
@@ -359,14 +359,14 @@ function OLMap(props: Props) {
 			// Geolocation
 			// ######################
 			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOvelayId));
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOvelayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOverlayId));
 
-			geolocationMarkerHeadingForegroundTriangleOvelayDiv.current = getMapOverlayElementAsDiv(
-				`container_${geolocationMarkerHeadingForegroundTriangleOvelayId}`,
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingForegroundTriangleOverlayId}`,
 			);
-			geolocationMarkerHeadingBackgroundTriangleOvelayDiv.current = getMapOverlayElementAsDiv(
-				`container_${geolocationMarkerHeadingBackgroundTriangleOvelayId}`,
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingBackgroundTriangleOverlayId}`,
 			);
 
 			const geolocationEventKeys = [

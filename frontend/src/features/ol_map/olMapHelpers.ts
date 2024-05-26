@@ -16,8 +16,8 @@ export const defaultZoomLevel = 20;
 export const defaultMapStartingPoint = [115.860444, -31.955978];
 export const mapTargetElementId = 'map';
 export const geolocationMarkerOverlayId = 'geolocation_marker';
-export const geolocationMarkerHeadingForegroundTriangleOvelayId = 'geolocation_marker_heading_foreground_triangle';
-export const geolocationMarkerHeadingBackgroundTriangleOvelayId = 'geolocation_marker_heading_background_triangle';
+export const geolocationMarkerHeadingForegroundTriangleOverlayId = 'geolocation_marker_heading_foreground_triangle';
+export const geolocationMarkerHeadingBackgroundTriangleOverlayId = 'geolocation_marker_heading_background_triangle';
 
 export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
 	basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
@@ -45,23 +45,23 @@ export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) =
 };
 
 export const getMapOverlayElementAsDiv = (elementId: string) => {
-	const geolocationMarkerHeadingForegroundTriangleOvelay = document.getElementById(elementId);
+	const geolocationMarkerHeadingForegroundTriangleOverlay = document.getElementById(elementId);
 
-	return geolocationMarkerHeadingForegroundTriangleOvelay !== null
-		? (geolocationMarkerHeadingForegroundTriangleOvelay as HTMLDivElement)
+	return geolocationMarkerHeadingForegroundTriangleOverlay !== null
+		? (geolocationMarkerHeadingForegroundTriangleOverlay as HTMLDivElement)
 		: undefined;
 };
 
 export const showCompassHeadingMarker = () => {
 	const markerOverlayHeadingForegroundTriangle = document.getElementById(
-		geolocationMarkerHeadingForegroundTriangleOvelayId,
+		geolocationMarkerHeadingForegroundTriangleOverlayId,
 	);
 	if (markerOverlayHeadingForegroundTriangle !== null) {
 		markerOverlayHeadingForegroundTriangle.style.setProperty('display', 'block');
 	}
 
 	const markerOverlayHeadingBackgroundTriangle = document.getElementById(
-		geolocationMarkerHeadingBackgroundTriangleOvelayId,
+		geolocationMarkerHeadingBackgroundTriangleOverlayId,
 	);
 	if (markerOverlayHeadingBackgroundTriangle !== null) {
 		markerOverlayHeadingBackgroundTriangle.style.setProperty('display', 'block');
@@ -70,14 +70,14 @@ export const showCompassHeadingMarker = () => {
 
 export const hideCompassHeadingMarker = () => {
 	const markerOverlayHeadingForegroundTriangle = document.getElementById(
-		geolocationMarkerHeadingForegroundTriangleOvelayId,
+		geolocationMarkerHeadingForegroundTriangleOverlayId,
 	);
 	if (markerOverlayHeadingForegroundTriangle !== null) {
 		markerOverlayHeadingForegroundTriangle.style.setProperty('display', 'none');
 	}
 
 	const markerOverlayHeadingBackgroundTriangle = document.getElementById(
-		geolocationMarkerHeadingBackgroundTriangleOvelayId,
+		geolocationMarkerHeadingBackgroundTriangleOverlayId,
 	);
 	if (markerOverlayHeadingBackgroundTriangle !== null) {
 		markerOverlayHeadingBackgroundTriangle.style.setProperty('display', 'none');
@@ -94,14 +94,14 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 		}
 
 		const markerOverlayHeadingForegroundTriangle = map.getOverlayById(
-			geolocationMarkerHeadingForegroundTriangleOvelayId,
+			geolocationMarkerHeadingForegroundTriangleOverlayId,
 		);
 		if (markerOverlayHeadingForegroundTriangle !== null) {
 			markerOverlayHeadingForegroundTriangle.setPosition(fromLonLat(position));
 		}
 
 		const markerOverlayHeadingBackgroundTriangle = map.getOverlayById(
-			geolocationMarkerHeadingBackgroundTriangleOvelayId,
+			geolocationMarkerHeadingBackgroundTriangleOverlayId,
 		);
 		if (markerOverlayHeadingBackgroundTriangle !== null) {
 			markerOverlayHeadingBackgroundTriangle.setPosition(fromLonLat(position));
