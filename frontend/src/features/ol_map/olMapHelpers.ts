@@ -189,7 +189,7 @@ export const setModifyInteractionStatus = (map: Map | undefined, status: boolean
 };
 
 export const onModifyInteractionStartEnd =
-	(callback: (feature: Partial<MapaFeature>) => void) => (evt: BaseEvent | Event) => {
+	(callback: (feature: Pick<MapaFeature, 'id' | 'geom'>) => void) => (evt: BaseEvent | Event) => {
 		const target = document.getElementById(mapTargetElementId);
 
 		if (target !== null) {
@@ -201,12 +201,10 @@ export const onModifyInteractionStartEnd =
 					const point = feature.getGeometry() as Point;
 
 					if (point.getType() === 'Point') {
-						const { id, geom_type, map_id } = feature.getProperties() as MapaFeature;
+						const { id } = feature.getProperties() as MapaFeature;
 						callback({
 							id,
 							geom: getPointGeoJSONFromCoordinates(point),
-							geom_type,
-							map_id,
 						});
 					}
 				});

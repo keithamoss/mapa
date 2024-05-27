@@ -16,7 +16,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
-import { MapaFeature, MapaOpenLayersFeature, useUpdateFeatureMutation } from '../../app/services/features';
+import {
+	MapaFeature,
+	MapaOpenLayersFeature,
+	useUpdateFeaturePositionForOLModifyInteractionMutation,
+} from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -301,6 +305,12 @@ function OLMap(props: Props) {
 	const isFeatureMovementAllowedRef = useRef<boolean>(false);
 	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
 
+	const modifyInteractionStartEndRef = useRef(
+		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => updateFeaturePosition(feature)),
+	);
+
+	const [updateFeaturePosition] = useUpdateFeaturePositionForOLModifyInteractionMutation();
+
 	const onFeatureMovementEnabled = useCallback(() => {
 		setModifyInteractionStatus(mapRef.current, true);
 		setIsFeatureMovementAllowed(true);
@@ -310,8 +320,6 @@ function OLMap(props: Props) {
 		setModifyInteractionStatus(mapRef.current, false);
 		setIsFeatureMovementAllowed(false);
 	}, []);
-
-	const [updateFeature] = useUpdateFeatureMutation();
 	// ######################
 	// Feature Movement (End)
 	// ######################
@@ -552,7 +560,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.geoJSON,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -572,7 +580,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.spriteSheet,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -584,12 +592,12 @@ function OLMap(props: Props) {
 					vectorLayer.current as WebGLPointsLayer<VectorSource<Feature<Geometry>>>,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			}
 		}
-	}, [featuresAndSpriteSheet.geoJSON, featuresAndSpriteSheet.spriteSheet, mapRenderer, updateFeature]);
+	}, [featuresAndSpriteSheet.geoJSON, featuresAndSpriteSheet.spriteSheet, mapRenderer]);
 	// ######################
 	// Data Layer (End)
 	// ######################

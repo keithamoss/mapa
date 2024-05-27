@@ -144,6 +144,30 @@ export const featuresApi = api.injectEndpoints({
 				}
 			},
 		}),
+		updateFeaturePositionForOLModifyInteraction: builder.mutation<MapaFeature, Pick<MapaFeature, 'id' | 'geom'>>({
+			query: (feature) => ({
+				url: `features/${feature.id}/`,
+				method: 'PATCH',
+				body: { geom: feature.geom },
+			}),
+			async onQueryStarted(feature, { dispatch, queryFulfilled }) {
+				try {
+					const { data: updatedFeature } = await queryFulfilled;
+
+					dispatch(
+						featuresApi.util.updateQueryData('getFeatures', undefined, (draft) => {
+							featuresAdapter.updateOne(draft, { id: updatedFeature.id, changes: updatedFeature });
+						}),
+					);
+
+					// In this very particular instance there's no need to prepareFeaturesForMap() to update the map because that's already happened via the Modify Interaction on the map.
+				} catch {
+					// Maybe we need to imporove error handling here?
+					// https://github.com/reduxjs/redux-toolkit/issues/2064
+					// I presume these are all logged to Sentry at the moment...
+				}
+			},
+		}),
 		deleteFeature: builder.mutation<void, number>({
 			query: (id) => ({
 				url: `features/${id}/`,
@@ -170,5 +194,10 @@ export const featuresApi = api.injectEndpoints({
 	}),
 });
 
-export const { useGetFeaturesQuery, useAddFeatureToMapMutation, useUpdateFeatureMutation, useDeleteFeatureMutation } =
-	featuresApi;
+export const {
+	useGetFeaturesQuery,
+	useAddFeatureToMapMutation,
+	useUpdateFeatureMutation,
+	useUpdateFeaturePositionForOLModifyInteractionMutation,
+	useDeleteFeatureMutation,
+} = featuresApi;
