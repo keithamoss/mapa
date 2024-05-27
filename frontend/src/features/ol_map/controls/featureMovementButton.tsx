@@ -2,7 +2,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Avatar, IconButton } from '@mui/material';
 import { memo } from 'react';
-import { mapaThemeMapButtonControlGrey, mapaThemeWarningPurple } from '../../../app/ui/theme';
+import { mapaThemeMapButtonControlGrey, mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 
 interface Props {
 	isFeatureMovementAllowed: boolean;
@@ -26,7 +26,7 @@ function FeatureMovementButton(props: Props) {
 			{isFeatureMovementAllowed === true ? (
 				<Avatar
 					sx={{
-						bgcolor: mapaThemeWarningPurple,
+						bgcolor: mapaThemeSecondaryBlue,
 					}}
 				>
 					<LockOpenIcon />

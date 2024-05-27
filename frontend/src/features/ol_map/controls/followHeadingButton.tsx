@@ -1,10 +1,41 @@
-import CompassCalibrationTwoToneIcon from '@mui/icons-material/CompassCalibrationTwoTone';
+import CompassCalibrationIcon from '@mui/icons-material/CompassCalibration';
 import ExploreIcon from '@mui/icons-material/Explore';
 import ExploreOffOutlinedIcon from '@mui/icons-material/ExploreOffOutlined';
 import { Avatar, IconButton } from '@mui/material';
 import { memo, useCallback } from 'react';
-import { mapaThemeMapButtonControlGrey, mapaThemeWarningPurple } from '../../../app/ui/theme';
+import { mapaThemeMapButtonControlGrey, mapaThemeSecondaryBlue, mapaThemeWarningPurple } from '../../../app/ui/theme';
 import { MapHeadingStatus } from '../olMapDeviceOrientationHelpers';
+
+const getIcon = (status: MapHeadingStatus) => {
+	switch (status) {
+		case MapHeadingStatus.Off:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
+					<ExploreOffOutlinedIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.On:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeSecondaryBlue }}>
+					<CompassCalibrationIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.OnAndMapFollowing:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeSecondaryBlue }}>
+					<ExploreIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.Denied:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeWarningPurple }}>
+					<ExploreOffOutlinedIcon />
+				</Avatar>
+			);
+		default:
+			return null;
+	}
+};
 
 interface Props {
 	status: MapHeadingStatus;
@@ -43,17 +74,7 @@ function FollowHeadingButton(props: Props) {
 
 	return (
 		<IconButton onClick={onClickButton} size="small">
-			<Avatar
-				sx={{ bgcolor: status === MapHeadingStatus.Denied ? mapaThemeWarningPurple : mapaThemeMapButtonControlGrey }}
-			>
-				{status === MapHeadingStatus.On ? (
-					<CompassCalibrationTwoToneIcon />
-				) : status === MapHeadingStatus.OnAndMapFollowing ? (
-					<ExploreIcon />
-				) : (
-					<ExploreOffOutlinedIcon />
-				)}
-			</Avatar>
+			{getIcon(status)}
 		</IconButton>
 	);
 }
