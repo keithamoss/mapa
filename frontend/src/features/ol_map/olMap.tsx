@@ -157,24 +157,18 @@ function OLMap(props: Props) {
 			} else if (isFollowingHeadingStatusRef.current === MapHeadingStatus.OnAndMapFollowing) {
 				setMapRotation(mapRef.current, compassHeading);
 			}
-		} else {
-			console.log('deviceOrientationCompassHeadingRef is undefined! Why are we running?');
 		}
 
 		isFollowingHeadingRequestAnimationFrameIdRef.current = window.requestAnimationFrame(requestAnimationFrameCallback);
 	}, []);
 
 	useEffect(() => {
-		console.log('isFollowingHeadingStatus changed', isFollowingHeadingStatus);
-
 		switch (isFollowingHeadingStatus) {
 			case MapHeadingStatus.Off:
 			case MapHeadingStatus.Unsupported:
 			case MapHeadingStatus.Denied:
-				console.log('Calling removeListeners from useEffect');
 				deviceOrientationListenerManagerRef.current.removeListener();
 
-				console.log('Calling cancelAnimationFrame from useEffect');
 				if (isFollowingHeadingRequestAnimationFrameIdRef.current !== undefined) {
 					window.cancelAnimationFrame(isFollowingHeadingRequestAnimationFrameIdRef.current);
 					isFollowingHeadingRequestAnimationFrameIdRef.current = undefined;
@@ -186,12 +180,10 @@ function OLMap(props: Props) {
 			case MapHeadingStatus.On:
 			case MapHeadingStatus.OnAndMapFollowing:
 				if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
-					console.log('Calling requestAnimationFrame from useEffect');
 					isFollowingHeadingRequestAnimationFrameIdRef.current =
 						window.requestAnimationFrame(requestAnimationFrameCallback);
 				}
 
-				console.log('Calling showCompassHeadingMarker from useEffect');
 				showCompassHeadingMarker();
 				break;
 		}

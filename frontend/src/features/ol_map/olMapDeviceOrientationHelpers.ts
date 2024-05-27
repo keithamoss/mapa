@@ -255,12 +255,9 @@ export const setMapRotation = (map: Map | undefined, compass: number) => {
 	if (map !== undefined) {
 		const view = map.getView();
 		const compassHeadingInRadians = toRadians(compass);
-		// 0 = 0
-		// 90 = 1.57
-		// 180 = 3.14
-		// 270 = 4.71
-		// 360 = 6.28
+
 		if (view !== undefined && view.getRotation() !== compassHeadingInRadians) {
+			// Without the - sign here the map flips east and west.
 			view.setRotation(-compassHeadingInRadians);
 		}
 	}
