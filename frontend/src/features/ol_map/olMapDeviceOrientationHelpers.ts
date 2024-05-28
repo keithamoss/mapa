@@ -170,7 +170,7 @@ export class DeviceOrientationListenerManager {
 			return;
 		}
 
-		// Support almost all combinations of browsers and devices with gyroscopes - except for iOS
+		// Support almost all combinations of browsers and devices with accelerometers and magnetometers - except for iOS
 		if ('ondeviceorientationabsolute' in window) {
 			this.abortController = new AbortController();
 

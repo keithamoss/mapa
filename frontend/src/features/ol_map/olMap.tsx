@@ -394,7 +394,7 @@ function OLMap(props: Props) {
 			// ######################
 			// Device Orientation
 			// ######################
-			// Attach a Device Orientation listener if we don't yet know if this browser + device combo has a gyroscope yet or a gyroscope that we need to ask permissions to use
+			// Attach a Device Orientation listener if we don't yet know if this browser + device combo has a accelerometer + magnetometer yet (or a accelerometer + magnetometer that we need to ask permissions to use)
 			if (isFollowingHeadingStatusRef.current !== MapHeadingStatus.Unsupported) {
 				requestDeviceOrientationPermissionAndOrAddListener(
 					deviceOrientationListenerManagerRef,
@@ -654,7 +654,7 @@ function OLMap(props: Props) {
 					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
 					onClose={onCloseFollowHeadingDeniedAlert}
 				>
-					<AlertTitle>You have denied permissions to use your device&apos;s gyroscope</AlertTitle>
+					<AlertTitle>You have denied permissions to use your device&apos;s accelerometer and magnetometer</AlertTitle>
 					To reset it, simply close and open the app again.
 				</Alert>
 			)}
@@ -665,7 +665,7 @@ function OLMap(props: Props) {
 					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
 					onClose={onCloseAlertDoNowt}
 				>
-					<AlertTitle>Your device doesn&apos;st seem to have a gyroscope</AlertTitle>
+					<AlertTitle>Your device doesn&apos;st seem to have a accelerometer and a magnetometer</AlertTitle>
 					So we&apos;ve removed the option to show which direction you&apos;re facing.
 				</Alert>
 			)} */}
