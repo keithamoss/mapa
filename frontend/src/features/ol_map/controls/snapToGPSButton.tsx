@@ -1,14 +1,8 @@
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import GpsOffIcon from '@mui/icons-material/GpsOff';
-import { Avatar, IconButton, styled } from '@mui/material';
+import { Avatar, IconButton } from '@mui/material';
 import { memo } from 'react';
-import { mapaThemeMapButtonControlGrey } from '../../../app/ui/theme';
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-	position: 'absolute',
-	top: theme.spacing(2),
-	right: theme.spacing(2),
-}));
+import { mapaThemeMapButtonControlGrey, mapaThemeSecondaryBlue } from '../../../app/ui/theme';
 
 interface Props {
 	isFollowingGPS: boolean;
@@ -28,11 +22,17 @@ function SnapToGPSButton(props: Props) {
 	};
 
 	return (
-		<StyledIconButton onClick={handleClick} size="small">
-			<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
-				{isFollowingGPS === true ? <GpsFixedIcon /> : <GpsOffIcon />}
-			</Avatar>
-		</StyledIconButton>
+		<IconButton onClick={handleClick} size="small">
+			{isFollowingGPS === true ? (
+				<Avatar sx={{ bgcolor: mapaThemeSecondaryBlue }}>
+					<GpsFixedIcon />
+				</Avatar>
+			) : (
+				<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
+					<GpsOffIcon />
+				</Avatar>
+			)}
+		</IconButton>
 	);
 }
 

@@ -50,6 +50,16 @@ npm-check-updates -u
 yarn install
 ```
 
+# Testing local dev on a real physical device
+
+1. Install [Proxyman](https://proxyman.io/) (the free version is sufficient)
+2. Follow its instructions for [installing the Proxyman certificate on an iOS device](https://docs.proxyman.io/debug-devices/ios-device)
+3. Visit https://api.mapa.test.keithmoss.me and https://mapa.test.keithmoss.me in Safari on the device and accept the unsigned certificate for both domains.
+4. Set the proxy server for your WiFi network to go through Proxyman (per the above link). So long as you're on the same WiFi network as the laptop, all of the phone's traffic will now go through Proxyman - and this includes taking advantage of the entires we have locally in `/etc/hosts` on our laptop
+5. Now everything will just work! And you don't even need the phone and laptop to be connected via a cable for it to all work.
+
+Tip: Don't forget to turn the WiFi proxy settings off when you're finished.
+
 # AWS deployment backstory (Production and Staging)
 
 First, the backstory. Then we'll get on to the step-by-step instructions.
@@ -144,7 +154,7 @@ Approach inspired by:
 For deployment to a blank environment to work, we need to deploy in two stages: Infrastructure first, pushing the Docker image, and finally deployment of the application.
 
 1. Add the new domain names for your new environment to `UsEastCertificateStack` and deploy the new certs `cdk deploy --app "npx ts-node --prefer-ts-exts bin/cdk-cert-stack.ts" UsEastCertificateStack --profile mapa-cdk-role`
-2. Add the context for the new environment to `cdk.json` (including the Arns for the new certs we just made)
+2. Add your new environment's config to `cdk-stack.ts` (including the Arns for the new certs we just made)
 3. Deploy InfraStack `cdk deploy MapaInfraStack[Env] --profile mapa-cdk-role`
 4. Now build and push a Docker image for the application to use `manual_build_and_push_django_lambdas_image.sh` (change `[env]`)
 5. Now deploy the application itself `cdk deploy MapaAppStack[Env] MapaStaticSiteStack[Env] --profile mapa-cdk-role`

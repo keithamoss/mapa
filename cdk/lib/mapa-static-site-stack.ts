@@ -56,6 +56,14 @@ export class MapaStaticSiteStack extends cdk.Stack {
 				logFilePrefix: 'mapa-static-site',
 				logIncludesCookies: true,
 				enableIpv6: true,
+				errorResponses: [
+					{
+						httpStatus: 403,
+						responseHttpStatus: 200,
+						responsePagePath: '/index.html',
+						ttl: cdk.Duration.seconds(10),
+					},
+				],
 				defaultBehavior: {
 					// Behaviour settings
 					compress: true,

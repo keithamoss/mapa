@@ -1,5 +1,37 @@
 [
   {
+    "version": "Where we're going, we won't need servers",
+    "date": "29 May, 2024",
+    "changes": {
+      "highlights": [
+        [
+          "Head west, young lady",
+          "The map can now use the accelerometer and magnetometer in your device to either show you which direction you're facing (relative to the map pointing north) or to rotate the map around you as you change the direction you're facing."
+        ],
+        [
+          "No servers for you",
+          "Mapa is now 100% serverless! Not a server in sight! This reduces our running costs by about $10/month and improves performance by about 30% when loading maps with lots of features."
+        ]
+      ],
+      "minor changes": [
+        [
+          "Blue(y)",
+          "We're now consistent in our use of colours. The map buttons use 'Mapa Cool Blue' to demonstrate when they're active now, rather than the mix of 'Mapa Default Grey' and 'Mapa Warning Purple' in use previously."
+        ]
+      ],
+      "bugs fixed": [
+        [
+          "Feature movement rave party",
+          "Moving features around no longer causes a rave party of flashing icons until everything locks up."
+        ],
+        [
+          "Refresh this",
+          "Refreshing any page that isn't the map no longer results in an error page. It now...just works."
+        ]
+      ]
+    }
+  },
+  {
     "version": "Cradle of Fur",
     "date": "17 May, 2024",
     "summary": "Several major new features, a few smaller features, and a whole pile of bug fixes.",
@@ -14,8 +46,8 @@
           "You can now quickly add symbols right from the map. Choose from symbols you've recently added, your most popular and often used symbols, or symbols you've favourited."
         ],
         [
-          "Head west, young lady",
-          "[Experimental] The map now lets you choose whether you want to follow your heading / compass bearing (the default), or whether the map should stay pointed to the north."
+          "[Experimental] Head west, young lady",
+          "The map now lets you choose whether you want to follow your heading / compass bearing (the default), or whether the map should stay pointed to the north."
         ],
         [
           "Easier feature editing",

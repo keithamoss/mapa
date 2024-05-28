@@ -1,4 +1,4 @@
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Box, styled } from '@mui/material';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
 import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
@@ -16,7 +16,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
-import { MapaFeature, MapaOpenLayersFeature, useUpdateFeatureMutation } from '../../app/services/features';
+import {
+	MapaFeature,
+	MapaOpenLayersFeature,
+	useUpdateFeaturePositionForOLModifyInteractionMutation,
+} from '../../app/services/features';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -31,15 +35,21 @@ import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
 import './olMap.css';
 import {
+	DeviceOrientationListenerManager,
+	MapHeadingStatus,
+	requestDeviceOrientationPermissionAndOrAddListener,
+	setMapRotation,
+	setOverlayElementRotation,
+} from './olMapDeviceOrientationHelpers';
+import {
 	createGeolocationMarkerOverlay,
 	defaultZoomLevel,
-	disableGeolocationHeadingMarkerFollowing,
-	disableGeolocationMarkerAndHeadingFollowing,
-	enableGeolocationMarkerAndMaybeHeadingFollowing,
-	geolocationMarkerHeadingBackgroundTriangleOvelayId,
-	geolocationMarkerHeadingForegroundTriangleOvelayId,
+	geolocationMarkerHeadingBackgroundTriangleOverlayId,
+	geolocationMarkerHeadingForegroundTriangleOverlayId,
 	geolocationMarkerOverlayId,
 	getBasemap,
+	getMapOverlayElementAsDiv,
+	hideCompassHeadingMarker,
 	mapTargetElementId,
 	onGeolocationChangePosition,
 	onGeolocationError,
@@ -47,10 +57,19 @@ import {
 	onModifyInteractionAddRemoveFeature,
 	onModifyInteractionStartEnd,
 	setModifyInteractionStatus,
+	showCompassHeadingMarker,
 	updateMapWithGPSPosition,
 } from './olMapHelpers';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
 import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './olWebGLPointsLayerManager';
+
+const MapButtonsContainer = styled(Box)(({ theme }) => ({
+	position: 'absolute',
+	zIndex: theme.zIndex.speedDial + 1, // See note in App.tsx
+	top: theme.spacing(2),
+	right: theme.spacing(2),
+	width: 50,
+}));
 
 // Inspo:
 // https://taylor.callsen.me/using-openlayers-with-react-functional-components/
@@ -96,6 +115,130 @@ function OLMap(props: Props) {
 	// ######################
 
 	// ######################
+	// Device Orientation
+	// ######################
+	// Ref: https://stackoverflow.com/a/75792197/7368493
+	// Ref: https://stackoverflow.com/a/26275869/7368493
+	// Ref: https://dev.opera.com/articles/w3c-device-orientation-usage/ circa 2014 - just skimmed it, appears to be what we had to do prior to Device Orientation Absolute being supported. Keeping it here as a potentially useful historical reference.
+	const deviceOrientationCompassHeadingRef = useRef<number | undefined>(undefined);
+
+	const deviceOrientationListenerManagerRef = useRef(new DeviceOrientationListenerManager());
+
+	const isFollowingHeadingRequestAnimationFrameIdRef = useRef<number | undefined>(undefined);
+
+	// const fakeDataGenerationRef = useRef<number[]>([]);
+
+	const [isFollowingHeadingStatus, setIsFollowingHeadingStatus] = useState(MapHeadingStatus.Off);
+	const isFollowingHeadingStatusRef = useRef<MapHeadingStatus>(isFollowingHeadingStatus);
+	isFollowingHeadingStatusRef.current = isFollowingHeadingStatus;
+
+	const geolocationMarkerHeadingForegroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
+	const geolocationMarkerHeadingBackgroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
+
+	// Once Safari on iOS supports the 'checkVisibility' part of Intersection Observer v2 we might be able to use that to pause RAF when the map is not visible.
+	// We went down a short rabbit hole of using <DialogWithTransition>, but then realised we'd have to rejig all of our many uses of the component to contain the <AppBar> that fires onClose() as well.
+	// So far now, we're just leaving RAF being called all of the time and hoping that's OK.
+
+	// We're potentially running at 60 - 144 FPS in here and are doing nothing to throttle it...yet.
+	// There is the timestamp that's passed to the callback that we could use to throttle.
+	// Ref: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+	const requestAnimationFrameCallback = useCallback(() => {
+		if (deviceOrientationCompassHeadingRef.current !== undefined) {
+			const compassHeading = Math.round(deviceOrientationCompassHeadingRef.current);
+
+			// fakeDataGenerationRef.current?.push(compassHeading);
+
+			if (isFollowingHeadingStatusRef.current === MapHeadingStatus.On) {
+				setOverlayElementRotation(
+					compassHeading,
+					geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+					geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
+				);
+			} else if (isFollowingHeadingStatusRef.current === MapHeadingStatus.OnAndMapFollowing) {
+				setMapRotation(mapRef.current, compassHeading);
+			}
+		}
+
+		isFollowingHeadingRequestAnimationFrameIdRef.current = window.requestAnimationFrame(requestAnimationFrameCallback);
+	}, []);
+
+	useEffect(() => {
+		switch (isFollowingHeadingStatus) {
+			case MapHeadingStatus.Off:
+			case MapHeadingStatus.Unsupported:
+			case MapHeadingStatus.Denied:
+				deviceOrientationListenerManagerRef.current.removeListener();
+
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current !== undefined) {
+					window.cancelAnimationFrame(isFollowingHeadingRequestAnimationFrameIdRef.current);
+					isFollowingHeadingRequestAnimationFrameIdRef.current = undefined;
+				}
+
+				hideCompassHeadingMarker();
+				break;
+
+			case MapHeadingStatus.On:
+			case MapHeadingStatus.OnAndMapFollowing:
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
+					isFollowingHeadingRequestAnimationFrameIdRef.current =
+						window.requestAnimationFrame(requestAnimationFrameCallback);
+				}
+
+				showCompassHeadingMarker();
+				break;
+		}
+	}, [isFollowingHeadingStatus, requestAnimationFrameCallback]);
+
+	const onFollowHeadingOn = useCallback(() => {
+		// This function will set MapHeadingStatus.On is we have permissions and the device supports it.
+		// Safari on iOS also requires the user to take an action to request permissions (this is that action).
+		requestDeviceOrientationPermissionAndOrAddListener(
+			deviceOrientationListenerManagerRef,
+			deviceOrientationCompassHeadingRef,
+			isFollowingHeadingStatusRef,
+			setIsFollowingHeadingStatus,
+		);
+	}, []);
+
+	const onFollowHeadingOnAndMapFollowing = useCallback(() => {
+		setIsFollowingHeadingStatus(MapHeadingStatus.OnAndMapFollowing);
+
+		// Set the compass heading marker back to north now that the map itself is following the compass
+		setOverlayElementRotation(
+			0,
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
+		);
+	}, []);
+
+	const onFollowHeadingOff = useCallback(() => {
+		setIsFollowingHeadingStatus(MapHeadingStatus.Off);
+
+		// Set the compass heading marker and the map back to point to north
+		setOverlayElementRotation(
+			0,
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv,
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv,
+		);
+		setMapRotation(mapRef.current, 0);
+
+		// console.log('fakeDataGenerationRef.current', fakeDataGenerationRef.current);
+	}, []);
+
+	const [isShowingFollowHeadingDeniedAlert, setIsShowingFollowHeadingDeniedAlert] = useState(false);
+
+	const onFollowHeadingDenied = useCallback(() => {
+		setIsShowingFollowHeadingDeniedAlert(true);
+	}, []);
+
+	const onCloseFollowHeadingDeniedAlert = useCallback(() => {
+		setIsShowingFollowHeadingDeniedAlert(false);
+	}, []);
+	// ######################
+	// Device Orientation (End)
+	// ######################
+
+	// ######################
 	// Geolocation
 	// ######################
 	const geolocation = useRef<Geolocation>(
@@ -121,79 +264,27 @@ function OLMap(props: Props) {
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
-	const [isFollowingHeading, setIsFollowingHeading] = useState(true);
-	const isFollowingHeadingRef = useRef<boolean>(isFollowingHeading);
-	isFollowingHeadingRef.current = isFollowingHeading;
-
-	const [isFollowingHeadingPrevious, setIsFollowingHeadingPrevious] = useState(true);
-	const isFollowingHeadingPreviousRef = useRef<boolean>(isFollowingHeadingPrevious);
-	isFollowingHeadingPreviousRef.current = isFollowingHeadingPrevious;
-
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
-		setIsFollowingHeading(isFollowingHeadingPreviousRef.current);
-
-		enableGeolocationMarkerAndMaybeHeadingFollowing(isFollowingHeadingPreviousRef.current);
 
 		// When we re-enable location following, grab the current location and snap the map to it.
-		// If we're following the user's heading as well, then let's re-orient to that.
 		if (mapRef.current !== undefined) {
 			const currentPosition = geolocation.current.getPosition();
-			const currentHeading = isFollowingHeadingPreviousRef.current === true ? geolocation.current.getHeading() : 0;
-
 			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
+				updateMapWithGPSPosition(mapRef.current, currentPosition, true);
 			}
 		}
 	}, []);
 
 	const onFollowGPSDisabled = useCallback(() => {
 		setIsFollowingGPS(false);
-		setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
-		setIsFollowingHeading(false);
-
-		disableGeolocationMarkerAndHeadingFollowing();
-
-		if (mapRef.current !== undefined) {
-			const view = mapRef.current.getView();
-			view.setRotation(0);
-		}
 	}, []);
 
-	const onFollowHeadingEnabled = useCallback(() => {
-		setIsFollowingGPS(true);
-		setIsFollowingHeadingPrevious(false);
-		setIsFollowingHeading(true);
-
-		enableGeolocationMarkerAndMaybeHeadingFollowing(true);
-
-		// When we re-enable heading following, grab the current location and heading and snap and re-orient the map to them.
-		if (mapRef.current !== undefined) {
-			const currentPosition = geolocation.current.getPosition();
-			const currentHeading = geolocation.current.getHeading();
-
-			// No need to check currentHeading here as it's always undefined on devices without the right hardware (e.g. laptops)
-			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, currentHeading, true);
-			}
-		}
-	}, []);
-
-	const onFollowHeadingDisabled = useCallback(() => {
-		setIsFollowingHeadingPrevious(true);
-		setIsFollowingHeading(false);
-
-		disableGeolocationHeadingMarkerFollowing();
-
-		if (mapRef.current !== undefined) {
-			const view = mapRef.current.getView();
-			view.setRotation(0);
-		}
-	}, []);
+	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
 	// Geolocation (End)
 	// ######################
@@ -206,6 +297,12 @@ function OLMap(props: Props) {
 	const isFeatureMovementAllowedRef = useRef<boolean>(false);
 	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
 
+	const modifyInteractionStartEndRef = useRef(
+		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => updateFeaturePosition(feature)),
+	);
+
+	const [updateFeaturePosition] = useUpdateFeaturePositionForOLModifyInteractionMutation();
+
 	const onFeatureMovementEnabled = useCallback(() => {
 		setModifyInteractionStatus(mapRef.current, true);
 		setIsFeatureMovementAllowed(true);
@@ -215,8 +312,6 @@ function OLMap(props: Props) {
 		setModifyInteractionStatus(mapRef.current, false);
 		setIsFeatureMovementAllowed(false);
 	}, []);
-
-	const [updateFeature] = useUpdateFeatureMutation();
 	// ######################
 	// Feature Movement (End)
 	// ######################
@@ -229,6 +324,9 @@ function OLMap(props: Props) {
 
 		if (mapRef.current === undefined) {
 			// console.log('making a map');
+
+			// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
+			const deviceOrientationListenerManagerRefCopy = deviceOrientationListenerManagerRef.current;
 
 			geolocation.current.setTracking(true);
 			const currentPosition = geolocation.current.getPosition();
@@ -261,8 +359,15 @@ function OLMap(props: Props) {
 			// Geolocation
 			// ######################
 			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOvelayId));
-			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOvelayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOverlayId));
+
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingForegroundTriangleOverlayId}`,
+			);
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingBackgroundTriangleOverlayId}`,
+			);
 
 			const geolocationEventKeys = [
 				geolocation.current.on(
@@ -272,7 +377,6 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
-						isFollowingHeadingRef,
 						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
@@ -285,6 +389,22 @@ function OLMap(props: Props) {
 			];
 			// ######################
 			// Geolocation (End)
+			// ######################
+
+			// ######################
+			// Device Orientation
+			// ######################
+			// Attach a Device Orientation listener if we don't yet know if this browser + device combo has a accelerometer + magnetometer yet (or a accelerometer + magnetometer that we need to ask permissions to use)
+			if (isFollowingHeadingStatusRef.current !== MapHeadingStatus.Unsupported) {
+				requestDeviceOrientationPermissionAndOrAddListener(
+					deviceOrientationListenerManagerRef,
+					deviceOrientationCompassHeadingRef,
+					isFollowingHeadingStatusRef,
+					setIsFollowingHeadingStatus,
+				);
+			}
+			// ######################
+			// Device Orientation (End)
 			// ######################
 
 			// ######################
@@ -312,10 +432,6 @@ function OLMap(props: Props) {
 					geolocation.current.getTracking() === true
 				) {
 					setIsFollowingGPS(false);
-					setIsFollowingHeadingPrevious(isFollowingHeadingRef.current);
-					setIsFollowingHeading(false);
-
-					disableGeolocationMarkerAndHeadingFollowing();
 				}
 
 				isDragging = false;
@@ -399,13 +515,20 @@ function OLMap(props: Props) {
 					mapRef.current = undefined;
 				}
 
+				deviceOrientationListenerManagerRefCopy.removeListener();
+
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current !== undefined) {
+					window.cancelAnimationFrame(isFollowingHeadingRequestAnimationFrameIdRef.current);
+					isFollowingHeadingRequestAnimationFrameIdRef.current = undefined;
+				}
+
 				setMap(undefined);
 			};
 		}
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
-	}, [basemap, basemap_style, dispatch, navigate]);
+	}, [basemap, basemap_style, dispatch, navigate, requestAnimationFrameCallback]);
 	// ######################
 	// Initialise map on load (End)
 	// ######################
@@ -429,7 +552,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.geoJSON,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -449,7 +572,7 @@ function OLMap(props: Props) {
 					featuresAndSpriteSheet.spriteSheet,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
@@ -461,12 +584,12 @@ function OLMap(props: Props) {
 					vectorLayer.current as WebGLPointsLayer<VectorSource<Feature<Geometry>>>,
 					mapRef.current,
 					isFeatureMovementAllowedRef.current,
-					onModifyInteractionStartEnd((feature: Partial<MapaFeature>) => updateFeature(feature)),
+					modifyInteractionStartEndRef.current,
 					onModifyInteractionAddRemoveFeature,
 				);
 			}
 		}
-	}, [featuresAndSpriteSheet.geoJSON, featuresAndSpriteSheet.spriteSheet, mapRenderer, updateFeature]);
+	}, [featuresAndSpriteSheet.geoJSON, featuresAndSpriteSheet.spriteSheet, mapRenderer]);
 	// ######################
 	// Data Layer (End)
 	// ######################
@@ -474,6 +597,7 @@ function OLMap(props: Props) {
 	return (
 		<div className="map-container">
 			<div id={mapTargetElementId} />
+
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
 			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
@@ -482,32 +606,40 @@ function OLMap(props: Props) {
 
 					<div id="workaround_modify_interaction_bug"></div>
 
-					<SnapToGPSButton
-						isFollowingGPS={isFollowingGPS}
-						onFollowGPSEnabled={onFollowGPSEnabled}
-						onFollowGPSDisabled={onFollowGPSDisabled}
-					/>
+					<MapButtonsContainer>
+						<SnapToGPSButton
+							isFollowingGPS={isFollowingGPS}
+							onFollowGPSEnabled={onFollowGPSEnabled}
+							onFollowGPSDisabled={onFollowGPSDisabled}
+						/>
 
-					<FollowHeadingButton
-						isFollowingHeading={isFollowingHeading}
-						onFollowHeadingEnabled={onFollowHeadingEnabled}
-						onFollowHeadingDisabled={onFollowHeadingDisabled}
-					/>
+						<FollowHeadingButton
+							status={isFollowingHeadingStatus}
+							onFollowHeadingOn={onFollowHeadingOn}
+							onFollowHeadingOnAndMapFollowing={onFollowHeadingOnAndMapFollowing}
+							onFollowHeadingOff={onFollowHeadingOff}
+							onFollowHeadingDenied={onFollowHeadingDenied}
+						/>
 
-					<FeatureMovementButton
-						isFeatureMovementAllowed={isFeatureMovementAllowed}
-						onFeatureMovementEnabled={onFeatureMovementEnabled}
-						onFeatureMovementDisabled={onFeatureMovementDisabled}
-					/>
+						<FeatureMovementButton
+							isFeatureMovementAllowed={isFeatureMovementAllowed}
+							onFeatureMovementEnabled={onFeatureMovementEnabled}
+							onFeatureMovementDisabled={onFeatureMovementDisabled}
+						/>
 
-					<QuickAddSymbolsControl />
+						<QuickAddSymbolsControl />
+					</MapButtonsContainer>
 				</React.Fragment>
 			) : (
 				<React.Fragment></React.Fragment>
 			)}
 
 			{geolocationHasError !== false && (
-				<Alert severity="error" sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1 }}>
+				<Alert
+					severity="error"
+					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
+					onClose={onCloseAlertDoNowt}
+				>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
 					the app and report it to the developer.
@@ -515,6 +647,28 @@ function OLMap(props: Props) {
 					Type: {geolocationHasError.type}, Code: {geolocationHasError.code}, Message: {geolocationHasError.message}
 				</Alert>
 			)}
+
+			{isShowingFollowHeadingDeniedAlert === true && (
+				<Alert
+					severity="error"
+					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
+					onClose={onCloseFollowHeadingDeniedAlert}
+				>
+					<AlertTitle>You have denied permissions to use your device&apos;s accelerometer and magnetometer</AlertTitle>
+					To reset it, simply close and open the app again.
+				</Alert>
+			)}
+
+			{/* {isFollowingHeadingStatus === MapHeadingStatus.Unsupported && (
+				<Alert
+					severity="error"
+					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
+					onClose={onCloseAlertDoNowt}
+				>
+					<AlertTitle>Your device doesn&apos;st seem to have a accelerometer and a magnetometer</AlertTitle>
+					So we&apos;ve removed the option to show which direction you&apos;re facing.
+				</Alert>
+			)} */}
 		</div>
 	);
 }

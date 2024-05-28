@@ -1,38 +1,81 @@
+import CompassCalibrationIcon from '@mui/icons-material/CompassCalibration';
 import ExploreIcon from '@mui/icons-material/Explore';
 import ExploreOffOutlinedIcon from '@mui/icons-material/ExploreOffOutlined';
-import { Avatar, IconButton, styled } from '@mui/material';
-import { memo } from 'react';
-import { mapaThemeMapButtonControlGrey } from '../../../app/ui/theme';
+import { Avatar, IconButton } from '@mui/material';
+import { memo, useCallback } from 'react';
+import { mapaThemeMapButtonControlGrey, mapaThemeSecondaryBlue, mapaThemeWarningPurple } from '../../../app/ui/theme';
+import { MapHeadingStatus } from '../olMapDeviceOrientationHelpers';
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-	position: 'absolute',
-	top: theme.spacing(8),
-	right: theme.spacing(2),
-}));
+const getIcon = (status: MapHeadingStatus) => {
+	switch (status) {
+		case MapHeadingStatus.Off:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
+					<ExploreOffOutlinedIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.On:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeSecondaryBlue }}>
+					<CompassCalibrationIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.OnAndMapFollowing:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeSecondaryBlue }}>
+					<ExploreIcon />
+				</Avatar>
+			);
+		case MapHeadingStatus.Denied:
+			return (
+				<Avatar sx={{ bgcolor: mapaThemeWarningPurple }}>
+					<ExploreOffOutlinedIcon />
+				</Avatar>
+			);
+		default:
+			return null;
+	}
+};
 
 interface Props {
-	isFollowingHeading: boolean;
-	onFollowHeadingEnabled: () => void;
-	onFollowHeadingDisabled: () => void;
+	status: MapHeadingStatus;
+	onFollowHeadingOn: () => void;
+	onFollowHeadingOnAndMapFollowing: () => void;
+	onFollowHeadingOff: () => void;
+	onFollowHeadingDenied: () => void;
 }
 
 function FollowHeadingButton(props: Props) {
-	const { isFollowingHeading, onFollowHeadingEnabled, onFollowHeadingDisabled } = props;
+	const { status, onFollowHeadingOn, onFollowHeadingOnAndMapFollowing, onFollowHeadingOff, onFollowHeadingDenied } =
+		props;
 
-	const handleClick = () => {
-		if (isFollowingHeading === true) {
-			onFollowHeadingDisabled();
-		} else if (isFollowingHeading === false) {
-			onFollowHeadingEnabled();
+	const onClickButton = useCallback(() => {
+		switch (status) {
+			case MapHeadingStatus.Off:
+				onFollowHeadingOn();
+				break;
+			case MapHeadingStatus.On:
+				onFollowHeadingOnAndMapFollowing();
+				break;
+			case MapHeadingStatus.OnAndMapFollowing:
+				onFollowHeadingOff();
+				break;
+			case MapHeadingStatus.Denied:
+				onFollowHeadingDenied();
+				break;
+			default:
+				onFollowHeadingOff();
 		}
-	};
+	}, [onFollowHeadingDenied, onFollowHeadingOff, onFollowHeadingOn, onFollowHeadingOnAndMapFollowing, status]);
+
+	if (status === MapHeadingStatus.Unsupported) {
+		return null;
+	}
 
 	return (
-		<StyledIconButton onClick={handleClick} size="small">
-			<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
-				{isFollowingHeading === true ? <ExploreIcon /> : <ExploreOffOutlinedIcon />}
-			</Avatar>
-		</StyledIconButton>
+		<IconButton onClick={onClickButton} size="small">
+			{getIcon(status)}
+		</IconButton>
 	);
 }
 

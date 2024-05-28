@@ -1,6 +1,6 @@
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, Box, IconButton, styled } from '@mui/material';
-import { memo, useCallback } from 'react';
+import { Avatar, IconButton } from '@mui/material';
+import React, { memo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import { User } from '../../../app/services/auth';
@@ -23,15 +23,6 @@ import {
 	getAppDefaultSymbologyConfig,
 	getFontAwesomeIconForSymbolPreview,
 } from '../../symbology/symbologyHelpers';
-
-const StyledBox = styled(Box)(({ theme }) => ({
-	position: 'absolute',
-	// See note in App.tsx
-	zIndex: theme.zIndex.speedDial + 1,
-	top: theme.spacing(20),
-	right: theme.spacing(2),
-	width: 50,
-}));
 
 function QuickAddSymbolsControlEntrypoint() {
 	const activeMapId = useAppSelector((state) => selectActiveMapId(state));
@@ -98,7 +89,7 @@ function QuickAddSymbolsControl(props: Props) {
 	);
 
 	return (
-		<StyledBox>
+		<React.Fragment>
 			<IconButton onClick={onClickSettings} size="small">
 				<Avatar sx={{ bgcolor: mapaThemeMapButtonControlGrey }}>
 					<SettingsIcon />
@@ -122,7 +113,7 @@ function QuickAddSymbolsControl(props: Props) {
 					</Avatar>
 				</IconButton>
 			))}
-		</StyledBox>
+		</React.Fragment>
 	);
 }
 
