@@ -4501,7 +4501,7 @@ __metadata:
     js-cookie: ^3.0.5
     lodash-es: ^4.17.21
     minisearch: ^6.3.0
-    ol: ^9.2.3
+    ol: ^9.2.4
     ol-mapbox-style: ^12.3.2
     prettier: ^3.2.5
     react: ^18.3.1
@@ -6163,9 +6163,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^9.2.3":
-  version: 9.2.3
-  resolution: "ol@npm:9.2.3"
+"ol@npm:^9.2.4":
+  version: 9.2.4
+  resolution: "ol@npm:9.2.4"
   dependencies:
     color-rgba: ^3.0.0
     color-space: ^2.0.1
@@ -6173,7 +6173,7 @@ __metadata:
     geotiff: ^2.0.7
     pbf: 3.2.1
     rbush: ^3.0.1
-  checksum: 99659a348c2a4457a2a98dda9d7f534db76545a4efc234b3ab652dbe2fc8ad422bec87eeacbb44d6f69f11fa18bf67c55ade64ee44944db607ca77b0271ae2ff
+  checksum: 71bf31f8b69ff06f94c800bf9621c996c14e579803aa40ac944d1bbbc04bf48b04f498a542fa4154a9902a2724c9d20af1c5852e901e611627f3ae4c428b5a1f
   languageName: node
   linkType: hard
 
