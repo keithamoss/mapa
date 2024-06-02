@@ -64,6 +64,8 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 }
 
 #geolocation_marker_heading_foreground_triangle {
+	/* isFollowingHeadingStatus is MapHeadingStatus.Off by default */
+	display: none;
 	position: absolute;
 	/* https://codepen.io/stoumann/full/abZxoOM */
 	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
@@ -79,6 +81,8 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 }
 
 #geolocation_marker_heading_background_triangle {
+	/* isFollowingHeadingStatus is MapHeadingStatus.Off by default */
+	display: none;
 	position: absolute;
 	/* https://codepen.io/stoumann/full/abZxoOM */
 	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
