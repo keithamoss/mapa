@@ -10,7 +10,7 @@
     "@hookform/resolvers": "^3.6.0",
     "@mui/icons-material": "^5.15.19",
     "@mui/lab": "^5.0.0-alpha.170",
-    "@mui/material": "^5.15.19",
+    "@mui/material": "^5.15.20",
     "@mui/system": "^5.15.15",
     "@mui/x-date-pickers": "^7.6.2",
     "@react-spring/web": "^9.7.3",
