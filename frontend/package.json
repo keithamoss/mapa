@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@hookform/resolvers": "^3.6.0",
-    "@mui/icons-material": "^5.15.19",
+    "@mui/icons-material": "^5.15.20",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.20",
     "@mui/system": "^5.15.15",
