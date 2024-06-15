@@ -484,12 +484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.24.6":
-  version: 7.24.6
-  resolution: "@babel/runtime@npm:7.24.6"
+"@babel/runtime@npm:^7.24.7":
+  version: 7.24.7
+  resolution: "@babel/runtime@npm:7.24.7"
   dependencies:
     regenerator-runtime: ^0.14.0
-  checksum: 44d95ca743898fed31b4cefef31de6fd3cf7906e94493368e9d6538289cc52c6c46185205d9c01d38466a5b3f673550f80892d30b1ed02a2c13e704863a8cc48
+  checksum: d17f29eed6f848ac15cdf4202a910b741facfb0419a9d79e5c7fa37df6362fc3227f1cc2e248cc6db5e53ddffb4caa6686c488e6e80ce3d29c36a4e74c8734ea
   languageName: node
   linkType: hard
 
@@ -1509,11 +1509,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^7.6.2":
-  version: 7.6.2
-  resolution: "@mui/x-date-pickers@npm:7.6.2"
+"@mui/x-date-pickers@npm:^7.7.0":
+  version: 7.7.0
+  resolution: "@mui/x-date-pickers@npm:7.7.0"
   dependencies:
-    "@babel/runtime": ^7.24.6
+    "@babel/runtime": ^7.24.7
     "@mui/base": ^5.0.0-beta.40
     "@mui/system": ^5.15.15
     "@mui/utils": ^5.15.14
@@ -1553,7 +1553,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 32ea5471c647330f4dab27c756013b20cf2dd3192a0285c539f08572171c9a6e858e300b91d0c818a3e5fe2c57b6d9cb0d470a4aa9abbe11673ab820e680d3ba
+  checksum: 384de423aa7ed2aca2bc03a9f110047a1c5114bea6a2aadb4810163e1593447a439e04d15ad557b1d1902a3cb406c94d6df7472affa7102f190c7cd0578774fe
   languageName: node
   linkType: hard
 
@@ -4550,7 +4550,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.170
     "@mui/material": ^5.15.20
     "@mui/system": ^5.15.15
-    "@mui/x-date-pickers": ^7.6.2
+    "@mui/x-date-pickers": ^7.7.0
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^2.2.5
     "@sentry/browser": ^8.8.0
