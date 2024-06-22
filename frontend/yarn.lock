@@ -1509,14 +1509,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "@mui/x-date-pickers@npm:7.7.0"
+"@mui/x-date-pickers@npm:^7.7.1":
+  version: 7.7.1
+  resolution: "@mui/x-date-pickers@npm:7.7.1"
   dependencies:
     "@babel/runtime": ^7.24.7
     "@mui/base": ^5.0.0-beta.40
-    "@mui/system": ^5.15.15
-    "@mui/utils": ^5.15.14
+    "@mui/system": ^5.15.20
+    "@mui/utils": ^5.15.20
     "@types/react-transition-group": ^4.4.10
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1553,7 +1553,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 384de423aa7ed2aca2bc03a9f110047a1c5114bea6a2aadb4810163e1593447a439e04d15ad557b1d1902a3cb406c94d6df7472affa7102f190c7cd0578774fe
+  checksum: 9a697e2e8b317e77aff8de0de263c8fd5a68bfac32cf7c5e25de1aa5a6a103e2214c1219348090e0eb8d601b0d7699eed669f65276d405b1d8c670c1a1966d56
   languageName: node
   linkType: hard
 
@@ -4637,7 +4637,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.170
     "@mui/material": ^5.15.20
     "@mui/system": ^5.15.20
-    "@mui/x-date-pickers": ^7.7.0
+    "@mui/x-date-pickers": ^7.7.1
     "@react-spring/web": ^9.7.3
     "@reduxjs/toolkit": ^2.2.5
     "@sentry/browser": ^8.11.0
