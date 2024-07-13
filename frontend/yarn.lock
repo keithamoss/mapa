@@ -2645,33 +2645,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@volar/language-core@npm:2.3.4":
-  version: 2.3.4
-  resolution: "@volar/language-core@npm:2.3.4"
-  dependencies:
-    "@volar/source-map": 2.3.4
-  checksum: 5656231dbba6634d0b8a5db130ff19e7407c9cc37ff9a362641fb07c66b893cf405c872ee4fdee8e8502717f9f73f1e35141cf48370317ef17e372e65c980729
-  languageName: node
-  linkType: hard
-
-"@volar/source-map@npm:2.3.4":
-  version: 2.3.4
-  resolution: "@volar/source-map@npm:2.3.4"
-  checksum: 0ba854e65b7afcf17c50c1dd482577ca59c338823d7c04bb80ec3db8df9eb8040118e7edabd926d298d7e69a9a9d43cd46487f045ba2c391df3c296547394c25
-  languageName: node
-  linkType: hard
-
-"@volar/typescript@npm:^2.3.0":
-  version: 2.3.4
-  resolution: "@volar/typescript@npm:2.3.4"
-  dependencies:
-    "@volar/language-core": 2.3.4
-    path-browserify: ^1.0.1
-    vscode-uri: ^3.0.8
-  checksum: ea68da94f71134d703bb94c461ed77c918e8e862bc5a292c769c36536e2ffae3fccdfbfb0b256e561a1fdd0029b1bbb0ea4b13dad7d30c8314d2c49220051936
-  languageName: node
-  linkType: hard
-
 "abbrev@npm:^1.0.0":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -4555,7 +4528,7 @@ __metadata:
     typescript: 5.5.3
     usehooks-ts: ^3.1.0
     vite: ^5.3.3
-    vite-plugin-checker: ^0.7.0
+    vite-plugin-checker: ^0.7.1
     vite-tsconfig-paths: ^4.3.2
     web-vitals: ^4.2.1
     yup: ^1.4.0
@@ -6364,13 +6337,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-browserify@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "path-browserify@npm:1.0.1"
-  checksum: c6d7fa376423fe35b95b2d67990060c3ee304fc815ff0a2dc1c6c3cfaff2bd0d572ee67e18f19d0ea3bbe32e8add2a05021132ac40509416459fffee35200699
-  languageName: node
-  linkType: hard
-
 "path-exists@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-exists@npm:4.0.0"
@@ -7867,12 +7833,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-checker@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "vite-plugin-checker@npm:0.7.0"
+"vite-plugin-checker@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "vite-plugin-checker@npm:0.7.1"
   dependencies:
     "@babel/code-frame": ^7.12.13
-    "@volar/typescript": ^2.3.0
     ansi-escapes: ^4.3.0
     chalk: ^4.1.1
     chokidar: ^3.5.1
@@ -7913,7 +7878,7 @@ __metadata:
       optional: true
     vue-tsc:
       optional: true
-  checksum: c81e1a0386199d3e028af0376d0090dcf4c7528340ba5941d3649724e877408ae9f1e22ff4f5cb3af558b87656c74ae6db8e2bf7e77ac08a8b8885c6761b39a4
+  checksum: 1dd547e7f11a6a6fe2e583799243a173b37964f0b78ac138694e9bf03e9ad6e267b3811db516a3e9659fabf0762ef96b873800bf82069ee81f5098e7af3531b4
   languageName: node
   linkType: hard
 
@@ -8026,7 +7991,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-uri@npm:^3.0.2, vscode-uri@npm:^3.0.8":
+"vscode-uri@npm:^3.0.2":
   version: 3.0.8
   resolution: "vscode-uri@npm:3.0.8"
   checksum: 514249126850c0a41a7d8c3c2836cab35983b9dc1938b903cfa253b9e33974c1416d62a00111385adcfa2b98df456437ab704f709a2ecca76a90134ef5eb4832
