@@ -1247,10 +1247,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^5.16.0":
-  version: 5.16.0
-  resolution: "@mui/core-downloads-tracker@npm:5.16.0"
-  checksum: cf625680553eb918f033a6dbeb78078e4a81d0939a3db9a97a7daaacd1449c894b05dab53864d03e8831a98cc32af6780c7c9db82829a2a3967c05b1ee33f222
+"@mui/core-downloads-tracker@npm:^5.16.1":
+  version: 5.16.1
+  resolution: "@mui/core-downloads-tracker@npm:5.16.1"
+  checksum: 13321ec64a9c6387b12b3cc137a0e75b4eb2259ae312a527c03aee0ec1992351454df7de44f221463b61b706e0d0714f0ccf2f16bce4becac47d18f720704141
   languageName: node
   linkType: hard
 
@@ -1299,21 +1299,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.16.0":
-  version: 5.16.0
-  resolution: "@mui/material@npm:5.16.0"
+"@mui/material@npm:^5.16.1":
+  version: 5.16.1
+  resolution: "@mui/material@npm:5.16.1"
   dependencies:
     "@babel/runtime": ^7.23.9
     "@mui/base": 5.0.0-beta.40
-    "@mui/core-downloads-tracker": ^5.16.0
-    "@mui/system": ^5.16.0
-    "@mui/types": ^7.2.14
-    "@mui/utils": ^5.16.0
+    "@mui/core-downloads-tracker": ^5.16.1
+    "@mui/system": ^5.16.1
+    "@mui/types": ^7.2.15
+    "@mui/utils": ^5.16.1
     "@types/react-transition-group": ^4.4.10
     clsx: ^2.1.0
     csstype: ^3.1.3
     prop-types: ^15.8.1
-    react-is: ^18.2.0
+    react-is: ^18.3.1
     react-transition-group: ^4.4.5
   peerDependencies:
     "@emotion/react": ^11.5.0
@@ -1328,7 +1328,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 3ba69218e2cd02dae95e039bec8822b2f2ba1ad69b5add3035e490a489e3c81db41b3c5709ab7845f63642d2ea13f4039618a50a1696a132e5e69730f516aed2
+  checksum: df9c78c13e5e7ff2f03f60c0d69f5913aad74f2a4cfb45975a2949f84be0f24fac86e8436827697018ab512bcbd10a631bb046292cd55d917ae5e10b263b5800
   languageName: node
   linkType: hard
 
@@ -4707,7 +4707,7 @@ __metadata:
     "@hookform/resolvers": ^3.9.0
     "@mui/icons-material": ^5.16.1
     "@mui/lab": ^5.0.0-alpha.171
-    "@mui/material": ^5.16.0
+    "@mui/material": ^5.16.1
     "@mui/system": ^5.16.1
     "@mui/x-date-pickers": ^7.10.0
     "@react-spring/web": ^9.7.3
