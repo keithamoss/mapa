@@ -1270,15 +1270,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:^5.0.0-alpha.171":
-  version: 5.0.0-alpha.171
-  resolution: "@mui/lab@npm:5.0.0-alpha.171"
+"@mui/lab@npm:^5.0.0-alpha.172":
+  version: 5.0.0-alpha.172
+  resolution: "@mui/lab@npm:5.0.0-alpha.172"
   dependencies:
     "@babel/runtime": ^7.23.9
     "@mui/base": 5.0.0-beta.40
-    "@mui/system": ^5.16.0
-    "@mui/types": ^7.2.14
-    "@mui/utils": ^5.16.0
+    "@mui/system": ^5.16.1
+    "@mui/types": ^7.2.15
+    "@mui/utils": ^5.16.1
     clsx: ^2.1.0
     prop-types: ^15.8.1
   peerDependencies:
@@ -1295,7 +1295,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 272cc71b6337b6c71c0557b2a8ac3d36cebad14a143bd99586fdf171c1d7b3f8852a36db7d09075f5ab1e85a9de34e5e5acd8549fafcbaa8a50951733bc4e396
+  checksum: 3089b236ab5adbee8e3495633f4502c12dec5fa7399b40bc421f9e0ee6d617f77d0506840b3395e2eeb36729f4bfe4ee9f99af66df3cde49667f1800789edffa
   languageName: node
   linkType: hard
 
@@ -4706,7 +4706,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^6.5.2
     "@hookform/resolvers": ^3.9.0
     "@mui/icons-material": ^5.16.1
-    "@mui/lab": ^5.0.0-alpha.171
+    "@mui/lab": ^5.0.0-alpha.172
     "@mui/material": ^5.16.1
     "@mui/system": ^5.16.1
     "@mui/x-date-pickers": ^7.10.0
