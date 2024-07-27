@@ -1318,10 +1318,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^5.16.4":
-  version: 5.16.4
-  resolution: "@mui/core-downloads-tracker@npm:5.16.4"
-  checksum: e1be17bfcfc5e50d42eff8ca8660469c0e20f70bd5148183e8a8d66da12c420f86e097b68d09561055c2d6e4f93f6650ba65a30522a997da9cd9a08d09a54bbc
+"@mui/core-downloads-tracker@npm:^5.16.5":
+  version: 5.16.5
+  resolution: "@mui/core-downloads-tracker@npm:5.16.5"
+  checksum: 2f0812bf38ffa99f96e0615bd8cb03557e661cc7908d490bee89479594c8143211bcd37cba7694171d9cd488abc8f186c84c68488d5f1e38749b9619ba960d50
   languageName: node
   linkType: hard
 
@@ -1370,15 +1370,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^5.16.4":
-  version: 5.16.4
-  resolution: "@mui/material@npm:5.16.4"
+"@mui/material@npm:^5.16.5":
+  version: 5.16.5
+  resolution: "@mui/material@npm:5.16.5"
   dependencies:
     "@babel/runtime": ^7.23.9
-    "@mui/core-downloads-tracker": ^5.16.4
-    "@mui/system": ^5.16.4
+    "@mui/core-downloads-tracker": ^5.16.5
+    "@mui/system": ^5.16.5
     "@mui/types": ^7.2.15
-    "@mui/utils": ^5.16.4
+    "@mui/utils": ^5.16.5
     "@popperjs/core": ^2.11.8
     "@types/react-transition-group": ^4.4.10
     clsx: ^2.1.0
@@ -1399,7 +1399,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: c9295e1fdd11301f7cc626f2e912d6dd9e4f7bf0f33df68f5c850073b78ce56fc33505ee98752d2e3a8a91e260254f2d37afa169bddcbac6b5780eae97df0f4b
+  checksum: 489be8f31dd1e86dd00716926700dd91565c1796dd4de0e209a3717414b017effd6fab3046baaf51fbe5589a9efc9cc0190cfd40267f7da923eeb696525267e1
   languageName: node
   linkType: hard
 
@@ -4809,7 +4809,7 @@ __metadata:
     "@hookform/resolvers": ^3.9.0
     "@mui/icons-material": ^5.16.4
     "@mui/lab": ^5.0.0-alpha.173
-    "@mui/material": ^5.16.4
+    "@mui/material": ^5.16.5
     "@mui/system": ^5.16.4
     "@mui/x-date-pickers": ^7.10.0
     "@react-spring/web": ^9.7.4
