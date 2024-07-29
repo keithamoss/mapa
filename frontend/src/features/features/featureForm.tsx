@@ -360,7 +360,8 @@ function FeatureForm(props: Props) {
 				</AppBar>
 
 				<Paper elevation={0} sx={{ m: 3, mt: 2 }}>
-					{localFeature.data.length >= 1 && (
+					{/* Don't display the feature summary when we're adding a feature - this just ensure we don't show it in the case when the feature already has data fields populated (e.g. In some Google Maps import scenarios) */}
+					{onDoneAdding === undefined && localFeature.data.length >= 1 && (
 						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
 							<FormSectionHeading>Feature Summary</FormSectionHeading>
 

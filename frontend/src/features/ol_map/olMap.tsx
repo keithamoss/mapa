@@ -30,6 +30,7 @@ import {
 } from '../app/appSlice';
 import FeatureMovementButton from './controls/featureMovementButton';
 import FollowHeadingButton from './controls/followHeadingButton';
+import GoogleMapsImportButton from './controls/googleMapsImportButton';
 import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
@@ -626,6 +627,8 @@ function OLMap(props: Props) {
 							onFeatureMovementEnabled={onFeatureMovementEnabled}
 							onFeatureMovementDisabled={onFeatureMovementDisabled}
 						/>
+
+						<GoogleMapsImportButton />
 
 						<QuickAddSymbolsControl />
 					</MapButtonsContainer>

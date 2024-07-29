@@ -1,10 +1,13 @@
 import numbers
 import os
+import re
 from copy import deepcopy
 from datetime import datetime
 from http.client import BAD_REQUEST
+from urllib.parse import unquote_plus, urlparse
 
 import pytz
+import requests
 from mapa.app.admin import is_admin
 from mapa.app.envs import are_management_tasks_allowed
 from mapa.app.export import orchestrate_google_drive_backup
@@ -334,3 +337,50 @@ class FeaturesViewSet(viewsets.ModelViewSet):
         feature.deleted_at = datetime.now(pytz.utc)
         feature.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class GoogleMapsImportView(APIView):
+    """
+    API endpoint that allows us to extract place name and 
+    # coordinates from a Google Maps Share Link.
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        # e.g. https://maps.app.goo.gl/1PLx9ie7Z4rSCWK28
+        googelMapsShareLink = request.query_params.get("sharelinkURL")
+        if googelMapsShareLink is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        parsedGoogelMapsShareLink = urlparse(googelMapsShareLink)
+        if parsedGoogelMapsShareLink.netloc != "maps.app.goo.gl" or re.search(r"^\/[A-z0-9]+$", parsedGoogelMapsShareLink.path) is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        r = requests.get(googelMapsShareLink, allow_redirects=False)
+
+        # Going to a Google Maps Share Link results in a 302 temporary redirect to its authoratative Google Maps URL (where we can parse its name and coordinates from the URL)
+        # e.g. https://maps.app.goo.gl/1PLx9ie7Z4rSCWK28
+        # becomes
+        # https://www.google.com.au/maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741297,173.279014,16z/data=!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
+        if r.status_code == 302:
+            # e.g. /maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741297,173.279014,16z/data=!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
+            # We do some (probably quite brittle!) parsing of Google's internal `data` component of the URL to pull out the actual lat lon of the place.
+            # Ref: https://stackoverflow.com/a/24662610/7368493
+            # 
+            # If this all falls apart one day, our best fallback option is probably to make an API call to the Text Search (New) API to try to find the place that is near to the coordinates.
+            # If we need it, the regex for that is:
+            # regex = r"\/maps\/place\/(?P<place_name>.+)\/@(?P<lat>[0-9\-\.]+),(?P<lon>[0-9\-\.]+),[0-9\.]+z\/data=.+"
+            # Ref: https://developers.google.com/maps/documentation/places/web-service/text-search
+            regex = r"\/maps\/place\/(?P<place_name>.+)\/@.+z\/data=.+!3d(?P<lat>[0-9\-\.]+)!4d(?P<lon>[0-9\-\.]+).+"
+            matches = re.search(regex, urlparse(r.headers['Location']).path)
+
+            if matches:
+                matchedGroups = matches.groupdict()
+
+                return Response({
+                    "place_name": unquote_plus(matchedGroups["place_name"]),
+                    "lat": float(matchedGroups["lat"]),
+                    "lon": float(matchedGroups["lon"]),
+                })
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
