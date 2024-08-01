@@ -41,3 +41,6 @@ export const isInStandaloneMode = () =>
 	document.referrer.includes('android-app://');
 
 export const titleCase = (string: string) => startCase(toLower(string));
+
+// https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
+export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator.clipboard.writeText);

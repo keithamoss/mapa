@@ -30,7 +30,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
-import { isSearchingYet } from '../search/searchHelpers';
+import { isSearchingYet } from '../searchFeatures/searchFeaturesHelpers';
 import {
 	getCategoryLabelByName,
 	getDefaultStyleByIconName,

@@ -24,13 +24,17 @@ import {
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
+	getSearchLocationsParameters,
+	getSearchLocationsZoomToCoordinates,
 	selectGeoJSONFeaturesAndSpriteSheet,
 	setFeaturesAvailableForEditing,
 	setMapView,
+	setSearchLocationsZoomToCoordinates,
 } from '../app/appSlice';
 import FeatureMovementButton from './controls/featureMovementButton';
 import FollowHeadingButton from './controls/followHeadingButton';
 import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
+import SearchLocationsButton from './controls/searchLocationsButton';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
 import './olMap.css';
@@ -58,6 +62,7 @@ import {
 	onModifyInteractionStartEnd,
 	setModifyInteractionStatus,
 	showCompassHeadingMarker,
+	updateAndCentreMapOnPosition,
 	updateMapWithGPSPosition,
 } from './olMapHelpers';
 import { manageVectorImageLayerCreation, manageVectorImageLayerUpdate } from './olVectorImageLayerManager';
@@ -112,6 +117,23 @@ function OLMap(props: Props) {
 	>(undefined);
 	// ######################
 	// OpenLayers Map (End)
+	// ######################
+
+	// ######################
+	// Zoom To Mapbox Search
+	// ######################
+	const searchLocationsParameters = useAppSelector(getSearchLocationsParameters);
+
+	const zoomToCoordinates = useAppSelector(getSearchLocationsZoomToCoordinates);
+
+	useEffect(() => {
+		if (mapRef.current !== undefined && zoomToCoordinates !== undefined) {
+			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates);
+			dispatch(setSearchLocationsZoomToCoordinates(undefined));
+		}
+	}, [dispatch, zoomToCoordinates]);
+	// ######################
+	// Zoom To Mapbox Search (End)
 	// ######################
 
 	// ######################
@@ -377,6 +399,7 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
+						setIsFollowingGPS,
 						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
@@ -384,7 +407,13 @@ function OLMap(props: Props) {
 				),
 				geolocation.current.on(
 					'error',
-					onGeolocationError(initialMap, mapHasPositionRef, setMapHasPosition, setGeolocationHasError),
+					onGeolocationError(
+						initialMap,
+						mapHasPositionRef,
+						setMapHasPosition,
+						setGeolocationHasError,
+						setIsFollowingGPS,
+					),
 				),
 			];
 			// ######################
@@ -626,6 +655,10 @@ function OLMap(props: Props) {
 							onFeatureMovementEnabled={onFeatureMovementEnabled}
 							onFeatureMovementDisabled={onFeatureMovementDisabled}
 						/>
+
+						<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
+
+						{/* <GoogleMapsImportButton /> */}
 
 						<QuickAddSymbolsControl />
 					</MapButtonsContainer>

@@ -45,7 +45,7 @@ const actions = [
 		name: 'Schemas',
 	},
 	{
-		linkTo: '/SearchManager',
+		linkTo: '/SearchFeaturesManager',
 		icon: <SearchIcon color="primary" />,
 		name: 'Search',
 	},

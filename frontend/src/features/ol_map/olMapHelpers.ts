@@ -106,12 +106,16 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 		}
 
 		if (centreOnMarker === true) {
-			const view = map.getView();
-			view.setCenter(fromLonLat(position));
-			view.setZoom(defaultZoomLevel);
-			map.setView(view);
+			updateAndCentreMapOnPosition(map, position);
 		}
 	}
+};
+
+export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate) => {
+	const view = map.getView();
+	view.setCenter(fromLonLat(position));
+	view.setZoom(defaultZoomLevel);
+	map.setView(view);
 };
 
 export const onGeolocationChangePosition =
@@ -120,6 +124,7 @@ export const onGeolocationChangePosition =
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		isFollowingGPSRef: React.MutableRefObject<boolean>,
+		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
 		isUserMovingTheMapRef: React.MutableRefObject<boolean>,
 		geolocationHasErrorRef: React.MutableRefObject<false | GeolocationError>,
 		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
@@ -128,6 +133,10 @@ export const onGeolocationChangePosition =
 		// Don't snap to the user's location if they're actively moving the map
 		if (isUserMovingTheMapRef.current === false) {
 			updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
+		}
+
+		if (isFollowingGPSRef.current === false) {
+			setIsFollowingGPS(true);
 		}
 
 		if (mapHasPositionRef.current === false) {
@@ -145,9 +154,11 @@ export const onGeolocationError =
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
+		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
 	) =>
 	(evt: GeolocationError) => {
 		setGeolocationHasError(evt);
+		setIsFollowingGPS(false);
 
 		// If this is our initial load, just use our default starting point so we can at least render the map for the first time.
 		if (mapHasPositionRef.current === false) {

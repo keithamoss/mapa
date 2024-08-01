@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { Point } from 'ol/geom';
 import {
+	FeatureDataItem,
 	featuresAdapter,
 	featuresApi,
 	GeomType,
@@ -72,4 +73,24 @@ export const createNewMapaFeatureObject = (
 			data: [],
 		};
 	}
+};
+
+export const createNewMapaFeatureObjectFromKnownCoordinates = (
+	mapId: number,
+	schemaId: number | null,
+	lat: number,
+	lon: number,
+	data: FeatureDataItem[],
+): NewMapaFeature | undefined => {
+	return {
+		geom: {
+			type: 'Point',
+			coordinates: [lon, lat],
+		},
+		geom_type: GeomType.Point,
+		map_id: mapId,
+		schema_id: schemaId,
+		symbol_id: null,
+		data,
+	};
 };

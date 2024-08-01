@@ -30,7 +30,7 @@ import {
 import { DialogWithTransition } from '../../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../../app/ui/theme';
 import { selectAllFeatures } from '../../features/featuresSlice';
-import { SymbolSearchResult, isSearchingYet, searchSymbols } from '../../search/searchHelpers';
+import { SymbolSearchResult, isSearchingYet, searchSymbols } from '../../searchFeatures/searchFeaturesHelpers';
 import {
 	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,

@@ -41,6 +41,9 @@ export const isFieldDefinitionSymbology = (fieldDefinition: FeatureSchemaFieldDe
 export const getFieldFromSchemaDefinitionById = (schema: FeatureSchema, schemaFieldId: number) =>
 	schema.definition.find((f) => f.id === schemaFieldId);
 
+export const getFirstFieldFromSchemaDefinitionByName = (schema: FeatureSchema, schemaFieldName: string) =>
+	schema.definition.find((f) => f.name === schemaFieldName);
+
 export const moveFieldUp = (fieldId: number, definition: FeatureSchemaFieldDefinitionCollection[]) => {
 	const fieldIdx = definition.findIndex((f) => f.id === fieldId);
 
