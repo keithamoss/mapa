@@ -128,13 +128,19 @@ function MapForm(props: Props) {
 	const onDoneWithForm: SubmitHandler<MapModifiableProps> = (data) => {
 		if (isEmpty(data) === false) {
 			if (map === undefined && onDoneAdding !== undefined) {
-				const mapData: NewMap = { ...data };
+				const mapData: NewMap = {
+					...data,
+					// For some reason when we we're saving a Map, MapForm was turning a null hero_icon into an empty {} object, rather than retaining it as null.
+					// No amount of playing with the Yup Resolver that was possibly causing this could get us to make it return null rather than {}.
+					// So oh well, this hack will do.
+					hero_icon: JSON.stringify(data.hero_icon) !== '{}' ? data.hero_icon : null,
+				};
 				onDoneAdding(mapData);
 			} else if (map !== undefined && onDoneEditing !== undefined) {
 				const mapData: Map = {
 					...map,
 					...data,
-					// For some reason when we were saving a Map, MapForm was turning a null hero_icon into an empty {} object, rather than retaining it as null.
+					// For some reason when we we're saving a Map, MapForm was turning a null hero_icon into an empty {} object, rather than retaining it as null.
 					// No amount of playing with the Yup Resolver that was possibly causing this could get us to make it return null rather than {}.
 					// So oh well, this hack will do.
 					hero_icon: JSON.stringify(data.hero_icon) !== '{}' ? data.hero_icon : null,
