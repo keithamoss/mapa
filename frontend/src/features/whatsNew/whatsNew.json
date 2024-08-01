@@ -1,5 +1,17 @@
 [
   {
+    "version": "Mapa and the Search For The Holy Grail",
+    "date": "2 August, 2024",
+    "changes": {
+      "highlights": [
+        [
+          "[Experimental] Location search",
+          "You can now search for the names of places, addresses, or points of interest from the map. It's still experimental until we discuss how the non-MVP version of search should work and evaluate Mapbox's search results in the real world based on the different types of travel-related places we want to add."
+        ]
+      ]
+    }
+  },
+  {
     "version": "Where we're going, we won't need servers",
     "date": "29 May, 2024",
     "changes": {
