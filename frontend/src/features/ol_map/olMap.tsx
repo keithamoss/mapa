@@ -399,6 +399,7 @@ function OLMap(props: Props) {
 						mapHasPositionRef,
 						setMapHasPosition,
 						isFollowingGPSRef,
+						setIsFollowingGPS,
 						isUserMovingTheMapRef,
 						geolocationHasErrorRef,
 						setGeolocationHasError,
@@ -406,7 +407,13 @@ function OLMap(props: Props) {
 				),
 				geolocation.current.on(
 					'error',
-					onGeolocationError(initialMap, mapHasPositionRef, setMapHasPosition, setGeolocationHasError),
+					onGeolocationError(
+						initialMap,
+						mapHasPositionRef,
+						setMapHasPosition,
+						setGeolocationHasError,
+						setIsFollowingGPS,
+					),
 				),
 			];
 			// ######################
