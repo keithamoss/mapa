@@ -15,7 +15,7 @@ import SchemaCreator from '../../features/schemas/schemaCreator';
 import SchemaDeleteManager from '../../features/schemas/schemaDeleteManager';
 import SchemaEditorEntrypoint from '../../features/schemas/schemaEditor';
 import SchemaManager from '../../features/schemas/schemaManager';
-import SearchManager from '../../features/search/searchManager';
+import SearchFeaturesManager from '../../features/searchFeatures/searchFeaturesManager';
 import SearchLocationsManager from '../../features/searchLocations/searchLocationsManager';
 import QuickAddSymbolsSettingsManager from '../../features/settings/quickAddSymbolsSettingsManager';
 import SettingsManager from '../../features/settings/settingsManager';
@@ -85,20 +85,12 @@ export const router = sentryCreateBrowserRouter([
 				element: <FeatureEditor />,
 			},
 			{
-				path: 'SearchManager',
-				element: <SearchManager />,
-			},
-			{
-				path: 'SearchLocationsManager',
-				element: <SearchLocationsManager />,
+				path: 'SearchFeaturesManager',
+				element: <SearchFeaturesManager />,
 			},
 			{
 				path: 'SettingsManager',
 				element: <SettingsManager />,
-			},
-			{
-				path: 'QuickAddSymbolsSettingsManager',
-				element: <QuickAddSymbolsSettingsManager />,
 			},
 			{
 				path: 'WhatsNew',
@@ -107,6 +99,14 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'About',
 				element: <AboutPage />,
+			},
+			{
+				path: 'QuickAddSymbolsSettingsManager',
+				element: <QuickAddSymbolsSettingsManager />,
+			},
+			{
+				path: 'SearchLocationsManager',
+				element: <SearchLocationsManager />,
 			},
 		],
 	},

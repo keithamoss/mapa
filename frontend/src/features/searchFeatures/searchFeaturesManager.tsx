@@ -45,22 +45,22 @@ import {
 } from '../app/appSlice';
 import { selectAllFeatures } from '../features/featuresSlice';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
-import { isSearchingYet, searchFeatures } from './searchHelpers';
+import { isSearchingYet, searchFeatures } from './searchFeaturesHelpers';
 
-function SearchManagerEntrypoint() {
+function SearchFeaturesManagerEntrypoint() {
 	const mapId = useAppSelector(selectActiveMapId);
 
 	if (mapId === undefined) {
 		return <NotFound />;
 	}
 
-	return <SearchManagerEntrypointLayer2 mapId={mapId} />;
+	return <SearchFeaturesManagerEntrypointLayer2 mapId={mapId} />;
 }
 
-function SearchManagerEntrypointLayer2(props: { mapId: number }) {
+function SearchFeaturesManagerEntrypointLayer2(props: { mapId: number }) {
 	const features = useAppSelector(selectAllFeatures);
 
-	return <SearchManager mapId={props.mapId} features={features} />;
+	return <SearchFeaturesManager mapId={props.mapId} features={features} />;
 }
 
 interface Props {
@@ -68,7 +68,7 @@ interface Props {
 	features: MapaFeature[];
 }
 
-function SearchManager(props: Props) {
+function SearchFeaturesManager(props: Props) {
 	const {
 		// mapId,
 		features,
@@ -225,4 +225,4 @@ function SearchManager(props: Props) {
 	);
 }
 
-export default SearchManagerEntrypoint;
+export default SearchFeaturesManagerEntrypoint;
