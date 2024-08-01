@@ -19,6 +19,9 @@ interface Props {
 	dialogProps?: Partial<DialogProps>;
 	transitionProps?: Partial<TransitionProps>;
 	themeColour?: string;
+	// Allows us to use autoFocus on inputs et cetera
+	// Ref: https://stackoverflow.com/a/76533962/7368493
+	disableRestoreFocus?: boolean;
 }
 export const DialogWithTransition = ({
 	onClose,
@@ -26,6 +29,7 @@ export const DialogWithTransition = ({
 	dialogProps,
 	transitionProps,
 	themeColour = dialogProps?.fullScreen === false ? defaultNakedNonFullScreenDialogColour : defaultAppBarColour,
+	disableRestoreFocus,
 }: Props) => {
 	const previousThemeColourRef = useRef<string | undefined>();
 	// This enteredRef never quite worked. It's goal was to stop seeing the brief flash of
@@ -60,6 +64,7 @@ export const DialogWithTransition = ({
 			fullScreen
 			open={true}
 			onClose={onDialogClose}
+			disableRestoreFocus={disableRestoreFocus}
 			transitionDuration={0}
 			TransitionComponent={Transition}
 			TransitionProps={{

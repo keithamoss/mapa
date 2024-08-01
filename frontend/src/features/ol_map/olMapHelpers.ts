@@ -106,12 +106,16 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 		}
 
 		if (centreOnMarker === true) {
-			const view = map.getView();
-			view.setCenter(fromLonLat(position));
-			view.setZoom(defaultZoomLevel);
-			map.setView(view);
+			updateAndCentreMapOnPosition(map, position);
 		}
 	}
+};
+
+export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate) => {
+	const view = map.getView();
+	view.setCenter(fromLonLat(position));
+	view.setZoom(defaultZoomLevel);
+	map.setView(view);
 };
 
 export const onGeolocationChangePosition =
