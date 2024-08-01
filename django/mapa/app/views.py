@@ -4,10 +4,12 @@ import re
 from copy import deepcopy
 from datetime import datetime
 from http.client import BAD_REQUEST
-from urllib.parse import unquote_plus, urlparse
+from urllib.parse import parse_qs, unquote_plus, urlparse
 
 import pytz
 import requests
+from google.oauth2.credentials import Credentials
+from googleapiclient import discovery
 from mapa.app.admin import is_admin
 from mapa.app.envs import are_management_tasks_allowed
 from mapa.app.export import orchestrate_google_drive_backup
@@ -21,6 +23,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.db.models import Count
@@ -347,6 +350,8 @@ class GoogleMapsImportView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
         # e.g. https://maps.app.goo.gl/1PLx9ie7Z4rSCWK28
         googelMapsShareLink = request.query_params.get("sharelinkURL")
         if googelMapsShareLink is None:
@@ -363,24 +368,79 @@ class GoogleMapsImportView(APIView):
         # becomes
         # https://www.google.com.au/maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741297,173.279014,16z/data=!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
         if r.status_code == 302:
-            # e.g. /maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741297,173.279014,16z/data=!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
-            # We do some (probably quite brittle!) parsing of Google's internal `data` component of the URL to pull out the actual lat lon of the place.
-            # Ref: https://stackoverflow.com/a/24662610/7368493
-            # 
-            # If this all falls apart one day, our best fallback option is probably to make an API call to the Text Search (New) API to try to find the place that is near to the coordinates.
-            # If we need it, the regex for that is:
-            # regex = r"\/maps\/place\/(?P<place_name>.+)\/@(?P<lat>[0-9\-\.]+),(?P<lon>[0-9\-\.]+),[0-9\.]+z\/data=.+"
-            # Ref: https://developers.google.com/maps/documentation/places/web-service/text-search
-            regex = r"\/maps\/place\/(?P<place_name>.+)\/@.+z\/data=.+!3d(?P<lat>[0-9\-\.]+)!4d(?P<lon>[0-9\-\.]+).+"
-            matches = re.search(regex, urlparse(r.headers['Location']).path)
+            redirectURL = r.headers['Location']
+            
+            # Handle sharing links generated on desktops/laptops
+            if "/maps/place/" in redirectURL:
+                # e.g. /maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741297,173.279014,16z/data=!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
+                # We do some (probably quite brittle!) parsing of Google's internal `data` component of the URL to pull out the actual lat lon of the place.
+                # Ref: https://stackoverflow.com/a/24662610/7368493
+                # 
+                # If this all falls apart one day, our best fallback option is probably to make an API call to the Text Search (New) API to try to find the place that is near to the coordinates.
+                # If we need it, the regex for that is:
+                # regex = r"\/maps\/place\/(?P<place_name>.+)\/@(?P<lat>[0-9\-\.]+),(?P<lon>[0-9\-\.]+),[0-9\.]+z\/data=.+"
+                # Ref: https://developers.google.com/maps/documentation/places/web-service/text-search
+                regex = r"\/maps\/place\/(?P<place_name>.+)\/@.+z\/data=.+!3d(?P<lat>[0-9\-\.]+)!4d(?P<lon>[0-9\-\.]+).+"
+                matches = re.search(regex, urlparse().path)
 
-            if matches:
-                matchedGroups = matches.groupdict()
+                if matches:
+                    matchedGroups = matches.groupdict()
 
-                return Response({
-                    "place_name": unquote_plus(matchedGroups["place_name"]),
-                    "lat": float(matchedGroups["lat"]),
-                    "lon": float(matchedGroups["lon"]),
-                })
+                    return Response({
+                        "place_name": unquote_plus(matchedGroups["place_name"]),
+                        "lat": float(matchedGroups["lat"]),
+                        "lon": float(matchedGroups["lon"]),
+                    })
+            
+            # Handle sharing links generated on mobile
+            elif "com.google.maps.preview.copy" in redirectURL:
+                # #########################
+                # We've abandoned this for now. There's two types of Google Maps Share Links that we've
+                # discovered (so far!) and the second one (for mobiles) needs a whole different set of code.
+                # We need to take the address we're parsing out of the 302 redirect URL and to a Google Places
+                # API lookup and then hope that the first result we get is the place we want.
+                # Screw it for now - we'll implement location search as an alternate way to easily find a specific place.
+                # We did try using Mapbox for this, but it was only returning results for areas from a specific
+                # address like Kismet. It could be that we didn't play around enough - or that the v6 API is better
+                # suited to that kind of search.
+                # #########################
+                parsedRedirectURL = urlparse(redirectURL)
+                parsedRedirectURLQueryString = parse_qs(parsedRedirectURL.query)
+
+                if "q" in parsedRedirectURLQueryString and len(parsedRedirectURLQueryString["q"]) == 1:
+                    address = parsedRedirectURLQueryString["q"][0]
+                    print(address)
+                    # urlSearchTerm
+
+                    # Kismet Cocktail & Whisky Bar 151 Hardy Street, Nelson 7010, New Zealand
+
+                    # token_uri = "https://oauth2.googleapis.com/token"
+                    # client_id = settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+                    # client_secret = settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+                    # places = discovery.build("places", "v1", credentials=Credentials(access_token, refresh_token, token_uri=token_uri, client_id=client_id, client_secret=client_secret))
+
+                    # First, ensure we have our Mapa folder in which we can store the user's data backups
+                    # https://developers.google.com/drive/api/guides/search-files
+                    # files = drive.files().list(q=f"name='{mapaGoogleDriveFolderName}' and mimeType='application/vnd.google-apps.folder' and trashed=false").execute()
+                    # results = places.searchText(body={
+                    #     "textQuery": address
+                    # })
+
+                    # From iOS:
+                    # https://maps.app.goo.gl/9z3w9iU6phFVu8ML9?g_st=com.google.maps.preview.copy
+
+                    # Results in:
+
+                    # https://www.google.com/maps?q=Kismet+Cocktail+%26+Whisky+Bar+151+Hardy+Street,+Nelson+7010,+New+Zealand&ftid=0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a&entry=gps&lucs=,94231203,94224825,94227247,94227248,47071704,47069508,94218641,94203019,47084304,94208458,94208447&g_ep=CAISDTYuMTI2LjMuNzY1MDAYACDXggMqYyw5NDIzMTIwMyw5NDIyNDgyNSw5NDIyNzI0Nyw5NDIyNzI0OCw0NzA3MTcwNCw0NzA2OTUwOCw5NDIxODY0MSw5NDIwMzAxOSw0NzA4NDMwNCw5NDIwODQ1OCw5NDIwODQ0N0ICQVU%3D&g_st=com.google.maps.preview.copy
+
+
+                    # From macOS:
+                    # https://maps.app.goo.gl/duzAndzdeGX5scnv7
+
+                    # Results in:
+
+                    # https://www.google.com/maps/place/Kismet+Cocktail+%26+Whisky+Bar/@-41.2741295,173.2827429,17z/data=!3m1!4b1!4m6!3m5!1s0x6d3bed01fe9b43c9:0xbb6d22d9ffbdd44a!8m2!3d-41.2741295!4d173.2827429!16s%2Fg%2F11h2bmt7wj?entry=tts&g_ep=EgoyMDI0MDcyNC4wKgBIAVAD
+
+                    print(results)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)

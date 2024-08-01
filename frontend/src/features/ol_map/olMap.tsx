@@ -651,6 +651,7 @@ function OLMap(props: Props) {
 
 						<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
 
+						{/* <GoogleMapsImportButton /> */}
 
 						<QuickAddSymbolsControl />
 					</MapButtonsContainer>
