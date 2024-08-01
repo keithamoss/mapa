@@ -128,6 +128,7 @@ function OLMap(props: Props) {
 
 	useEffect(() => {
 		if (mapRef.current !== undefined && zoomToCoordinates !== undefined) {
+			setIsFollowingGPS(false);
 			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates);
 			dispatch(setSearchLocationsZoomToCoordinates(undefined));
 		}
