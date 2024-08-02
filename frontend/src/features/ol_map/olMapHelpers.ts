@@ -135,10 +135,6 @@ export const onGeolocationChangePosition =
 			updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
 		}
 
-		if (isFollowingGPSRef.current === false) {
-			setIsFollowingGPS(true);
-		}
-
 		if (mapHasPositionRef.current === false) {
 			setMapHasPosition(true);
 		}
