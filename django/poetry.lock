@@ -35,13 +35,13 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "p
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.41.0"
+version = "2.42.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "aws_lambda_powertools-2.41.0-py3-none-any.whl", hash = "sha256:3c8a44dcfdb9fad49f161db6bf79d12e727bf440ae2c3d5896905ec8250b8624"},
-    {file = "aws_lambda_powertools-2.41.0.tar.gz", hash = "sha256:024aec66b7f1b453a622117d1ba5df01dfbd06c92fbd25839eae3df4fdc27233"},
+    {file = "aws_lambda_powertools-2.42.0-py3-none-any.whl", hash = "sha256:6a74fd234629a77238b15ef2d2e73403b3a671eddac6f1a45afc51baa22eb537"},
+    {file = "aws_lambda_powertools-2.42.0.tar.gz", hash = "sha256:c7e9dcab90933d5ec77ba7a038bdcfd04546a06183a7cb4dbf3e6812170a8620"},
 ]
 
 [package.dependencies]
@@ -1510,4 +1510,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1d7159cac11eb6783719e59574c50cae871e44120042f6d49271c1e859ff927d"
+content-hash = "a9770be2aeae8e8844c94b916fd04433be52811bf45c2f4e30c00924ce3a9d2b"
