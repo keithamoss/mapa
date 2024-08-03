@@ -3831,10 +3831,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"earcut@npm:^2.2.3":
-  version: 2.2.4
-  resolution: "earcut@npm:2.2.4"
-  checksum: aea0466cb2f24e0c3c57148d8d28ac9846f53c4f43ee66780826474303ac851b305ef988152d0bdeb31e8f7ca939dc0df737e7505cfb1c1bdf2ff9d7f9ea2faa
+"earcut@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "earcut@npm:3.0.0"
+  checksum: 1b96b4f9ca0c35b8e2428ce0fbd79d520f552b53c3b030c10ad27dac0852067d30b373e62c7ee373a8faa38073eb46ef49bcc650427165e557d5e61bb802339e
   languageName: node
   linkType: hard
 
@@ -4731,7 +4731,7 @@ __metadata:
     js-cookie: ^3.0.5
     lodash-es: ^4.17.21
     minisearch: ^7.1.0
-    ol: ^9.2.4
+    ol: ^10.0.0
     ol-mapbox-style: ^12.3.4
     prettier: ^3.3.3
     react: ^18.3.1
@@ -5204,13 +5204,6 @@ __metadata:
   dependencies:
     safer-buffer: ">= 2.1.2 < 3.0.0"
   checksum: 3f60d47a5c8fc3313317edfd29a00a692cc87a19cac0159e2ce711d0ebc9019064108323b5e493625e25594f11c6236647d8e256fbe7a58f4a3b33b89e6d30bf
-  languageName: node
-  linkType: hard
-
-"ieee754@npm:^1.1.12":
-  version: 1.2.1
-  resolution: "ieee754@npm:1.2.1"
-  checksum: 5144c0c9815e54ada181d80a0b810221a253562422e7c6c3a60b1901154184f49326ec239d618c416c1c5945a2e197107aee8d986a3dd836b53dffefd99b5e7e
   languageName: node
   linkType: hard
 
@@ -6439,17 +6432,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^9.2.4":
-  version: 9.2.4
-  resolution: "ol@npm:9.2.4"
+"ol@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "ol@npm:10.0.0"
   dependencies:
     color-rgba: ^3.0.0
     color-space: ^2.0.1
-    earcut: ^2.2.3
+    earcut: ^3.0.0
     geotiff: ^2.0.7
-    pbf: 3.2.1
-    rbush: ^3.0.1
-  checksum: 71bf31f8b69ff06f94c800bf9621c996c14e579803aa40ac944d1bbbc04bf48b04f498a542fa4154a9902a2724c9d20af1c5852e901e611627f3ae4c428b5a1f
+    pbf: 4.0.1
+    rbush: ^4.0.0
+  checksum: f15936f460e293c5ba87a784ac4630aadd45f4e2814b8097c42bba4f50d2ebc5204c7ea635dc2899246a0160fe60563eca1eb6d6df8f53ff33df6fd4cb084388
   languageName: node
   linkType: hard
 
@@ -6583,15 +6576,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pbf@npm:3.2.1":
-  version: 3.2.1
-  resolution: "pbf@npm:3.2.1"
+"pbf@npm:4.0.1":
+  version: 4.0.1
+  resolution: "pbf@npm:4.0.1"
   dependencies:
-    ieee754: ^1.1.12
     resolve-protobuf-schema: ^2.1.0
   bin:
     pbf: bin/pbf
-  checksum: 8033f5e21fffdc485e85d50bbff07ab3313c6841c3630a4ba9bc9e82d2e9005ab92000a1a90cb911223caa44316293e367bab607dd8110d5c771e6c8aaad63e1
+  checksum: c8a553847b3932803f63f62adece39da7b938f29bab97eb7e62f37cde96207a9c962ba92e26af3a7cad28df53e5a0fbcbca9aab985c32eb0553cbee5d4becfef
   languageName: node
   linkType: hard
 
@@ -6747,12 +6739,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rbush@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "rbush@npm:3.0.1"
+"rbush@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "rbush@npm:4.0.0"
   dependencies:
     quickselect: ^2.0.0
-  checksum: b7def5ba762ca01b6c7c032098ef61b86bd4fef4afb82e4a1d70a07a929b39e779290446c2d4730f577e8a1c8fd0dfd349605b5ea0229258d5f013debdffa65a
+  checksum: 23f0091b870f2e1087231cd8cf4b0797735ba5859b332b9accba6a4e84b0a8ae92e15498adb99feb3edd4728b7789b7fd1bd78a14c49734e9c80f732dda030a9
   languageName: node
   linkType: hard
 
