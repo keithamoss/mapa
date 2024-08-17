@@ -4607,7 +4607,7 @@ __metadata:
     lodash-es: ^4.17.21
     minisearch: ^7.1.0
     ol: ^10.0.0
-    ol-mapbox-style: ^12.3.4
+    ol-mapbox-style: ^12.3.5
     prettier: ^3.3.3
     react: ^18.3.1
     react-dom: ^18.3.1
@@ -6295,15 +6295,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol-mapbox-style@npm:^12.3.4":
-  version: 12.3.4
-  resolution: "ol-mapbox-style@npm:12.3.4"
+"ol-mapbox-style@npm:^12.3.5":
+  version: 12.3.5
+  resolution: "ol-mapbox-style@npm:12.3.5"
   dependencies:
     "@mapbox/mapbox-gl-style-spec": ^13.23.1
     mapbox-to-css-font: ^2.4.1
   peerDependencies:
     ol: "*"
-  checksum: 642a9128e481dcd705b80c9ea2b42708276c950dd836133b46fc6be65f23a3eb253c0c47dcf361535974c07afd6d949dd6f232e11248a501ff0920ea8d19166a
+  checksum: 55346ef90fe857ca12f1d9207e67fadcd7189f58b3d080b6beb7dd4505fe8300d22cafe85fc4df23199be133d4b63b7f0715bc863814d15d398f1f2b6d30b92b
   languageName: node
   linkType: hard
 
