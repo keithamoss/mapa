@@ -29,11 +29,11 @@ export const colourOptional = yup
 //   .transform((_, val) => (val !== "" ? Number(val) : undefined))
 //   .notRequired();
 
-// export const positiveIntegerRequired = yup
-//   .number()
-//   .positive("Must be a positive number")
-//   .integer("Must be a whole number")
-//   .required();
+export const positiveIntegerRequired = yup
+	.number()
+	.positive('Must be a positive number')
+	.integer('Must be a whole number')
+	.required();
 
 export const positiveIntegerOptional = yup
 	.number()
@@ -49,9 +49,6 @@ export const positiveIntegerOptional = yup
 //   .transform((_, val) => (val !== "" ? Number(val) : undefined))
 //   .notRequired();
 
-// export const positiveFloatRequired = yup
-//   .number()
-//   .positive("Must be a positive number")
-//   .required();
+export const positiveFloatRequired = yup.number().positive('Must be a positive number').required();
 
 export const positiveFloatOptional = yup.number().positive('Must be a positive number').optional();

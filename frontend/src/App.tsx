@@ -80,6 +80,7 @@ function App() {
 		<div className="App">
 			{mapId !== undefined && (
 				<OLMap
+					mapId={mapId}
 					mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
 					basemap={user.settings.basemap || Basemap.MapboxVectorTile}
 					basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}

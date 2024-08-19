@@ -22,6 +22,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
+import { Coordinate } from 'ol/coordinate';
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +38,7 @@ import { selectAllFeatures } from '../features/featuresSlice';
 import { getSchemaIdsUsedByFeatures } from '../schemas/schemaHelpers';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
+import MapStartingLocationEditor from './mapStartingLocationEditor';
 
 interface Props {
 	map?: Map;
@@ -65,10 +67,11 @@ function MapForm(props: Props) {
 			default_symbology: map?.default_symbology || undefined,
 			hero_icon: map?.hero_icon || undefined,
 			available_schema_ids: map?.available_schema_ids || [],
+			starting_location: map?.starting_location || undefined,
 		},
 	});
 
-	const { hero_icon, default_symbology, available_schema_ids } = watch();
+	const { hero_icon, default_symbology, available_schema_ids, starting_location } = watch();
 
 	// ######################
 	// Map Hero Icon
@@ -119,6 +122,23 @@ function MapForm(props: Props) {
 	// ######################
 
 	// ######################
+	// Starting Location
+	// ######################
+	const [isSettingMapStartingLocation, setIsSettingMapStartingLocation] = useState(false);
+
+	const onClickChooseMapStartingLocation = () => setIsSettingMapStartingLocation(true);
+
+	const onDoneSettingMapStartingLocation = (centre: Coordinate | undefined, zoom: number) => {
+		setValue('starting_location', { centre, zoom }, { shouldDirty: true });
+		setIsSettingMapStartingLocation(false);
+	};
+
+	const onCloseSettingMapStartingLocation = () => setIsSettingMapStartingLocation(false);
+	// ######################
+	// Starting Location (End)
+	// ######################
+
+	// ######################
 	// Form Management
 	// ######################
 	const onClickSave = () => {
@@ -134,6 +154,7 @@ function MapForm(props: Props) {
 					// No amount of playing with the Yup Resolver that was possibly causing this could get us to make it return null rather than {}.
 					// So oh well, this hack will do.
 					hero_icon: JSON.stringify(data.hero_icon) !== '{}' ? data.hero_icon : null,
+					starting_location: JSON.stringify(data.starting_location) !== '{}' ? data.starting_location : null,
 				};
 				onDoneAdding(mapData);
 			} else if (map !== undefined && onDoneEditing !== undefined) {
@@ -144,6 +165,7 @@ function MapForm(props: Props) {
 					// No amount of playing with the Yup Resolver that was possibly causing this could get us to make it return null rather than {}.
 					// So oh well, this hack will do.
 					hero_icon: JSON.stringify(data.hero_icon) !== '{}' ? data.hero_icon : null,
+					starting_location: JSON.stringify(data.starting_location) !== '{}' ? data.starting_location : null,
 				};
 				onDoneEditing(mapData);
 			}
@@ -314,6 +336,34 @@ function MapForm(props: Props) {
 								<FormHelperText error>{errors.available_schema_ids.message}</FormHelperText>
 							)}
 						</FormControl>
+
+						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<FormSectionHeading>Starting location</FormSectionHeading>
+
+								<Typography variant="body2">
+									Choose where your map starts off when it loads. If you don&apos;t set a location, we&apos;ll use the
+									device&apos;s GPS location and zoom in to street-level.
+								</Typography>
+
+								<Button
+									variant="outlined"
+									startIcon={<TuneIcon />}
+									onClick={onClickChooseMapStartingLocation}
+									sx={{ mt: 2, mb: 2, maxWidth: 350 }}
+								>
+									Choose Starting Location
+								</Button>
+
+								<Typography variant="caption">
+									{starting_location === undefined
+										? 'No starting location has been set.'
+										: 'A starting location has been set'}
+								</Typography>
+							</FormGroup>
+						</FormControl>
+
+						{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
 					</Paper>
 				</form>
 			</DialogWithTransition>
@@ -335,6 +385,15 @@ function MapForm(props: Props) {
 					onCancel={onCancelSettingMapHeroIcon}
 					nameFieldRequired={false}
 					iconFieldRequired={true}
+				/>
+			)}
+
+			{isSettingMapStartingLocation === true && (
+				<MapStartingLocationEditor
+					centre={starting_location?.centre}
+					zoom={starting_location?.zoom}
+					onDone={onDoneSettingMapStartingLocation}
+					onClose={onCloseSettingMapStartingLocation}
 				/>
 			)}
 		</React.Fragment>

@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
+import { Coordinate } from 'ol/coordinate';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
@@ -8,6 +9,10 @@ export interface MapModifiableProps {
 	default_symbology: SymbologyProps | null;
 	hero_icon: SymbologyProps | null;
 	available_schema_ids: number[];
+	starting_location: {
+		centre?: Coordinate;
+		zoom?: number;
+	} | null;
 }
 
 export type NewMap = MapModifiableProps;

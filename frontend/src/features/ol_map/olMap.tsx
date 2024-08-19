@@ -5,6 +5,7 @@ import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
+import { Coordinate } from 'ol/coordinate';
 import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -21,6 +22,7 @@ import {
 	MapaOpenLayersFeature,
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
+import { Map as MapaMap } from '../../app/services/maps';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -31,12 +33,14 @@ import {
 	setMapView,
 	setSearchLocationsZoomToCoordinates,
 } from '../app/appSlice';
+import { selectMapById } from '../maps/mapsSlice';
 import FeatureMovementButton from './controls/featureMovementButton';
 import FollowHeadingButton from './controls/followHeadingButton';
 import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
 import SearchLocationsButton from './controls/searchLocationsButton';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
+import './olCore.css';
 import './olMap.css';
 import {
 	DeviceOrientationListenerManager,
@@ -76,24 +80,44 @@ const MapButtonsContainer = styled(Box)(({ theme }) => ({
 	width: 50,
 }));
 
+interface EntrypointLayer1Props {
+	mapId: number;
+	mapRenderer: MapRenderer;
+	basemap: Basemap;
+	basemap_style: BasemapStyle;
+}
+
+function EntrypointLayer1(props: EntrypointLayer1Props) {
+	const { mapId, ...rest } = props;
+
+	const map = useAppSelector((state) => selectMapById(state, mapId));
+
+	if (map === undefined) {
+		return null;
+	}
+
+	return <OLMap mapaMap={map} {...rest} />;
+}
+
 // Inspo:
 // https://taylor.callsen.me/using-openlayers-with-react-functional-components/
 // https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 interface Props {
+	mapaMap: MapaMap;
 	mapRenderer: MapRenderer;
 	basemap: Basemap;
 	basemap_style: BasemapStyle;
 }
 
 function OLMap(props: Props) {
+	const { mapaMap, mapRenderer, basemap, basemap_style } = props;
+
 	// console.log('# olMap rendering');
 
 	const dispatch = useAppDispatch();
 
 	const navigate = useNavigate();
-
-	const { mapRenderer, basemap, basemap_style } = props;
 
 	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
@@ -275,7 +299,12 @@ function OLMap(props: Props) {
 		}),
 	);
 
-	const [mapHasPosition, setMapHasPosition] = useState<boolean>(false);
+	// The map only has a starting location from the get-go if the user has defined both the zoom and centre
+	const [mapHasPosition, setMapHasPosition] = useState<boolean>(
+		mapaMap.starting_location !== null &&
+			mapaMap.starting_location.zoom !== undefined &&
+			mapaMap.starting_location.centre !== undefined,
+	);
 	const mapHasPositionRef = useRef<boolean>(mapHasPosition);
 	mapHasPositionRef.current = mapHasPosition;
 
@@ -283,7 +312,11 @@ function OLMap(props: Props) {
 	const geolocationHasErrorRef = useRef<false | GeolocationError>(geolocationHasError);
 	geolocationHasErrorRef.current = geolocationHasError;
 
-	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
+	// We follow (i.e. snap the map to) the user's GPS location if no starting location is set or if a starting location is set, but they've only set the zoom level
+	const [isFollowingGPS, setIsFollowingGPS] = useState(
+		mapaMap.starting_location === null ||
+			(mapaMap.starting_location?.centre === undefined && mapaMap.starting_location?.zoom !== undefined),
+	);
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
@@ -356,6 +389,36 @@ function OLMap(props: Props) {
 
 			let isScrollZooming = false;
 
+			const getMapView = (currentPosition: Coordinate | undefined, mapaMap: MapaMap) => {
+				if (currentPosition !== undefined) {
+					// console.log('Set old school view');
+
+					return new View({
+						zoom:
+							mapaMap.starting_location !== null && mapaMap.starting_location.zoom !== undefined
+								? mapaMap.starting_location.zoom
+								: defaultZoomLevel,
+						center: fromLonLat(currentPosition),
+					});
+				}
+
+				if (
+					mapaMap.starting_location !== null &&
+					mapaMap.starting_location.zoom !== undefined &&
+					mapaMap.starting_location.centre !== undefined
+				) {
+					// console.log('View from set location');
+
+					return new View({
+						zoom: mapaMap.starting_location.zoom,
+						center: fromLonLat(mapaMap.starting_location.centre),
+					});
+				}
+
+				// console.log('Undefined view');
+				return undefined;
+			};
+
 			const initialMap = new Map({
 				target: mapTargetElementId,
 				interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
@@ -372,10 +435,7 @@ function OLMap(props: Props) {
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
 				controls: [new Attribution({ collapsible: false })],
-				view:
-					currentPosition !== undefined
-						? new View({ zoom: defaultZoomLevel, center: fromLonLat(currentPosition) })
-						: undefined,
+				view: getMapView(currentPosition, mapaMap),
 			});
 
 			// ######################
@@ -558,7 +618,7 @@ function OLMap(props: Props) {
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
-	}, [basemap, basemap_style, dispatch, navigate, requestAnimationFrameCallback]);
+	}, [basemap, basemap_style, dispatch, navigate, mapaMap]);
 	// ######################
 	// Initialise map on load (End)
 	// ######################
@@ -707,4 +767,4 @@ function OLMap(props: Props) {
 	);
 }
 
-export default OLMap;
+export default EntrypointLayer1;
