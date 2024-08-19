@@ -13,6 +13,7 @@ import { store } from './app/store';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
 import { selectActiveMapId } from './features/app/appSlice';
+import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
@@ -38,6 +39,7 @@ function App() {
 	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in OLMap, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below all of the on-map buttons.
 	// tl;dr Toggle the zIndex of the SpeedDial depending on whether its open or not.
 	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
+
 	const onSpeedDialOpen = useCallback(() => {
 		setBoxZIndex(`${theme.zIndex.speedDial + 2}`);
 	}, [theme.zIndex.speedDial]);
@@ -97,12 +99,22 @@ function App() {
 							zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
 							right: theme.spacing(2),
-							// right: theme.spacing(isInStandaloneMode() === false ? 2 : 4),
 						}}
 					>
 						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
 
 						<AddFeatureButton mapId={mapId} />
+					</Box>
+
+					<Box
+						sx={{
+							position: 'absolute',
+							zIndex: boxZIndex,
+							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
+							left: theme.spacing(2),
+						}}
+					>
+						<MapSwitcher onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
 					</Box>
 				</React.Fragment>
 			)}
