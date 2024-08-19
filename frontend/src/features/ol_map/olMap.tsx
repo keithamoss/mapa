@@ -293,8 +293,8 @@ function OLMap(props: Props) {
 		new Geolocation({
 			trackingOptions: {
 				enableHighAccuracy: true,
-				timeout: Infinity, // Always wait until the position is returned
-				// timeout: 2000,
+				// timeout: Infinity, // Always wait until the position is returned
+				timeout: 4000,
 				maximumAge: 60000, // Use cached position for up to 10s
 			},
 		}),
