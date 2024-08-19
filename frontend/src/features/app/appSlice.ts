@@ -127,6 +127,9 @@ export const appSlice = createSlice({
 		setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
 			state.mapView = action.payload;
 		},
+		setMapFeaturesStatus: (state, action: PayloadAction<eMapFeaturesLoadingStatus>) => {
+			state.mapFeatures.status = action.payload;
+		},
 		setFeaturesAvailableForEditing: (state, action: PayloadAction<MapaFeature[]>) => {
 			state.featuresAvailableForEditing = action.payload;
 		},
@@ -176,6 +179,7 @@ export const appSlice = createSlice({
 export const {
 	setActiveMapId,
 	setMapView,
+	setMapFeaturesStatus,
 	setFeaturesAvailableForEditing,
 	setSearchParameters,
 	setFilteredFeatures,

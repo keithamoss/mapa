@@ -1,7 +1,7 @@
 import { EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import { Coordinate } from 'ol/coordinate';
 import { Point } from 'ol/geom';
-import { prepareFeaturesForMap } from '../../features/app/appSlice';
+import { eMapFeaturesLoadingStatus, prepareFeaturesForMap, setMapFeaturesStatus } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
 
@@ -86,7 +86,10 @@ export const featuresApi = api.injectEndpoints({
 				return featuresAdapter.setAll(initialState, res);
 			},
 			async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
 				await queryFulfilled;
+
+				// The reducers in appSlice for prepareFeaturesForMap takes care of setting eMapFeaturesLoadingStatus() to its resolved state
 				dispatch(prepareFeaturesForMap());
 			},
 		}),

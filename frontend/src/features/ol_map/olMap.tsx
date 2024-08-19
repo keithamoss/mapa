@@ -23,6 +23,7 @@ import {
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
 import { Map as MapaMap } from '../../app/services/maps';
+import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
 	eMapFeaturesLoadingStatus,
 	getMapFeatureLoadingStatus,
@@ -701,6 +702,8 @@ function OLMap(props: Props) {
 
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
+			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.LOADING ? (
+				<WholeScreenLoadingIndicator />
 			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
 				<React.Fragment>
 					<div id="centre_of_the_map"></div>
@@ -736,7 +739,9 @@ function OLMap(props: Props) {
 					</MapButtonsContainer>
 				</React.Fragment>
 			) : (
-				<React.Fragment></React.Fragment>
+				<React.Fragment>
+					{/* I guess this would only be for mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.FAILED */}
+				</React.Fragment>
 			)}
 
 			{geolocationHasError !== false && (
