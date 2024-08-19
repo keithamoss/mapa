@@ -154,6 +154,7 @@ function OLMap(props: Props) {
 		if (mapRef.current !== undefined && zoomToCoordinates !== undefined) {
 			setIsFollowingGPS(false);
 			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates);
+			setMapHasPosition(true); // Highly unlikely, be just in case the map doesn't have a position yet.
 			dispatch(setSearchLocationsZoomToCoordinates(undefined));
 		}
 	}, [dispatch, zoomToCoordinates]);
