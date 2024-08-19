@@ -80,6 +80,16 @@ const MapButtonsContainer = styled(Box)(({ theme }) => ({
 	width: 50,
 }));
 
+const StyledAlert = styled(Alert)(({ theme }) => ({
+	position: 'absolute',
+	// Ensure this sits 1 above MapButtonsContainer so you can close the alert's without the QuickAdd buttons getting in the way
+	zIndex: theme.zIndex.speedDial + 2, // See note in App.tsx
+	bottom: 160,
+	ml: 1,
+	mr: 1,
+	width: '90%',
+}));
+
 interface EntrypointLayer1Props {
 	mapId: number;
 	mapRenderer: MapRenderer;
@@ -730,28 +740,20 @@ function OLMap(props: Props) {
 			)}
 
 			{geolocationHasError !== false && (
-				<Alert
-					severity="error"
-					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
-					onClose={onCloseAlertDoNowt}
-				>
+				<StyledAlert severity="error" onClose={onCloseAlertDoNowt}>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
 					the app and report it to the developer.
 					<br />
 					Type: {geolocationHasError.type}, Code: {geolocationHasError.code}, Message: {geolocationHasError.message}
-				</Alert>
+				</StyledAlert>
 			)}
 
 			{isShowingFollowHeadingDeniedAlert === true && (
-				<Alert
-					severity="error"
-					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
-					onClose={onCloseFollowHeadingDeniedAlert}
-				>
+				<StyledAlert severity="error" onClose={onCloseFollowHeadingDeniedAlert}>
 					<AlertTitle>You have denied permissions to use your device&apos;s accelerometer and magnetometer</AlertTitle>
 					To reset it, simply close and open the app again.
-				</Alert>
+				</StyledAlert>
 			)}
 
 			{/* {isFollowingHeadingStatus === MapHeadingStatus.Unsupported && (
