@@ -1,4 +1,3 @@
-import CloseIcon from '@mui/icons-material/Close';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { SpeedDialIcon, styled } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
@@ -33,9 +32,6 @@ interface Props {
 
 export default function MapSwitcher(props: Props) {
 	const { onSpeedDialOpen, onSpeedDialClose } = props;
-
-	// @TODO Stop the icon rotating and disappearing when the user hovers over
-	// @TODO Work out how to display the names as labels, not tooltips
 
 	const dispatch = useAppDispatch();
 
@@ -102,7 +98,6 @@ export default function MapSwitcher(props: Props) {
 										},
 									)
 						}
-						openIcon={<CloseIcon />}
 					/>
 				}
 				onClose={handleClose}
@@ -115,6 +110,8 @@ export default function MapSwitcher(props: Props) {
 						key={map.name}
 						title={map.name}
 						tooltipTitle={map.name}
+						// tooltipPlacement="right"
+						// tooltipOpen
 						icon={
 							map.hero_icon !== null
 								? getFontAwesomeIconForSymbolPreview(map.hero_icon, {
