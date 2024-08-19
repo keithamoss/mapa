@@ -252,6 +252,8 @@ export const selectActiveMapId = (state: RootState) => state.app.mapId;
 export const selectMapView = (state: RootState) => state.app.mapView;
 
 export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
+export const getMapFeatureLoadingStatusDirectlyFromRTK = (state: RootState) =>
+	state.api.queries['getFeatures(undefined)']?.status;
 
 export const getGeoJSONFeatures = (state: RootState) => state.app.mapFeatures.features;
 

@@ -1,4 +1,5 @@
 import { Alert, AlertTitle, Box, styled } from '@mui/material';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
 import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
@@ -25,8 +26,7 @@ import {
 import { Map as MapaMap } from '../../app/services/maps';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
-	eMapFeaturesLoadingStatus,
-	getMapFeatureLoadingStatus,
+	getMapFeatureLoadingStatusDirectlyFromRTK,
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
 	selectGeoJSONFeaturesAndSpriteSheet,
@@ -142,7 +142,7 @@ function OLMap(props: Props) {
 	const mapRef = useRef<Map>();
 	mapRef.current = map;
 
-	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatus);
+	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatusDirectlyFromRTK);
 
 	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
@@ -702,9 +702,7 @@ function OLMap(props: Props) {
 
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
-			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.LOADING ? (
-				<WholeScreenLoadingIndicator />
-			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
+			) : mapFeatureLoadingStatus === QueryStatus.fulfilled ? (
 				<React.Fragment>
 					<div id="centre_of_the_map"></div>
 
@@ -743,6 +741,8 @@ function OLMap(props: Props) {
 					{/* I guess this would only be for mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.FAILED */}
 				</React.Fragment>
 			)}
+
+			{mapFeatureLoadingStatus === QueryStatus.pending && <WholeScreenLoadingIndicator />}
 
 			{geolocationHasError !== false && (
 				<StyledAlert severity="error" onClose={onCloseAlertDoNowt}>
