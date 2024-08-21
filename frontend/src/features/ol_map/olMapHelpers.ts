@@ -10,7 +10,7 @@ import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
 import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
-import { Map as MapaMap } from '../../app/services/maps';
+import { MapStartingLocation } from '../../app/services/maps';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
@@ -227,6 +227,6 @@ export const onModifyInteractionAddRemoveFeature = (evt: VectorSourceEvent) => {
 	}
 };
 
-export const isMapaMapFollowingGPS = (mapaMap: MapaMap) =>
-	mapaMap.starting_location === null ||
-	(mapaMap.starting_location?.centre === undefined && mapaMap.starting_location?.zoom !== undefined);
+export const isMapaMapFollowingGPS = (mapStartingLocation: MapStartingLocation | null) =>
+	mapStartingLocation === null ||
+	(mapStartingLocation?.centre === undefined && mapStartingLocation?.zoom !== undefined);

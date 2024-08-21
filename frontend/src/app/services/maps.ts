@@ -4,15 +4,17 @@ import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
 import { SymbologyProps } from './schemas';
 
+export interface MapStartingLocation {
+	centre?: Coordinate;
+	zoom?: number;
+}
+
 export interface MapModifiableProps {
 	name: string;
 	default_symbology: SymbologyProps | null;
 	hero_icon: SymbologyProps | null;
 	available_schema_ids: number[];
-	starting_location: {
-		centre?: Coordinate;
-		zoom?: number;
-	} | null;
+	starting_location: MapStartingLocation | null;
 }
 
 export type NewMap = MapModifiableProps;

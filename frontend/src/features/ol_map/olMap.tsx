@@ -326,7 +326,7 @@ function OLMap(props: Props) {
 	geolocationHasErrorRef.current = geolocationHasError;
 
 	// We follow (i.e. snap the map to) the user's GPS location if no starting location is set or if a starting location is set, but they've only set the zoom level
-	const [isFollowingGPS, setIsFollowingGPS] = useState(isMapaMapFollowingGPS(mapaMap));
+	const [isFollowingGPS, setIsFollowingGPS] = useState(isMapaMapFollowingGPS(mapaMap.starting_location));
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
@@ -337,7 +337,7 @@ function OLMap(props: Props) {
 	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
 	useEffect(() => {
 		// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
-		const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap);
+		const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap.starting_location);
 		if (isFollowingGPS !== isFollowingGPSForNewMap) {
 			setIsFollowingGPS(isFollowingGPSForNewMap);
 		}
