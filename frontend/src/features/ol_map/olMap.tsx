@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, styled } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { MapBrowserEvent, MapEvent, View } from 'ol';
 import Feature from 'ol/Feature';
@@ -380,6 +380,17 @@ function OLMap(props: Props) {
 	const onFollowGPSDisabled = useCallback(() => {
 		setIsFollowingGPS(false);
 	}, []);
+
+	const onClickTryAndGetGPSLocationAgain = useCallback(() => {
+		setGeolocationHasError(false);
+
+		if (mapRef.current !== undefined) {
+			const currentPosition = geolocation.current.getPosition();
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPS);
+			}
+		}
+	}, [isFollowingGPS]);
 
 	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
@@ -774,7 +785,15 @@ function OLMap(props: Props) {
 			{mapFeatureLoadingStatus === QueryStatus.pending && <WholeScreenLoadingIndicator />}
 
 			{geolocationHasError !== false && (
-				<StyledAlert severity="error" onClose={onCloseAlertDoNowt}>
+				<StyledAlert
+					severity="error"
+					onClose={onCloseAlertDoNowt}
+					action={
+						<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
+							Try again
+						</Button>
+					}
+				>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
 					the app and report it to the developer.
