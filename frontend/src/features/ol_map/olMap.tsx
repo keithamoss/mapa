@@ -59,6 +59,7 @@ import {
 	getBasemap,
 	getMapOverlayElementAsDiv,
 	hideCompassHeadingMarker,
+	isMapaMapFollowingGPS,
 	mapTargetElementId,
 	onGeolocationChangePosition,
 	onGeolocationError,
@@ -325,16 +326,44 @@ function OLMap(props: Props) {
 	geolocationHasErrorRef.current = geolocationHasError;
 
 	// We follow (i.e. snap the map to) the user's GPS location if no starting location is set or if a starting location is set, but they've only set the zoom level
-	const [isFollowingGPS, setIsFollowingGPS] = useState(
-		mapaMap.starting_location === null ||
-			(mapaMap.starting_location?.centre === undefined && mapaMap.starting_location?.zoom !== undefined),
-	);
+	const [isFollowingGPS, setIsFollowingGPS] = useState(isMapaMapFollowingGPS(mapaMap));
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
+
+	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
+	useEffect(() => {
+		// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
+		const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap);
+		if (isFollowingGPS !== isFollowingGPSForNewMap) {
+			setIsFollowingGPS(isFollowingGPSForNewMap);
+		}
+
+		// And make sure the user's current location is updated on the map as required
+		// Without this call, it won't immediately update until the user's position actually changes in the real world
+		if (mapRef.current !== undefined) {
+			const currentPosition = geolocation.current.getPosition();
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPSForNewMap);
+			}
+		}
+
+		// And because switching maps recreates a whole new OL map, we also need to reattach the RAF for the heading indicator
+		if (
+			isFollowingHeadingStatus === MapHeadingStatus.On ||
+			isFollowingHeadingStatus === MapHeadingStatus.OnAndMapFollowing
+		) {
+			if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
+				isFollowingHeadingRequestAnimationFrameIdRef.current =
+					window.requestAnimationFrame(requestAnimationFrameCallback);
+			}
+
+			showCompassHeadingMarker();
+		}
+	}, [isFollowingGPS, isFollowingHeadingStatus, mapaMap.starting_location, requestAnimationFrameCallback]);
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
