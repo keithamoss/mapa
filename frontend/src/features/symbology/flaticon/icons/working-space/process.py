@@ -4,7 +4,7 @@ import shutil
 from pathlib import Path
 from xml.dom import minidom
 
-FOLDERS = ["_fruits", "_vegetables", "_fruits-and-veggies", "_herbs-and-spices", "_nature", "_assorted-food", "_miscellaneous"]
+FOLDERS = ["_fruits", "_vegetables", "_fruits-and-veggies", "_herbs-and-spices", "_nature", "_assorted-food", "_sea-life", "_adventure-sports", "_odds-and-ends", "_miscellaneous"]
 FOLDER_TO_CATEGORY_MAPPING = {
   "_fruits": {"categories": ["Fruits (Coloured)"], "terms": ["fruit"]},
   "_vegetables": {"categories": ["Vegetables (Coloured)"], "terms": ["vegetable", "veggies"]},
@@ -13,6 +13,9 @@ FOLDER_TO_CATEGORY_MAPPING = {
   "_herbs-and-spices": {"categories": ["Herbs and Spices (Coloured)"], "terms": ["herb", "spice", "weasel", "bam!"]},
   "_nature": {"categories": ["Nature (Coloured)"], "terms": ["nature"]},
   "_assorted-food": {"categories": ["Assorted Food (Coloured)"], "terms": ["food"]},
+  "_sea-life": {"categories": ["Sea Life (Coloured)"], "terms": ["sea life", "fish"]},
+  "_adventure-sports": {"categories": ["Adventure Sports (Coloured)"], "terms": ["adventure", "travel"]},
+  "_odds-and-ends": {"categories": ["Odds and Ends"], "terms": ["bits and bobs", "misc", "miscellaneous"]},
   # Not used. Icons are split up into separate fruit and veg categories
   "_miscellaneous": {"categories": None, "terms": None}
 }
@@ -60,7 +63,7 @@ for top_level_folder in FOLDERS:
         svg_file_name = os.path.basename(svg_file)
         svg_file_name_sans_number = "".join(svg_file_name.split("-")[1:])
 
-        if svg_file_name_sans_number in svg_file_names_sans_number and svg_file_name_sans_number not in ["leaf.svg", "holly.svg", "palm.svg", "aspen.svg", "berry.svg"]:
+        if svg_file_name_sans_number in svg_file_names_sans_number and svg_file_name_sans_number not in ["leaf.svg", "holly.svg", "palm.svg", "aspen.svg", "berry.svg", "mountain.svg", "fish.svg", "whale.svg", "shell.svg", "seaweed.svg"]:
           raise Exception(f"svg_file_name_sans_number already contains '{svg_file_name_sans_number}' - might need to manually rename it?")
         svg_file_names_sans_number.append(svg_file_name_sans_number)
         

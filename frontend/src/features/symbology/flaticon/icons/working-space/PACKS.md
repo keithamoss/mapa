@@ -47,6 +47,7 @@ https://www.flaticon.com/packs/spice-1
 https://www.flaticon.com/packs/leaf-8
 https://www.flaticon.com/packs/autumn-nature-57
 https://www.flaticon.com/packs/flowers-61
+https://www.flaticon.com/packs/nature-185
 
 # Individual Icons
 
@@ -60,3 +61,15 @@ https://www.flaticon.com/free-icon/argan_1704366
 https://www.flaticon.com/free-icon/sapote_1143255
 https://www.flaticon.com/free-icon/sapote_581778
 https://www.flaticon.com/free-icon/sapote_3553943
+
+# Adventure Sports
+
+https://www.flaticon.com/packs/adventure-sports-6
+
+# Sea Life
+
+https://www.flaticon.com/packs/sea-life-49
+
+# Odds and Ends
+
+https://www.flaticon.com/packs/miscellaneous-63

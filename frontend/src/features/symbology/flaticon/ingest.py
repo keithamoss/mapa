@@ -12,6 +12,9 @@ CATEGORY_HERO_ICONS = {
     "vegetables-(coloured)": "broccoli-fruitsandveggies5",
     "herbs-and-spices-(coloured)": "chili-herbsandspices2",
     "nature-(coloured)": "aldar-nature1",
+    "sea-life-(coloured)": "octopus-sealife",
+    "adventure-sports-(coloured)": "carabiner-adventuresports",
+    "odds-and-ends": "obelisk-miscellaneous",
     # "miscellaneous-(coloured)": "argan-miscellaneous1"
 }
 
