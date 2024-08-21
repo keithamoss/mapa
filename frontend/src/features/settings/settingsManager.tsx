@@ -148,11 +148,21 @@ function SettingsManager() {
 						{performance
 							.getEntriesByType('resource')
 							// .filter((e) => e.initiatorType === 'script')
-							.map((e: any) => {
+							.map((e: any, idx) => {
 								console.log(e);
 								return (
-									<div>
-										{e.initiatorType} | {e.entryType} | {e.deliveryType}: {e.name}
+									<div key={idx} style={{ marginBottom: '15px' }}>
+										{e.initiatorType}
+										<br />
+										{e.entryType}
+										<br />
+										{e.deliveryType !== '' && (
+											<React.Fragment>
+												{e.deliveryType}
+												<br />
+											</React.Fragment>
+										)}
+										{e.name}
 									</div>
 								);
 							})}
