@@ -17,7 +17,7 @@ const getDataItemAsString = (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 		schemaFieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
 	) {
-		return dataItem.value === true ? 'On' : 'Off';
+		return dataItem.value === true ? 'Checked' : 'Unchecked';
 	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
 		return typeof dataItem.value === 'string' && dataItem.value !== '' ? (
 			dayjs(dataItem.value).format('ddd, MMM D YYYY')
