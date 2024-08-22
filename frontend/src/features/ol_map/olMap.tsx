@@ -17,6 +17,7 @@ import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
+import { usePrevious } from '../../app/hooks/usePrevious';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
 import {
 	MapaFeature,
@@ -130,6 +131,9 @@ function OLMap(props: Props) {
 	const dispatch = useAppDispatch();
 
 	const navigate = useNavigate();
+
+	const previousMapaMap = usePrevious(mapaMap) as MapaMap;
+	const hasMapaMapChanged = previousMapaMap !== undefined ? previousMapaMap.id !== mapaMap.id : false;
 
 	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
@@ -336,34 +340,42 @@ function OLMap(props: Props) {
 
 	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
 	useEffect(() => {
-		// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
-		const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap.starting_location);
-		if (isFollowingGPS !== isFollowingGPSForNewMap) {
-			setIsFollowingGPS(isFollowingGPSForNewMap);
-		}
-
-		// And make sure the user's current location is updated on the map as required
-		// Without this call, it won't immediately update until the user's position actually changes in the real world
-		if (mapRef.current !== undefined) {
-			const currentPosition = geolocation.current.getPosition();
-			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPSForNewMap);
-			}
-		}
-
-		// And because switching maps recreates a whole new OL map, we also need to reattach the RAF for the heading indicator
-		if (
-			isFollowingHeadingStatus === MapHeadingStatus.On ||
-			isFollowingHeadingStatus === MapHeadingStatus.OnAndMapFollowing
-		) {
-			if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
-				isFollowingHeadingRequestAnimationFrameIdRef.current =
-					window.requestAnimationFrame(requestAnimationFrameCallback);
+		if (hasMapaMapChanged === true) {
+			// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
+			const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap.starting_location);
+			if (isFollowingGPS !== isFollowingGPSForNewMap) {
+				setIsFollowingGPS(isFollowingGPSForNewMap);
 			}
 
-			showCompassHeadingMarker();
+			// And make sure the user's current location is updated on the map as required
+			// Without this call, it won't immediately update until the user's position actually changes in the real world
+			if (mapRef.current !== undefined) {
+				const currentPosition = geolocation.current.getPosition();
+				if (currentPosition !== undefined) {
+					updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPSForNewMap);
+				}
+			}
+
+			// And because switching maps recreates a whole new OL map, we also need to reattach the RAF for the heading indicator
+			if (
+				isFollowingHeadingStatus === MapHeadingStatus.On ||
+				isFollowingHeadingStatus === MapHeadingStatus.OnAndMapFollowing
+			) {
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
+					isFollowingHeadingRequestAnimationFrameIdRef.current =
+						window.requestAnimationFrame(requestAnimationFrameCallback);
+				}
+
+				showCompassHeadingMarker();
+			}
 		}
-	}, [isFollowingGPS, isFollowingHeadingStatus, mapaMap.starting_location, requestAnimationFrameCallback]);
+	}, [
+		hasMapaMapChanged,
+		isFollowingGPS,
+		isFollowingHeadingStatus,
+		mapaMap.starting_location,
+		requestAnimationFrameCallback,
+	]);
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
