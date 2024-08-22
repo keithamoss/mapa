@@ -109,7 +109,7 @@ function App() {
 					<Box
 						sx={{
 							position: 'absolute',
-							zIndex: boxZIndex,
+							// zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
 							left: theme.spacing(2),
 						}}
