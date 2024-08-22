@@ -1,4 +1,4 @@
-import { MapBrowserEvent, Overlay } from 'ol';
+import { MapBrowserEvent, Overlay, View } from 'ol';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
@@ -10,7 +10,7 @@ import { fromLonLat } from 'ol/proj';
 import { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
 import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
-import { MapStartingLocation } from '../../app/services/maps';
+import { MapStartingLocation, Map as MapaMap } from '../../app/services/maps';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
@@ -85,7 +85,12 @@ export const hideCompassHeadingMarker = () => {
 	}
 };
 
-export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefined, centreOnMarker: boolean) => {
+export const updateMapWithGPSPosition = (
+	map: Map,
+	position: Coordinate | undefined,
+	centreOnMarker: boolean,
+	mapStartingZoomLevel?: number,
+) => {
 	if (position !== undefined) {
 		const markerOverlay = map.getOverlayById(geolocationMarkerOverlayId);
 		if (markerOverlay !== null) {
@@ -107,15 +112,15 @@ export const updateMapWithGPSPosition = (map: Map, position: Coordinate | undefi
 		}
 
 		if (centreOnMarker === true) {
-			updateAndCentreMapOnPosition(map, position);
+			updateAndCentreMapOnPosition(map, position, mapStartingZoomLevel);
 		}
 	}
 };
 
-export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate) => {
+export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate, mapStartingZoomLevel?: number) => {
 	const view = map.getView();
 	view.setCenter(fromLonLat(position));
-	view.setZoom(defaultZoomLevel);
+	view.setZoom(mapStartingZoomLevel || defaultZoomLevel);
 	map.setView(view);
 };
 
@@ -124,6 +129,7 @@ export const onGeolocationChangePosition =
 		map: Map,
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
+		mapStartingZoomLevel: number,
 		isFollowingGPSRef: React.MutableRefObject<boolean>,
 		setIsFollowingGPS: React.Dispatch<React.SetStateAction<boolean>>,
 		isUserMovingTheMapRef: React.MutableRefObject<boolean>,
@@ -133,7 +139,12 @@ export const onGeolocationChangePosition =
 	(evt: BaseEvent) => {
 		// Don't snap to the user's location if they're actively moving the map
 		if (isUserMovingTheMapRef.current === false) {
-			updateMapWithGPSPosition(map, (evt.target as Geolocation).getPosition(), isFollowingGPSRef.current);
+			updateMapWithGPSPosition(
+				map,
+				(evt.target as Geolocation).getPosition(),
+				isFollowingGPSRef.current,
+				mapHasPositionRef.current === false ? mapStartingZoomLevel : undefined,
+			);
 		}
 
 		if (mapHasPositionRef.current === false) {
@@ -227,6 +238,36 @@ export const onModifyInteractionAddRemoveFeature = (evt: VectorSourceEvent) => {
 	}
 };
 
+export const getMapInitialView = (currentPosition: Coordinate | undefined, mapaMap: MapaMap) => {
+	if (currentPosition !== undefined) {
+		// console.log('Set old school view');
+
+		return new View({
+			zoom: getMapStartingZoomLevel(mapaMap.starting_location),
+			center: fromLonLat(currentPosition),
+		});
+	}
+
+	if (
+		mapaMap.starting_location !== null &&
+		mapaMap.starting_location.zoom !== undefined &&
+		mapaMap.starting_location.centre !== undefined
+	) {
+		// console.log('View from set location');
+
+		return new View({
+			zoom: mapaMap.starting_location.zoom,
+			center: fromLonLat(mapaMap.starting_location.centre),
+		});
+	}
+
+	// console.log('Undefined view');
+	return undefined;
+};
+
 export const isMapaMapFollowingGPS = (mapStartingLocation: MapStartingLocation | null) =>
 	mapStartingLocation === null ||
 	(mapStartingLocation?.centre === undefined && mapStartingLocation?.zoom !== undefined);
+
+export const getMapStartingZoomLevel = (mapStartingLocation: MapStartingLocation | null) =>
+	mapStartingLocation !== null && mapStartingLocation.zoom !== undefined ? mapStartingLocation.zoom : defaultZoomLevel;

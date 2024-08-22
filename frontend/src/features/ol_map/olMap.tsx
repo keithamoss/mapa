@@ -1,18 +1,17 @@
 import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
 import { QueryStatus } from '@reduxjs/toolkit/query';
-import { MapBrowserEvent, MapEvent, View } from 'ol';
+import { MapBrowserEvent, MapEvent } from 'ol';
 import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
-import { Coordinate } from 'ol/coordinate';
 import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
-import { fromLonLat, transform } from 'ol/proj';
+import { transform } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -53,12 +52,13 @@ import {
 } from './olMapDeviceOrientationHelpers';
 import {
 	createGeolocationMarkerOverlay,
-	defaultZoomLevel,
 	geolocationMarkerHeadingBackgroundTriangleOverlayId,
 	geolocationMarkerHeadingForegroundTriangleOverlayId,
 	geolocationMarkerOverlayId,
 	getBasemap,
+	getMapInitialView,
 	getMapOverlayElementAsDiv,
+	getMapStartingZoomLevel,
 	hideCompassHeadingMarker,
 	isMapaMapFollowingGPS,
 	mapTargetElementId,
@@ -453,36 +453,6 @@ function OLMap(props: Props) {
 
 			let isScrollZooming = false;
 
-			const getMapView = (currentPosition: Coordinate | undefined, mapaMap: MapaMap) => {
-				if (currentPosition !== undefined) {
-					// console.log('Set old school view');
-
-					return new View({
-						zoom:
-							mapaMap.starting_location !== null && mapaMap.starting_location.zoom !== undefined
-								? mapaMap.starting_location.zoom
-								: defaultZoomLevel,
-						center: fromLonLat(currentPosition),
-					});
-				}
-
-				if (
-					mapaMap.starting_location !== null &&
-					mapaMap.starting_location.zoom !== undefined &&
-					mapaMap.starting_location.centre !== undefined
-				) {
-					// console.log('View from set location');
-
-					return new View({
-						zoom: mapaMap.starting_location.zoom,
-						center: fromLonLat(mapaMap.starting_location.centre),
-					});
-				}
-
-				// console.log('Undefined view');
-				return undefined;
-			};
-
 			const initialMap = new Map({
 				target: mapTargetElementId,
 				interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
@@ -499,7 +469,7 @@ function OLMap(props: Props) {
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
 				controls: [new Attribution({ collapsible: false })],
-				view: getMapView(currentPosition, mapaMap),
+				view: getMapInitialView(currentPosition, mapaMap),
 			});
 
 			// ######################
@@ -523,6 +493,7 @@ function OLMap(props: Props) {
 						initialMap,
 						mapHasPositionRef,
 						setMapHasPosition,
+						getMapStartingZoomLevel(mapaMap.starting_location),
 						isFollowingGPSRef,
 						setIsFollowingGPS,
 						isUserMovingTheMapRef,
