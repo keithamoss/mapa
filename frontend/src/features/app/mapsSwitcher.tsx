@@ -93,7 +93,7 @@ export default function MapSwitcher() {
 				onClose={handleClose}
 				onOpen={handleOpen}
 				open={open}
-				sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' } }}
+				sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' }, '& img': { pointerEvents: 'none' } }}
 			>
 				{mapsWithHeroIcons.map((map) => (
 					<SpeedDialAction
