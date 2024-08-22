@@ -16,7 +16,6 @@ import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { usePrevious } from '../../app/hooks/usePrevious';
 import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
 import {
 	MapaFeature,
@@ -52,6 +51,7 @@ import {
 } from './olMapDeviceOrientationHelpers';
 import {
 	createGeolocationMarkerOverlay,
+	defaultZoomLevel,
 	geolocationMarkerHeadingBackgroundTriangleOverlayId,
 	geolocationMarkerHeadingForegroundTriangleOverlayId,
 	geolocationMarkerOverlayId,
@@ -132,8 +132,7 @@ function OLMap(props: Props) {
 
 	const navigate = useNavigate();
 
-	const previousMapaMap = usePrevious(mapaMap) as MapaMap;
-	const hasMapaMapChanged = previousMapaMap !== undefined ? previousMapaMap.id !== mapaMap.id : false;
+	const mapStartingZoomLevel = getMapStartingZoomLevel(mapaMap.starting_location);
 
 	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
@@ -146,6 +145,9 @@ function OLMap(props: Props) {
 	// https://stackoverflow.com/a/60643670
 	const mapRef = useRef<Map>();
 	mapRef.current = map;
+
+	// Used to let the component know that a new OL map has been created (e.g. when we're switching between maps) so it knows it needs to re-initialise a number of pieces of state
+	const mapReadyToBeReinitialisedRef = useRef<boolean>(false);
 
 	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatusDirectlyFromRTK);
 
@@ -169,7 +171,7 @@ function OLMap(props: Props) {
 	useEffect(() => {
 		if (mapRef.current !== undefined && zoomToCoordinates !== undefined) {
 			setIsFollowingGPS(false);
-			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates);
+			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates, defaultZoomLevel);
 			setMapHasPosition(true); // Highly unlikely, be just in case the map doesn't have a position yet.
 			dispatch(setSearchLocationsZoomToCoordinates(undefined));
 		}
@@ -340,7 +342,7 @@ function OLMap(props: Props) {
 
 	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
 	useEffect(() => {
-		if (hasMapaMapChanged === true) {
+		if (mapReadyToBeReinitialisedRef.current === true) {
 			// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
 			const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap.starting_location);
 			if (isFollowingGPS !== isFollowingGPSForNewMap) {
@@ -349,10 +351,11 @@ function OLMap(props: Props) {
 
 			// And make sure the user's current location is updated on the map as required
 			// Without this call, it won't immediately update until the user's position actually changes in the real world
-			if (mapRef.current !== undefined) {
+			if (map !== undefined) {
 				const currentPosition = geolocation.current.getPosition();
+
 				if (currentPosition !== undefined) {
-					updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPSForNewMap);
+					updateMapWithGPSPosition(map, currentPosition, isFollowingGPSForNewMap, mapStartingZoomLevel);
 				}
 			}
 
@@ -368,11 +371,14 @@ function OLMap(props: Props) {
 
 				showCompassHeadingMarker();
 			}
+
+			mapReadyToBeReinitialisedRef.current = false;
 		}
 	}, [
-		hasMapaMapChanged,
 		isFollowingGPS,
 		isFollowingHeadingStatus,
+		map,
+		mapStartingZoomLevel,
 		mapaMap.starting_location,
 		requestAnimationFrameCallback,
 	]);
@@ -384,10 +390,10 @@ function OLMap(props: Props) {
 		if (mapRef.current !== undefined) {
 			const currentPosition = geolocation.current.getPosition();
 			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, true);
+				updateMapWithGPSPosition(mapRef.current, currentPosition, true, mapStartingZoomLevel);
 			}
 		}
-	}, []);
+	}, [mapStartingZoomLevel]);
 
 	const onFollowGPSDisabled = useCallback(() => {
 		setIsFollowingGPS(false);
@@ -399,10 +405,10 @@ function OLMap(props: Props) {
 		if (mapRef.current !== undefined) {
 			const currentPosition = geolocation.current.getPosition();
 			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPS);
+				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPS, mapStartingZoomLevel);
 			}
 		}
-	}, [isFollowingGPS]);
+	}, [isFollowingGPS, mapStartingZoomLevel]);
 
 	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
@@ -443,7 +449,7 @@ function OLMap(props: Props) {
 		// console.log('useEffect init');
 
 		if (mapRef.current === undefined) {
-			// console.log('making a map');
+			// console.log('Making a map');
 
 			// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
 			const deviceOrientationListenerManagerRefCopy = deviceOrientationListenerManagerRef.current;
@@ -493,7 +499,7 @@ function OLMap(props: Props) {
 						initialMap,
 						mapHasPositionRef,
 						setMapHasPosition,
-						getMapStartingZoomLevel(mapaMap.starting_location),
+						mapStartingZoomLevel,
 						isFollowingGPSRef,
 						setIsFollowingGPS,
 						isUserMovingTheMapRef,
@@ -626,6 +632,8 @@ function OLMap(props: Props) {
 			setMap(initialMap);
 			mapRef.current = initialMap;
 
+			mapReadyToBeReinitialisedRef.current = true;
+
 			return () => {
 				// console.log('Cleanup OLMap');
 
@@ -653,7 +661,7 @@ function OLMap(props: Props) {
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
-	}, [basemap, basemap_style, dispatch, navigate, mapaMap]);
+	}, [basemap, basemap_style, dispatch, navigate, mapaMap, mapStartingZoomLevel]);
 	// ######################
 	// Initialise map on load (End)
 	// ######################

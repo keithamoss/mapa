@@ -89,7 +89,7 @@ export const updateMapWithGPSPosition = (
 	map: Map,
 	position: Coordinate | undefined,
 	centreOnMarker: boolean,
-	mapStartingZoomLevel?: number,
+	mapStartingZoomLevel: number,
 ) => {
 	if (position !== undefined) {
 		const markerOverlay = map.getOverlayById(geolocationMarkerOverlayId);
@@ -117,10 +117,10 @@ export const updateMapWithGPSPosition = (
 	}
 };
 
-export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate, mapStartingZoomLevel?: number) => {
+export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate, mapStartingZoomLevel: number) => {
 	const view = map.getView();
 	view.setCenter(fromLonLat(position));
-	view.setZoom(mapStartingZoomLevel || defaultZoomLevel);
+	view.setZoom(mapStartingZoomLevel);
 	map.setView(view);
 };
 
@@ -143,7 +143,7 @@ export const onGeolocationChangePosition =
 				map,
 				(evt.target as Geolocation).getPosition(),
 				isFollowingGPSRef.current,
-				mapHasPositionRef.current === false ? mapStartingZoomLevel : undefined,
+				mapStartingZoomLevel,
 			);
 		}
 
