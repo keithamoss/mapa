@@ -28,9 +28,10 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 export default function MapSwitcher() {
 	const dispatch = useAppDispatch();
 
-	const maps = useAppSelector(selectAllMaps);
-	const mapsWithHeroIcons = maps.filter((m) => m.hero_icon !== null).reverse();
 	const activeMap = useAppSelector(selectActiveMap);
+
+	const maps = useAppSelector(selectAllMaps);
+	const mapsWithHeroIcons = maps.filter((m) => m.hero_icon !== null && m.id !== activeMap?.id).reverse();
 
 	const hasMapsWithNoHeroIcons = maps.find((m) => m.hero_icon === null) !== undefined;
 
