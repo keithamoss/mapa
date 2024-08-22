@@ -41,8 +41,8 @@ import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
 import SearchLocationsButton from './controls/searchLocationsButton';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
-import './olCore.css';
 import './olMap.css';
+import './olMapCore.css';
 import {
 	DeviceOrientationListenerManager,
 	MapHeadingStatus,

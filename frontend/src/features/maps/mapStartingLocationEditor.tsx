@@ -10,7 +10,7 @@ import { fromLonLat, toLonLat } from 'ol/proj';
 import { useCallback, useRef, useState } from 'react';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import '../ol_map/olCore.css';
+import '../ol_map/olMapCore.css';
 import { getBasemap } from '../ol_map/olMapHelpers';
 import './mapStartingLocationEditor.css';
 import {
