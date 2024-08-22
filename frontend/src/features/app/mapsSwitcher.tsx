@@ -25,14 +25,7 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 	},
 }));
 
-interface Props {
-	onSpeedDialOpen: () => void;
-	onSpeedDialClose: () => void;
-}
-
-export default function MapSwitcher(props: Props) {
-	const { onSpeedDialOpen, onSpeedDialClose } = props;
-
+export default function MapSwitcher() {
 	const dispatch = useAppDispatch();
 
 	const maps = useAppSelector(selectAllMaps);
@@ -45,27 +38,23 @@ export default function MapSwitcher(props: Props) {
 
 	const handleOpen = () => {
 		setOpen(true);
-		onSpeedDialOpen();
 	};
 
 	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
 		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
 		if (reason !== 'mouseLeave') {
 			setOpen(false);
-			onSpeedDialClose();
 		}
 	};
 
 	const handleBackdropClick = () => {
 		setOpen(false);
-		onSpeedDialClose();
 	};
 
 	const [updateUserProfile] = useUpdateUserProfileMutation();
 
 	const onSwitchMap = (mapId: number) => () => {
 		setOpen(false);
-		onSpeedDialClose();
 
 		dispatch(setSearchParameters(defaultSearchParameters));
 		dispatch(setFilteredFeatures([]));

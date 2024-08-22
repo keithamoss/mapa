@@ -114,7 +114,7 @@ function App() {
 							left: theme.spacing(2),
 						}}
 					>
-						<MapSwitcher onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+						<MapSwitcher />
 					</Box>
 				</React.Fragment>
 			)}
