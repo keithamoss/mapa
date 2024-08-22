@@ -9,13 +9,7 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { useUpdateUserProfileMutation } from '../../app/services/auth';
 import { selectAllMaps } from '../maps/mapsSlice';
-import {
-	defaultMapHeroIcon,
-	defaultMapHeroIconColour,
-	defaultMapHeroIconOpacity,
-	defaultSymbolSizeForSpeedDials,
-	getFontAwesomeIconForSymbolPreview,
-} from '../symbology/symbologyHelpers';
+import { defaultSymbolSizeForSpeedDials, getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
 import { defaultSearchParameters, selectActiveMap, setFilteredFeatures, setSearchParameters } from './appSlice';
 
 const StyledSpeedDial = styled(SpeedDial)(() => ({
@@ -74,26 +68,26 @@ export default function MapSwitcher() {
 				ariaLabel="A button to switch the active map"
 				icon={
 					<SpeedDialIcon
-						icon={
-							activeMap !== undefined && activeMap.hero_icon !== null
-								? getFontAwesomeIconForSymbolPreview(activeMap.hero_icon, {
-										size: defaultSymbolSizeForSpeedDials,
-									})
-								: /* Just in case the user is on a map with no hero icon, we still want to let them use thes switcher */ getFontAwesomeIconForSymbolPreview(
-										{
-											icon: defaultMapHeroIcon,
-											colour: defaultMapHeroIconColour,
-											opacity: defaultMapHeroIconOpacity,
-											size: defaultSymbolSizeForSpeedDials,
-										},
-									)
-						}
+					// icon={
+					// 	activeMap !== undefined && activeMap.hero_icon !== null
+					// 		? getFontAwesomeIconForSymbolPreview(activeMap.hero_icon, {
+					// 				size: defaultSymbolSizeForSpeedDials,
+					// 			})
+					// 		: /* Just in case the user is on a map with no hero icon, we still want to let them use thes switcher */ getFontAwesomeIconForSymbolPreview(
+					// 				{
+					// 					icon: defaultMapHeroIcon,
+					// 					colour: defaultMapHeroIconColour,
+					// 					opacity: defaultMapHeroIconOpacity,
+					// 					size: defaultSymbolSizeForSpeedDials,
+					// 				},
+					// 			)
+					// }
 					/>
 				}
 				onClose={handleClose}
 				onOpen={handleOpen}
 				open={open}
-				sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' } }}
+				// sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' } }}
 			>
 				{mapsWithHeroIcons.map((map) => (
 					<SpeedDialAction
