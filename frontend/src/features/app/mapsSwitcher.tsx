@@ -16,7 +16,14 @@ import {
 	defaultSymbolSizeForSpeedDials,
 	getFontAwesomeIconForSymbolPreview,
 } from '../symbology/symbologyHelpers';
-import { defaultSearchParameters, selectActiveMap, setFilteredFeatures, setSearchParameters } from './appSlice';
+import {
+	defaultSearchParameters,
+	eMapFeaturesLoadingStatus,
+	selectActiveMap,
+	setFilteredFeatures,
+	setMapFeaturesStatus,
+	setSearchParameters,
+} from './appSlice';
 
 const StyledSpeedDial = styled(SpeedDial)(() => ({
 	// Ensures that the SVG icons inside <Link /> elements display centred inside their wee circles
@@ -55,6 +62,8 @@ export default function MapSwitcher() {
 	const [updateUserProfile] = useUpdateUserProfileMutation();
 
 	const onSwitchMap = (mapId: number) => () => {
+		dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
+
 		setOpen(false);
 
 		dispatch(setSearchParameters(defaultSearchParameters));

@@ -1,5 +1,4 @@
 import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
-import { QueryStatus } from '@reduxjs/toolkit/query';
 import { MapBrowserEvent, MapEvent } from 'ol';
 import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
@@ -25,9 +24,9 @@ import {
 import { Map as MapaMap } from '../../app/services/maps';
 import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
-	getMapFeatureLoadingStatusDirectlyFromRTK,
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
+	isMapLoadingViaRTKOrManuallySpecified,
 	selectGeoJSONFeaturesAndSpriteSheet,
 	setFeaturesAvailableForEditing,
 	setMapView,
@@ -149,7 +148,7 @@ function OLMap(props: Props) {
 	// Used to let the component know that a new OL map has been created (e.g. when we're switching between maps) so it knows it needs to re-initialise a number of pieces of state
 	const mapReadyToBeReinitialisedRef = useRef<boolean>(false);
 
-	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatusDirectlyFromRTK);
+	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
 
 	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
@@ -733,7 +732,7 @@ function OLMap(props: Props) {
 
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
-			) : mapFeatureLoadingStatus === QueryStatus.fulfilled ? (
+			) : isMapLoading === false ? (
 				<React.Fragment>
 					<div id="centre_of_the_map"></div>
 
@@ -773,7 +772,9 @@ function OLMap(props: Props) {
 				</React.Fragment>
 			)}
 
-			{mapFeatureLoadingStatus === QueryStatus.pending && <WholeScreenLoadingIndicator />}
+			{/* <WholeScreenLoadingIndicator /> */}
+
+			{isMapLoading === true && <WholeScreenLoadingIndicator />}
 
 			{geolocationHasError !== false && (
 				<StyledAlert
