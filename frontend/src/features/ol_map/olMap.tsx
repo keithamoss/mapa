@@ -1,5 +1,5 @@
-import { Alert, AlertTitle, Box, styled } from '@mui/material';
-import { MapBrowserEvent, MapEvent, View } from 'ol';
+import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
+import { MapBrowserEvent, MapEvent } from 'ol';
 import Feature from 'ol/Feature';
 import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
@@ -10,7 +10,7 @@ import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } fro
 import VectorImageLayer from 'ol/layer/VectorImage';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
-import { fromLonLat, transform } from 'ol/proj';
+import { transform } from 'ol/proj';
 import VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -21,16 +21,18 @@ import {
 	MapaOpenLayersFeature,
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
+import { Map as MapaMap } from '../../app/services/maps';
+import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
-	eMapFeaturesLoadingStatus,
-	getMapFeatureLoadingStatus,
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
+	isMapLoadingViaRTKOrManuallySpecified,
 	selectGeoJSONFeaturesAndSpriteSheet,
 	setFeaturesAvailableForEditing,
 	setMapView,
 	setSearchLocationsZoomToCoordinates,
 } from '../app/appSlice';
+import { selectMapById } from '../maps/mapsSlice';
 import FeatureMovementButton from './controls/featureMovementButton';
 import FollowHeadingButton from './controls/followHeadingButton';
 import QuickAddSymbolsControl from './controls/quickAddSymbolsControl';
@@ -38,6 +40,7 @@ import SearchLocationsButton from './controls/searchLocationsButton';
 import SnapToGPSButton from './controls/snapToGPSButton';
 import LocationFetchingIndicator from './locationFetchingIndicator';
 import './olMap.css';
+import './olMapCore.css';
 import {
 	DeviceOrientationListenerManager,
 	MapHeadingStatus,
@@ -52,8 +55,11 @@ import {
 	geolocationMarkerHeadingForegroundTriangleOverlayId,
 	geolocationMarkerOverlayId,
 	getBasemap,
+	getMapInitialView,
 	getMapOverlayElementAsDiv,
+	getMapStartingZoomLevel,
 	hideCompassHeadingMarker,
+	isMapaMapFollowingGPS,
 	mapTargetElementId,
 	onGeolocationChangePosition,
 	onGeolocationError,
@@ -76,24 +82,56 @@ const MapButtonsContainer = styled(Box)(({ theme }) => ({
 	width: 50,
 }));
 
+const StyledAlert = styled(Alert)(({ theme }) => ({
+	position: 'absolute',
+	// Ensure this sits 1 above MapButtonsContainer so you can close the alert's without the QuickAdd buttons getting in the way
+	zIndex: theme.zIndex.speedDial + 2, // See note in App.tsx
+	bottom: 160,
+	ml: 1,
+	mr: 1,
+	width: '90%',
+}));
+
+interface EntrypointLayer1Props {
+	mapId: number;
+	mapRenderer: MapRenderer;
+	basemap: Basemap;
+	basemap_style: BasemapStyle;
+}
+
+function EntrypointLayer1(props: EntrypointLayer1Props) {
+	const { mapId, ...rest } = props;
+
+	const map = useAppSelector((state) => selectMapById(state, mapId));
+
+	if (map === undefined) {
+		return null;
+	}
+
+	return <OLMap mapaMap={map} {...rest} />;
+}
+
 // Inspo:
 // https://taylor.callsen.me/using-openlayers-with-react-functional-components/
 // https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 interface Props {
+	mapaMap: MapaMap;
 	mapRenderer: MapRenderer;
 	basemap: Basemap;
 	basemap_style: BasemapStyle;
 }
 
 function OLMap(props: Props) {
+	const { mapaMap, mapRenderer, basemap, basemap_style } = props;
+
 	// console.log('# olMap rendering');
 
 	const dispatch = useAppDispatch();
 
 	const navigate = useNavigate();
 
-	const { mapRenderer, basemap, basemap_style } = props;
+	const mapStartingZoomLevel = getMapStartingZoomLevel(mapaMap.starting_location);
 
 	// Note: We useRef() for mapHasPosition and isFeatureMovementAllowed to avoid passing state to useEffect()
 
@@ -107,7 +145,10 @@ function OLMap(props: Props) {
 	const mapRef = useRef<Map>();
 	mapRef.current = map;
 
-	const mapFeatureLoadingStatus = useAppSelector(getMapFeatureLoadingStatus);
+	// Used to let the component know that a new OL map has been created (e.g. when we're switching between maps) so it knows it needs to re-initialise a number of pieces of state
+	const mapReadyToBeReinitialisedRef = useRef<boolean>(false);
+
+	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
 
 	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
@@ -129,7 +170,8 @@ function OLMap(props: Props) {
 	useEffect(() => {
 		if (mapRef.current !== undefined && zoomToCoordinates !== undefined) {
 			setIsFollowingGPS(false);
-			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates);
+			updateAndCentreMapOnPosition(mapRef.current, zoomToCoordinates, defaultZoomLevel);
+			setMapHasPosition(true); // Highly unlikely, be just in case the map doesn't have a position yet.
 			dispatch(setSearchLocationsZoomToCoordinates(undefined));
 		}
 	}, [dispatch, zoomToCoordinates]);
@@ -268,14 +310,19 @@ function OLMap(props: Props) {
 		new Geolocation({
 			trackingOptions: {
 				enableHighAccuracy: true,
-				timeout: Infinity, // Always wait until the position is returned
-				// timeout: 2000,
+				// timeout: Infinity, // Always wait until the position is returned
+				timeout: 4000,
 				maximumAge: 60000, // Use cached position for up to 10s
 			},
 		}),
 	);
 
-	const [mapHasPosition, setMapHasPosition] = useState<boolean>(false);
+	// The map only has a starting location from the get-go if the user has defined both the zoom and centre
+	const [mapHasPosition, setMapHasPosition] = useState<boolean>(
+		mapaMap.starting_location !== null &&
+			mapaMap.starting_location.zoom !== undefined &&
+			mapaMap.starting_location.centre !== undefined,
+	);
 	const mapHasPositionRef = useRef<boolean>(mapHasPosition);
 	mapHasPositionRef.current = mapHasPosition;
 
@@ -283,13 +330,57 @@ function OLMap(props: Props) {
 	const geolocationHasErrorRef = useRef<false | GeolocationError>(geolocationHasError);
 	geolocationHasErrorRef.current = geolocationHasError;
 
-	const [isFollowingGPS, setIsFollowingGPS] = useState(true);
+	// We follow (i.e. snap the map to) the user's GPS location if no starting location is set or if a starting location is set, but they've only set the zoom level
+	const [isFollowingGPS, setIsFollowingGPS] = useState(isMapaMapFollowingGPS(mapaMap.starting_location));
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
 	isFollowingGPSRef.current = isFollowingGPS;
 
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
 	isUserMovingTheMapRef.current = isUserMovingTheMap;
+
+	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
+	useEffect(() => {
+		if (mapReadyToBeReinitialisedRef.current === true) {
+			// Make sure we snap to (or stop snapping to) the user's GPS location based on the needs of the map
+			const isFollowingGPSForNewMap = isMapaMapFollowingGPS(mapaMap.starting_location);
+			if (isFollowingGPS !== isFollowingGPSForNewMap) {
+				setIsFollowingGPS(isFollowingGPSForNewMap);
+			}
+
+			// And make sure the user's current location is updated on the map as required
+			// Without this call, it won't immediately update until the user's position actually changes in the real world
+			if (map !== undefined) {
+				const currentPosition = geolocation.current.getPosition();
+
+				if (currentPosition !== undefined) {
+					updateMapWithGPSPosition(map, currentPosition, isFollowingGPSForNewMap, mapStartingZoomLevel);
+				}
+			}
+
+			// And because switching maps recreates a whole new OL map, we also need to reattach the RAF for the heading indicator
+			if (
+				isFollowingHeadingStatus === MapHeadingStatus.On ||
+				isFollowingHeadingStatus === MapHeadingStatus.OnAndMapFollowing
+			) {
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current === undefined) {
+					isFollowingHeadingRequestAnimationFrameIdRef.current =
+						window.requestAnimationFrame(requestAnimationFrameCallback);
+				}
+
+				showCompassHeadingMarker();
+			}
+
+			mapReadyToBeReinitialisedRef.current = false;
+		}
+	}, [
+		isFollowingGPS,
+		isFollowingHeadingStatus,
+		map,
+		mapStartingZoomLevel,
+		mapaMap.starting_location,
+		requestAnimationFrameCallback,
+	]);
 
 	const onFollowGPSEnabled = useCallback(() => {
 		setIsFollowingGPS(true);
@@ -298,14 +389,25 @@ function OLMap(props: Props) {
 		if (mapRef.current !== undefined) {
 			const currentPosition = geolocation.current.getPosition();
 			if (currentPosition !== undefined) {
-				updateMapWithGPSPosition(mapRef.current, currentPosition, true);
+				updateMapWithGPSPosition(mapRef.current, currentPosition, true, mapStartingZoomLevel);
 			}
 		}
-	}, []);
+	}, [mapStartingZoomLevel]);
 
 	const onFollowGPSDisabled = useCallback(() => {
 		setIsFollowingGPS(false);
 	}, []);
+
+	const onClickTryAndGetGPSLocationAgain = useCallback(() => {
+		setGeolocationHasError(false);
+
+		if (mapRef.current !== undefined) {
+			const currentPosition = geolocation.current.getPosition();
+			if (currentPosition !== undefined) {
+				updateMapWithGPSPosition(mapRef.current, currentPosition, isFollowingGPS, mapStartingZoomLevel);
+			}
+		}
+	}, [isFollowingGPS, mapStartingZoomLevel]);
 
 	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
@@ -346,7 +448,7 @@ function OLMap(props: Props) {
 		// console.log('useEffect init');
 
 		if (mapRef.current === undefined) {
-			// console.log('making a map');
+			// console.log('Making a map');
 
 			// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
 			const deviceOrientationListenerManagerRefCopy = deviceOrientationListenerManagerRef.current;
@@ -372,10 +474,7 @@ function OLMap(props: Props) {
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
 				controls: [new Attribution({ collapsible: false })],
-				view:
-					currentPosition !== undefined
-						? new View({ zoom: defaultZoomLevel, center: fromLonLat(currentPosition) })
-						: undefined,
+				view: getMapInitialView(currentPosition, mapaMap),
 			});
 
 			// ######################
@@ -399,6 +498,7 @@ function OLMap(props: Props) {
 						initialMap,
 						mapHasPositionRef,
 						setMapHasPosition,
+						mapStartingZoomLevel,
 						isFollowingGPSRef,
 						setIsFollowingGPS,
 						isUserMovingTheMapRef,
@@ -531,6 +631,8 @@ function OLMap(props: Props) {
 			setMap(initialMap);
 			mapRef.current = initialMap;
 
+			mapReadyToBeReinitialisedRef.current = true;
+
 			return () => {
 				// console.log('Cleanup OLMap');
 
@@ -558,7 +660,7 @@ function OLMap(props: Props) {
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
-	}, [basemap, basemap_style, dispatch, navigate, requestAnimationFrameCallback]);
+	}, [basemap, basemap_style, dispatch, navigate, mapaMap, mapStartingZoomLevel]);
 	// ######################
 	// Initialise map on load (End)
 	// ######################
@@ -630,7 +732,7 @@ function OLMap(props: Props) {
 
 			{mapHasPosition === false ? (
 				<LocationFetchingIndicator />
-			) : mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.SUCCEEDED ? (
+			) : isMapLoading === false ? (
 				<React.Fragment>
 					<div id="centre_of_the_map"></div>
 
@@ -665,32 +767,38 @@ function OLMap(props: Props) {
 					</MapButtonsContainer>
 				</React.Fragment>
 			) : (
-				<React.Fragment></React.Fragment>
+				<React.Fragment>
+					{/* I guess this would only be for mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.FAILED */}
+				</React.Fragment>
 			)}
 
+			{/* <WholeScreenLoadingIndicator /> */}
+
+			{isMapLoading === true && <WholeScreenLoadingIndicator />}
+
 			{geolocationHasError !== false && (
-				<Alert
+				<StyledAlert
 					severity="error"
-					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
 					onClose={onCloseAlertDoNowt}
+					action={
+						<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
+							Try again
+						</Button>
+					}
 				>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
 					the app and report it to the developer.
 					<br />
 					Type: {geolocationHasError.type}, Code: {geolocationHasError.code}, Message: {geolocationHasError.message}
-				</Alert>
+				</StyledAlert>
 			)}
 
 			{isShowingFollowHeadingDeniedAlert === true && (
-				<Alert
-					severity="error"
-					sx={{ zIndex: 30, position: 'absolute', bottom: 160, ml: 1, mr: 1, width: '90%' }}
-					onClose={onCloseFollowHeadingDeniedAlert}
-				>
+				<StyledAlert severity="error" onClose={onCloseFollowHeadingDeniedAlert}>
 					<AlertTitle>You have denied permissions to use your device&apos;s accelerometer and magnetometer</AlertTitle>
 					To reset it, simply close and open the app again.
-				</Alert>
+				</StyledAlert>
 			)}
 
 			{/* {isFollowingHeadingStatus === MapHeadingStatus.Unsupported && (
@@ -707,4 +815,4 @@ function OLMap(props: Props) {
 	);
 }
 
-export default OLMap;
+export default EntrypointLayer1;

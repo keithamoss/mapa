@@ -54,7 +54,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class MapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Maps
-        fields = ("id", "name", "owner_id", "default_symbology", "hero_icon", "available_schema_ids", "last_used_schema_id")
+        fields = ("id", "name", "owner_id", "default_symbology", "hero_icon", "available_schema_ids", "starting_location", "last_used_schema_id")
 
 class FeatureSerializer(serializers.ModelSerializer):
     creation_date = TimestampReadOnlyField(required=False)

@@ -1,0 +1,14 @@
+/* Beware! This affects both OLMap and MapStartingLocationEditor */
+
+.ol-attribution {
+	left: 0 !important;
+	right: auto !important;
+	border-radius: 0 4px 0 0 !important;
+	opacity: 0.7;
+}
+
+/* https://github.com/openlayers/ol-mapbox-style/issues/1001 */
+@font-face {
+	font-family: 'DIN Pro';
+	src: url('/fonts/D-DIN-PRO-400-Regular.otf') format('opentype');
+}

@@ -16,11 +16,12 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer, useUpdateUserProfileMutation } from '../../app/services/auth';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import { getBaseURL } from '../../app/utils';
 import { selectUser } from '../auth/authSlice';
 
 function SettingsManager() {
@@ -60,6 +61,94 @@ function SettingsManager() {
 	};
 
 	const onClose = () => navigate('/');
+
+	const findAllCacheEntries = async () => {
+		// Get a list of all of the caches for this origin
+		const cacheNames = await caches.keys();
+		const result = [];
+
+		for (const name of cacheNames) {
+			// Open the cache
+			const cache = await caches.open(name);
+
+			// Get a list of entries. Each item is a Request object
+			for (const request of await cache.keys()) {
+				// If the request URL matches, add the response to the result
+				// if (request.url.endsWith('.png')) {
+				//   result.push(await cache.match(request));
+				// }
+
+				result.push(await cache.match(request));
+			}
+		}
+
+		return result;
+	};
+
+	const isCacheAPIAvailable = 'caches' in self;
+
+	const [cacheEntries, setCacheEntries] = useState<(Response | undefined)[]>();
+	console.log('cacheEntries', cacheEntries);
+
+	const [cacheResponseIconsLibrary, setCacheResponseIconsLibrary] = useState<Response | undefined>();
+	console.log('cacheResponseIconsLibrary', cacheResponseIconsLibrary);
+
+	const [cacheResponseIconsLibraryCategories, setCacheResponseIconsLibraryCategories] = useState<
+		Response | undefined
+	>();
+	console.log('cacheResponseIconsLibraryCategories', cacheResponseIconsLibraryCategories);
+
+	const cacheName = 'my-cache';
+	const cacheHash = '2137551e43704e7d6cc4a2825540f1b6';
+	const iconsLibraryURL = `/icons-library/icons-library.json?${cacheHash}`;
+	const iconsLibraryCategoriesURL = `/icons-library/icons-categories-library.json?${cacheHash}`;
+
+	const populateCache = async () => {
+		if (isCacheAPIAvailable === true) {
+			const cache = await caches.open(cacheName);
+			console.log('cache', cache);
+
+			// Icons Library
+			cache.add(iconsLibraryURL);
+
+			const request = new Request(iconsLibraryURL);
+			console.log('request', request);
+
+			// Icons Library Categories
+			cache.add(iconsLibraryCategoriesURL);
+
+			const request2 = new Request(iconsLibraryCategoriesURL);
+			console.log('request2', request2);
+		}
+	};
+
+	const readCache = async () => {
+		if (isCacheAPIAvailable === true) {
+			const cache = await caches.open(cacheName);
+			console.log('cache', cache);
+
+			const cacheEntries = await findAllCacheEntries();
+			setCacheEntries(cacheEntries);
+
+			// Icons Library
+			const request = new Request(iconsLibraryURL);
+			console.log('request', request);
+
+			const response = await cache.match(request);
+			setCacheResponseIconsLibrary(response);
+			console.log('response', response);
+			console.log('response.body', await response?.json());
+
+			// Icons Library Categories
+			const request2 = new Request(iconsLibraryCategoriesURL);
+			console.log('request2', request2);
+
+			const response2 = await cache.match(request2);
+			setCacheResponseIconsLibraryCategories(response2);
+			console.log('response2', response2);
+			console.log('response2.body', await response2?.json());
+		}
+	};
 
 	if (user === null) {
 		return null;
@@ -139,6 +228,51 @@ function SettingsManager() {
 					</FormControl>
 
 					<FormControl sx={{ mb: 3 }} fullWidth>
+						<FormLabel>Icons library caching experiment</FormLabel>
+						<Button variant="contained" sx={{ mt: 2, mb: 2 }} onClick={populateCache}>
+							Test Icons Library Cache: Populate
+						</Button>
+						<Button variant="contained" sx={{ mt: 2, mb: 2 }} onClick={readCache}>
+							Test Icons Library Cache: Read
+						</Button>
+						Cache API Supported: {isCacheAPIAvailable === true ? 'Yes' : 'No'}
+						<br />
+						Icons Library:
+						{cacheResponseIconsLibrary === undefined && 'TBA'}
+						{cacheResponseIconsLibrary !== undefined && (
+							<div style={{ marginBottom: '15px' }}>
+								{cacheResponseIconsLibrary.status}
+								<br />
+								{cacheResponseIconsLibrary.url.replace(getBaseURL(), '')}
+							</div>
+						)}
+						<br />
+						Icons Library Categories:
+						{cacheResponseIconsLibraryCategories === undefined && 'TBA'}
+						{cacheResponseIconsLibraryCategories !== undefined && (
+							<div style={{ marginBottom: '15px' }}>
+								{cacheResponseIconsLibraryCategories.status}
+								<br />
+								{cacheResponseIconsLibraryCategories.url.replace(getBaseURL(), '')}
+							</div>
+						)}
+						<br />
+						Cache Entries:
+						{cacheEntries !== undefined
+							? cacheEntries.map((entry, idx) =>
+									entry !== undefined ? (
+										<div key={idx} style={{ marginBottom: '15px' }}>
+											{entry.status}
+											<br />
+											{entry.url.replace(getBaseURL(), '')}
+										</div>
+									) : undefined,
+								)
+							: 'TBA'}
+						<br />
+					</FormControl>
+
+					<FormControl sx={{ mb: 3 }} fullWidth>
 						<FormLabel>Version debugging</FormLabel>
 
 						<Button variant="contained" sx={{ mt: 2, mb: 2 }} onClick={() => window.location.reload()}>
@@ -148,11 +282,21 @@ function SettingsManager() {
 						{performance
 							.getEntriesByType('resource')
 							// .filter((e) => e.initiatorType === 'script')
-							.map((e: any) => {
-								console.log(e);
+							.map((e: any, idx) => {
+								// console.log(e);
 								return (
-									<div>
-										{e.initiatorType} | {e.entryType} | {e.deliveryType}: {e.name}
+									<div key={idx} style={{ marginBottom: '15px' }}>
+										{e.initiatorType}
+										<br />
+										{e.entryType}
+										<br />
+										{e.deliveryType !== '' && (
+											<React.Fragment>
+												{e.deliveryType}
+												<br />
+											</React.Fragment>
+										)}
+										{e.name}
 									</div>
 								);
 							})}

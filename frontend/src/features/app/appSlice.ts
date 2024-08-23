@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 import { Coordinate } from 'ol/coordinate';
 import { authApi } from '../../app/services/auth';
 import { featuresApi, MapaFeature } from '../../app/services/features';
@@ -127,6 +128,9 @@ export const appSlice = createSlice({
 		setMapView: (state, action: PayloadAction<Partial<OLMapView>>) => {
 			state.mapView = action.payload;
 		},
+		setMapFeaturesStatus: (state, action: PayloadAction<eMapFeaturesLoadingStatus>) => {
+			state.mapFeatures.status = action.payload;
+		},
 		setFeaturesAvailableForEditing: (state, action: PayloadAction<MapaFeature[]>) => {
 			state.featuresAvailableForEditing = action.payload;
 		},
@@ -176,6 +180,7 @@ export const appSlice = createSlice({
 export const {
 	setActiveMapId,
 	setMapView,
+	setMapFeaturesStatus,
 	setFeaturesAvailableForEditing,
 	setSearchParameters,
 	setFilteredFeatures,
@@ -246,8 +251,13 @@ export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap
 export const selectActiveMapId = (state: RootState) => state.app.mapId;
 
 export const selectMapView = (state: RootState) => state.app.mapView;
+export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) =>
+	state.api.queries['getFeatures(undefined)']?.status === QueryStatus.pending ||
+	state.app.mapFeatures.status === eMapFeaturesLoadingStatus.LOADING;
 
-export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
+// export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
+// export const getMapFeatureLoadingStatusDirectlyFromRTK = (state: RootState) =>
+// 	state.api.queries['getFeatures(undefined)']?.status;
 
 export const getGeoJSONFeatures = (state: RootState) => state.app.mapFeatures.features;
 

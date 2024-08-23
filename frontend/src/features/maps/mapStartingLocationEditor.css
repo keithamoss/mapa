@@ -1,0 +1,24 @@
+/* This ensures the user on mobile can pinch zoom 
+without triggering the browser's default behaviour 
+of scaling the whole page.
+
+c.f. https://github.com/openlayers/openlayers/issues/13495
+*/
+#map-choose-starting-location * {
+	touch-action: none;
+}
+
+.map-choose-starting-location-container,
+#map-choose-starting-location {
+	margin: 0;
+	padding: 0;
+	width: 100dvw;
+	height: 100dvh;
+	position: absolute;
+}
+
+.map-choose-starting-location-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
