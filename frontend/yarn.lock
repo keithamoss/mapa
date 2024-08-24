@@ -2538,6 +2538,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/rbush@npm:^3.0.3":
+  version: 3.0.4
+  resolution: "@types/rbush@npm:3.0.4"
+  checksum: c5016b55cdefd2905248ae5b9fa304837f271a9cfd73ce23d8ab4f4717f74673f1fdd7d71136b78a80940fd3cffb5d5a58608269d8ee5abe0f4afbf339de1992
+  languageName: node
+  linkType: hard
+
 "@types/react-dom@npm:^18.3.0":
   version: 18.3.0
   resolution: "@types/react-dom@npm:18.3.0"
@@ -4687,7 +4694,7 @@ __metadata:
     js-cookie: ^3.0.5
     lodash-es: ^4.17.21
     minisearch: ^7.1.0
-    ol: ^10.0.0
+    ol: ^10.1.0
     ol-mapbox-style: ^12.3.5
     prettier: ^3.3.3
     react: ^18.3.1
@@ -6388,17 +6395,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^10.0.0":
-  version: 10.0.0
-  resolution: "ol@npm:10.0.0"
+"ol@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "ol@npm:10.1.0"
   dependencies:
+    "@types/rbush": ^3.0.3
     color-rgba: ^3.0.0
     color-space: ^2.0.1
     earcut: ^3.0.0
     geotiff: ^2.0.7
     pbf: 4.0.1
     rbush: ^4.0.0
-  checksum: f15936f460e293c5ba87a784ac4630aadd45f4e2814b8097c42bba4f50d2ebc5204c7ea635dc2899246a0160fe60563eca1eb6d6df8f53ff33df6fd4cb084388
+  checksum: 01f82abd727cedebbfb8287d9d4d20d531914f74d670850ff40aa12421053f5086059853fc73538b517b8481dd25282301e5304ad41c4a9d9bbfe985e5365fac
   languageName: node
   linkType: hard
 
