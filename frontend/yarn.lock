@@ -1586,14 +1586,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^7.13.0":
-  version: 7.13.0
-  resolution: "@mui/x-date-pickers@npm:7.13.0"
+"@mui/x-date-pickers@npm:^7.14.0":
+  version: 7.14.0
+  resolution: "@mui/x-date-pickers@npm:7.14.0"
   dependencies:
     "@babel/runtime": ^7.25.0
-    "@mui/system": ^5.16.5
-    "@mui/utils": ^5.16.5
-    "@types/react-transition-group": ^4.4.10
+    "@mui/system": ^5.16.7
+    "@mui/utils": ^5.16.6
+    "@types/react-transition-group": ^4.4.11
     clsx: ^2.1.1
     prop-types: ^15.8.1
     react-transition-group: ^4.4.5
@@ -1629,7 +1629,7 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 50db036f6d6877e576b9b265f7008bbc7095015bf7d63625e09537e3f5129852c990cc90904e71e20a1edb9dcd4aed9e308d25a0db2e423d43413cf1bee85b92
+  checksum: b7a4c2f23e6136a50b6f520c285a2cf7be418ffe6b26b580b4540c80daa93d8f0ece3873c64e2e41cbe9651dadbf61cfcb0d73a36f6b3c331c6008eb4a836636
   languageName: node
   linkType: hard
 
@@ -2527,6 +2527,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: fe2ea11f70251e9f79f368e198c18fd469b1d4f1e1d44e4365845b44e15974b0ec925100036f449b023b0ca3480a82725c5f0a73040e282ad32ec7b0def9b57c
+  languageName: node
+  linkType: hard
+
+"@types/react-transition-group@npm:^4.4.11":
+  version: 4.4.11
+  resolution: "@types/react-transition-group@npm:4.4.11"
+  dependencies:
+    "@types/react": "*"
+  checksum: a6e3b2e4363cb019e256ae4f19dadf9d7eb199da1a5e4109bbbf6a132821884044d332e9c74b520b1e5321a7f545502443fd1ce0b18649c8b510fa4220b0e5c2
   languageName: node
   linkType: hard
 
@@ -4569,7 +4578,7 @@ __metadata:
     "@mui/lab": ^5.0.0-alpha.173
     "@mui/material": ^5.16.7
     "@mui/system": ^5.16.7
-    "@mui/x-date-pickers": ^7.13.0
+    "@mui/x-date-pickers": ^7.14.0
     "@react-spring/web": ^9.7.4
     "@reduxjs/toolkit": ^2.2.7
     "@sentry/browser": ^8.26.0
