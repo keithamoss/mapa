@@ -1,4 +1,5 @@
 import { Schema } from '@mui/icons-material';
+import BugReportIcon from '@mui/icons-material/BugReport';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import InfoIcon from '@mui/icons-material/Info';
@@ -63,6 +64,11 @@ const actions = [
 		linkTo: '/About',
 		icon: <InfoIcon color="primary" />,
 		name: 'About Mapa',
+	},
+	{
+		linkTo: '/DebugManager',
+		icon: <BugReportIcon color="primary" />,
+		name: 'Debug',
 	},
 ];
 
