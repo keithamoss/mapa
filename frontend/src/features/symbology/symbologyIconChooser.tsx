@@ -22,7 +22,8 @@ import {
 } from '@mui/material';
 
 import React, { startTransition, useRef, useState } from 'react';
-import { IconStyle, getCategories } from './iconsLibrary';
+import { getCategories } from './iconsLibrary';
+import { IconStyle } from './iconsLibraryInterfaces';
 import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 
 import { grey } from '@mui/material/colors';

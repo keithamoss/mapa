@@ -1,6 +1,6 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, styled, useTheme } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import WelcomeUser from './WelcomeUser';
@@ -36,6 +36,9 @@ function App() {
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
+	// ######################
+	// Speed Dial Z-Index Workaround
+	// ######################
 	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in OLMap, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below all of the on-map buttons.
 	// tl;dr Toggle the zIndex of the SpeedDial depending on whether its open or not.
 	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
@@ -48,13 +51,44 @@ function App() {
 		// A slight delay to allow the SpeedDial to have closed first
 		window.setTimeout(() => setBoxZIndex(undefined), 500);
 	}, []);
+	// ######################
+	// Speed Dial Z-Index Workaround (End)
+	// ######################
+
+	// ######################
+	// Icons Library Loading
+	// ######################
+	const [iconsLibraryLoaded, setIconsLibraryLoaded] = useState<boolean | undefined>();
+
+	if (iconsLibraryLoaded === undefined) {
+		import('./features/symbology/iconsLibraryLoader').then((module) => {
+			if (module.icons !== undefined && module.categories !== undefined) {
+				setIconsLibraryLoaded(true);
+			} else {
+				setIconsLibraryLoaded(false);
+
+				// This shouldn't ever really happen, so let's happily throw an exception and let Sentry deal with showing its error dialog.
+				// From what we can see, the only things that should cause this would be the files not existing or some as-yet-unknown issue with adding resources of this size to the cache on some platform.
+				throw Error(
+					`Error hydrating Icons Library Cache. Icons Library: ${module.icons !== undefined ? 'Loaded' : 'Not Loaded'}; Icons Library Categories: ${module.categories !== undefined ? 'Loaded' : 'Not Loaded'}`,
+				);
+			}
+		});
+	}
+
+	useEffect(() => {
+		if (iconsLibraryLoaded === true) {
+			const loader = document.getElementById('loader-container');
+			loader?.remove();
+		}
+	}, [iconsLibraryLoaded]);
+	// ######################
+	// Icons Library Loading (End)
+	// ######################
 
 	if (isLoggedIn === undefined) {
 		return null;
 	}
-
-	const loader = document.getElementById('loader-container');
-	loader?.remove();
 
 	if (user === null) {
 		return (
@@ -76,6 +110,10 @@ function App() {
 	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
 	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
+
+	if (iconsLibraryLoaded !== true) {
+		return null;
+	}
 
 	return (
 		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>

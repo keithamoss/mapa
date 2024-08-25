@@ -67,3 +67,5 @@ export const waitForElm = (selector: string) => {
 		});
 	});
 };
+
+export const isCacheApiSupported = () => 'caches' in self;

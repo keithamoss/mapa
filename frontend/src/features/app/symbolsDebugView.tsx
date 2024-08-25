@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { selectUser } from '../auth/authSlice';
-import { IconStyle } from '../symbology/iconsLibrary';
+import { IconStyle } from '../symbology/iconsLibraryInterfaces';
 import { getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
 
 const iconDefs = [
