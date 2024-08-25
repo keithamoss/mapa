@@ -21,20 +21,29 @@ export default defineConfig(({ command, mode }) => {
 		},
 		build: {
 			outDir: 'build',
+			// Just big enough not to trigger the warning for the OpenLayers chunk. (The default is 500kb.)
+			chunkSizeWarningLimit: 600,
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
-						// Creating a chunk for third-party packages
+						// Creating chunks for various third-party packages
 						if (id.includes('/.yarn/')) {
-							return 'vendor';
+							if (id.includes('/react') || id.includes('redux')) {
+								return 'vendor-react-and-friends';
+							}
+
+							if (id.includes('/@mui')) {
+								return 'vendor-materialui';
+							}
+
+							if (id.includes('/ol')) {
+								return 'vendor-ol';
+							}
+
+							return 'vendor-others';
 						}
 
-						// Creating a chunk for the icons library so we can cache it for as long as possible
-						// and avoid source code changes affecting the cache too much.
-						if (id.includes('/iconsLibrary.ts')) {
-							console.log('>> found icons library');
-							return 'iconsLibrary';
-						}
+						// All else is our code and ends up in index.js
 					},
 				},
 			},
