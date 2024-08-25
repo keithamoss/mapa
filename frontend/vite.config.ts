@@ -12,6 +12,13 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 
 	return {
+		// Our target browsers are all modern, so let's avoid build errors being throw because we have top-level await in iconsLibraryLoader.ts
+		// Ref: https://stackoverflow.com/a/75839023/7368493
+		esbuild: {
+			supported: {
+				'top-level-await': true,
+			},
+		},
 		build: {
 			outDir: 'build',
 			rollupOptions: {
