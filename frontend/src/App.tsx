@@ -10,9 +10,15 @@ import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
+import { WholeScreenLoadingIndicator } from './app/ui/wholeScreenLoadingIndicator';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import { eMapFeaturesLoadingStatus, selectActiveMapId, setMapFeaturesStatus } from './features/app/appSlice';
+import {
+	eMapFeaturesLoadingStatus,
+	isMapLoadingViaRTKOrManuallySpecified,
+	selectActiveMapId,
+	setMapFeaturesStatus,
+} from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
@@ -37,6 +43,8 @@ function App() {
 	const user = useAppSelector(selectUser);
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
+
+	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
 
 	// ######################
 	// Speed Dial Z-Index Workaround
@@ -130,6 +138,8 @@ function App() {
 					basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
 				/>
 			)}
+
+			{isMapLoading === true && <WholeScreenLoadingIndicator />}
 
 			{location.pathname === '/' && (
 				<React.Fragment>

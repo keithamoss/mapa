@@ -22,7 +22,6 @@ import {
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
 import { Map as MapaMap } from '../../app/services/maps';
-import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
@@ -771,8 +770,6 @@ function OLMap(props: Props) {
 					{/* I guess this would only be for mapFeatureLoadingStatus === eMapFeaturesLoadingStatus.FAILED */}
 				</React.Fragment>
 			)}
-
-			{isMapLoading === true && <WholeScreenLoadingIndicator />}
 
 			{geolocationHasError !== false && (
 				<StyledAlert
