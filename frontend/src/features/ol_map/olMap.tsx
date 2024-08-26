@@ -772,8 +772,6 @@ function OLMap(props: Props) {
 				</React.Fragment>
 			)}
 
-			{/* <WholeScreenLoadingIndicator /> */}
-
 			{isMapLoading === true && <WholeScreenLoadingIndicator />}
 
 			{geolocationHasError !== false && (
