@@ -88,9 +88,14 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
-			dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
-
 			const loader = document.getElementById('loader-container');
+
+			// Only set the loader going if this is our first time initialising everything.
+			// This avoids working in dev showing the loader each time we save a file.
+			if (loader !== null) {
+				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
+			}
+
 			loader?.remove();
 		}
 	}, [dispatch, iconsLibraryLoaded]);
