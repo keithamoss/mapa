@@ -54,10 +54,19 @@ function App() {
 	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
 
 	const onSpeedDialOpen = useCallback(() => {
-		setBoxZIndex(`${theme.zIndex.speedDial + 2}`);
+		setBoxZIndex(`${theme.zIndex.speedDial + 4}`);
 	}, [theme.zIndex.speedDial]);
 
 	const onSpeedDialClose = useCallback(() => {
+		// A slight delay to allow the SpeedDial to have closed first
+		window.setTimeout(() => setBoxZIndex(undefined), 500);
+	}, []);
+
+	const onMapsSwitcherSpeedDialOpen = useCallback(() => {
+		setBoxZIndex(`${theme.zIndex.speedDial}`);
+	}, [theme.zIndex.speedDial]);
+
+	const onMapsSwitcherSpeedDialClose = useCallback(() => {
 		// A slight delay to allow the SpeedDial to have closed first
 		window.setTimeout(() => setBoxZIndex(undefined), 500);
 	}, []);
@@ -154,24 +163,34 @@ function App() {
 						sx={{
 							position: 'absolute',
 							zIndex: boxZIndex,
-							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+							bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
 							right: theme.spacing(2),
 						}}
 					>
 						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+					</Box>
 
+					<Box
+						sx={{
+							position: 'absolute',
+							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+							right: theme.spacing(2),
+						}}
+					>
 						<AddFeatureButton mapId={mapId} />
 					</Box>
 
 					<Box
 						sx={{
 							position: 'absolute',
-							// zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
 							left: theme.spacing(2),
 						}}
 					>
-						<MapSwitcher />
+						<MapSwitcher
+							onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
+							onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+						/>
 					</Box>
 				</React.Fragment>
 			)}
