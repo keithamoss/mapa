@@ -3,7 +3,7 @@ import { AppBar, Button, FormControl, FormLabel, IconButton, Paper, Toolbar, Typ
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DialogWithTransition } from '../../app/ui/dialog';
-import { getBaseURL, isCacheApiSupported } from '../../app/utils';
+import { getAPIBaseURL, getBaseURL, isCacheApiSupported } from '../../app/utils';
 import { iconsLibraryCacheName } from '../symbology/iconsLibraryCache';
 import { getAllResourcesFromCache, purgeAllCaches } from '../symbology/iconsLibraryCacheHelpers';
 
@@ -81,6 +81,7 @@ function DebugManager() {
 						{performance
 							.getEntriesByType('resource')
 							// .filter((e) => e.initiatorType === 'script')
+							.filter((e) => e.name.includes(getBaseURL()) === true || e.name.includes(getAPIBaseURL()) === true)
 							.map((e: any, idx) => {
 								// console.log(e);
 								return (
