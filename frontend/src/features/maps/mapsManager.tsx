@@ -3,7 +3,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Divider from '@mui/material/Divider';
 
-import { AppBar, Button, IconButton, List, ListItemButton, ListItemIcon, Toolbar } from '@mui/material';
+import { AppBar, Button, IconButton, List, ListItemButton, ListItemIcon, Toolbar, useTheme } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -26,6 +26,8 @@ import { selectAllMaps } from './mapsSlice';
 
 function MapManager() {
 	const mapId = useAppSelector(selectActiveMapId);
+
+	const theme = useTheme();
 
 	const maps = useAppSelector(selectAllMaps);
 
@@ -128,7 +130,8 @@ function MapManager() {
 				</List>
 			</DialogWithTransition>
 
-			{isUpdatingUpdateUserProfileLoading === true && <WholeScreenLoadingIndicator />}
+			{/* Bump the z-index of the WholeScreenLoadingIndicator up so it's visible above the modal dialog we're in */}
+			{isUpdatingUpdateUserProfileLoading === true && <WholeScreenLoadingIndicator zIndex={theme.zIndex.modal + 1} />}
 		</React.Fragment>
 	);
 }
