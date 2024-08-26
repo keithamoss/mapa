@@ -21,8 +21,6 @@ export default defineConfig(({ command, mode }) => {
 		},
 		build: {
 			outDir: 'build',
-			// Just big enough not to trigger the warning for the OpenLayers chunk. (The default is 500kb.)
-			chunkSizeWarningLimit: 600,
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
@@ -30,10 +28,6 @@ export default defineConfig(({ command, mode }) => {
 						if (id.includes('/.yarn/')) {
 							if (id.includes('/react') || id.includes('redux')) {
 								return 'vendor-react-and-friends';
-							}
-
-							if (id.includes('/@mui')) {
-								return 'vendor-materialui';
 							}
 
 							if (id.includes('/ol')) {
