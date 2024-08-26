@@ -1,5 +1,5 @@
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { SpeedDialIcon, styled } from '@mui/material';
+import { SpeedDialIcon, styled, useTheme } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import SpeedDial, { CloseReason } from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
@@ -34,6 +34,8 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 
 export default function MapSwitcher() {
 	const dispatch = useAppDispatch();
+
+	const theme = useTheme();
 
 	const activeMap = useAppSelector(selectActiveMap);
 
@@ -77,7 +79,8 @@ export default function MapSwitcher() {
 
 	return (
 		<React.Fragment>
-			<Backdrop open={open} onClick={handleBackdropClick} />
+			{/* Ensure our Backdrop sits just above the other on-map controls in App.tsx and olMap.tsx */}
+			<Backdrop open={open} onClick={handleBackdropClick} sx={{ zIndex: theme.zIndex.speedDial + 2 }} />
 
 			<StyledSpeedDial
 				ariaLabel="A button to switch the active map"

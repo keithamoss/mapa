@@ -76,7 +76,7 @@ import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './
 
 const MapButtonsContainer = styled(Box)(({ theme }) => ({
 	position: 'absolute',
-	zIndex: theme.zIndex.speedDial + 1, // See note in App.tsx
+	zIndex: theme.zIndex.speedDial + 1, // See note in App.tsx and MapsSwitcher.tsx
 	top: theme.spacing(2),
 	right: theme.spacing(2),
 	width: 50,
