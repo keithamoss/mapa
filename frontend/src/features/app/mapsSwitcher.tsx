@@ -107,7 +107,13 @@ export default function MapSwitcher() {
 				open={open}
 				// pointerEvents is required here because we're using our custom <img> as the icon, not a regular <svg>
 				// Without this the <img> triggers an event which means the first tap on the button opens and then immediately closes the FAB
-				sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' }, '& img': { pointerEvents: 'none' } }}
+				sx={{
+					'& .MuiButtonBase-root': {
+						zIndex: theme.zIndex.speedDial + 3, // Ensure the buttins in the SpeedDial sit just above our Backdrop from above
+						bgcolor: 'white',
+					},
+					'& img': { pointerEvents: 'none' },
+				}}
 			>
 				{mapsWithHeroIcons.map((map) => (
 					<SpeedDialAction
