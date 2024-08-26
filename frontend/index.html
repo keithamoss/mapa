@@ -45,8 +45,12 @@
   </div>
 
   <script>
-    const loaderHeart = document.getElementById("loader-heart")
-    loaderHeart?.style.setProperty("display", "inline")
+    // Delay showing the heart so we don't see it flash up when
+    // we're loading everything from the local cache.
+    window.setTimeout(() => {
+      const loaderHeart = document.getElementById("loader-heart")
+      loaderHeart?.style.setProperty("display", "inline")
+    }, 500)
   </script>
 
 
