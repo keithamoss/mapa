@@ -24,17 +24,9 @@ export default defineConfig(({ command, mode }) => {
 			rollupOptions: {
 				output: {
 					manualChunks(id: string) {
-						// Creating chunks for various third-party packages
+						// Creating a chunk for third-party packages
 						if (id.includes('/.yarn/')) {
-							if (id.includes('/react') || id.includes('redux')) {
-								return 'vendor-react-and-friends';
-							}
-
-							if (id.includes('/ol')) {
-								return 'vendor-ol';
-							}
-
-							return 'vendor-others';
+							return 'vendor';
 						}
 
 						// All else is our code and ends up in index.js
