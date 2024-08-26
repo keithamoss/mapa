@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import WelcomeUser from './WelcomeUser';
-import { useAppSelector } from './app/hooks/store';
+import { useAppDispatch, useAppSelector } from './app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from './app/services/auth';
 import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
@@ -12,7 +12,7 @@ import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import { selectActiveMapId } from './features/app/appSlice';
+import { eMapFeaturesLoadingStatus, selectActiveMapId, setMapFeaturesStatus } from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
@@ -26,6 +26,8 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
+	const dispatch = useAppDispatch();
+
 	const location = useLocation();
 
 	const theme = useTheme();
@@ -78,10 +80,12 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
+			dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
+
 			const loader = document.getElementById('loader-container');
 			loader?.remove();
 		}
-	}, [iconsLibraryLoaded]);
+	}, [dispatch, iconsLibraryLoaded]);
 	// ######################
 	// Icons Library Loading (End)
 	// ######################
