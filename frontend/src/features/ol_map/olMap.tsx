@@ -426,7 +426,13 @@ function OLMap(props: Props) {
 	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
 
 	const modifyInteractionStartEndRef = useRef(
-		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => updateFeaturePosition(feature)),
+		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => {
+			updateFeaturePosition(feature);
+
+			if (isStickyModeOnRef.current === false) {
+				onFeatureMovementDisabled();
+			}
+		}),
 	);
 
 	const [updateFeaturePosition] = useUpdateFeaturePositionForOLModifyInteractionMutation();
@@ -439,7 +445,17 @@ function OLMap(props: Props) {
 	const onFeatureMovementDisabled = useCallback(() => {
 		setModifyInteractionStatus(mapRef.current, false);
 		setIsFeatureMovementAllowed(false);
+		setIsStickyModeOn(false);
 	}, []);
+
+	const [isStickyModeOn, setIsStickyModeOn] = useState(false);
+
+	const isStickyModeOnRef = useRef<boolean>(false);
+	isStickyModeOnRef.current = isStickyModeOn;
+
+	const onFeatureMovementStickyModeEnabled = useCallback(() => setIsStickyModeOn(true), []);
+
+	const onFeatureMovementStickyModeDisabled = useCallback(() => setIsStickyModeOn(false), []);
 	// ######################
 	// Feature Movement (End)
 	// ######################
@@ -760,6 +776,9 @@ function OLMap(props: Props) {
 							isFeatureMovementAllowed={isFeatureMovementAllowed}
 							onFeatureMovementEnabled={onFeatureMovementEnabled}
 							onFeatureMovementDisabled={onFeatureMovementDisabled}
+							isStickyModeOn={isStickyModeOn}
+							onFeatureMovementStickyModeEnabled={onFeatureMovementStickyModeEnabled}
+							onFeatureMovementStickyModeDisabled={onFeatureMovementStickyModeDisabled}
 						/>
 
 						{mapaMap.location_search_enabled === true && (
