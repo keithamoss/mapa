@@ -22,7 +22,7 @@ import {
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { searchLocationsFormValidationSchema } from '../../app/forms/searchLocationsForm';
@@ -82,6 +82,8 @@ function SearchLocationsManager() {
 	// ######################
 	// TextField Component
 	// ######################
+	const textInput = useRef<HTMLInputElement>(null);
+
 	const onPasteFromClipboard = (pastedText: string) => {
 		setValue('search_term', pastedText, { shouldDirty: true });
 	};
@@ -123,6 +125,10 @@ function SearchLocationsManager() {
 	const onClearSearchResults = () => {
 		reset(defaultSearchLocationsParameters);
 		dispatch(setSearchLocationsParameters(defaultSearchLocationsParameters));
+
+		if (textInput.current !== null) {
+			textInput.current.focus();
+		}
 	};
 	// ######################
 	// Header Controls (End)
@@ -155,6 +161,7 @@ function SearchLocationsManager() {
 									render={({ field }) => (
 										<TextFieldWithPasteAdornment
 											{...field}
+											inputRef={textInput}
 											label="Search"
 											autoFocus
 											InputProps={{
