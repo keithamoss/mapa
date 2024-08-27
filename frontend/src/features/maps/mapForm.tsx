@@ -379,9 +379,9 @@ function MapForm(props: Props) {
 										: 'A starting location has been set'}
 								</Typography>
 							</FormGroup>
-						</FormControl>
 
-						{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
+							{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
+						</FormControl>
 					</Paper>
 				</form>
 			</DialogWithTransition>
