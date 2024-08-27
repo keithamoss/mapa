@@ -38,6 +38,7 @@ function SchemaFieldFormForTextField(props: Props) {
 		name: getStringOrEmptyStringForSchemasFieldsFormField(field, 'name'),
 		default_value: getStringOrEmptyStringForSchemasFieldsFormField(field, 'default_value'),
 		required_field: field?.required_field || false,
+		allow_pasting: field?.allow_pasting || false,
 	};
 
 	const {
@@ -107,6 +108,24 @@ function SchemaFieldFormForTextField(props: Props) {
 						</FormGroup>
 
 						{errors.required_field && <FormHelperText error>{errors.required_field.message}</FormHelperText>}
+					</FormControl>
+
+					<FormControl fullWidth={true} component="fieldset" variant="outlined">
+						<FormGroup>
+							<Controller
+								name="allow_pasting"
+								control={control}
+								defaultValue={defaultValues.allow_pasting}
+								render={({ field }) => (
+									<FormControlLabel
+										control={<Checkbox {...field} checked={field.value} />}
+										label="Enable paste button?"
+									/>
+								)}
+							/>
+						</FormGroup>
+
+						{errors.allow_pasting && <FormHelperText error>{errors.allow_pasting.message}</FormHelperText>}
 					</FormControl>
 				</form>
 			</DialogContent>

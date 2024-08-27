@@ -1,8 +1,6 @@
-import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Control, Controller, UseFormSetValue } from 'react-hook-form';
 import { FeatureSchemaFieldDefinitionTextField, FeatureSchemaFieldType } from '../../../app/services/schemas';
-import { isClipboardApiSupported } from '../../../app/utils';
+import TextFieldWithPasteAdornment from '../../../app/ui/textFieldWithPasteAdornment';
 import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
@@ -18,19 +16,8 @@ function SchemaDataEntryTextField(props: Props) {
 		return null;
 	}
 
-	const onPasteFromClipboard = async () => {
-		try {
-			const pasted = await navigator.clipboard.readText();
-			setValue(`schema_field_${schemaField.id}`, pasted, { shouldDirty: true });
-		} catch {
-			/* empty */
-		}
-	};
-
-	// This is here because the MUI example had it.
-	// Ref: https://mui.com/material-ui/react-text-field/#input-adornments
-	const handleMouseDownOnPasteFromClipboard = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
+	const onPasteFromClipboard = (pastedText: string) => {
+		setValue(`schema_field_${schemaField.id}`, pastedText, { shouldDirty: true });
 	};
 
 	return (
@@ -38,7 +25,7 @@ function SchemaDataEntryTextField(props: Props) {
 			name={`schema_field_${schemaField.id}`}
 			control={control}
 			render={({ field }) => (
-				<TextField
+				<TextFieldWithPasteAdornment
 					{...{ ...field, value: field.value !== undefined ? field.value : '' }}
 					required={schemaField.required_field}
 					label={schemaField.name}
@@ -46,21 +33,8 @@ function SchemaDataEntryTextField(props: Props) {
 					// Normal margins, but we don't need top margins because every element above these provides their own bottom margins
 					margin="normal"
 					sx={{ mt: 0, mb: 0 }}
-					InputProps={{
-						endAdornment:
-							isClipboardApiSupported() === true ? (
-								<InputAdornment position="end">
-									<IconButton
-										aria-label="toggle password visibility"
-										onClick={onPasteFromClipboard}
-										onMouseDown={handleMouseDownOnPasteFromClipboard}
-										edge="end"
-									>
-										<ContentPasteGoIcon />
-									</IconButton>
-								</InputAdornment>
-							) : undefined,
-					}}
+					pastingDisabled={schemaField.allow_pasting !== true}
+					onPasteFromClipboard={onPasteFromClipboard}
 				/>
 			)}
 		/>

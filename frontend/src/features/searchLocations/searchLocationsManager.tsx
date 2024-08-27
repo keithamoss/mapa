@@ -16,7 +16,6 @@ import {
 	ListItem,
 	ListItemText,
 	Paper,
-	TextField,
 	Toolbar,
 	Typography,
 } from '@mui/material';
@@ -30,6 +29,7 @@ import { searchLocationsFormValidationSchema } from '../../app/forms/searchLocat
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
 import { useFetchMapboxGeocodingResultsQuery } from '../../app/services/mapbox';
 import { DialogWithTransition } from '../../app/ui/dialog';
+import TextFieldWithPasteAdornment from '../../app/ui/textFieldWithPasteAdornment';
 import {
 	SearchLocationsParameters,
 	defaultSearchLocationsParameters,
@@ -57,6 +57,7 @@ function SearchLocationsManager() {
 	const {
 		watch,
 		handleSubmit,
+		setValue,
 		reset,
 		control,
 		formState: { errors },
@@ -76,6 +77,16 @@ function SearchLocationsManager() {
 	}, [dispatch, search_term]);
 	// ######################
 	// Form Component (End)
+	// ######################
+
+	// ######################
+	// TextField Component
+	// ######################
+	const onPasteFromClipboard = (pastedText: string) => {
+		setValue('search_term', pastedText, { shouldDirty: true });
+	};
+	// ######################
+	// TextField Component (End)
 	// ######################
 
 	// ######################
@@ -142,7 +153,7 @@ function SearchLocationsManager() {
 									name="search_term"
 									control={control}
 									render={({ field }) => (
-										<TextField
+										<TextFieldWithPasteAdornment
 											{...field}
 											label="Search"
 											autoFocus
@@ -153,6 +164,7 @@ function SearchLocationsManager() {
 													</InputAdornment>
 												),
 											}}
+											onPasteFromClipboard={onPasteFromClipboard}
 										/>
 									)}
 								/>
