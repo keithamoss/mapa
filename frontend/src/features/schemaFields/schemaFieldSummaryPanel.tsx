@@ -1,8 +1,9 @@
-import { List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import dayjs from 'dayjs';
 import { useAppSelector } from '../../app/hooks/store';
 import { FeatureDataItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
 import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
+import { isClipboardApiSupported } from '../../app/utils';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 
 const getDataItemAsString = (
@@ -39,6 +40,16 @@ function SchemaFieldSummaryPanel(props: Props) {
 
 	const schema = useAppSelector((state) => selectFeatureSchemaById(state, schemaId));
 
+	const onClickField = (dataItem: FeatureDataItem | undefined) => async () => {
+		if (isClipboardApiSupported() === true && dataItem !== undefined) {
+			try {
+				await navigator.clipboard.writeText(`${dataItem.value}`);
+			} catch {
+				/* empty */
+			}
+		}
+	};
+
 	if (schema === undefined || schema.definition.length === 0) {
 		return null;
 	}
@@ -51,11 +62,13 @@ function SchemaFieldSummaryPanel(props: Props) {
 				);
 
 				return dataItem !== undefined ? (
-					<ListItem key={schemaFieldDefinition.id}>
-						<ListItemText
-							primary={getDataItemAsString(schemaFieldDefinition, dataItem)}
-							secondary={schemaFieldDefinition.name}
-						/>
+					<ListItem key={schemaFieldDefinition.id} sx={{ cursor: 'pointer' }}>
+						<ListItemButton onClick={onClickField(dataItem)}>
+							<ListItemText
+								primary={getDataItemAsString(schemaFieldDefinition, dataItem)}
+								secondary={schemaFieldDefinition.name}
+							/>
+						</ListItemButton>
 					</ListItem>
 				) : undefined;
 			})}
