@@ -173,6 +173,20 @@ function SchemaSymbologyChooser(props: Props) {
 	const symbolSearchResults = symbolSearchTerm !== '' ? searchSymbols(schema.symbology, symbolSearchTerm) : [];
 	const symbolSearchResultsSymbolIds = symbolSearchResults.map((s) => s.id);
 
+	const optionsFilteredMostRecentlyAdded =
+		optionsGrouped['Most recently added'] !== undefined
+			? optionsGrouped['Most recently added'].filter((o) =>
+					symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true,
+				)
+			: undefined;
+
+	const optionsFilteredFavourites =
+		optionsGrouped.Favourites !== undefined
+			? optionsGrouped.Favourites.filter((o) =>
+					symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true,
+				)
+			: undefined;
+
 	return (
 		<React.Fragment>
 			<DialogWithTransition themeColour={defaultNakedDialogColour}>
@@ -214,19 +228,19 @@ function SchemaSymbologyChooser(props: Props) {
 							bgcolor: 'background.paper',
 						}}
 					>
-						{optionsGrouped.Favourites !== undefined && (
+						{optionsFilteredFavourites !== undefined && optionsFilteredFavourites.length > 0 && (
 							<React.Fragment>
 								<ListSubheader sx={{ mt: 0 }} color="primary" disableGutters>
 									Favourites
 								</ListSubheader>
 
-								{optionsGrouped.Favourites.filter((o) =>
-									symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true,
-								).map((option) => createSymbolListItem(option, onClickSymbol, symbolSearchTerm, symbolSearchResults))}
+								{optionsFilteredFavourites.map((option) =>
+									createSymbolListItem(option, onClickSymbol, symbolSearchTerm, symbolSearchResults),
+								)}
 							</React.Fragment>
 						)}
 
-						{optionsGrouped['Most recently added'] !== undefined && (
+						{optionsFilteredMostRecentlyAdded !== undefined && optionsFilteredMostRecentlyAdded.length > 0 && (
 							<React.Fragment>
 								<ListSubheader
 									sx={{
@@ -238,42 +252,47 @@ function SchemaSymbologyChooser(props: Props) {
 									Most recently added
 								</ListSubheader>
 
-								{optionsGrouped['Most recently added']
-									.filter((o) => (symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true))
-									.map((option) => createSymbolListItem(option, onClickSymbol, symbolSearchTerm, symbolSearchResults))}
+								{optionsFilteredMostRecentlyAdded.map((option) =>
+									createSymbolListItem(option, onClickSymbol, symbolSearchTerm, symbolSearchResults),
+								)}
 							</React.Fragment>
 						)}
 
-						{getSymbolGroups(symbology).map((symbologyGroup) => (
-							<React.Fragment key={symbologyGroup.id}>
-								{optionsGrouped[symbologyGroup.name] !== undefined && (
-									<React.Fragment key={symbologyGroup.id}>
-										<ListSubheader
-											sx={{
-												mt:
-													(optionsGrouped.Favourites !== undefined ||
-														optionsGrouped['Most recently added'] !== undefined) &&
-													symbologyGroup.id === defaultSymbologyGroupId
-														? 2
-														: 0,
-											}}
-											color="primary"
-											disableGutters
-										>
-											{symbologyGroup.name}
-										</ListSubheader>
+						{getSymbolGroups(symbology).map((symbologyGroup) => {
+							const optionsFiltered =
+								optionsGrouped[symbologyGroup.name] !== undefined
+									? optionsGrouped[symbologyGroup.name].filter((o) =>
+											symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true,
+										)
+									: undefined;
 
-										{optionsGrouped[symbologyGroup.name]
-											.filter((o) =>
-												symbolSearchTerm !== '' ? symbolSearchResultsSymbolIds.includes(o.symbol.id) : true,
-											)
-											.map((option) =>
+							return (
+								<React.Fragment key={symbologyGroup.id}>
+									{optionsFiltered !== undefined && optionsFiltered.length > 0 && (
+										<React.Fragment key={symbologyGroup.id}>
+											<ListSubheader
+												sx={{
+													mt:
+														(optionsGrouped.Favourites !== undefined ||
+															optionsFilteredMostRecentlyAdded !== undefined) &&
+														symbologyGroup.id === defaultSymbologyGroupId
+															? 2
+															: 0,
+												}}
+												color="primary"
+												disableGutters
+											>
+												{symbologyGroup.name}
+											</ListSubheader>
+
+											{optionsFiltered.map((option) =>
 												createSymbolListItem(option, onClickSymbol, symbolSearchTerm, symbolSearchResults),
 											)}
-									</React.Fragment>
-								)}
-							</React.Fragment>
-						))}
+										</React.Fragment>
+									)}
+								</React.Fragment>
+							);
+						})}
 					</List>
 				</Paper>
 			</DialogWithTransition>
