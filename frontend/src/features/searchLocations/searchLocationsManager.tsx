@@ -6,6 +6,7 @@ import {
 	AlertTitle,
 	AppBar,
 	Button,
+	Checkbox,
 	CircularProgress,
 	FormControl,
 	FormGroup,
@@ -14,6 +15,8 @@ import {
 	InputAdornment,
 	List,
 	ListItem,
+	ListItemButton,
+	ListItemIcon,
 	ListItemText,
 	Paper,
 	Toolbar,
@@ -22,6 +25,7 @@ import {
 import { skipToken } from '@reduxjs/toolkit/query';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
+import Cookies from 'js-cookie';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -44,6 +48,10 @@ import {
 	isSearchingYet,
 } from './searchLocationsHelpers';
 
+interface FormProps extends SearchLocationsParameters {
+	proximity: boolean;
+}
+
 function SearchLocationsManager() {
 	const navigate = useNavigate();
 
@@ -61,12 +69,15 @@ function SearchLocationsManager() {
 		reset,
 		control,
 		formState: { errors },
-	} = useForm<SearchLocationsParameters>({
+	} = useForm<FormProps>({
 		resolver: yupResolver(searchLocationsFormValidationSchema),
-		defaultValues: searchParameters,
+		defaultValues: {
+			search_term: searchParameters.search_term,
+			proximity: Cookies.get('locationSearchProximity') === 'true' ? true : false,
+		},
 	});
 
-	const { search_term } = watch();
+	const { search_term, proximity } = watch();
 
 	const onDoneWithForm: SubmitHandler<SearchLocationsParameters> = () => {};
 
@@ -87,6 +98,14 @@ function SearchLocationsManager() {
 	const onPasteFromClipboard = (pastedText: string) => {
 		setValue('search_term', pastedText, { shouldDirty: true });
 	};
+
+	const onClickProximity = () => {
+		setValue('proximity', !proximity, { shouldDirty: true });
+
+		Cookies.set('locationSearchProximity', `${!proximity}`, {
+			expires: 400, // This is the new maximum expiry for cookies in days
+		});
+	};
 	// ######################
 	// TextField Component (End)
 	// ######################
@@ -94,7 +113,7 @@ function SearchLocationsManager() {
 	// ######################
 	// Mapbox Search Query
 	// ######################
-	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${search_term}.json?limit=10&proximity=&types=${defaultMapboxSearchTypes.join(
+	const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${search_term}.json?limit=10&proximity=${proximity === true ? 'ip' : ''}&types=${defaultMapboxSearchTypes.join(
 		'%2C',
 	)}&access_token=${getMapboxAPIKey()}`;
 
@@ -153,7 +172,7 @@ function SearchLocationsManager() {
 
 				<form onSubmit={handleSubmit(onDoneWithForm)}>
 					<Paper elevation={0} sx={{ m: 3 }}>
-						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+						<FormControl fullWidth={true} sx={{ mb: 1 }} component="fieldset" variant="outlined">
 							<FormGroup>
 								<Controller
 									name="search_term"
@@ -178,6 +197,32 @@ function SearchLocationsManager() {
 							</FormGroup>
 
 							{errors.search_term && <FormHelperText error>{errors.search_term.message}</FormHelperText>}
+						</FormControl>
+
+						<FormControl fullWidth={true} sx={{ mb: 2 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<List disablePadding>
+									<ListItem disablePadding disableGutters>
+										<ListItemButton dense onClick={onClickProximity}>
+											<ListItemIcon>
+												<Controller
+													name="proximity"
+													control={control}
+													defaultValue={false}
+													render={({ field }) => <Checkbox {...field} checked={field.value} />}
+												/>
+											</ListItemIcon>
+											<ListItemText
+												primary="Prefer results close to my location"
+												secondary="(Based on your IP address.)"
+												sx={{ '& .MuiListItemText-primary': { fontWeight: 500 } }}
+											/>
+										</ListItemButton>
+									</ListItem>
+								</List>
+							</FormGroup>
+
+							{errors.proximity && <FormHelperText error>{errors.proximity.message}</FormHelperText>}
 						</FormControl>
 
 						{/* Handles not found and all other types of error */}
