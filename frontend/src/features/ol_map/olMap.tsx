@@ -5,6 +5,7 @@ import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
+import ScaleLine from 'ol/control/ScaleLine';
 import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -492,9 +493,33 @@ function OLMap(props: Props) {
 					}),
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
-				controls: [new Attribution({ collapsible: false })],
+				controls: [
+					new Attribution({ collapsible: false }),
+					new ScaleLine({
+						units: 'metric',
+					}),
+				],
 				view: getMapInitialView(currentPosition, mapaMap),
 			});
+
+			// ######################
+			// Scale Bar
+			// ######################
+			let isMapResolutionChanged: boolean = false;
+			let isMapResolutionChangedTimeoutHandler: number | undefined;
+
+			initialMap.getView().on('change:resolution', () => {
+				if (isMapResolutionChanged === false) {
+					isMapResolutionChanged = true;
+
+					const olScaleLine = document.querySelector(`#${mapTargetElementId} .ol-scale-line`);
+					olScaleLine?.classList.remove('goaway');
+					olScaleLine?.classList.add('visible');
+				}
+			});
+			// ######################
+			// Scale Bar (End)
+			// ######################
 
 			// ######################
 			// Geolocation
@@ -575,6 +600,18 @@ function OLMap(props: Props) {
 
 			initialMap.on('moveend', (evt: MapEvent) => {
 				setIsUserMovingTheMap(false);
+
+				if (isMapResolutionChanged === true) {
+					isMapResolutionChanged = false;
+
+					if (isMapResolutionChangedTimeoutHandler !== undefined) {
+						window.clearTimeout(isMapResolutionChangedTimeoutHandler);
+					}
+
+					isMapResolutionChangedTimeoutHandler = window.setTimeout(() => {
+						document.querySelector(`#${mapTargetElementId} .ol-scale-line`)?.classList.add('goaway');
+					}, 2000);
+				}
 
 				if (
 					(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
