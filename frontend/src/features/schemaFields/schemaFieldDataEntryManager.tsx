@@ -80,6 +80,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 	const previousDefaultValues = usePrevious(defaultValues);
 
 	const {
+		setValue,
 		handleSubmit,
 		control,
 		reset,
@@ -120,6 +121,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 									key={`${schema.id}_${fieldDefinition.id}`}
 									control={control}
 									schemaField={fieldDefinition}
+									setValue={setValue}
 								/>
 							);
 							break;
