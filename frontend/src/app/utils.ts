@@ -43,8 +43,7 @@ export const isInStandaloneMode = () =>
 export const titleCase = (string: string) => startCase(toLower(string));
 
 // https://phuoc.ng/collection/clipboard/check-if-the-clipboard-api-is-supported/
-export const isClipboardApiSupported = () =>
-	!!(navigator.clipboard && navigator.clipboard.writeText && navigator.clipboard.readText);
+export const isClipboardApiSupported = () => !!(navigator.clipboard && navigator.clipboard.writeText);
 
 // https://stackoverflow.com/a/61511955/7368493
 // Not actually used, but useful if we ever need it
