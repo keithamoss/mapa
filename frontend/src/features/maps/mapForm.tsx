@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
 import TuneIcon from '@mui/icons-material/Tune';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -67,7 +68,7 @@ function MapForm(props: Props) {
 			default_symbology: map?.default_symbology || undefined,
 			hero_icon: map?.hero_icon || undefined,
 			available_schema_ids: map?.available_schema_ids || [],
-			starting_location: map?.starting_location || undefined,
+			starting_location: map?.starting_location || null,
 		},
 	});
 
@@ -132,6 +133,8 @@ function MapForm(props: Props) {
 		setValue('starting_location', { centre, zoom }, { shouldDirty: true });
 		setIsSettingMapStartingLocation(false);
 	};
+
+	const onClearMapStartingLocation = () => setValue('starting_location', null, { shouldDirty: true });
 
 	const onCloseSettingMapStartingLocation = () => setIsSettingMapStartingLocation(false);
 	// ######################
@@ -350,13 +353,28 @@ function MapForm(props: Props) {
 									variant="outlined"
 									startIcon={<TuneIcon />}
 									onClick={onClickChooseMapStartingLocation}
-									sx={{ mt: 2, mb: 2, maxWidth: 350 }}
+									sx={{
+										mt: 2,
+										mb: starting_location !== null ? 0 : 2,
+										maxWidth: 350,
+									}}
 								>
 									Choose Starting Location
 								</Button>
 
+								{starting_location !== null && (
+									<Button
+										variant="outlined"
+										startIcon={<ClearIcon />}
+										onClick={onClearMapStartingLocation}
+										sx={{ mt: 2, mb: 2, maxWidth: 150 }}
+									>
+										Clear
+									</Button>
+								)}
+
 								<Typography variant="caption">
-									{starting_location === undefined
+									{starting_location === null
 										? 'No starting location has been set.'
 										: 'A starting location has been set'}
 								</Typography>
