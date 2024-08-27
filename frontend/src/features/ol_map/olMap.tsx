@@ -408,6 +408,10 @@ function OLMap(props: Props) {
 		}
 	}, [isFollowingGPS, mapStartingZoomLevel]);
 
+	const onCloseTryAndGetGPSLocationAgain = useCallback(() => {
+		setGeolocationHasError(false);
+	}, []);
+
 	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
 	// Geolocation (End)
@@ -780,7 +784,7 @@ function OLMap(props: Props) {
 							<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
 								Try again
 							</Button>
-							<Button color="inherit" size="small" onClick={onCloseAlertDoNowt}>
+							<Button color="inherit" size="small" onClick={onCloseTryAndGetGPSLocationAgain}>
 								Close
 							</Button>
 						</React.Fragment>
