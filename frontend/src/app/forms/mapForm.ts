@@ -24,5 +24,6 @@ export const mapFormValidationSchema: ObjectSchema<MapModifiableProps> = yup
 			})
 			.required()
 			.nullable(),
+		location_search_enabled: yup.boolean().required(),
 	})
 	.required();

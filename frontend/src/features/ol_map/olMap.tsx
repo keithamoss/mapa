@@ -762,7 +762,9 @@ function OLMap(props: Props) {
 							onFeatureMovementDisabled={onFeatureMovementDisabled}
 						/>
 
-						<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
+						{mapaMap.location_search_enabled === true && (
+							<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
+						)}
 
 						{/* <GoogleMapsImportButton /> */}
 

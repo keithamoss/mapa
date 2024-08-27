@@ -72,6 +72,7 @@ class Maps(models.Model):
     deleted_at = models.DateTimeField(null=True)
     available_schema_ids = JSONField(default=list, blank=True)
     starting_location = JSONField(null=True)
+    location_search_enabled = models.BooleanField(default=False)
     last_used_schema_id = models.ForeignKey(FeatureSchemas, null=True, on_delete=models.CASCADE, db_column="last_used_schema_id")
 
     history = HistoricalRecords()

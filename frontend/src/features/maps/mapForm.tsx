@@ -14,6 +14,10 @@ import {
 	FormHelperText,
 	IconButton,
 	InputLabel,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	OutlinedInput,
@@ -69,10 +73,11 @@ function MapForm(props: Props) {
 			hero_icon: map?.hero_icon || undefined,
 			available_schema_ids: map?.available_schema_ids || [],
 			starting_location: map?.starting_location || null,
+			location_search_enabled: map?.location_search_enabled || false,
 		},
 	});
 
-	const { hero_icon, default_symbology, available_schema_ids, starting_location } = watch();
+	const { hero_icon, default_symbology, available_schema_ids, starting_location, location_search_enabled } = watch();
 
 	// ######################
 	// Map Hero Icon
@@ -139,6 +144,15 @@ function MapForm(props: Props) {
 	const onCloseSettingMapStartingLocation = () => setIsSettingMapStartingLocation(false);
 	// ######################
 	// Starting Location (End)
+	// ######################
+
+	// ######################
+	// Location Search
+	// ######################
+	const onClickLocationSearch = () =>
+		setValue('location_search_enabled', !location_search_enabled, { shouldDirty: true });
+	// ######################
+	// Location Search (End)
 	// ######################
 
 	// ######################
@@ -381,6 +395,36 @@ function MapForm(props: Props) {
 							</FormGroup>
 
 							{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
+						</FormControl>
+
+						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<FormSectionHeading>Location search</FormSectionHeading>
+
+								<Typography variant="body2">
+									Choose if the map will show the control that lets people search for place names and addresses.
+								</Typography>
+
+								<List disablePadding>
+									<ListItem disablePadding disableGutters>
+										<ListItemButton dense onClick={onClickLocationSearch}>
+											<ListItemIcon>
+												<Controller
+													name="location_search_enabled"
+													control={control}
+													defaultValue={false}
+													render={({ field }) => <Checkbox {...field} checked={field.value} />}
+												/>
+											</ListItemIcon>
+											<ListItemText primary="Location search enabled?" />
+										</ListItemButton>
+									</ListItem>
+								</List>
+							</FormGroup>
+
+							{errors.location_search_enabled && (
+								<FormHelperText error>{errors.location_search_enabled.message}</FormHelperText>
+							)}
 						</FormControl>
 					</Paper>
 				</form>

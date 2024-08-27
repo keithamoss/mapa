@@ -15,6 +15,7 @@ export interface MapModifiableProps {
 	hero_icon: SymbologyProps | null;
 	available_schema_ids: number[];
 	starting_location: MapStartingLocation | null;
+	location_search_enabled: boolean;
 }
 
 export type NewMap = MapModifiableProps;
