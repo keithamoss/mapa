@@ -776,10 +776,16 @@ function OLMap(props: Props) {
 					severity="error"
 					onClose={onCloseAlertDoNowt}
 					action={
-						<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
-							Try again
-						</Button>
+						<React.Fragment>
+							<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
+								Try again
+							</Button>
+							<Button color="inherit" size="small" onClick={onCloseAlertDoNowt}>
+								Close
+							</Button>
+						</React.Fragment>
 					}
+					sx={{ '& .MuiAlert-action': { flexDirection: 'column' } }}
 				>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting
