@@ -1,5 +1,51 @@
 [
   {
+    "version": "I'm a lumberjack, and I'm okay",
+    "date": "26 August, 2024",
+    "changes": {
+      "highlights": [
+        [
+          "Meep meep!",
+          "We now cache the whole icons library in a new and much more reliable way than we have been so far. This means Mapa should load (or reload) much much faster than it ever has before. Enjoy"
+        ],
+        [
+          "Icons galore",
+          "We've added three brand new icon packs: Adventure, Sea Life, and Odds and Ends and we've also added a bunch of new icons to the existing Nature pack."
+        ],
+        [
+          "Where do we start?",
+          "You can now set a custom starting location for your maps. You can choose to (a) set a fixed location (i.e. setting the centre of the map and the zoom level you want to start at) or (b) to use your current location, but choose how close to zoom into it."
+        ],
+        [
+          "Quickly now, hurry",
+          "Due to popular demand, you can now quickly switch between your maps without ever having to leave the map itself. Simply tap on the button with your map's icon and your other maps are just a tap away."
+        ]
+      ],
+      "minor changes": [
+        [
+          "Waiting for Godot",
+          "The map no longer waits forever for your location. If it can't get a location fix within 4s, an alert banner will popup and give you the option of trying again."
+        ],
+        [
+          "Loading...",
+          "Whenever a map is loading up we now display a loading screen over the top of the map so you get instant feedback that something is going on. As a bonus, this means you can't interact with the map and accidently add mulberry trees to the Canada travel map."
+        ],
+        [
+          "Still loading...",
+          "In a similar vein, when switching maps from the Maps page you'll now see a loading screen so you get instant feedback that something is happening."
+        ],
+        [
+          "Semantics",
+          "Under the 'Feature Summary' we used to say that a boolean field as 'On'. This language didn't make a lot of sense for how boolean fields are being used in practice, so we now say that they are 'Checked'."
+        ],
+        [
+          "Debugging",
+          "All of the debug related guff on the Settings screen has moved over to a separate Debug screen that's accessible from the top of the navigation menu."
+        ]
+      ]
+    }
+  },
+  {
     "version": "Mapa and the Search For The Holy Grail",
     "date": "2 August, 2024",
     "changes": {
