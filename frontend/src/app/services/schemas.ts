@@ -1,6 +1,6 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
-import { IconStyle } from '../../features/symbology/iconsLibrary';
+import { IconStyle } from '../../features/symbology/iconsLibraryInterfaces';
 import { api } from './api';
 
 export interface SymbologyProps {

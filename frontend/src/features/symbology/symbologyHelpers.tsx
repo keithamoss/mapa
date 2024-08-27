@@ -11,8 +11,8 @@ import { sortBy } from 'lodash-es';
 import { hextoRGBACSS } from '../../app/colourUtils';
 import { MapaFeature } from '../../app/services/features';
 import { isDevelopment } from '../../app/utils';
-import { IconStyle } from './iconsLibrary';
 import { getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibraryHelpers';
+import { IconStyle } from './iconsLibraryInterfaces';
 import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';

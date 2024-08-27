@@ -1,5 +1,4 @@
 import { RGBACSSDarkenColour } from '../../app/colourUtils';
-import { IconStyle } from './iconsLibrary';
 import {
 	getIconByName,
 	getIconSVG,
@@ -8,6 +7,7 @@ import {
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibraryHelpers';
+import { IconStyle } from './iconsLibraryInterfaces';
 import {
 	FontAwesomeIconSVGProps,
 	defaultSymbolDarkenColourByPercentage,

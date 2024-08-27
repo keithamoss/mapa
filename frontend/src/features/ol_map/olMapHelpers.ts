@@ -239,15 +239,6 @@ export const onModifyInteractionAddRemoveFeature = (evt: VectorSourceEvent) => {
 };
 
 export const getMapInitialView = (currentPosition: Coordinate | undefined, mapaMap: MapaMap) => {
-	if (currentPosition !== undefined) {
-		// console.log('Set old school view');
-
-		return new View({
-			zoom: getMapStartingZoomLevel(mapaMap.starting_location),
-			center: fromLonLat(currentPosition),
-		});
-	}
-
 	if (
 		mapaMap.starting_location !== null &&
 		mapaMap.starting_location.zoom !== undefined &&
@@ -258,6 +249,15 @@ export const getMapInitialView = (currentPosition: Coordinate | undefined, mapaM
 		return new View({
 			zoom: mapaMap.starting_location.zoom,
 			center: fromLonLat(mapaMap.starting_location.centre),
+		});
+	}
+
+	if (currentPosition !== undefined) {
+		// console.log('Set old school view');
+
+		return new View({
+			zoom: getMapStartingZoomLevel(mapaMap.starting_location),
+			center: fromLonLat(currentPosition),
 		});
 	}
 

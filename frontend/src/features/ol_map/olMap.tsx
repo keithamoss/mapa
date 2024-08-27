@@ -22,7 +22,6 @@ import {
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
 import { Map as MapaMap } from '../../app/services/maps';
-import { WholeScreenLoadingIndicator } from '../../app/ui/wholeScreenLoadingIndicator';
 import {
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
@@ -76,7 +75,7 @@ import { manageWebGLPointsLayerCreation, manageWebGLPointsLayerUpdate } from './
 
 const MapButtonsContainer = styled(Box)(({ theme }) => ({
 	position: 'absolute',
-	zIndex: theme.zIndex.speedDial + 1, // See note in App.tsx
+	zIndex: theme.zIndex.speedDial + 1, // See note in App.tsx and MapsSwitcher.tsx
 	top: theme.spacing(2),
 	right: theme.spacing(2),
 	width: 50,
@@ -772,19 +771,21 @@ function OLMap(props: Props) {
 				</React.Fragment>
 			)}
 
-			{/* <WholeScreenLoadingIndicator /> */}
-
-			{isMapLoading === true && <WholeScreenLoadingIndicator />}
-
 			{geolocationHasError !== false && (
 				<StyledAlert
 					severity="error"
 					onClose={onCloseAlertDoNowt}
 					action={
-						<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
-							Try again
-						</Button>
+						<React.Fragment>
+							<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
+								Try again
+							</Button>
+							<Button color="inherit" size="small" onClick={onCloseAlertDoNowt}>
+								Close
+							</Button>
+						</React.Fragment>
 					}
+					sx={{ '& .MuiAlert-action': { flexDirection: 'column' } }}
 				>
 					<AlertTitle>Error determining your location</AlertTitle>
 					We&lsquo;re now trying to re-establish your location. If we can&lsquo;t, please try refreshing or restarting

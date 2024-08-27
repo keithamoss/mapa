@@ -82,7 +82,6 @@ import { isInStandaloneMode } from '../../app/utils';
 import { selectMapById } from '../maps/mapsSlice';
 import SchemaSymbologyGroupEditor from '../schemas/schemaSymbologyGroupEditor';
 import './colourPicker.css';
-import { IconStyle } from './iconsLibrary';
 import {
 	getDefaultStyleByIconName,
 	getIconLabelByName,
@@ -92,6 +91,7 @@ import {
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibraryHelpers';
+import { IconStyle } from './iconsLibraryInterfaces';
 import SliderFixed from './sliderFixed';
 import SymbologyIconChooser from './symbologyIconChooser';
 import SymbologyIconStyleChooser from './symbologyIconStyleChooser';

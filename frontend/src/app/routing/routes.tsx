@@ -4,6 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../../App';
 import AboutPage from '../../features/about/aboutPage';
 import SymbolsDebugView from '../../features/app/symbolsDebugView';
+import DebugManager from '../../features/debug/debugManager';
 import FeatureCreator from '../../features/features/featureCreator';
 import FeatureEditor from '../../features/features/featureEditor';
 import FeatureManager from '../../features/features/featureManager';
@@ -91,6 +92,10 @@ export const router = sentryCreateBrowserRouter([
 			{
 				path: 'SettingsManager',
 				element: <SettingsManager />,
+			},
+			{
+				path: 'DebugManager',
+				element: <DebugManager />,
 			},
 			{
 				path: 'WhatsNew',

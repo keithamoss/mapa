@@ -1,18 +1,24 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import { Box, Button, styled, useTheme } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import './App.css';
 import WelcomeUser from './WelcomeUser';
-import { useAppSelector } from './app/hooks/store';
+import { useAppDispatch, useAppSelector } from './app/hooks/store';
 import { Basemap, BasemapStyle, MapRenderer } from './app/services/auth';
 import { featuresApi } from './app/services/features';
 import { mapsApi } from './app/services/maps';
 import { featureSchemasApi } from './app/services/schemas';
 import { store } from './app/store';
+import { WholeScreenLoadingIndicator } from './app/ui/wholeScreenLoadingIndicator';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import { selectActiveMapId } from './features/app/appSlice';
+import {
+	eMapFeaturesLoadingStatus,
+	isMapLoadingViaRTKOrManuallySpecified,
+	selectActiveMapId,
+	setMapFeaturesStatus,
+} from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
@@ -26,6 +32,8 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
+	const dispatch = useAppDispatch();
+
 	const location = useLocation();
 
 	const theme = useTheme();
@@ -36,12 +44,17 @@ function App() {
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
+	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
+
+	// ######################
+	// Speed Dial Z-Index Workaround
+	// ######################
 	// Without this, and setting `zIndex: theme.zIndex.speedDial + 1` in OLMap, we (a) can't click anything except for the first two QuickAdd icons and (b) when the SpeedDial opens it sits below all of the on-map buttons.
 	// tl;dr Toggle the zIndex of the SpeedDial depending on whether its open or not.
 	const [boxZIndex, setBoxZIndex] = useState<string | undefined>(undefined);
 
 	const onSpeedDialOpen = useCallback(() => {
-		setBoxZIndex(`${theme.zIndex.speedDial + 2}`);
+		setBoxZIndex(`${theme.zIndex.speedDial + 4}`);
 	}, [theme.zIndex.speedDial]);
 
 	const onSpeedDialClose = useCallback(() => {
@@ -49,12 +62,59 @@ function App() {
 		window.setTimeout(() => setBoxZIndex(undefined), 500);
 	}, []);
 
+	const onMapsSwitcherSpeedDialOpen = useCallback(() => {
+		setBoxZIndex(`${theme.zIndex.speedDial}`);
+	}, [theme.zIndex.speedDial]);
+
+	const onMapsSwitcherSpeedDialClose = useCallback(() => {
+		// A slight delay to allow the SpeedDial to have closed first
+		window.setTimeout(() => setBoxZIndex(undefined), 500);
+	}, []);
+	// ######################
+	// Speed Dial Z-Index Workaround (End)
+	// ######################
+
+	// ######################
+	// Icons Library Loading
+	// ######################
+	const [iconsLibraryLoaded, setIconsLibraryLoaded] = useState<boolean | undefined>();
+
+	if (iconsLibraryLoaded === undefined) {
+		import('./features/symbology/iconsLibraryLoader').then((module) => {
+			if (module.icons !== undefined && module.categories !== undefined) {
+				setIconsLibraryLoaded(true);
+			} else {
+				setIconsLibraryLoaded(false);
+
+				// This shouldn't ever really happen, so let's happily throw an exception and let Sentry deal with showing its error dialog.
+				// From what we can see, the only things that should cause this would be the files not existing or some as-yet-unknown issue with adding resources of this size to the cache on some platform.
+				throw Error(
+					`Error hydrating Icons Library Cache. Icons Library: ${module.icons !== undefined ? 'Loaded' : 'Not Loaded'}; Icons Library Categories: ${module.categories !== undefined ? 'Loaded' : 'Not Loaded'}`,
+				);
+			}
+		});
+	}
+
+	useEffect(() => {
+		if (iconsLibraryLoaded === true) {
+			const loader = document.getElementById('loader-container');
+
+			// Only set the loader going if this is our first time initialising everything.
+			// This avoids working in dev showing the loader each time we save a file.
+			if (loader !== null) {
+				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
+			}
+
+			loader?.remove();
+		}
+	}, [dispatch, iconsLibraryLoaded]);
+	// ######################
+	// Icons Library Loading (End)
+	// ######################
+
 	if (isLoggedIn === undefined) {
 		return null;
 	}
-
-	const loader = document.getElementById('loader-container');
-	loader?.remove();
 
 	if (user === null) {
 		return (
@@ -77,6 +137,10 @@ function App() {
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
 	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
 
+	if (iconsLibraryLoaded !== true) {
+		return null;
+	}
+
 	return (
 		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
 		<div className="App">
@@ -89,6 +153,8 @@ function App() {
 				/>
 			)}
 
+			{isMapLoading === true && <WholeScreenLoadingIndicator />}
+
 			{location.pathname === '/' && (
 				<React.Fragment>
 					{mapId === undefined && <WelcomeUser />}
@@ -97,24 +163,34 @@ function App() {
 						sx={{
 							position: 'absolute',
 							zIndex: boxZIndex,
-							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+							bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
 							right: theme.spacing(2),
 						}}
 					>
 						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+					</Box>
 
+					<Box
+						sx={{
+							position: 'absolute',
+							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+							right: theme.spacing(2),
+						}}
+					>
 						<AddFeatureButton mapId={mapId} />
 					</Box>
 
 					<Box
 						sx={{
 							position: 'absolute',
-							// zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
 							left: theme.spacing(2),
 						}}
 					>
-						<MapSwitcher />
+						<MapSwitcher
+							onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
+							onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+						/>
 					</Box>
 				</React.Fragment>
 			)}

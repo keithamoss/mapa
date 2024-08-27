@@ -1,5 +1,5 @@
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { SpeedDialIcon, styled } from '@mui/material';
+import { SpeedDialIcon, styled, useTheme } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import SpeedDial, { CloseReason } from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
@@ -32,8 +32,17 @@ const StyledSpeedDial = styled(SpeedDial)(() => ({
 	},
 }));
 
-export default function MapSwitcher() {
+interface Props {
+	onSpeedDialOpen: () => void;
+	onSpeedDialClose: () => void;
+}
+
+export default function MapSwitcher(props: Props) {
+	const { onSpeedDialOpen, onSpeedDialClose } = props;
+
 	const dispatch = useAppDispatch();
+
+	const theme = useTheme();
 
 	const activeMap = useAppSelector(selectActiveMap);
 
@@ -46,17 +55,20 @@ export default function MapSwitcher() {
 
 	const handleOpen = () => {
 		setOpen(true);
+		onSpeedDialOpen();
 	};
 
 	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
 		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
 		if (reason !== 'mouseLeave') {
 			setOpen(false);
+			onSpeedDialClose();
 		}
 	};
 
 	const handleBackdropClick = () => {
 		setOpen(false);
+		onSpeedDialClose();
 	};
 
 	const [updateUserProfile] = useUpdateUserProfileMutation();
@@ -69,6 +81,8 @@ export default function MapSwitcher() {
 		dispatch(setSearchParameters(defaultSearchParameters));
 		dispatch(setFilteredFeatures([]));
 		updateUserProfile({ last_map_id: mapId });
+
+		onSpeedDialClose();
 	};
 
 	if (mapsWithHeroIcons.length === 0) {
@@ -77,7 +91,8 @@ export default function MapSwitcher() {
 
 	return (
 		<React.Fragment>
-			<Backdrop open={open} onClick={handleBackdropClick} />
+			{/* Ensure our Backdrop sits just above the other on-map controls in App.tsx and olMap.tsx */}
+			<Backdrop open={open} onClick={handleBackdropClick} sx={{ zIndex: theme.zIndex.speedDial + 2 }} />
 
 			<StyledSpeedDial
 				ariaLabel="A button to switch the active map"
@@ -102,7 +117,17 @@ export default function MapSwitcher() {
 				onClose={handleClose}
 				onOpen={handleOpen}
 				open={open}
-				sx={{ '& .MuiButtonBase-root': { bgcolor: 'white' }, '& img': { pointerEvents: 'none' } }}
+				// pointerEvents is required here because we're using our custom <img> as the icon, not a regular <svg>
+				// Without this the <img> triggers an event which means the first tap on the button opens and then immediately closes the FAB
+				sx={{
+					position: 'relative', // Ensure the primary FAB button sits below the Backdrop in SpeedDialNavigation (without this it's position static and ignores z-indexes)
+					zIndex: theme.zIndex.speedDial + 3, // Ensure the buttons in the SpeedDial sit just above our Backdrop from above
+					'& .MuiButtonBase-root': {
+						zIndex: theme.zIndex.speedDial + 3, // Ensure the buttons in the SpeedDial sit just above our Backdrop from above
+						bgcolor: 'white',
+					},
+					'& img': { pointerEvents: 'none' },
+				}}
 			>
 				{mapsWithHeroIcons.map((map) => (
 					<SpeedDialAction
