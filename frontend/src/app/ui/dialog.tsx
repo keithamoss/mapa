@@ -1,17 +1,16 @@
-import { Dialog, DialogProps, Slide } from '@mui/material';
+import { Dialog, DialogProps } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import React, { forwardRef, useEffect, useRef } from 'react';
-import { useUnmount } from '../hooks/useUnmount';
-import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour, getThemeColour, setThemeColour } from './theme';
+import React from 'react';
+import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour } from './theme';
 
-const Transition = forwardRef(function Transition(
-	props: TransitionProps & {
-		children: React.ReactElement;
-	},
-	ref: React.Ref<unknown>,
-) {
-	return <Slide direction="up" ref={ref} {...props} />;
-});
+// const Transition = forwardRef(function Transition(
+// 	props: TransitionProps & {
+// 		children: React.ReactElement;
+// 	},
+// 	ref: React.Ref<unknown>,
+// ) {
+// 	return <Slide direction="up" ref={ref} {...props} />;
+// });
 
 interface Props {
 	onClose?: () => void;
@@ -31,33 +30,33 @@ export const DialogWithTransition = ({
 	themeColour = dialogProps?.fullScreen === false ? defaultNakedNonFullScreenDialogColour : defaultAppBarColour,
 	disableRestoreFocus,
 }: Props) => {
-	const previousThemeColourRef = useRef<string | undefined>();
+	// const previousThemeColourRef = useRef<string | undefined>();
 	// This enteredRef never quite worked. It's goal was to stop seeing the brief flash of
 	// the default creamy white/grey colour when switching between two layers of dialogs.
 	// const enteredRef = useRef(false);
 
-	useEffect(() => {
-		previousThemeColourRef.current = getThemeColour();
-	}, []);
+	// useEffect(() => {
+	// 	previousThemeColourRef.current = getThemeColour();
+	// }, []);
 
 	const onDialogClose = () => {
-		if (previousThemeColourRef.current !== undefined) {
-			setThemeColour(previousThemeColourRef.current);
-		}
+		// if (previousThemeColourRef.current !== undefined) {
+		// 	setThemeColour(previousThemeColourRef.current);
+		// }
 
 		if (onClose !== undefined) {
 			onClose();
 		}
 	};
 
-	useUnmount(() => {
-		if (
-			/*enteredRef.current === true &&*/
-			previousThemeColourRef.current !== undefined
-		) {
-			setThemeColour(previousThemeColourRef.current);
-		}
-	});
+	// useUnmount(() => {
+	// 	if (
+	// 		/*enteredRef.current === true &&*/
+	// 		previousThemeColourRef.current !== undefined
+	// 	) {
+	// 		setThemeColour(previousThemeColourRef.current);
+	// 	}
+	// });
 
 	return (
 		<Dialog
@@ -65,32 +64,32 @@ export const DialogWithTransition = ({
 			open={true}
 			onClose={onDialogClose}
 			disableRestoreFocus={disableRestoreFocus}
-			transitionDuration={0}
-			TransitionComponent={Transition}
-			TransitionProps={{
-				...transitionProps,
-				onEntered: (node: HTMLElement, isAppearing: boolean) => {
-					if (dialogProps?.fullScreen !== false) {
-						setThemeColour(themeColour);
-						// enteredRef.current = true;
-					}
+			// transitionDuration={0}
+			// TransitionComponent={Transition}
+			// TransitionProps={{
+			// 	...transitionProps,
+			// 	onEntered: (node: HTMLElement, isAppearing: boolean) => {
+			// 		if (dialogProps?.fullScreen !== false) {
+			// 			setThemeColour(themeColour);
+			// 			// enteredRef.current = true;
+			// 		}
 
-					if (transitionProps?.onEntered !== undefined) {
-						transitionProps.onEntered(node, isAppearing);
-					}
-				},
-				// This works better with non-full screen dialogs than onEntered
-				addEndListener: (node: HTMLElement, done: () => void) => {
-					if (dialogProps?.fullScreen === false) {
-						setThemeColour(themeColour);
-						// enteredRef.current = true;
-					}
+			// 		if (transitionProps?.onEntered !== undefined) {
+			// 			transitionProps.onEntered(node, isAppearing);
+			// 		}
+			// 	},
+			// 	// This works better with non-full screen dialogs than onEntered
+			// 	addEndListener: (node: HTMLElement, done: () => void) => {
+			// 		if (dialogProps?.fullScreen === false) {
+			// 			setThemeColour(themeColour);
+			// 			// enteredRef.current = true;
+			// 		}
 
-					if (transitionProps?.addEndListener !== undefined) {
-						transitionProps.addEndListener(node, done);
-					}
-				},
-			}}
+			// 		if (transitionProps?.addEndListener !== undefined) {
+			// 			transitionProps.addEndListener(node, done);
+			// 		}
+			// 	},
+			// }}
 			{...dialogProps}
 		>
 			{children}
