@@ -72,7 +72,7 @@ export const DialogWithTransition = ({
 			// TransitionProps={{
 			// 	addEndListener: onDialogTransitionEnd,
 			// }}
-			// transitionDuration={250}
+			transitionDuration={0}
 			TransitionComponent={Transition}
 			TransitionProps={{
 				...transitionProps,
