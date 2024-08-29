@@ -1,5 +1,6 @@
 import {
 	Button,
+	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
@@ -13,7 +14,6 @@ import {
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { DialogWithTransition } from '../../app/ui/dialog';
 import { getFeaturesAvailableForEditing, setFeaturesAvailableForEditing } from '../app/appSlice';
 import { defaultSymbolSizeForFormFields, getFontAwesomeIconForSymbolPreview } from '../symbology/symbologyHelpers';
 import { getFeatureLabel } from './featureHelpers';
@@ -40,7 +40,7 @@ function FeatureManager() {
 	};
 
 	return (
-		<DialogWithTransition onClose={onClose} dialogProps={{ fullScreen: false, fullWidth: true }}>
+		<Dialog open={true} onClose={onClose} fullScreen={false} fullWidth={true}>
 			<DialogTitle>Edit Features</DialogTitle>
 
 			<DialogContent>
@@ -70,7 +70,7 @@ function FeatureManager() {
 			<DialogActions>
 				<Button onClick={onClose}>Cancel</Button>
 			</DialogActions>
-		</DialogWithTransition>
+		</Dialog>
 	);
 }
 
