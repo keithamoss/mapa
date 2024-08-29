@@ -20,14 +20,36 @@ export const geolocationMarkerOverlayId = 'geolocation_marker';
 export const geolocationMarkerHeadingForegroundTriangleOverlayId = 'geolocation_marker_heading_foreground_triangle';
 export const geolocationMarkerHeadingBackgroundTriangleOverlayId = 'geolocation_marker_heading_background_triangle';
 
-export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) =>
-	basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
+export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) => {
+	// import VectorLayer from 'ol/layer/Vector';
+	// import VectorSource from 'ol/source/Vector';
+	// import TopoJSON from 'ol/format/TopoJSON';
+
+	// Ref: https://openlayers.org/en/latest/examples/topojson.html
+	// return new VectorLayer({
+	// 	source: new VectorSource({
+	// 		url: '/offlineBasemap/world-110m.json',
+	// 		format: new TopoJSON({
+	// 			// don't want to render the full world polygon (stored as 'land' layer),
+	// 			// which repeats all countries
+	// 			layers: ['countries'],
+	// 		}),
+	// 		overlaps: false,
+	// 	}),
+	// 	style: {
+	// 		'stroke-color': 'darkgrey',
+	// 		'stroke-width': 2,
+	// 	},
+	// });
+
+	return basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
 		? getWMTSTileLayer(basemap_style)
 		: new MapboxVectorLayer({
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Infinity,
 			});
+};
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {
 	const markerEl = document.createElement('div');

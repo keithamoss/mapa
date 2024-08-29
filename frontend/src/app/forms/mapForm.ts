@@ -22,6 +22,8 @@ export const mapFormValidationSchema: ObjectSchema<MapModifiableProps> = yup
 					.min(minZoomLevel, `Must be ${minZoomLevel} or larger`)
 					.max(maxZoomLevel, `Must be ${maxZoomLevel} or smaller`),
 			})
-			.required(),
+			.required()
+			.nullable(),
+		location_search_enabled: yup.boolean().required(),
 	})
 	.required();

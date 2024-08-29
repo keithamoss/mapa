@@ -90,6 +90,7 @@ export type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps = {
 	name: string;
 	default_value: string;
 	required_field: boolean;
+	allow_pasting: boolean;
 };
 
 export type FeatureSchemaFieldDefinitionTextField = FeatureSchemaFieldDefinitionTextFieldFormModifiableProps & {

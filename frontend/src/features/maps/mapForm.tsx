@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import ClearIcon from '@mui/icons-material/Clear';
 import CloseIcon from '@mui/icons-material/Close';
 import TuneIcon from '@mui/icons-material/Tune';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -13,6 +14,10 @@ import {
 	FormHelperText,
 	IconButton,
 	InputLabel,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	OutlinedInput,
@@ -67,11 +72,12 @@ function MapForm(props: Props) {
 			default_symbology: map?.default_symbology || undefined,
 			hero_icon: map?.hero_icon || undefined,
 			available_schema_ids: map?.available_schema_ids || [],
-			starting_location: map?.starting_location || undefined,
+			starting_location: map?.starting_location || null,
+			location_search_enabled: map?.location_search_enabled || false,
 		},
 	});
 
-	const { hero_icon, default_symbology, available_schema_ids, starting_location } = watch();
+	const { hero_icon, default_symbology, available_schema_ids, starting_location, location_search_enabled } = watch();
 
 	// ######################
 	// Map Hero Icon
@@ -133,9 +139,20 @@ function MapForm(props: Props) {
 		setIsSettingMapStartingLocation(false);
 	};
 
+	const onClearMapStartingLocation = () => setValue('starting_location', null, { shouldDirty: true });
+
 	const onCloseSettingMapStartingLocation = () => setIsSettingMapStartingLocation(false);
 	// ######################
 	// Starting Location (End)
+	// ######################
+
+	// ######################
+	// Location Search
+	// ######################
+	const onClickLocationSearch = () =>
+		setValue('location_search_enabled', !location_search_enabled, { shouldDirty: true });
+	// ######################
+	// Location Search (End)
 	// ######################
 
 	// ######################
@@ -350,20 +367,65 @@ function MapForm(props: Props) {
 									variant="outlined"
 									startIcon={<TuneIcon />}
 									onClick={onClickChooseMapStartingLocation}
-									sx={{ mt: 2, mb: 2, maxWidth: 350 }}
+									sx={{
+										mt: 2,
+										mb: starting_location !== null ? 0 : 2,
+										maxWidth: 350,
+									}}
 								>
 									Choose Starting Location
 								</Button>
 
+								{starting_location !== null && (
+									<Button
+										variant="outlined"
+										startIcon={<ClearIcon />}
+										onClick={onClearMapStartingLocation}
+										sx={{ mt: 2, mb: 2, maxWidth: 150 }}
+									>
+										Clear
+									</Button>
+								)}
+
 								<Typography variant="caption">
-									{starting_location === undefined
+									{starting_location === null
 										? 'No starting location has been set.'
 										: 'A starting location has been set'}
 								</Typography>
 							</FormGroup>
+
+							{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
 						</FormControl>
 
-						{errors.starting_location && <FormHelperText error>{errors.starting_location.message}</FormHelperText>}
+						<FormControl fullWidth={true} sx={{ mb: 3 }} component="fieldset" variant="outlined">
+							<FormGroup>
+								<FormSectionHeading>Location search</FormSectionHeading>
+
+								<Typography variant="body2">
+									Choose if the map will show the control that lets people search for place names and addresses.
+								</Typography>
+
+								<List disablePadding>
+									<ListItem disablePadding disableGutters>
+										<ListItemButton dense onClick={onClickLocationSearch}>
+											<ListItemIcon>
+												<Controller
+													name="location_search_enabled"
+													control={control}
+													defaultValue={false}
+													render={({ field }) => <Checkbox {...field} checked={field.value} />}
+												/>
+											</ListItemIcon>
+											<ListItemText primary="Location search enabled?" />
+										</ListItemButton>
+									</ListItem>
+								</List>
+							</FormGroup>
+
+							{errors.location_search_enabled && (
+								<FormHelperText error>{errors.location_search_enabled.message}</FormHelperText>
+							)}
+						</FormControl>
 					</Paper>
 				</form>
 			</DialogWithTransition>

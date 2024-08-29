@@ -5,6 +5,7 @@ import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
+import ScaleLine from 'ol/control/ScaleLine';
 import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -408,6 +409,10 @@ function OLMap(props: Props) {
 		}
 	}, [isFollowingGPS, mapStartingZoomLevel]);
 
+	const onCloseTryAndGetGPSLocationAgain = useCallback(() => {
+		setGeolocationHasError(false);
+	}, []);
+
 	const onCloseAlertDoNowt = useCallback(() => {}, []);
 	// ######################
 	// Geolocation (End)
@@ -422,7 +427,13 @@ function OLMap(props: Props) {
 	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
 
 	const modifyInteractionStartEndRef = useRef(
-		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => updateFeaturePosition(feature)),
+		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => {
+			updateFeaturePosition(feature);
+
+			if (isStickyModeOnRef.current === false) {
+				onFeatureMovementDisabled();
+			}
+		}),
 	);
 
 	const [updateFeaturePosition] = useUpdateFeaturePositionForOLModifyInteractionMutation();
@@ -435,7 +446,17 @@ function OLMap(props: Props) {
 	const onFeatureMovementDisabled = useCallback(() => {
 		setModifyInteractionStatus(mapRef.current, false);
 		setIsFeatureMovementAllowed(false);
+		setIsStickyModeOn(false);
 	}, []);
+
+	const [isStickyModeOn, setIsStickyModeOn] = useState(false);
+
+	const isStickyModeOnRef = useRef<boolean>(false);
+	isStickyModeOnRef.current = isStickyModeOn;
+
+	const onFeatureMovementStickyModeEnabled = useCallback(() => setIsStickyModeOn(true), []);
+
+	const onFeatureMovementStickyModeDisabled = useCallback(() => setIsStickyModeOn(false), []);
 	// ######################
 	// Feature Movement (End)
 	// ######################
@@ -472,9 +493,33 @@ function OLMap(props: Props) {
 					}),
 				]),
 				layers: [getBasemap(basemap, basemap_style)],
-				controls: [new Attribution({ collapsible: false })],
+				controls: [
+					new Attribution({ collapsible: false }),
+					new ScaleLine({
+						units: 'metric',
+					}),
+				],
 				view: getMapInitialView(currentPosition, mapaMap),
 			});
+
+			// ######################
+			// Scale Bar
+			// ######################
+			let isMapResolutionChanged: boolean = false;
+			let isMapResolutionChangedTimeoutHandler: number | undefined;
+
+			initialMap.getView().on('change:resolution', () => {
+				if (isMapResolutionChanged === false) {
+					isMapResolutionChanged = true;
+
+					const olScaleLine = document.querySelector(`#${mapTargetElementId} .ol-scale-line`);
+					olScaleLine?.classList.remove('goaway');
+					olScaleLine?.classList.add('visible');
+				}
+			});
+			// ######################
+			// Scale Bar (End)
+			// ######################
 
 			// ######################
 			// Geolocation
@@ -556,6 +601,18 @@ function OLMap(props: Props) {
 			initialMap.on('moveend', (evt: MapEvent) => {
 				setIsUserMovingTheMap(false);
 
+				if (isMapResolutionChanged === true) {
+					isMapResolutionChanged = false;
+
+					if (isMapResolutionChangedTimeoutHandler !== undefined) {
+						window.clearTimeout(isMapResolutionChangedTimeoutHandler);
+					}
+
+					isMapResolutionChangedTimeoutHandler = window.setTimeout(() => {
+						document.querySelector(`#${mapTargetElementId} .ol-scale-line`)?.classList.add('goaway');
+					}, 2000);
+				}
+
 				if (
 					(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
 					geolocation.current.getTracking() === true
@@ -602,12 +659,7 @@ function OLMap(props: Props) {
 					if (features.length === 1) {
 						navigate(`/FeatureManager/Edit/${features[0].id}`);
 					} else if (features.length > 1) {
-						// Without this, for some reason the <DialogWithTransition> in FeatureManager was closing its dialog
-						// due to a click on the background as soon as it opened. i.e. we see a brief flash of it appearing and then gone.
-						// I guess somehow it was comimg up so fast while the map was being was clicked and the same event triggered it?
-						window.setTimeout(() => {
-							navigate('/FeatureManager');
-						}, 50);
+						navigate('/FeatureManager');
 					}
 				}),
 			);
@@ -756,9 +808,14 @@ function OLMap(props: Props) {
 							isFeatureMovementAllowed={isFeatureMovementAllowed}
 							onFeatureMovementEnabled={onFeatureMovementEnabled}
 							onFeatureMovementDisabled={onFeatureMovementDisabled}
+							isStickyModeOn={isStickyModeOn}
+							onFeatureMovementStickyModeEnabled={onFeatureMovementStickyModeEnabled}
+							onFeatureMovementStickyModeDisabled={onFeatureMovementStickyModeDisabled}
 						/>
 
-						<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
+						{mapaMap.location_search_enabled === true && (
+							<SearchLocationsButton active={searchLocationsParameters.search_term.length >= 1} />
+						)}
 
 						{/* <GoogleMapsImportButton /> */}
 
@@ -780,7 +837,7 @@ function OLMap(props: Props) {
 							<Button color="inherit" size="small" onClick={onClickTryAndGetGPSLocationAgain}>
 								Try again
 							</Button>
-							<Button color="inherit" size="small" onClick={onCloseAlertDoNowt}>
+							<Button color="inherit" size="small" onClick={onCloseTryAndGetGPSLocationAgain}>
 								Close
 							</Button>
 						</React.Fragment>
