@@ -664,7 +664,7 @@ function OLMap(props: Props) {
 						// I guess somehow it was comimg up so fast while the map was being was clicked and the same event triggered it?
 						window.setTimeout(() => {
 							navigate('/FeatureManager');
-						}, 50);
+						}, 500);
 					}
 				}),
 			);
