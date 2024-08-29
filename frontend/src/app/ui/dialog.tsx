@@ -1,6 +1,6 @@
 import { Dialog, DialogProps } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
-import React from 'react';
+import React, { useState } from 'react';
 import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour } from './theme';
 
 // const Transition = forwardRef(function Transition(
@@ -58,12 +58,19 @@ export const DialogWithTransition = ({
 	// 	}
 	// });
 
+	const [isDialogFullyShown, setIsDialogFullyShown] = useState(false);
+
+	const onDialogTransitionEnd = () => setIsDialogFullyShown(true);
+
 	return (
 		<Dialog
 			fullScreen
 			open={true}
 			onClose={onDialogClose}
 			disableRestoreFocus={disableRestoreFocus}
+			TransitionProps={{
+				addEndListener: onDialogTransitionEnd,
+			}}
 			// transitionDuration={0}
 			// TransitionComponent={Transition}
 			// TransitionProps={{
@@ -92,7 +99,7 @@ export const DialogWithTransition = ({
 			// }}
 			{...dialogProps}
 		>
-			{children}
+			{isDialogFullyShown === true && children}
 		</Dialog>
 	);
 };
