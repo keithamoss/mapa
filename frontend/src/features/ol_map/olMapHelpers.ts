@@ -203,8 +203,6 @@ export const onGeolocationError =
 
 export const onMapClick =
 	(callback: (features: MapaOpenLayersFeature[]) => void) => (evt: MapBrowserEvent<UIEvent>) => {
-		evt.stopPropagation();
-
 		const features: MapaOpenLayersFeature[] = [];
 
 		evt.map.forEachFeatureAtPixel(

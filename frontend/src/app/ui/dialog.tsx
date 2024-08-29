@@ -65,7 +65,6 @@ export const DialogWithTransition = ({
 			open={true}
 			onClose={onDialogClose}
 			disableRestoreFocus={disableRestoreFocus}
-			// transitionDuration={0}
 			TransitionComponent={Transition}
 			TransitionProps={{
 				...transitionProps,
