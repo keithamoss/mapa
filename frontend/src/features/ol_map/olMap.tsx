@@ -659,13 +659,6 @@ function OLMap(props: Props) {
 					if (features.length === 1) {
 						navigate(`/FeatureManager/Edit/${features[0].id}`);
 					} else if (features.length > 1) {
-						// Without this, for some reason the <DialogWithTransition> in FeatureManager was closing its dialog
-						// due to a click on the background as soon as it opened. i.e. we see a brief flash of it appearing and then gone.
-						// I guess somehow it was comimg up so fast while the map was being was clicked and the same event triggered it?
-						// window.setTimeout(() => {
-						// 	navigate('/FeatureManager');
-						// }, 50);
-
 						navigate('/FeatureManager');
 					}
 				}),
