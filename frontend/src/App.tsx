@@ -165,6 +165,8 @@ function App() {
 							zIndex: boxZIndex,
 							bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
 							right: theme.spacing(2),
+							// Ensures the user can still interact with the map underneath this Box
+							pointerEvents: 'none',
 						}}
 					>
 						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
@@ -185,6 +187,8 @@ function App() {
 							position: 'absolute',
 							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
 							left: theme.spacing(2),
+							// Ensures the user can still interact with the map underneath this Box
+							pointerEvents: 'none',
 						}}
 					>
 						<MapSwitcher
