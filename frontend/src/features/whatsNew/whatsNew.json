@@ -1,5 +1,65 @@
 [
   {
+    "version": "Gosh, Toronto is pretty great, hey?",
+    "date": "29 August, 2024",
+    "changes": {
+      "highlights": [
+        [
+          "Fewer mistakes?",
+          "The Feature Movement control has had an upgrade! By default, it's behaviour is now to turn itself off after you've moved a feature once. You can override this behaviour by tapping the 'sticky' / 'repeat' button next to it to let you make multiple moves, or to move multiple features."
+        ],
+        [
+          "Copy that. We're in the pipe, five by five",
+          "To make it easier to switch between Mapa and other apps, you can now tap on any Text or Number fields under the Summary for a feature to copy the field's value to your clipboard."
+        ],
+        [
+          "But I would walk five hundred miles...Just to be the man who...(fell) down at your door",
+          "Whenever you zoom the map a scalebar will now (temporarily) popup to give you a better sense of distance."
+        ],
+        [
+          "Pasty",
+          "Schema Text Fields can now be configured to show a handy 'Paste' button in the field that will populate the field with whatever is on your clipboard. This is opt-in, so you'll need to review your schemas and have a think about which fields it makes sense on."
+        ],
+        [
+          "Pastie",
+          "Location Search now also features the handy in-field 'Paste' button that will take whatever's on your clipboard and search for it."
+        ],
+        [
+          "Preferential treatment",
+          "When searching for a location, you can now choose to prefer results close to wherever you are. It's based on your IP address, so reliability maaaaaaay vary."
+        ]
+      ],
+      "minor changes": [
+        [
+          "Your preference, madame?",
+          "Maps can now choose to have the Location Search control. This is opt-in, so you'll need to revisit your maps and decide which maps would benefit."
+        ],
+        [
+          "Tidying up",
+          "Starting locations for maps can now be cleared. i.e. Reset back to the default behaviour of 'Start the map at my location and have it follow me as I move'."
+        ],
+        [
+          "Clear!",
+          "Hitting the 'Clear' button on the Location Search screen now gives focus to the search field, so you can just start typing your new search right away."
+        ]
+      ],
+      "bugs fixed": [
+        [
+          "Randomness be gone",
+          "The bug should (hopefully!) be fixed where sometimes you'd tap on the map, briefly see the list of features you can edit, and then have a random feature chosen from the list and opened."
+        ],
+        [
+          "The fingers, they do nothing!",
+          "Fixed the bug where you couldn't interact with the bits of map directly above the Navigation and Map Switcher buttons."
+        ],
+        [
+          "Less clutter",
+          "When searching for a symbol you've created, we no longer display empty categories in the list that clutter up the actual search results."
+        ]
+      ]
+    }
+  },
+  {
     "version": "I'm a lumberjack, and I'm okay",
     "date": "26 August, 2024",
     "changes": {
