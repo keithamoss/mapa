@@ -59,20 +59,13 @@ export const DialogWithTransition = ({
 		}
 	});
 
-	// const [isDialogFullyShown, setIsDialogFullyShown] = useState(false);
-
-	// const onDialogTransitionEnd = () => setIsDialogFullyShown(true);
-
 	return (
 		<Dialog
 			fullScreen
 			open={true}
 			onClose={onDialogClose}
 			disableRestoreFocus={disableRestoreFocus}
-			// TransitionProps={{
-			// 	addEndListener: onDialogTransitionEnd,
-			// }}
-			transitionDuration={0}
+			// transitionDuration={0}
 			TransitionComponent={Transition}
 			TransitionProps={{
 				...transitionProps,
@@ -100,7 +93,6 @@ export const DialogWithTransition = ({
 			}}
 			{...dialogProps}
 		>
-			{/* {isDialogFullyShown === true && children} */}
 			{children}
 		</Dialog>
 	);
