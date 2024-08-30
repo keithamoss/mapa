@@ -4,10 +4,12 @@ import Geolocation, { GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { Coordinate } from 'ol/coordinate';
 import BaseEvent from 'ol/events/Event';
+import TopoJSON from 'ol/format/TopoJSON';
 import { Point } from 'ol/geom';
 import { ModifyEvent } from 'ol/interaction/Modify';
+import VectorLayer from 'ol/layer/Vector';
 import { fromLonLat } from 'ol/proj';
-import { VectorSourceEvent } from 'ol/source/Vector';
+import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
 import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
 import { MapStartingLocation, Map as MapaMap } from '../../app/services/maps';
@@ -19,28 +21,27 @@ export const mapTargetElementId = 'map';
 export const geolocationMarkerOverlayId = 'geolocation_marker';
 export const geolocationMarkerHeadingForegroundTriangleOverlayId = 'geolocation_marker_heading_foreground_triangle';
 export const geolocationMarkerHeadingBackgroundTriangleOverlayId = 'geolocation_marker_heading_background_triangle';
+export const isOffline = () => false;
 
 export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) => {
-	// import VectorLayer from 'ol/layer/Vector';
-	// import VectorSource from 'ol/source/Vector';
-	// import TopoJSON from 'ol/format/TopoJSON';
-
-	// Ref: https://openlayers.org/en/latest/examples/topojson.html
-	// return new VectorLayer({
-	// 	source: new VectorSource({
-	// 		url: '/offlineBasemap/world-110m.json',
-	// 		format: new TopoJSON({
-	// 			// don't want to render the full world polygon (stored as 'land' layer),
-	// 			// which repeats all countries
-	// 			layers: ['countries'],
-	// 		}),
-	// 		overlaps: false,
-	// 	}),
-	// 	style: {
-	// 		'stroke-color': 'darkgrey',
-	// 		'stroke-width': 2,
-	// 	},
-	// });
+	if (isOffline() === true) {
+		// Ref: https://openlayers.org/en/latest/examples/topojson.html
+		return new VectorLayer({
+			source: new VectorSource({
+				url: '/offlineBasemap/world-110m.json',
+				format: new TopoJSON({
+					// don't want to render the full world polygon (stored as 'land' layer),
+					// which repeats all countries
+					layers: ['countries'],
+				}),
+				overlaps: false,
+			}),
+			style: {
+				'stroke-color': 'darkgrey',
+				'stroke-width': 2,
+			},
+		});
+	}
 
 	return basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
 		? getWMTSTileLayer(basemap_style)
