@@ -28,7 +28,10 @@ import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
-import SchemaFieldDataEntryManager, { SchemaFormFieldsFormValues } from '../schemaFields/schemaFieldDataEntryManager';
+import SchemaFieldDataEntryManager, {
+	SchemaFieldDataEntryManagerTouchedFields,
+	SchemaFormFieldsFormValues,
+} from '../schemaFields/schemaFieldDataEntryManager';
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
 import { SchemaEditor } from '../schemas/schemaEditor';
 import { getFieldFromSchemaDefinitionById } from '../schemas/schemaHelpers';
@@ -144,13 +147,7 @@ function FeatureForm(props: Props) {
 	// Schema Fields Form
 	// ######################
 	const handleSubmitRef = useRef<UseFormHandleSubmit<SchemaFormFieldsFormValues>>();
-	const touchedFieldsRef = useRef<
-		Partial<
-			Readonly<{
-				[x: string]: boolean;
-			}>
-		>
-	>();
+	const touchedFieldsRef = useRef<Partial<Readonly<SchemaFieldDataEntryManagerTouchedFields>> | undefined>();
 
 	const onSave = () => {
 		// The feature has a schema with some fields defined

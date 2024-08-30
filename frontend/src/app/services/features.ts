@@ -38,12 +38,26 @@ export interface FeatureDataItemDateField extends FeatureDataItemBase {
 	value: string;
 }
 
+export interface FeatureDataItemURLField extends FeatureDataItemBase {
+	value: FeatureDataItemURLFieldLinkItem[];
+}
+
+export type FeatureDataItemURLFieldLinkItemFormModifiableProps = {
+	name: string;
+	url: string;
+};
+
+export type FeatureDataItemURLFieldLinkItem = FeatureDataItemURLFieldLinkItemFormModifiableProps & {
+	id: string; // uuid
+};
+
 export type FeatureDataItem =
 	| FeatureDataItemTextField
 	| FeatureDataItemNumberField
 	| FeatureDataItemBooleanField
 	| FeatureDataItemSymbologyBooleanField
-	| FeatureDataItemDateField;
+	| FeatureDataItemDateField
+	| FeatureDataItemURLField;
 
 export interface MapaFeature {
 	id: number;

@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import * as yup from 'yup';
-import { AnyObject, ObjectSchema } from 'yup';
+import { ObjectSchema } from 'yup';
 import { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
-import { MapaFeature, NewMapaFeature } from '../services/features';
+import { FeatureDataItemURLFieldLinkItemFormModifiableProps, MapaFeature, NewMapaFeature } from '../services/features';
 import {
 	FeatureSchema,
 	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
@@ -10,6 +10,7 @@ import {
 	FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
 	FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
+	FeatureSchemaFieldDefinitionURLFieldFormModifiableProps,
 	FeatureSchemaFieldType,
 } from '../services/schemas';
 import { symbologyFormValidationSchema } from './symbologyForm';
@@ -52,6 +53,14 @@ export const schemaSymbologyBooleanFieldFormValidationSchema: ObjectSchema<Featu
 		})
 		.required();
 
+export const schemaURLFieldFormValidationSchema: ObjectSchema<FeatureSchemaFieldDefinitionURLFieldFormModifiableProps> =
+	yup
+		.object({
+			name: yup.string().required(),
+			required_field: yup.boolean().required(),
+		})
+		.required();
+
 export const schemaDateFieldFormValidationSchema: ObjectSchema<FeatureSchemaFieldDefinitionDateFieldFormModifiableProps> =
 	yup
 		.object({
@@ -82,7 +91,10 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 			(featureDataItem) => featureDataItem.schema_field_id === fieldDefinition.id,
 		);
 
-		if (
+		if (fieldDefinition.type === FeatureSchemaFieldType.URLField) {
+			values[schemaFieldName] =
+				featureDataItemForSchemaField?.value !== undefined ? featureDataItemForSchemaField?.value : [];
+		} else if (
 			fieldDefinition.type === FeatureSchemaFieldType.TextField ||
 			fieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 			fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean ||
@@ -98,7 +110,7 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 
 	return values;
 };
-export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema): ObjectSchema<AnyObject> => {
+export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema): ObjectSchema<yup.AnyObject> => {
 	const values: yup.ObjectShape = {};
 
 	schema.definition.forEach((fieldDefinition) => {
@@ -127,8 +139,31 @@ export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema):
 					typeof val === 'string' ? val : val !== null ? val.format() : '',
 				);
 			values[schemaFieldName] = fieldDefinition.required_field === true ? validator.required() : validator.optional();
+		} else if (fieldDefinition.type === FeatureSchemaFieldType.URLField) {
+			const validator = yup.array().of(schemaURLFieldLinkItemFormValidationSchema);
+			values[schemaFieldName] =
+				fieldDefinition.required_field === true ? validator.min(1).required() : validator.optional();
 		}
 	});
 
 	return yup.object(values).required();
 };
+
+export const schemaURLFieldLinkItemFormValidationSchema: ObjectSchema<FeatureDataItemURLFieldLinkItemFormModifiableProps> =
+	yup.object({
+		name: yup.string().required(),
+		// Yup's inbuilt URL validation doesn't allow us to have a valid URL or blank, so here's the easiest workaround
+		url: yup.lazy((value) =>
+			!value
+				? yup.string().required()
+				: yup
+						.string()
+						// Yup's regex doesn't allow for URLs wihout the proctol, so this is our pragmatic fix that doesn't involve trying to have a regex that validates URLs. Abandon hope all ye who embark upon that task.
+						.transform((value: string) =>
+							// In this day and age, let's just assume everything supports https and tack it on the start
+							value.startsWith('http://') || value.startsWith('https://') ? value : `https://${value}`,
+						)
+						.url()
+						.required(),
+		),
+	});

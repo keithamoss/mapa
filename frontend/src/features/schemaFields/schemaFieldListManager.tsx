@@ -2,6 +2,7 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import DeleteIcon from '@mui/icons-material/Delete';
+import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import NumbersIcon from '@mui/icons-material/Numbers';
 import PhotoIcon from '@mui/icons-material/Photo';
@@ -29,6 +30,8 @@ const getIconForSchemaFieldType = (field: FeatureSchemaFieldDefinitionCollection
 			return <PhotoIcon />;
 		case FeatureSchemaFieldType.DateField:
 			return <TodayIcon />;
+		case FeatureSchemaFieldType.URLField:
+			return <LinkIcon />;
 		default:
 			return <QuestionMarkIcon />;
 	}

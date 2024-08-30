@@ -73,6 +73,7 @@ export enum FeatureSchemaFieldType {
 	BooleanField = 'boolean_field',
 	SymbologyFieldBoolean = 'symbology_field_boolean',
 	DateField = 'date_field',
+	URLField = 'url_field',
 }
 
 export enum FeatureSchemaFieldTypeLabel {
@@ -81,6 +82,7 @@ export enum FeatureSchemaFieldTypeLabel {
 	boolean_field = 'Boolean field',
 	symbology_field_boolean = 'Symbology field boolean',
 	date_field = 'Date field',
+	url_field = 'URL field',
 }
 
 // ######################
@@ -168,19 +170,40 @@ export type FeatureSchemaFieldDefinitionDateField = FeatureSchemaFieldDefinition
 // Date Field (End)
 // ######################
 
+// ######################
+// URL Field
+// ######################
+export type FeatureSchemaFieldDefinitionURLFieldFormModifiableProps = {
+	name: string;
+	required_field: boolean;
+};
+
+export type FeatureSchemaFieldDefinitionURLField = FeatureSchemaFieldDefinitionURLFieldFormModifiableProps & {
+	type: FeatureSchemaFieldType.URLField;
+	id: number;
+	// Unlike all other fields we're not allowing default_value for URL Fields.
+	// To avoid having to rewrite a lot of code, we just leave it as an unmodifable undefiend field.
+	default_value: undefined;
+};
+// ######################
+// URL Field (End)
+// ######################
+
 export type FeatureSchemaFieldDefinitionFormModifiablePropsCollection =
 	| FeatureSchemaFieldDefinitionTextFieldFormModifiableProps
 	| FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps
 	| FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps
 	| FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps
-	| FeatureSchemaFieldDefinitionDateFieldFormModifiableProps;
+	| FeatureSchemaFieldDefinitionDateFieldFormModifiableProps
+	| FeatureSchemaFieldDefinitionURLFieldFormModifiableProps;
 
 export type FeatureSchemaFieldDefinitionCollection =
 	| FeatureSchemaFieldDefinitionTextField
 	| FeatureSchemaFieldDefinitionNumberField
 	| FeatureSchemaFieldDefinitionBooleanField
 	| FeatureSchemaFieldDefinitionSymbologyBooleanField
-	| FeatureSchemaFieldDefinitionDateField;
+	| FeatureSchemaFieldDefinitionDateField
+	| FeatureSchemaFieldDefinitionURLField;
 
 export type NewFeatureSchemaFieldDefinitionCollection = Omit<FeatureSchemaFieldDefinitionCollection, 'id'>;
 

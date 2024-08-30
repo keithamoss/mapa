@@ -7,6 +7,7 @@ import {
 	FeatureSchemaFieldDefinitionNumberField,
 	FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldDefinitionTextField,
+	FeatureSchemaFieldDefinitionURLField,
 	FeatureSchemaFieldType,
 	NewFeatureSchemaFieldDefinitionCollection,
 } from '../../app/services/schemas';
@@ -15,6 +16,7 @@ import SchemaFieldFormForDateField from './DateField/schemaFieldFormForDateField
 import SchemaFieldFormForNumberField from './NumberField/schemaFieldFormForNumberField';
 import SchemaFieldFormForSymbologyBoolean from './SymbologyBooleanField/schemaFieldFormForSymbologyBoolean';
 import SchemaFieldFormForTextField from './TextField/schemaFieldFormForTextField';
+import SchemaFieldFormForURLField from './URLField/schemaFieldFormForURLField';
 
 interface Props {
 	fieldTypeToAdd?: FeatureSchemaFieldType;
@@ -87,6 +89,15 @@ function SchemaFieldCreatorAndEditor(props: Props) {
 				fieldToEdit?.type === FeatureSchemaFieldType.DateField) && (
 				<SchemaFieldFormForDateField
 					field={fieldToEdit as FeatureSchemaFieldDefinitionDateField}
+					onDone={onDone}
+					onCancel={onCancel}
+				/>
+			)}
+
+			{(fieldTypeToAdd === FeatureSchemaFieldType.URLField ||
+				fieldToEdit?.type === FeatureSchemaFieldType.URLField) && (
+				<SchemaFieldFormForURLField
+					field={fieldToEdit as FeatureSchemaFieldDefinitionURLField}
 					onDone={onDone}
 					onCancel={onCancel}
 				/>

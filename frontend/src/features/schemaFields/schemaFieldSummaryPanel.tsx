@@ -1,20 +1,22 @@
-import { Alert, List, ListItem, ListItemButton, ListItemText, Snackbar } from '@mui/material';
+import LinkIcon from '@mui/icons-material/Link';
+import { Alert, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Snackbar } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { FeatureDataItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
 import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { isClipboardApiSupported } from '../../app/utils';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 
-const getDataItemAsString = (
+const getDataItemForDisplay = (
 	schemaFieldDefinition: FeatureSchemaFieldDefinitionCollection,
 	dataItem: FeatureDataItem,
 ) => {
 	if (schemaFieldDefinition.type === FeatureSchemaFieldType.TextField) {
-		return dataItem.value !== '' ? dataItem.value : <em>No text entered</em>;
+		return dataItem.value !== '' ? (dataItem.value as string) : <em>No text entered</em>;
 	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
-		return dataItem.value;
+		return dataItem.value as number;
 	} else if (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 		schemaFieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
@@ -26,13 +28,33 @@ const getDataItemAsString = (
 		) : (
 			<em>No date entered</em>
 		);
+	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
+		return dataItem.value !== '' && Array.isArray(dataItem.value) ? (
+			<List dense disablePadding sx={{ '& a': { color: 'rgba(0, 0, 0, 0.87)', textDecoration: 'none' } }}>
+				{dataItem.value.map((i, idx) => (
+					<ListItem key={idx} dense disablePadding disableGutters>
+						<ListItemIcon sx={{ minWidth: 24 + 8 }}>
+							<LinkIcon />
+						</ListItemIcon>
+						<ListItemButton dense disableGutters>
+							<ListItemText
+								primary={
+									<Link key={idx} to={i.url} target="_blank">
+										{i.name}
+									</Link>
+								}
+							/>
+						</ListItemButton>
+					</ListItem>
+				))}
+			</List>
+		) : (
+			<em>No links entered</em>
+		);
 	} else {
 		return 'Unknown value-to-string mapping';
 	}
 };
-
-const isFieldCopyable = (dataItem: FeatureDataItem) =>
-	isClipboardApiSupported() === true && (typeof dataItem.value === 'string' || typeof dataItem.value === 'number');
 
 interface Props {
 	schemaId: number;
@@ -49,7 +71,10 @@ function SchemaFieldSummaryPanel(props: Props) {
 	const handleSnackbarClose = () => setIsSnackbarOpen(false);
 
 	const onClickField = (dataItem: FeatureDataItem) => async () => {
-		if (isFieldCopyable(dataItem) === true) {
+		if (
+			isClipboardApiSupported() === true &&
+			(typeof dataItem.value === 'string' || typeof dataItem.value === 'number')
+		) {
 			try {
 				await navigator.clipboard.writeText(`${dataItem.value}`);
 				setIsSnackbarOpen(true);
@@ -72,11 +97,12 @@ function SchemaFieldSummaryPanel(props: Props) {
 					);
 
 					return dataItem !== undefined ? (
-						isClipboardApiSupported() === true && isFieldCopyable(dataItem) === true ? (
+						isClipboardApiSupported() === true &&
+						(typeof dataItem.value === 'string' || typeof dataItem.value === 'number') ? (
 							<ListItem key={schemaFieldDefinition.id} sx={{ cursor: 'pointer' }}>
 								<ListItemButton onClick={onClickField(dataItem)} disableGutters>
 									<ListItemText
-										primary={getDataItemAsString(schemaFieldDefinition, dataItem)}
+										primary={getDataItemForDisplay(schemaFieldDefinition, dataItem)}
 										secondary={schemaFieldDefinition.name}
 									/>
 								</ListItemButton>
@@ -84,7 +110,7 @@ function SchemaFieldSummaryPanel(props: Props) {
 						) : (
 							<ListItem key={schemaFieldDefinition.id}>
 								<ListItemText
-									primary={getDataItemAsString(schemaFieldDefinition, dataItem)}
+									primary={getDataItemForDisplay(schemaFieldDefinition, dataItem)}
 									secondary={schemaFieldDefinition.name}
 								/>
 							</ListItem>
