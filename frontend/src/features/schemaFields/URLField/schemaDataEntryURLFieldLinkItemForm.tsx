@@ -63,7 +63,11 @@ function SchemaDataEntryURLFieldLinkItemForm(props: Props) {
 	const onPasteURLFromClipboard = (pastedText: string) => setValue('url', pastedText, { shouldDirty: true });
 
 	return (
-		<DialogWithTransition onClose={onCancel} dialogProps={{ fullScreen: false, fullWidth: true }}>
+		<DialogWithTransition
+			onClose={onCancel}
+			dialogProps={{ fullScreen: false, fullWidth: true }}
+			disableRestoreFocus={true}
+		>
 			<DialogTitle>{isAddingNewLink === true ? 'Add Link' : 'Edit Link'}</DialogTitle>
 
 			<DialogContent>
@@ -78,6 +82,7 @@ function SchemaDataEntryURLFieldLinkItemForm(props: Props) {
 										{...{ ...field, value: field.value !== undefined ? field.value : '' }}
 										required={true}
 										label="Link name"
+										autoFocus={isAddingNewLink === true}
 										onPasteFromClipboard={onPasteNameFromClipboard}
 									/>
 								)}
