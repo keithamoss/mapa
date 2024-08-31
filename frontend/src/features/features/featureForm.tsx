@@ -189,6 +189,11 @@ function FeatureForm(props: Props) {
 					if (fieldValue !== '') {
 						dataFiltered[fieldName] = fieldValue;
 					}
+				} else if (schemaField?.type === FeatureSchemaFieldType.URLField) {
+					// Only include URLFields that have values, otherwise we'lll be saving an empty array on URLFields that aren't required
+					if (Array.isArray(fieldValue) && fieldValue.length > 0) {
+						dataFiltered[fieldName] = fieldValue;
+					}
 				} else {
 					dataFiltered[fieldName] = fieldValue;
 				}

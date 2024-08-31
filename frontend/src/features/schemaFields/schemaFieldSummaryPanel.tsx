@@ -29,7 +29,7 @@ const getDataItemForDisplay = (
 			<em>No date entered</em>
 		);
 	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
-		return dataItem.value !== '' && Array.isArray(dataItem.value) ? (
+		return Array.isArray(dataItem.value) && dataItem.value.length > 0 ? (
 			<List dense disablePadding sx={{ '& a': { color: 'rgba(0, 0, 0, 0.87)', textDecoration: 'none' } }}>
 				{dataItem.value.map((i, idx) => (
 					<ListItem key={idx} dense disablePadding disableGutters>
