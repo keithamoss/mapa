@@ -16,6 +16,9 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 			const pastedText = await navigator.clipboard.readText();
 			onPasteFromClipboard(pastedText);
 			alert(JSON.stringify(pastedText));
+
+			const pastedValue = await navigator.clipboard.read();
+			alert(JSON.stringify(pastedValue));
 		} catch (err: unknown) {
 			/* empty */
 			if (err instanceof Error) {
