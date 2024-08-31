@@ -17,8 +17,27 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 			// onPasteFromClipboard(pastedText);
 			// alert(JSON.stringify(pastedText));
 
-			const pastedValue = await navigator.clipboard.read();
-			alert(JSON.stringify(pastedValue));
+			// const pastedValue = await navigator.clipboard.read();
+			const clipboardContents = await navigator.clipboard.read();
+			alert(`clipboardContents: ${JSON.stringify(clipboardContents)}`);
+
+			for (const item of clipboardContents) {
+				for (const mimeType of item.types) {
+					// alert(`mimeType: ${mimeType}`);
+
+					if (mimeType === 'text/html') {
+						const blob = await item.getType('text/html');
+						const blobText = await blob.text();
+						alert(`text/html blobText: ${blobText}`);
+					} else if (mimeType === 'text/plain') {
+						const blob = await item.getType('text/plain');
+						const blobText = await blob.text();
+						alert(`text/plain blobText: ${blobText}`);
+					} else {
+						throw new Error(`${mimeType} not supported.`);
+					}
+				}
+			}
 		} catch (err: unknown) {
 			/* empty */
 			if (err instanceof Error) {
