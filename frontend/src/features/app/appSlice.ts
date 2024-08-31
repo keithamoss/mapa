@@ -251,9 +251,19 @@ export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap
 export const selectActiveMapId = (state: RootState) => state.app.mapId;
 
 export const selectMapView = (state: RootState) => state.app.mapView;
-export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) =>
-	state.api.queries['getFeatures(undefined)']?.status === QueryStatus.pending ||
-	state.app.mapFeatures.status === eMapFeaturesLoadingStatus.LOADING;
+export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) => {
+	try {
+		return (
+			state.api.queries['getFeatures(undefined)']?.status === QueryStatus.pending ||
+			state.app.mapFeatures.status === eMapFeaturesLoadingStatus.LOADING
+		);
+	} catch {
+		/* empty */
+		console.log('debug3');
+	}
+
+	return true;
+};
 
 // export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
 // export const getMapFeatureLoadingStatusDirectlyFromRTK = (state: RootState) =>

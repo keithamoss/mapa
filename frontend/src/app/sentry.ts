@@ -47,6 +47,7 @@ export const sentryInit = () => {
 				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
 			} catch {
 				/* empty */
+				console.log('debug1');
 			}
 
 			// IMPORTANT: This doesn't actually fix the issue because event.breadcrumbs contains the full history of all requests/actions, which themselves contain the full mapFeatures responses.
@@ -60,13 +61,20 @@ export const sentryInit = () => {
 				Sentry.showReportDialog({ eventId: event.event_id });
 			}
 
-			// Don't send mapFeatures as it's exceeds Sentry's 1MB limit for event and transaction context on large maps
-			// Ref: https://develop.sentry.dev/sdk/envelopes/#size-limits
-			// Avoid "The operand of a 'delete' operator must be optional" by casting to any
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-			delete (event.contexts?.state?.state.value.app as any).mapFeatures;
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-			delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+			// `getFeatures(undefined)` here may be behind the "undefined is not an object" we were seeing in Safari
+			// ...
+			try {
+				// Don't send mapFeatures as it's exceeds Sentry's 1MB limit for event and transaction context on large maps
+				// Ref: https://develop.sentry.dev/sdk/envelopes/#size-limits
+				// Avoid "The operand of a 'delete' operator must be optional" by casting to any
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+				delete (event.contexts?.state?.state.value.app as any).mapFeatures;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+			} catch {
+				/* empty */
+				console.log('debug2');
+			}
 
 			// IMPORTANT: This doesn't actually fix the issue because event.breadcrumbs contains the full history of all requests/actions, which themselves contain the full mapFeatures responses.
 			// Giving up on this...for now.
