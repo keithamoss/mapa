@@ -33,6 +33,10 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 						const blob = await item.getType('text/plain');
 						const blobText = await blob.text();
 						alert(`text/plain blobText: ${blobText}`);
+					} else if (mimeType === 'text/uri-list') {
+						const blob = await item.getType('text/uri-list');
+						const blobText = await blob.text();
+						alert(`text/uri-list blobText: ${blobText}`);
 					} else {
 						throw new Error(`${mimeType} not supported.`);
 					}
