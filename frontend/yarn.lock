@@ -2605,12 +2605,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.4.0":
-  version: 22.4.0
-  resolution: "@types/node@npm:22.4.0"
+"@types/node@npm:^22.5.1":
+  version: 22.5.1
+  resolution: "@types/node@npm:22.5.1"
   dependencies:
     undici-types: ~6.19.2
-  checksum: 680303e9b2801f3e19453957df93f59e7ad95e2277a363ba3719e9a3e0c8949ed9bed2265a2a3444254c5e550170177c088bc2b2303eb79740fb8ee96b097ad3
+  checksum: 366990347c12e08e9ffe113e493253ac454d5337828e23cb02c790d5abe1f2ab0148da37b728eb886d858c4c5f29f4341a29987e89555d482ea236691d9d2648
   languageName: node
   linkType: hard
 
@@ -4750,7 +4750,7 @@ __metadata:
     "@types/jest": ^29.5.12
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
-    "@types/node": ^22.4.0
+    "@types/node": ^22.5.1
     "@types/react": ^18.3.5
     "@types/react-dom": ^18.3.0
     "@typescript-eslint/eslint-plugin": ^8.3.0
