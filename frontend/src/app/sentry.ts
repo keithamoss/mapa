@@ -43,8 +43,12 @@ export const sentryInit = () => {
 				// Avoid "The operand of a 'delete' operator must be optional" by casting to any
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
 				delete (event.contexts?.state?.state.value.app as any).mapFeatures;
+
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+				// delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+				delete (event.contexts?.state?.state.value.api as any).queries;
 			} catch {
 				/* empty */
 				console.log('debug1');
@@ -69,8 +73,12 @@ export const sentryInit = () => {
 				// Avoid "The operand of a 'delete' operator must be optional" by casting to any
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
 				delete (event.contexts?.state?.state.value.app as any).mapFeatures;
+
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+				// delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
+
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+				delete (event.contexts?.state?.state.value.api as any).queries;
 			} catch {
 				/* empty */
 				console.log('debug2');
