@@ -85,7 +85,7 @@ export default function MapSwitcher(props: Props) {
 		onSpeedDialClose();
 	};
 
-	if (mapsWithHeroIcons.length === 0) {
+	if (mapsWithHeroIcons.length === 0 && maps.length < 2) {
 		return null;
 	}
 

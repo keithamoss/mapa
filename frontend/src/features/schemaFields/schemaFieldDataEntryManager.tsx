@@ -10,7 +10,7 @@ import {
 } from '../../app/forms/schemaFieldsForms';
 import { useAppSelector } from '../../app/hooks/store';
 import { usePrevious } from '../../app/hooks/usePrevious';
-import { MapaFeature, NewMapaFeature } from '../../app/services/features';
+import { FeatureDataItemURLFieldLinkItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
 import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
@@ -18,19 +18,13 @@ import SchemaDataEntryBooleanyTypeFields from './BooleanyTypeFields/schemaDataEn
 import SchemaDataEntryDateField from './DateField/schemaDataEntryDateField';
 import SchemaDataEntryNumberField from './NumberField/schemaDataEntryNumberField';
 import SchemaDataEntryTextField from './TextField/schemaDataEntryTextField';
+import SchemaDataEntryURLField from './URLField/schemaDataEntryURLField';
 
 interface PropsEntrypoint {
 	schemaId: number;
 	feature: MapaFeature | NewMapaFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
-	touchedFieldsRef: React.MutableRefObject<
-		| Partial<
-				Readonly<{
-					[x: string]: boolean;
-				}>
-		  >
-		| undefined
-	>;
+	touchedFieldsRef: React.MutableRefObject<Partial<Readonly<SchemaFieldDataEntryManagerTouchedFields>> | undefined>;
 	isDirtyRef: React.MutableRefObject<boolean | undefined>;
 }
 
@@ -55,21 +49,25 @@ function SchemaFieldDataEntryManagerEntrypoint(props: PropsEntrypoint) {
 }
 
 export interface SchemaFormFieldsFormValues {
-	[key: string]: string | number | boolean;
+	[key: string]: string | number | boolean | FeatureDataItemURLFieldLinkItem[];
+}
+
+export interface SchemaFieldDataEntryManagerTouchedFields {
+	[x: string]: // For all other schema field types
+	| boolean
+		// For FeatureDataItemURLFieldLinkItem
+		| {
+				name?: boolean | undefined;
+				url?: boolean | undefined;
+				id?: boolean | undefined;
+		  }[];
 }
 
 interface Props {
 	schema: FeatureSchema;
 	feature: MapaFeature | NewMapaFeature;
 	handleSubmitRef: React.MutableRefObject<UseFormHandleSubmit<SchemaFormFieldsFormValues> | undefined>;
-	touchedFieldsRef: React.MutableRefObject<
-		| Partial<
-				Readonly<{
-					[x: string]: boolean;
-				}>
-		  >
-		| undefined
-	>;
+	touchedFieldsRef: React.MutableRefObject<Partial<Readonly<SchemaFieldDataEntryManagerTouchedFields>> | undefined>;
 	isDirtyRef: React.MutableRefObject<boolean | undefined>;
 }
 
@@ -80,6 +78,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 	const previousDefaultValues = usePrevious(defaultValues);
 
 	const {
+		watch,
 		setValue,
 		handleSubmit,
 		control,
@@ -154,6 +153,16 @@ function SchemaFieldDataEntryManager(props: Props) {
 								/>
 							);
 							break;
+						case FeatureSchemaFieldType.URLField:
+							field = (
+								<SchemaDataEntryURLField
+									key={`${schema.id}_${fieldDefinition.id}`}
+									schemaField={fieldDefinition}
+									watch={watch}
+									setValue={setValue}
+								/>
+							);
+							break;
 					}
 
 					return (
@@ -172,7 +181,13 @@ function SchemaFieldDataEntryManager(props: Props) {
 						>
 							<FormGroup>{field}</FormGroup>
 							{errors[`schema_field_${fieldDefinition.id}`] !== undefined && (
-								<FormHelperText error>{errors[`schema_field_${fieldDefinition.id}`]?.message}</FormHelperText>
+								<FormHelperText error>
+									{fieldDefinition.type === FeatureSchemaFieldType.URLField
+										? typeof errors[`schema_field_${fieldDefinition.id}`]?.message === 'string'
+											? errors[`schema_field_${fieldDefinition.id}`]?.message
+											: 'This field is invalid...somehow 🤷‍♂️'
+										: errors[`schema_field_${fieldDefinition.id}`]?.message}
+								</FormHelperText>
 							)}
 						</FormControl>
 					);

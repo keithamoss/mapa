@@ -100,7 +100,15 @@ function WhatsNewPage() {
 																primary={
 																	Array.isArray(whatChanged) === true ? (
 																		<React.Fragment>
-																			<b>{whatChanged[0]}:</b> {whatChanged[1]}
+																			<b>
+																				{whatChanged[0]}
+																				{/* Only include the : if we end in an alphanumeric character */}
+																				{typeof whatChanged[0] === 'string' &&
+																				whatChanged[0].slice(-1).match(/[^A-Za-z0-9]/) === null
+																					? ':'
+																					: undefined}
+																			</b>{' '}
+																			{whatChanged[1]}
 																		</React.Fragment>
 																	) : (
 																		whatChanged

@@ -13,8 +13,26 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 
 	const onClickPaste = async () => {
 		try {
-			onPasteFromClipboard(await navigator.clipboard.readText());
-		} catch {
+			// This doesn't work with the Safari-only text/uri-list mime type that you get on your clipboard when you copy a link from the iOS Share Sheet
+			// onPasteFromClipboard(await navigator.clipboard.readText());
+
+			const clipboardContents = await navigator.clipboard.read();
+
+			for (const item of clipboardContents) {
+				for (const mimeType of item.types) {
+					if (['text/html', 'text/plain', 'text/uri-list'].includes(mimeType)) {
+						const blob = await item.getType(mimeType);
+						const blobText = await blob.text();
+						onPasteFromClipboard(blobText);
+
+						// Abandon after the first valid item we find
+						return;
+					}
+
+					// Just ignore any other mime types that don't make sense e.g. image/png
+				}
+			}
+		} catch (err: unknown) {
 			/* empty */
 		}
 	};

@@ -1,5 +1,23 @@
 [
   {
+    "version": "Parlez-vous anglais?",
+    "date": "31 August, 2024",
+    "changes": {
+      "highlights": [
+        [
+          "Welcome to the Information Superhighway!",
+          "You can now add URL Fields to your schemas! URL Fields get given an overall name of your choice and let you add as many links as you like within each field. Each link needs to be given a name (or label) and a URL. Links can be re-ordered and are available to open, copy, or share from the Feature Summary at the top of each feature. Some links will open directly in their relevant apps (e.g. Google Maps)."
+        ]
+      ],
+      "bugs fixed": [
+        [
+          "Behave yourself!",
+          "The Quick Map Switcher now behaves better when you only have one or two maps. Previously, it would be inconsistent in whether it was displaying or not."
+        ]
+      ]
+    }
+  },
+  {
     "version": "Gosh, Toronto is pretty great, hey?",
     "date": "29 August, 2024",
     "changes": {

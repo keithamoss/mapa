@@ -69,3 +69,25 @@ export const waitForElm = (selector: string) => {
 };
 
 export const isCacheApiSupported = () => 'caches' in self;
+
+export const getLinkWithProtocol = (url: string | undefined) => {
+	if (url === undefined || (typeof url === 'string' && url === '')) {
+		return undefined;
+	}
+
+	// Assume that everything supports https these days
+	// And obviously this makes a big assumption that the only protocols we'd ever see would be http or https
+	return url.startsWith('http') === true ? url : `https://${url}`;
+};
+
+export const getLinkDomainName = (url: string | undefined) => {
+	const urlWithProtocolForSure = getLinkWithProtocol(url);
+
+	if (urlWithProtocolForSure !== undefined && URL.canParse(urlWithProtocolForSure) === true) {
+		const domainName = new URL(urlWithProtocolForSure).host;
+
+		return domainName.startsWith('www.') ? domainName.replace('www.', '') : domainName;
+	}
+
+	return undefined;
+};
