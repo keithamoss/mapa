@@ -13,40 +13,27 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 
 	const onClickPaste = async () => {
 		try {
-			// const pastedText = await navigator.clipboard.readText();
-			// onPasteFromClipboard(pastedText);
-			// alert(JSON.stringify(pastedText));
+			// This doesn't work with the Safari-only text/uri-list mime type that you get on your clipboard when you copy a link from the iOS Share Sheet
+			// onPasteFromClipboard(await navigator.clipboard.readText());
 
-			// const pastedValue = await navigator.clipboard.read();
 			const clipboardContents = await navigator.clipboard.read();
-			alert(`clipboardContents: ${JSON.stringify(clipboardContents)}`);
 
 			for (const item of clipboardContents) {
 				for (const mimeType of item.types) {
-					// alert(`mimeType: ${mimeType}`);
+					if (['text/html', 'text/plain', 'text/uri-list'].includes(mimeType)) {
+						const blob = await item.getType(mimeType);
+						const blobText = await blob.text();
+						onPasteFromClipboard(blobText);
 
-					if (mimeType === 'text/html') {
-						const blob = await item.getType('text/html');
-						const blobText = await blob.text();
-						alert(`text/html blobText: ${blobText}`);
-					} else if (mimeType === 'text/plain') {
-						const blob = await item.getType('text/plain');
-						const blobText = await blob.text();
-						alert(`text/plain blobText: ${blobText}`);
-					} else if (mimeType === 'text/uri-list') {
-						const blob = await item.getType('text/uri-list');
-						const blobText = await blob.text();
-						alert(`text/uri-list blobText: ${blobText}`);
-					} else {
-						throw new Error(`${mimeType} not supported.`);
+						// Abandon after the first valid item we find
+						return;
 					}
+
+					// Just ignore any other mime types that don't make sense e.g. image/png
 				}
 			}
 		} catch (err: unknown) {
 			/* empty */
-			if (err instanceof Error) {
-				alert(`Things exploded (${err.message})`);
-			}
 		}
 	};
 
