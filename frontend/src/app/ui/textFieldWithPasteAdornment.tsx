@@ -1,8 +1,7 @@
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
-import { IconButton, InputAdornment, TextFieldProps } from '@mui/material';
+import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { ForwardedRef, forwardRef } from 'react';
 import { isClipboardApiSupported } from '../utils';
-import TextFieldWithout1Password from './textFieldWithout1Password';
 
 interface Props {
 	pastingDisabled?: boolean;
@@ -27,7 +26,7 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 	};
 
 	return (
-		<TextFieldWithout1Password
+		<TextField
 			ref={ref}
 			InputProps={{
 				...InputProps,
