@@ -13,8 +13,9 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 
 	const onClickPaste = async () => {
 		try {
-			alert(JSON.stringify(await navigator.clipboard.readText()));
-			onPasteFromClipboard(await navigator.clipboard.readText());
+			const pastedText = await navigator.clipboard.readText();
+			onPasteFromClipboard(pastedText);
+			alert(JSON.stringify(pastedText));
 		} catch (err: unknown) {
 			/* empty */
 			if (err instanceof Error) {
