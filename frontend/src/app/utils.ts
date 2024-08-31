@@ -84,7 +84,10 @@ export const getLinkDomainName = (url: string | undefined) => {
 	const urlWithProtocolForSure = getLinkWithProtocol(url);
 
 	if (urlWithProtocolForSure !== undefined && URL.canParse(urlWithProtocolForSure) === true) {
-		return new URL(urlWithProtocolForSure).host;
+		const domainName = new URL(urlWithProtocolForSure).host;
+
+		return domainName.startsWith('www.') ? domainName.replace('www.', '') : domainName;
 	}
+
 	return undefined;
 };
