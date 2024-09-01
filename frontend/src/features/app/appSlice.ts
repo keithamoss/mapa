@@ -264,7 +264,6 @@ export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) => {
 		);
 	} catch {
 		/* empty */
-		console.log('debug3');
 	}
 
 	return true;
