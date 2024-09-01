@@ -189,22 +189,22 @@ export const {
 } = appSlice.actions;
 
 export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap', async (arg, { getState }) => {
-	console.log('# prepareFeaturesForMap');
+	// console.log('# prepareFeaturesForMap');
 	const state = getState() as RootState;
 
 	const activeMapId = selectActiveMapId(state);
 	const maps = selectMapsResult(state);
 
 	if (activeMapId !== undefined && maps.data !== undefined) {
-		console.log('# prepareFeaturesForMap: Active map set and maps.data loaded');
+		// console.log('# prepareFeaturesForMap: Active map set and maps.data loaded');
 		const activeMap = maps.data.entities[activeMapId];
 		const featuresResult = featuresApi.endpoints.getFeatures.select()(state);
 
 		if (activeMap !== undefined && featuresResult.data !== undefined) {
-			console.log('# prepareFeaturesForMap: Active map retrieved and featuresResult.data loaded');
+			// console.log('# prepareFeaturesForMap: Active map retrieved and featuresResult.data loaded');
 
 			const features = Object.values(featuresResult.data.entities) || [];
-			console.log('# prepareFeaturesForMap features.length', features.length);
+			// console.log('# prepareFeaturesForMap features.length', features.length);
 
 			const geoJSONFeatures = await convertFeaturesToGeoJSON(
 				features,

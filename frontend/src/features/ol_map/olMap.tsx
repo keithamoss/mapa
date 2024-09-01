@@ -152,7 +152,7 @@ function OLMap(props: Props) {
 	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
 
 	const featuresAndSpriteSheet = useAppSelector(selectGeoJSONFeaturesAndSpriteSheet);
-	console.log('$ featuresAndSpriteSheet geojson l=0', featuresAndSpriteSheet.geoJSON.features.length === 0);
+	// console.log('$ featuresAndSpriteSheet geojson length=0', featuresAndSpriteSheet.geoJSON.features.length === 0);
 	// console.log('🚀 ~ file: olMap.tsx:84 ~ OLMap ~ featuresAndSpriteSheet:', featuresAndSpriteSheet);
 
 	const vectorLayer = useRef<
@@ -460,7 +460,7 @@ function OLMap(props: Props) {
 	// Initialise map on load
 	// ######################
 	useEffect(() => {
-		console.log('useEffect init');
+		// console.log('useEffect init');
 
 		let geolocationEventKeys: EventsKey[] = [];
 
@@ -470,7 +470,7 @@ function OLMap(props: Props) {
 		// Note: We used to do the cleanup in the return from this useEffect, but found a few odd bugs where other parts of olMap would hit mapRef.current being undefined. We couldn't prove it, but it looked like some sort of race condition going on (per the notes above on `mapRef` being initialised). It wouldn't reproduce reliably, but maybe a couple of times out of 10.
 		// Anyway, doing the clean-up just before we immediately replace the map obviously helps. It's not like the map is ever not rendered anyway, so we're hardly saving on memory.
 		if (mapRef.current !== undefined) {
-			console.log('Cleanup OLMap');
+			// console.log('Cleanup OLMap');
 
 			vectorLayer.current = undefined;
 
@@ -491,7 +491,7 @@ function OLMap(props: Props) {
 			setMap(undefined);
 		}
 
-		console.log('Making a map');
+		// console.log('Making a map');
 
 		geolocation.current.setTracking(true);
 		const currentPosition = geolocation.current.getPosition();
@@ -696,7 +696,7 @@ function OLMap(props: Props) {
 
 		setMap(initialMap);
 		mapRef.current = initialMap;
-		console.log('$ mapRef.current now has a map');
+		// console.log('$ mapRef.current now has a map');
 
 		mapReadyToBeReinitialisedRef.current = true;
 
@@ -713,21 +713,9 @@ function OLMap(props: Props) {
 	// Note: This will get a lot cleaner once OL supports defining
 	// styles for WebGL layers using a flat style object/function.
 	useEffect(() => {
-		console.log('create/update data layer');
+		// console.log('create/update data layer');
 
-		// if (featuresAndSpriteSheet.status !== eMapFeaturesLoadingStatus.SUCCEEDED) {
-		// 	console.log('$ ...but bail because mapFeatures.status is not SUCCEEDED');
-		// 	return;
-		// } else {
-		// 	console.log("$ ...and we're good because mapFeatures.status is SUCCEEDED");
-		// }
-
-		console.log('$ mapRef.current', mapRef.current);
-
-		// if (featuresAndSpriteSheet.geoJSON.features.length === 0) {
-		// 	console.log('$ geoJSON length is 0, so abandoning');
-		// 	return;
-		// }
+		// console.log('$ mapRef.current', mapRef.current);
 
 		// Note: In theory, we could bail on creating the layers here until the features have finished loading - i.e. featuresAndSpriteSheet.status !== eMapFeaturesLoadingStatus.SUCCEEDED *and* featuresAndSpriteSheet.geoJSON.features.length.
 
@@ -736,7 +724,7 @@ function OLMap(props: Props) {
 			// will briefly point to the old layer while the page is refreshing.
 			// This will trigger an error briefly before the page gets to reloading, so no biggie.
 			if (vectorLayer.current === undefined) {
-				console.log('> manage vector layer: create VectorImageLayer');
+				// console.log('> manage vector layer: create VectorImageLayer');
 
 				vectorLayer.current = manageVectorImageLayerCreation(
 					featuresAndSpriteSheet.geoJSON,
@@ -746,7 +734,7 @@ function OLMap(props: Props) {
 					onModifyInteractionAddRemoveFeature,
 				);
 			} else {
-				console.log('> manage vector layer: update VectorImageLayer layer');
+				// console.log('> manage vector layer: update VectorImageLayer layer');
 
 				manageVectorImageLayerUpdate(
 					featuresAndSpriteSheet.geoJSON,
