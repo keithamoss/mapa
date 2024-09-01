@@ -3,8 +3,10 @@ import MiniSearch, { SearchResult } from 'minisearch';
 import { defaultSymbolIconStyle } from './symbologyHelpers';
 
 import { FontAwesomeCategory } from './icons-categories-library';
-import { getCategories, getIcons } from './iconsLibrary';
+import { getCategories } from './iconsLibrary';
 import { IFontAwesomeIcon, IFontAwesomeIcons, IconStyle } from './iconsLibraryInterfaces';
+
+export const isIconsLibraryLoaded = () => window.MapaNamespace.iconsLibrary.loaded;
 
 export const getCategoryByName = (categoryName: string) => {
 	const categories = getCategories();
@@ -26,13 +28,17 @@ export interface IFontAwesomeIconsByCategory {
 }
 
 export const getIconByName = (iconName: string) => {
-	const icons = getIcons();
-	if (iconName in icons) {
+	if (
+		isIconsLibraryLoaded() === true &&
+		window.MapaNamespace.iconsLibrary.icons !== undefined &&
+		iconName in window.MapaNamespace.iconsLibrary.icons
+	) {
 		return {
-			...icons[iconName],
+			...window.MapaNamespace.iconsLibrary.icons[iconName],
 			name: iconName,
 		} as IFontAwesomeIcon;
 	}
+
 	return null;
 };
 
@@ -55,40 +61,54 @@ export const searchIcons = (
 	boostCircularModifierIcons: boolean = false,
 	iconNamesAvailableToSearch?: string[],
 ) => {
-	const icons = categoryName === undefined ? getIcons() : getIconsForCategoryIndexedByIconName(categoryName);
+	if (isIconsLibraryLoaded() === true && window.MapaNamespace.iconsLibrary.icons !== undefined) {
+		const miniSearch = new MiniSearch({
+			idField: 'name',
+			fields: ['label', 'search.terms', 'categories'], // Fields to index for full-text search
+			storeFields: ['name', 'label', 'search.terms', 'categories'], // Fields to return with search results
+			searchOptions: {
+				boost: { name: 3, categories: 1.5 }, // Fields to boost in the results
+				// documentId is the icon name
+				boostDocument: (documentId) =>
+					boostCircularModifierIcons === true &&
+					typeof documentId === 'string' &&
+					isCircularModifierIcon(documentId) === true
+						? 3
+						: 1,
+				prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
+				combineWith: 'AND', // Combine terms with AND, not OR
+				// Fuzzy search with a max edit distance of 0.2 * term length,
+				// rounded to nearest integer. The mispelled 'ismael' will match 'ishmael'.
+				// fuzzy: 0.2,
+			},
+			// Access nested fields (and regular top-level fields)
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+			extractField: (document, fieldName) => fieldName.split('.').reduce((doc, key) => doc && doc[key], document),
+		});
 
-	const miniSearch = new MiniSearch({
-		idField: 'name',
-		fields: ['label', 'search.terms', 'categories'], // Fields to index for full-text search
-		storeFields: ['name', 'label', 'search.terms', 'categories'], // Fields to return with search results
-		searchOptions: {
-			boost: { name: 3, categories: 1.5 }, // Fields to boost in the results
-			// documentId is the icon name
-			boostDocument: (documentId) =>
-				boostCircularModifierIcons === true &&
-				typeof documentId === 'string' &&
-				isCircularModifierIcon(documentId) === true
-					? 3
-					: 1,
-			prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
-			combineWith: 'AND', // Combine terms with AND, not OR
-			// Fuzzy search with a max edit distance of 0.2 * term length,
-			// rounded to nearest integer. The mispelled 'ismael' will match 'ishmael'.
-			// fuzzy: 0.2,
-		},
-		// Access nested fields (and regular top-level fields)
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-		extractField: (document, fieldName) => fieldName.split('.').reduce((doc, key) => doc && doc[key], document),
-	});
+		// Index documents
+		if (iconNamesAvailableToSearch === undefined) {
+			miniSearch.addAll(
+				Object.values(
+					categoryName === undefined
+						? window.MapaNamespace.iconsLibrary.icons
+						: getIconsForCategoryIndexedByIconName(categoryName),
+				),
+			);
+		} else {
+			miniSearch.addAll(
+				Object.values(
+					categoryName === undefined
+						? window.MapaNamespace.iconsLibrary.icons
+						: getIconsForCategoryIndexedByIconName(categoryName),
+				).filter((icon) => iconNamesAvailableToSearch.includes(icon.name)),
+			);
+		}
 
-	// Index documents
-	if (iconNamesAvailableToSearch === undefined) {
-		miniSearch.addAll(Object.values(icons));
-	} else {
-		miniSearch.addAll(Object.values(icons).filter((icon) => iconNamesAvailableToSearch.includes(icon.name)));
+		return miniSearch.search(searchTerm) as IconSearchResult[];
 	}
 
-	return miniSearch.search(searchTerm) as IconSearchResult[];
+	return [];
 };
 
 export const getIconsForCategory = (categoryName: string) => {
@@ -240,7 +260,6 @@ export const getCategoryLabelsForIconNames = (iconNames: string[]) => {
 };
 
 export const findIconsAvailableForUseAsModifiers = () => {
-	const icons = getIcons();
 	const modifiers: IFontAwesomeIcon[] = [];
 
 	const denyList = [
@@ -265,17 +284,19 @@ export const findIconsAvailableForUseAsModifiers = () => {
 
 	const allowList = ['circle', 'pen-circle'];
 
-	Object.keys(icons)
-		.filter(
-			(iconName) =>
-				(iconName.startsWith('circle') || allowList.includes(iconName)) && denyList.includes(iconName) === false,
-		)
-		.forEach((iconName) => {
-			const icon = getIconByName(iconName);
-			if (icon !== null) {
-				modifiers.push(icon);
-			}
-		});
+	if (isIconsLibraryLoaded() === true && window.MapaNamespace.iconsLibrary.icons !== undefined) {
+		Object.keys(window.MapaNamespace.iconsLibrary.icons)
+			.filter(
+				(iconName) =>
+					(iconName.startsWith('circle') || allowList.includes(iconName)) && denyList.includes(iconName) === false,
+			)
+			.forEach((iconName) => {
+				const icon = getIconByName(iconName);
+				if (icon !== null) {
+					modifiers.push(icon);
+				}
+			});
+	}
 
 	return modifiers.map((icon) => icon.name);
 };

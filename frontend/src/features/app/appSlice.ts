@@ -189,17 +189,22 @@ export const {
 } = appSlice.actions;
 
 export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap', async (arg, { getState }) => {
+	// console.log('# prepareFeaturesForMap');
 	const state = getState() as RootState;
 
 	const activeMapId = selectActiveMapId(state);
 	const maps = selectMapsResult(state);
 
 	if (activeMapId !== undefined && maps.data !== undefined) {
+		// console.log('# prepareFeaturesForMap: Active map set and maps.data loaded');
 		const activeMap = maps.data.entities[activeMapId];
 		const featuresResult = featuresApi.endpoints.getFeatures.select()(state);
 
 		if (activeMap !== undefined && featuresResult.data !== undefined) {
+			// console.log('# prepareFeaturesForMap: Active map retrieved and featuresResult.data loaded');
+
 			const features = Object.values(featuresResult.data.entities) || [];
+			// console.log('# prepareFeaturesForMap features.length', features.length);
 
 			const geoJSONFeatures = await convertFeaturesToGeoJSON(
 				features,
@@ -251,13 +256,24 @@ export const prepareFeaturesForMap = createAsyncThunk('app/prepareFeaturesForMap
 export const selectActiveMapId = (state: RootState) => state.app.mapId;
 
 export const selectMapView = (state: RootState) => state.app.mapView;
-export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) =>
-	state.api.queries['getFeatures(undefined)']?.status === QueryStatus.pending ||
-	state.app.mapFeatures.status === eMapFeaturesLoadingStatus.LOADING;
+export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) => {
+	try {
+		return (
+			state.api.queries['getFeatures(undefined)']?.status === QueryStatus.pending ||
+			state.app.mapFeatures.status === eMapFeaturesLoadingStatus.LOADING
+		);
+	} catch {
+		/* empty */
+	}
+
+	return true;
+};
 
 // export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
 // export const getMapFeatureLoadingStatusDirectlyFromRTK = (state: RootState) =>
 // 	state.api.queries['getFeatures(undefined)']?.status;
+
+export const getGeoJSONFeaturesLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
 
 export const getGeoJSONFeatures = (state: RootState) => state.app.mapFeatures.features;
 
@@ -283,7 +299,9 @@ export const selectGeoJSONFeaturesAndSpriteSheet = createSelector(
 	getGeoJSONFeatures,
 	getFilteredFeatureIds,
 	getGeoJSONFeaturesSpriteSheet,
-	(mapFeatures, filteredFeatureIds, mapSpriteSheet) => ({
+	getGeoJSONFeaturesLoadingStatus,
+	(mapFeatures, filteredFeatureIds, mapSpriteSheet, mapFeaturesStatus) => ({
+		status: mapFeaturesStatus,
 		geoJSON: {
 			type: 'FeatureCollection',
 			features:

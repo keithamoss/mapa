@@ -10,7 +10,18 @@ import { router } from './app/routing/routes';
 import { authApi } from './app/services/auth';
 import { store } from './app/store';
 import { theme } from './app/ui/theme';
+import { MapaNamespace, MapaNamespaceDefaults } from './window';
 // import './browserstack';
+
+// Extend the global window object with MapaNamespace so we have a place to load the Icons Library into
+// Ref: https://stackoverflow.com/questions/12709074/how-do-you-explicitly-set-a-new-property-on-window-in-typescript
+declare global {
+	interface Window {
+		MapaNamespace: MapaNamespace;
+	}
+}
+
+window.MapaNamespace = MapaNamespaceDefaults;
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);

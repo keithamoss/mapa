@@ -23,6 +23,7 @@ import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
+import { loadIconsLibrary } from './features/symbology/iconsLibraryLoader';
 
 const LoginContainer = styled('div')`
 	height: 100dvh;
@@ -77,35 +78,30 @@ function App() {
 	// ######################
 	// Icons Library Loading
 	// ######################
-	const [iconsLibraryLoaded, setIconsLibraryLoaded] = useState<boolean | undefined>();
+	const [iconsLibraryLoaded, setIconsLibraryLoaded] = useState(window.MapaNamespace.iconsLibrary.loaded);
 
-	if (iconsLibraryLoaded === undefined) {
-		import('./features/symbology/iconsLibraryLoader').then((module) => {
-			if (module.icons !== undefined && module.categories !== undefined) {
+	// The first time we render, start loading the icons library
+	useEffect(() => {
+		loadIconsLibrary().then(() => {
+			if (
+				window.MapaNamespace.iconsLibrary.icons !== undefined &&
+				window.MapaNamespace.iconsLibrary.categories !== undefined
+			) {
 				setIconsLibraryLoaded(true);
-			} else {
-				setIconsLibraryLoaded(false);
-
-				// This shouldn't ever really happen, so let's happily throw an exception and let Sentry deal with showing its error dialog.
-				// From what we can see, the only things that should cause this would be the files not existing or some as-yet-unknown issue with adding resources of this size to the cache on some platform.
-				throw Error(
-					`Error hydrating Icons Library Cache. Icons Library: ${module.icons !== undefined ? 'Loaded' : 'Not Loaded'}; Icons Library Categories: ${module.categories !== undefined ? 'Loaded' : 'Not Loaded'}`,
-				);
 			}
 		});
-	}
+	}, []);
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
+			// Only set the map features loader going if this is our first time initialising everything.
+			// This avoids working in dev showing the loader each time we save a file.
 			const loader = document.getElementById('loader-container');
 
-			// Only set the loader going if this is our first time initialising everything.
-			// This avoids working in dev showing the loader each time we save a file.
 			if (loader !== null) {
+				loader.remove();
 				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
 			}
-
-			loader?.remove();
 		}
 	}, [dispatch, iconsLibraryLoaded]);
 	// ######################
@@ -131,15 +127,15 @@ function App() {
 		);
 	}
 
+	if (iconsLibraryLoaded !== true) {
+		return null;
+	}
+
 	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
 	// Important: We're pre-fetching *after* we have a user object to avoid 403s
 	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
 	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
-
-	if (iconsLibraryLoaded !== true) {
-		return null;
-	}
 
 	return (
 		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
