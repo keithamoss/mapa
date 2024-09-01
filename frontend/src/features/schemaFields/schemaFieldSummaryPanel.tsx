@@ -108,7 +108,11 @@ function SchemaFieldSummaryPanel(props: Props) {
 								</ListItemButton>
 							</ListItem>
 						) : (
-							<ListItem key={schemaFieldDefinition.id}>
+							<ListItem
+								key={schemaFieldDefinition.id}
+								// Because the List and ListItems in URL Fields give us this padding anyway
+								sx={{ pt: schemaFieldDefinition.type === FeatureSchemaFieldType.URLField ? 0 : undefined }}
+							>
 								<ListItemText
 									primary={getDataItemForDisplay(schemaFieldDefinition, dataItem)}
 									secondary={schemaFieldDefinition.name}
