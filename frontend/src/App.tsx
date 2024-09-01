@@ -87,6 +87,7 @@ function App() {
 				window.MapaNamespace.iconsLibrary.icons !== undefined &&
 				window.MapaNamespace.iconsLibrary.categories !== undefined
 			) {
+				console.log('> loaded!');
 				setIconsLibraryLoaded(true);
 			}
 		});
@@ -94,6 +95,8 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
+			console.log('> Icons Library loaded: Set Features Loader going and remove heart loader');
+
 			// Only set the map features loader going if this is our first time initialising everything.
 			// This avoids working in dev showing the loader each time we save a file.
 			const loader = document.getElementById('loader-container');
@@ -128,8 +131,11 @@ function App() {
 	}
 
 	if (iconsLibraryLoaded !== true) {
+		console.log('> block');
 		return null;
 	}
+
+	console.log('> begin loading maps, schemas, and features');
 
 	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
 	// Important: We're pre-fetching *after* we have a user object to avoid 403s
