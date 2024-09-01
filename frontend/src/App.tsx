@@ -23,7 +23,7 @@ import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
-import { loadIconsLibrary } from './features/symbology/iconsLibraryLoaderAlternate';
+import { loadIconsLibrary } from './features/symbology/iconsLibraryLoader';
 
 const LoginContainer = styled('div')`
 	height: 100dvh;
