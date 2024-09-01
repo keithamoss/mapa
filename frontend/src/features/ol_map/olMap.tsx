@@ -197,7 +197,6 @@ function OLMap(props: Props) {
 
 	const [isFollowingHeadingStatus, setIsFollowingHeadingStatus] = useState(MapHeadingStatus.Off);
 	const isFollowingHeadingStatusRef = useRef<MapHeadingStatus>(isFollowingHeadingStatus);
-	isFollowingHeadingStatusRef.current = isFollowingHeadingStatus;
 
 	const geolocationMarkerHeadingForegroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
 	const geolocationMarkerHeadingBackgroundTriangleOverlayDiv = useRef<HTMLDivElement | undefined>(undefined);
@@ -326,20 +325,16 @@ function OLMap(props: Props) {
 			mapaMap.starting_location.centre !== undefined,
 	);
 	const mapHasPositionRef = useRef<boolean>(mapHasPosition);
-	mapHasPositionRef.current = mapHasPosition;
 
 	const [geolocationHasError, setGeolocationHasError] = useState<false | GeolocationError>(false);
 	const geolocationHasErrorRef = useRef<false | GeolocationError>(geolocationHasError);
-	geolocationHasErrorRef.current = geolocationHasError;
 
 	// We follow (i.e. snap the map to) the user's GPS location if no starting location is set or if a starting location is set, but they've only set the zoom level
 	const [isFollowingGPS, setIsFollowingGPS] = useState(isMapaMapFollowingGPS(mapaMap.starting_location));
 	const isFollowingGPSRef = useRef<boolean>(isFollowingGPS);
-	isFollowingGPSRef.current = isFollowingGPS;
 
 	const [isUserMovingTheMap, setIsUserMovingTheMap] = useState(false);
 	const isUserMovingTheMapRef = useRef<boolean>(isUserMovingTheMap);
-	isUserMovingTheMapRef.current = isUserMovingTheMap;
 
 	// If the user switches maps through MapsSwitcher, we need to re-initialise location and heading following
 	useEffect(() => {
@@ -425,8 +420,7 @@ function OLMap(props: Props) {
 	// ######################
 	const [isFeatureMovementAllowed, setIsFeatureMovementAllowed] = useState(false);
 
-	const isFeatureMovementAllowedRef = useRef<boolean>(false);
-	isFeatureMovementAllowedRef.current = isFeatureMovementAllowed;
+	const isFeatureMovementAllowedRef = useRef<boolean>(isFeatureMovementAllowed);
 
 	const modifyInteractionStartEndRef = useRef(
 		onModifyInteractionStartEnd((feature: Pick<MapaFeature, 'id' | 'geom'>) => {
@@ -453,8 +447,7 @@ function OLMap(props: Props) {
 
 	const [isStickyModeOn, setIsStickyModeOn] = useState(false);
 
-	const isStickyModeOnRef = useRef<boolean>(false);
-	isStickyModeOnRef.current = isStickyModeOn;
+	const isStickyModeOnRef = useRef<boolean>(isStickyModeOn);
 
 	const onFeatureMovementStickyModeEnabled = useCallback(() => setIsStickyModeOn(true), []);
 
