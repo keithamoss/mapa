@@ -43,15 +43,10 @@ export const sentryInit = () => {
 				// Avoid "The operand of a 'delete' operator must be optional" by casting to any
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
 				delete (event.contexts?.state?.state.value.app as any).mapFeatures;
-
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-				// delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
-
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-				delete (event.contexts?.state?.state.value.api as any).queries;
+				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
 			} catch {
 				/* empty */
-				console.log('debug1');
 			}
 
 			// IMPORTANT: This doesn't actually fix the issue because event.breadcrumbs contains the full history of all requests/actions, which themselves contain the full mapFeatures responses.
@@ -73,15 +68,10 @@ export const sentryInit = () => {
 				// Avoid "The operand of a 'delete' operator must be optional" by casting to any
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
 				delete (event.contexts?.state?.state.value.app as any).mapFeatures;
-
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-				// delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
-
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-				delete (event.contexts?.state?.state.value.api as any).queries;
+				delete (event.contexts?.state?.state.value.api as any).queries['getFeatures(undefined)'].data;
 			} catch {
 				/* empty */
-				console.log('debug2');
 			}
 
 			// IMPORTANT: This doesn't actually fix the issue because event.breadcrumbs contains the full history of all requests/actions, which themselves contain the full mapFeatures responses.
