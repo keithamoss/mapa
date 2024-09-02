@@ -6,7 +6,6 @@ import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
-import { EventsKey } from 'ol/events';
 import { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import VectorImageLayer from 'ol/layer/VectorImage';
@@ -463,243 +462,248 @@ function OLMap(props: Props) {
 	useEffect(() => {
 		// console.log('useEffect init');
 
-		let geolocationEventKeys: EventsKey[] = [];
-
-		// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
-		const deviceOrientationListenerManagerRefCopy = deviceOrientationListenerManagerRef.current;
-
-		// Note: We used to do the cleanup in the return from this useEffect, but found a few odd bugs where other parts of olMap would hit mapRef.current being undefined. We couldn't prove it, but it looked like some sort of race condition going on (per the notes above on `mapRef` being initialised). It wouldn't reproduce reliably, but maybe a couple of times out of 10.
-		// Anyway, doing the clean-up just before we immediately replace the map obviously helps. It's not like the map is ever not rendered anyway, so we're hardly saving on memory.
 		if (mapRef.current !== undefined) {
-			// console.log('Cleanup OLMap');
+			// console.log('Making a map');
 
-			vectorLayer.current = undefined;
+			// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
+			const deviceOrientationListenerManagerRefCopy = deviceOrientationListenerManagerRef.current;
 
-			unByKey(geolocationEventKeys);
+			geolocation.current.setTracking(true);
+			const currentPosition = geolocation.current.getPosition();
 
-			if (mapRef.current !== undefined) {
-				mapRef.current.setTarget(undefined);
-				mapRef.current = undefined;
-			}
+			let isScrollZooming = false;
 
-			deviceOrientationListenerManagerRefCopy.removeListener();
+			const initialMap = new Map({
+				target: mapTargetElementId,
+				interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
+					new DblClickDragZoom(),
+					new MouseWheelZoom({
+						condition: (mapBrowserEvent) => {
+							if (mapBrowserEvent.type === 'wheel' && isScrollZooming === false) {
+								isScrollZooming = true;
+							}
 
-			if (isFollowingHeadingRequestAnimationFrameIdRef.current !== undefined) {
-				window.cancelAnimationFrame(isFollowingHeadingRequestAnimationFrameIdRef.current);
-				isFollowingHeadingRequestAnimationFrameIdRef.current = undefined;
-			}
+							return true;
+						},
+					}),
+				]),
+				layers: [getBasemap(basemap, basemap_style)],
+				controls: [
+					new Attribution({ collapsible: false }),
+					new ScaleLine({
+						units: 'metric',
+					}),
+				],
+				view: getMapInitialView(currentPosition, mapaMap),
+			});
 
-			setMap(undefined);
-		}
+			// ######################
+			// Scale Bar
+			// ######################
+			let isMapResolutionChanged: boolean = false;
+			let isMapResolutionChangedTimeoutHandler: number | undefined;
 
-		// console.log('Making a map');
+			initialMap.getView().on('change:resolution', () => {
+				if (isMapResolutionChanged === false) {
+					isMapResolutionChanged = true;
 
-		geolocation.current.setTracking(true);
-		const currentPosition = geolocation.current.getPosition();
-
-		let isScrollZooming = false;
-
-		const initialMap = new Map({
-			target: mapTargetElementId,
-			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
-				new DblClickDragZoom(),
-				new MouseWheelZoom({
-					condition: (mapBrowserEvent) => {
-						if (mapBrowserEvent.type === 'wheel' && isScrollZooming === false) {
-							isScrollZooming = true;
-						}
-
-						return true;
-					},
-				}),
-			]),
-			layers: [getBasemap(basemap, basemap_style)],
-			controls: [
-				new Attribution({ collapsible: false }),
-				new ScaleLine({
-					units: 'metric',
-				}),
-			],
-			view: getMapInitialView(currentPosition, mapaMap),
-		});
-
-		// ######################
-		// Scale Bar
-		// ######################
-		let isMapResolutionChanged: boolean = false;
-		let isMapResolutionChangedTimeoutHandler: number | undefined;
-
-		initialMap.getView().on('change:resolution', () => {
-			if (isMapResolutionChanged === false) {
-				isMapResolutionChanged = true;
-
-				const olScaleLine = document.querySelector(`#${mapTargetElementId} .ol-scale-line`);
-				olScaleLine?.classList.remove('goaway');
-				olScaleLine?.classList.add('visible');
-			}
-		});
-		// ######################
-		// Scale Bar (End)
-		// ######################
-
-		// ######################
-		// Geolocation
-		// ######################
-		initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
-		initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOverlayId));
-		initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOverlayId));
-
-		geolocationMarkerHeadingForegroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
-			`container_${geolocationMarkerHeadingForegroundTriangleOverlayId}`,
-		);
-		geolocationMarkerHeadingBackgroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
-			`container_${geolocationMarkerHeadingBackgroundTriangleOverlayId}`,
-		);
-
-		// const geolocationEventKeys = [
-		geolocationEventKeys = [
-			geolocation.current.on(
-				'change:position',
-				onGeolocationChangePosition(
-					initialMap,
-					mapHasPositionRef,
-					setMapHasPosition,
-					mapStartingZoomLevel,
-					isFollowingGPSRef,
-					setIsFollowingGPS,
-					isUserMovingTheMapRef,
-					geolocationHasErrorRef,
-					setGeolocationHasError,
-				),
-			),
-			geolocation.current.on(
-				'error',
-				onGeolocationError(initialMap, mapHasPositionRef, setMapHasPosition, setGeolocationHasError, setIsFollowingGPS),
-			),
-		];
-		// ######################
-		// Geolocation (End)
-		// ######################
-
-		// ######################
-		// Device Orientation
-		// ######################
-		// Attach a Device Orientation listener if we don't yet know if this browser + device combo has a accelerometer + magnetometer yet (or a accelerometer + magnetometer that we need to ask permissions to use)
-		if (isFollowingHeadingStatusRef.current !== MapHeadingStatus.Unsupported) {
-			requestDeviceOrientationPermissionAndOrAddListener(
-				deviceOrientationListenerManagerRef,
-				deviceOrientationCompassHeadingRef,
-				isFollowingHeadingStatusRef,
-				setIsFollowingHeadingStatus,
-			);
-		}
-		// ######################
-		// Device Orientation (End)
-		// ######################
-
-		// ######################
-		// Drag Detection, Map View Updating, and Feature Clicking
-		// ######################
-		// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
-		// Ref: https://gis.stackexchange.com/a/378877
-		let isDragging = false;
-		let isDoubleClicking = false;
-
-		initialMap.on('movestart', () => {
-			isDragging = false;
-			setIsUserMovingTheMap(true);
-		});
-
-		initialMap.on('pointerdrag', () => {
-			isDragging = true;
-		});
-
-		initialMap.on('moveend', (evt: MapEvent) => {
-			setIsUserMovingTheMap(false);
-
-			if (isMapResolutionChanged === true) {
-				isMapResolutionChanged = false;
-
-				if (isMapResolutionChangedTimeoutHandler !== undefined) {
-					window.clearTimeout(isMapResolutionChangedTimeoutHandler);
+					const olScaleLine = document.querySelector(`#${mapTargetElementId} .ol-scale-line`);
+					olScaleLine?.classList.remove('goaway');
+					olScaleLine?.classList.add('visible');
 				}
+			});
+			// ######################
+			// Scale Bar (End)
+			// ######################
 
-				isMapResolutionChangedTimeoutHandler = window.setTimeout(() => {
-					document.querySelector(`#${mapTargetElementId} .ol-scale-line`)?.classList.add('goaway');
-				}, 2000);
-			}
+			// ######################
+			// Geolocation
+			// ######################
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingForegroundTriangleOverlayId));
+			initialMap.addOverlay(createGeolocationMarkerOverlay(geolocationMarkerHeadingBackgroundTriangleOverlayId));
 
-			if (
-				(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
-				geolocation.current.getTracking() === true
-			) {
-				setIsFollowingGPS(false);
-			}
-
-			isDragging = false;
-			isDoubleClicking = false;
-			isScrollZooming = false;
-
-			// Update the Redux store version of the view for when
-			// we add new features.
-			const view = evt.map.getView();
-
-			dispatch(
-				setMapView({
-					center: view.getCenter(),
-					zoom: view.getZoom(),
-					resolution: view.getResolution(),
-				}),
+			geolocationMarkerHeadingForegroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingForegroundTriangleOverlayId}`,
 			);
-		});
+			geolocationMarkerHeadingBackgroundTriangleOverlayDiv.current = getMapOverlayElementAsDiv(
+				`container_${geolocationMarkerHeadingBackgroundTriangleOverlayId}`,
+			);
 
-		initialMap.on(
-			'click',
-			onMapClick((features: MapaOpenLayersFeature[]) => {
-				dispatch(
-					setFeaturesAvailableForEditing(
-						features.map((f) => {
-							const { geometry, ...rest } = f;
-
-							return {
-								...rest,
-								geom: {
-									type: 'Point',
-									coordinates: transform(geometry.getCoordinates(), 'EPSG:3857', 'EPSG:4326'),
-								},
-							};
-						}),
+			const geolocationEventKeys = [
+				geolocation.current.on(
+					'change:position',
+					onGeolocationChangePosition(
+						initialMap,
+						mapHasPositionRef,
+						setMapHasPosition,
+						mapStartingZoomLevel,
+						isFollowingGPSRef,
+						setIsFollowingGPS,
+						isUserMovingTheMapRef,
+						geolocationHasErrorRef,
+						setGeolocationHasError,
 					),
+				),
+				geolocation.current.on(
+					'error',
+					onGeolocationError(
+						initialMap,
+						mapHasPositionRef,
+						setMapHasPosition,
+						setGeolocationHasError,
+						setIsFollowingGPS,
+					),
+				),
+			];
+			// ######################
+			// Geolocation (End)
+			// ######################
+
+			// ######################
+			// Device Orientation
+			// ######################
+			// Attach a Device Orientation listener if we don't yet know if this browser + device combo has a accelerometer + magnetometer yet (or a accelerometer + magnetometer that we need to ask permissions to use)
+			if (isFollowingHeadingStatusRef.current !== MapHeadingStatus.Unsupported) {
+				requestDeviceOrientationPermissionAndOrAddListener(
+					deviceOrientationListenerManagerRef,
+					deviceOrientationCompassHeadingRef,
+					isFollowingHeadingStatusRef,
+					setIsFollowingHeadingStatus,
 				);
+			}
+			// ######################
+			// Device Orientation (End)
+			// ######################
 
-				if (features.length === 1) {
-					navigate(`/FeatureManager/Edit/${features[0].id}`);
-				} else if (features.length > 1) {
-					navigate('/FeatureManager');
+			// ######################
+			// Drag Detection, Map View Updating, and Feature Clicking
+			// ######################
+			// If a 'pointerdrag' fires between 'movestart' and 'moveend' the move has been the result of a drag
+			// Ref: https://gis.stackexchange.com/a/378877
+			let isDragging = false;
+			let isDoubleClicking = false;
+
+			initialMap.on('movestart', () => {
+				isDragging = false;
+				setIsUserMovingTheMap(true);
+			});
+
+			initialMap.on('pointerdrag', () => {
+				isDragging = true;
+			});
+
+			initialMap.on('moveend', (evt: MapEvent) => {
+				setIsUserMovingTheMap(false);
+
+				if (isMapResolutionChanged === true) {
+					isMapResolutionChanged = false;
+
+					if (isMapResolutionChangedTimeoutHandler !== undefined) {
+						window.clearTimeout(isMapResolutionChangedTimeoutHandler);
+					}
+
+					isMapResolutionChangedTimeoutHandler = window.setTimeout(() => {
+						document.querySelector(`#${mapTargetElementId} .ol-scale-line`)?.classList.add('goaway');
+					}, 2000);
 				}
-			}),
-		);
 
-		initialMap.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
-			evt.preventDefault();
+				if (
+					(isDragging === true || isDoubleClicking === true || isScrollZooming === true) &&
+					geolocation.current.getTracking() === true
+				) {
+					setIsFollowingGPS(false);
+				}
 
-			isDoubleClicking = true;
+				isDragging = false;
+				isDoubleClicking = false;
+				isScrollZooming = false;
 
-			const view = initialMap.getView();
-			view.setCenter(evt.coordinate);
-			initialMap.setView(view);
+				// Update the Redux store version of the view for when
+				// we add new features.
+				const view = evt.map.getView();
 
-			return false;
-		});
-		// ######################
-		// Drag Detection, Map View Updating, and Feature Clicking (End)
-		// ######################
+				dispatch(
+					setMapView({
+						center: view.getCenter(),
+						zoom: view.getZoom(),
+						resolution: view.getResolution(),
+					}),
+				);
+			});
 
-		setMap(initialMap);
-		mapRef.current = initialMap;
-		// console.log('$ mapRef.current now has a map');
+			initialMap.on(
+				'click',
+				onMapClick((features: MapaOpenLayersFeature[]) => {
+					dispatch(
+						setFeaturesAvailableForEditing(
+							features.map((f) => {
+								const { geometry, ...rest } = f;
 
-		mapReadyToBeReinitialisedRef.current = true;
+								return {
+									...rest,
+									geom: {
+										type: 'Point',
+										coordinates: transform(geometry.getCoordinates(), 'EPSG:3857', 'EPSG:4326'),
+									},
+								};
+							}),
+						),
+					);
+
+					if (features.length === 1) {
+						navigate(`/FeatureManager/Edit/${features[0].id}`);
+					} else if (features.length > 1) {
+						navigate('/FeatureManager');
+					}
+				}),
+			);
+
+			initialMap.on('dblclick', (evt: MapBrowserEvent<UIEvent>) => {
+				evt.preventDefault();
+
+				isDoubleClicking = true;
+
+				const view = initialMap.getView();
+				view.setCenter(evt.coordinate);
+				initialMap.setView(view);
+
+				return false;
+			});
+			// ######################
+			// Drag Detection, Map View Updating, and Feature Clicking (End)
+			// ######################
+
+			setMap(initialMap);
+			mapRef.current = initialMap;
+			// console.log('$ mapRef.current now has a map');
+
+			mapReadyToBeReinitialisedRef.current = true;
+
+			return () => {
+				// console.log('Cleanup OLMap');
+
+				vectorLayer.current = undefined;
+
+				unByKey(geolocationEventKeys);
+
+				initialMap.setTarget(undefined);
+
+				if (mapRef.current !== undefined) {
+					mapRef.current.setTarget(undefined);
+					mapRef.current = undefined;
+				}
+
+				deviceOrientationListenerManagerRefCopy.removeListener();
+
+				if (isFollowingHeadingRequestAnimationFrameIdRef.current !== undefined) {
+					window.cancelAnimationFrame(isFollowingHeadingRequestAnimationFrameIdRef.current);
+					isFollowingHeadingRequestAnimationFrameIdRef.current = undefined;
+				}
+
+				setMap(undefined);
+			};
+		}
 
 		// Note: basemap is not strictly needed in here because any changes to it from
 		// the settings panel are done via a full page reload.
