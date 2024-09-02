@@ -462,7 +462,7 @@ function OLMap(props: Props) {
 	useEffect(() => {
 		// console.log('useEffect init');
 
-		if (mapRef.current !== undefined) {
+		if (mapRef.current === undefined) {
 			// console.log('Making a map');
 
 			// Make a local copy in useEffect() otherwise it'll complain about how it's probably changed by the time the return (aka 'on unmount') fires to handle removing listeners
