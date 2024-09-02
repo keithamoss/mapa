@@ -19,17 +19,16 @@ const TextFieldWithPasteAdornment = (props: TextFieldProps & Props, ref: Forward
 			const clipboardContents = await navigator.clipboard.read();
 
 			for (const item of clipboardContents) {
-				for (const mimeType of item.types) {
-					if (['text/html', 'text/plain', 'text/uri-list'].includes(mimeType)) {
-						const blob = await item.getType(mimeType);
+				// Ordered by preference
+				for (const preferredMimeType of ['text/plain', 'text/uri-list', 'text/html']) {
+					if (item.types.includes(preferredMimeType)) {
+						const blob = await item.getType(preferredMimeType);
 						const blobText = await blob.text();
 						onPasteFromClipboard(blobText);
 
 						// Abandon after the first valid item we find
 						return;
 					}
-
-					// Just ignore any other mime types that don't make sense e.g. image/png
 				}
 			}
 		} catch (err: unknown) {
