@@ -13,15 +13,10 @@ import { store } from './app/store';
 import { WholeScreenLoadingIndicator } from './app/ui/wholeScreenLoadingIndicator';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import {
-	eMapFeaturesLoadingStatus,
-	isMapLoadingViaRTKOrManuallySpecified,
-	selectActiveMapId,
-	setMapFeaturesStatus,
-} from './features/app/appSlice';
+import { isMapLoadingViaRTKOrManuallySpecified, selectActiveMapId } from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
-import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
+import { isMapLoadingViaRTK, isUserLoggedIn, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
 import { loadIconsLibrary } from './features/symbology/iconsLibraryLoader';
 
@@ -46,6 +41,8 @@ function App() {
 	const user = useAppSelector(selectUser);
 
 	const isLoggedIn = useAppSelector(isUserLoggedIn);
+
+	const isLoggedInLoading = useAppSelector(isMapLoadingViaRTK);
 
 	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
 
@@ -97,24 +94,21 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
-			window.log('App.tsx: Removing heart loader and setting feature loader indicator going');
-
-			// Only set the map features loader going if this is our first time initialising everything.
-			// This avoids working in dev showing the loader each time we save a file.
-			const loader = document.getElementById('loader-container');
-
-			if (loader !== null) {
-				loader.remove();
-				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
-			}
+			window.log('App.tsx: Removing heart loader');
+			document.getElementById('loader-container')?.remove();
 		}
 	}, [dispatch, iconsLibraryLoaded]);
 	// ######################
 	// Icons Library Loading (End)
 	// ######################
 
-	if (isLoggedIn === undefined) {
-		return null;
+	window.log(`App.tsx: isMapLoading = ${isMapLoading}, isLoggedInLoading = ${isLoggedInLoading}`);
+
+	if (isLoggedInLoading === true) {
+		window.log('App.tsx: Not logged in, show loading indicator');
+
+		// Don't return the loading indicator until the Icons Library is loaded, because the heart loader is showing until then
+		return iconsLibraryLoaded === true ? <WholeScreenLoadingIndicator /> : null;
 	}
 
 	if (user === null) {
@@ -132,16 +126,17 @@ function App() {
 		);
 	}
 
+	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
+	// Important: We're pre-fetching *after* we have a user object to avoid 403s
+	window.log('App.tsx: initiate');
+	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
+	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
+	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
+
 	if (iconsLibraryLoaded !== true) {
 		window.log('App.tsx: Awaiting Icons Library Loading');
 		return null;
 	}
-
-	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
-	// Important: We're pre-fetching *after* we have a user object to avoid 403s
-	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
-	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
-	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
 
 	return (
 		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
