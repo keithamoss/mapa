@@ -33,6 +33,8 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
+	window.log('App.tsx: Rendering');
+
 	const dispatch = useAppDispatch();
 
 	const location = useLocation();
@@ -87,6 +89,7 @@ function App() {
 				window.MapaNamespace.iconsLibrary.icons !== undefined &&
 				window.MapaNamespace.iconsLibrary.categories !== undefined
 			) {
+				window.log('App.tsx: Icons Library Loaded');
 				setIconsLibraryLoaded(true);
 			}
 		});
@@ -94,6 +97,8 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
+			window.log('App.tsx: Removing heart loader and setting feature loader indicator going');
+
 			// Only set the map features loader going if this is our first time initialising everything.
 			// This avoids working in dev showing the loader each time we save a file.
 			const loader = document.getElementById('loader-container');
@@ -128,6 +133,7 @@ function App() {
 	}
 
 	if (iconsLibraryLoaded !== true) {
+		window.log('App.tsx: Awaiting Icons Library Loading');
 		return null;
 	}
 

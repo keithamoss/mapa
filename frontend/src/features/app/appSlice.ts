@@ -152,9 +152,11 @@ export const appSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(prepareFeaturesForMap.pending, (state) => {
+				window.log('appSlice.ts: Feature LOADING');
 				state.mapFeatures.status = eMapFeaturesLoadingStatus.LOADING;
 			})
 			.addCase(prepareFeaturesForMap.fulfilled, (state, action) => {
+				window.log('appSlice.ts: Feature SUCCEEDED');
 				state.mapFeatures.status = eMapFeaturesLoadingStatus.SUCCEEDED;
 				if (action.payload !== undefined) {
 					state.mapFeatures.features = action.payload.geoJSON;
@@ -162,6 +164,7 @@ export const appSlice = createSlice({
 				}
 			})
 			.addCase(prepareFeaturesForMap.rejected, (state) => {
+				window.log('appSlice.ts: Feature FAILED');
 				state.mapFeatures.status = eMapFeaturesLoadingStatus.FAILED;
 			})
 			.addMatcher(authApi.endpoints.checkLoginStatus.matchFulfilled, (state, action) => {
