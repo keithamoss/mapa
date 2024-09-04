@@ -115,86 +115,86 @@ function App() {
 	// Initiate API Calls (End)
 	// ######################
 
+	if (isLoggedInLoading === false && user === null) {
+		return (
+			<LoginContainer>
+				<Button
+					variant="contained"
+					size="large"
+					startIcon={<GoogleIcon />}
+					onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
+				>
+					Login
+				</Button>
+			</LoginContainer>
+		);
+	}
+
 	return (
-		<React.Fragment>
-			{isLoggedInLoading === false && user === null && (
-				<LoginContainer>
-					<Button
-						variant="contained"
-						size="large"
-						startIcon={<GoogleIcon />}
-						onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
-					>
-						Login
-					</Button>
-				</LoginContainer>
+		<div className="App">
+			{iconsLibraryLoaded === true && (isLoggedInLoading === true || isMapLoadingSucceeded === false) && (
+				<WholeScreenLoadingIndicator />
 			)}
 
-			<div className="App">
-				{iconsLibraryLoaded === true && (isLoggedInLoading === true || isMapLoadingSucceeded === false) && (
-					<WholeScreenLoadingIndicator />
-				)}
+			{user !== null && iconsLibraryLoaded === true && (
+				<React.Fragment>
+					{mapId !== undefined && (
+						<OLMap
+							mapId={mapId}
+							mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
+							basemap={user.settings.basemap || Basemap.MapboxVectorTile}
+							basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
+						/>
+					)}
 
-				{user !== null && iconsLibraryLoaded === true && (
-					<React.Fragment>
-						{mapId !== undefined && (
-							<OLMap
-								mapId={mapId}
-								mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
-								basemap={user.settings.basemap || Basemap.MapboxVectorTile}
-								basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
-							/>
-						)}
+					{location.pathname === '/' && (
+						<React.Fragment>
+							{mapId === undefined && <WelcomeUser />}
 
-						{location.pathname === '/' && (
-							<React.Fragment>
-								{mapId === undefined && <WelcomeUser />}
+							<Box
+								sx={{
+									position: 'absolute',
+									zIndex: boxZIndex,
+									bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
+									right: theme.spacing(2),
+									// Ensures the user can still interact with the map underneath this Box
+									pointerEvents: 'none',
+								}}
+							>
+								<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+							</Box>
 
-								<Box
-									sx={{
-										position: 'absolute',
-										zIndex: boxZIndex,
-										bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
-										right: theme.spacing(2),
-										// Ensures the user can still interact with the map underneath this Box
-										pointerEvents: 'none',
-									}}
-								>
-									<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
-								</Box>
+							<Box
+								sx={{
+									position: 'absolute',
+									bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+									right: theme.spacing(2),
+								}}
+							>
+								<AddFeatureButton mapId={mapId} />
+							</Box>
 
-								<Box
-									sx={{
-										position: 'absolute',
-										bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
-										right: theme.spacing(2),
-									}}
-								>
-									<AddFeatureButton mapId={mapId} />
-								</Box>
+							<Box
+								sx={{
+									position: 'absolute',
+									bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
+									left: theme.spacing(2),
+									// Ensures the user can still interact with the map underneath this Box
+									pointerEvents: 'none',
+								}}
+							>
+								<MapSwitcher
+									onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
+									onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+								/>
+							</Box>
+						</React.Fragment>
+					)}
 
-								<Box
-									sx={{
-										position: 'absolute',
-										bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
-										left: theme.spacing(2),
-										// Ensures the user can still interact with the map underneath this Box
-										pointerEvents: 'none',
-									}}
-								>
-									<MapSwitcher
-										onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
-										onSpeedDialClose={onMapsSwitcherSpeedDialClose}
-									/>
-								</Box>
-							</React.Fragment>
-						)}
-
-						<Outlet />
-					</React.Fragment>
-				)}
-			</div>
-		</React.Fragment>
+					<Outlet />
+				</React.Fragment>
+			)}
+		</div>
 	);
 }
 
