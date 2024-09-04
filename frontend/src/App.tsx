@@ -13,7 +13,7 @@ import { store } from './app/store';
 import { WholeScreenLoadingIndicator } from './app/ui/wholeScreenLoadingIndicator';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import { isMapLoadingViaRTKOrManuallySpecified, selectActiveMapId } from './features/app/appSlice';
+import { isMapLoadingSucceededViaRTKOrManuallySpecified, selectActiveMapId } from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
 import { isMapLoadingViaRTK, selectUser } from './features/auth/authSlice';
@@ -40,7 +40,7 @@ function App() {
 
 	const isLoggedInLoading = useAppSelector(isMapLoadingViaRTK);
 
-	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
+	const isMapLoadingSucceeded = useAppSelector(isMapLoadingSucceededViaRTKOrManuallySpecified);
 
 	// ######################
 	// Speed Dial Z-Index Workaround
@@ -96,97 +96,105 @@ function App() {
 	// Icons Library Loading (End)
 	// ######################
 
-	if (isLoggedInLoading === true) {
-		// Don't return the loading indicator until the Icons Library is loaded, because the heart loader is showing until then
-		return iconsLibraryLoaded === true ? <WholeScreenLoadingIndicator /> : null;
-	}
+	// ######################
+	// Initiate API Calls
+	// ######################
+	const [hasInitiateRun, setHasInitiateRun] = useState(false);
 
-	if (user === null) {
-		return (
-			<LoginContainer>
-				<Button
-					variant="contained"
-					size="large"
-					startIcon={<GoogleIcon />}
-					onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
-				>
-					Login
-				</Button>
-			</LoginContainer>
-		);
-	}
-
-	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
-	// Important: We're pre-fetching *after* we have a user object to avoid 403s
-	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
-	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
-	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
-
-	if (iconsLibraryLoaded !== true) {
-		return null;
-	}
+	useEffect(() => {
+		if (isLoggedInLoading === false && user !== null && hasInitiateRun === false) {
+			// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
+			// Important: We're pre-fetching *after* we have a user object to avoid 403s
+			setHasInitiateRun(true);
+			void store.dispatch(mapsApi.endpoints.getMaps.initiate());
+			void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
+			void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
+		}
+	}, [hasInitiateRun, isLoggedInLoading, user]);
+	// ######################
+	// Initiate API Calls (End)
+	// ######################
 
 	return (
-		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
-		<div className="App">
-			{mapId !== undefined && (
-				<OLMap
-					mapId={mapId}
-					mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
-					basemap={user.settings.basemap || Basemap.MapboxVectorTile}
-					basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
-				/>
+		<React.Fragment>
+			{isLoggedInLoading === false && user === null && (
+				<LoginContainer>
+					<Button
+						variant="contained"
+						size="large"
+						startIcon={<GoogleIcon />}
+						onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
+					>
+						Login
+					</Button>
+				</LoginContainer>
 			)}
 
-			{isMapLoading === true && <WholeScreenLoadingIndicator />}
+			<div className="App">
+				{iconsLibraryLoaded === true && (isLoggedInLoading === true || isMapLoadingSucceeded === false) && (
+					<WholeScreenLoadingIndicator />
+				)}
 
-			{location.pathname === '/' && (
-				<React.Fragment>
-					{mapId === undefined && <WelcomeUser />}
+				{user !== null && iconsLibraryLoaded === true && (
+					<React.Fragment>
+						{mapId !== undefined && (
+							<OLMap
+								mapId={mapId}
+								mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
+								basemap={user.settings.basemap || Basemap.MapboxVectorTile}
+								basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
+							/>
+						)}
 
-					<Box
-						sx={{
-							position: 'absolute',
-							zIndex: boxZIndex,
-							bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
-							right: theme.spacing(2),
-							// Ensures the user can still interact with the map underneath this Box
-							pointerEvents: 'none',
-						}}
-					>
-						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
-					</Box>
+						{location.pathname === '/' && (
+							<React.Fragment>
+								{mapId === undefined && <WelcomeUser />}
 
-					<Box
-						sx={{
-							position: 'absolute',
-							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
-							right: theme.spacing(2),
-						}}
-					>
-						<AddFeatureButton mapId={mapId} />
-					</Box>
+								<Box
+									sx={{
+										position: 'absolute',
+										zIndex: boxZIndex,
+										bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
+										right: theme.spacing(2),
+										// Ensures the user can still interact with the map underneath this Box
+										pointerEvents: 'none',
+									}}
+								>
+									<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+								</Box>
 
-					<Box
-						sx={{
-							position: 'absolute',
-							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
-							left: theme.spacing(2),
-							// Ensures the user can still interact with the map underneath this Box
-							pointerEvents: 'none',
-						}}
-					>
-						<MapSwitcher
-							onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
-							onSpeedDialClose={onMapsSwitcherSpeedDialClose}
-						/>
-					</Box>
-				</React.Fragment>
-			)}
+								<Box
+									sx={{
+										position: 'absolute',
+										bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+										right: theme.spacing(2),
+									}}
+								>
+									<AddFeatureButton mapId={mapId} />
+								</Box>
 
-			<Outlet />
-		</div>
-		// </ErrorBoundary>
+								<Box
+									sx={{
+										position: 'absolute',
+										bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
+										left: theme.spacing(2),
+										// Ensures the user can still interact with the map underneath this Box
+										pointerEvents: 'none',
+									}}
+								>
+									<MapSwitcher
+										onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
+										onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+									/>
+								</Box>
+							</React.Fragment>
+						)}
+
+						<Outlet />
+					</React.Fragment>
+				)}
+			</div>
+		</React.Fragment>
 	);
 }
 

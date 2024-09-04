@@ -268,6 +268,18 @@ export const isMapLoadingViaRTKOrManuallySpecified = (state: RootState) => {
 
 	return true;
 };
+export const isMapLoadingSucceededViaRTKOrManuallySpecified = (state: RootState) => {
+	try {
+		return (
+			state.api.queries['getFeatures(undefined)']?.status === QueryStatus.fulfilled ||
+			state.app.mapFeatures.status === eMapFeaturesLoadingStatus.SUCCEEDED
+		);
+	} catch {
+		/* empty */
+	}
+
+	return true;
+};
 
 // export const getMapFeatureLoadingStatus = (state: RootState) => state.app.mapFeatures.status;
 // export const getMapFeatureLoadingStatusDirectlyFromRTK = (state: RootState) =>
