@@ -13,15 +13,10 @@ import { store } from './app/store';
 import { WholeScreenLoadingIndicator } from './app/ui/wholeScreenLoadingIndicator';
 import { getAPIBaseURL, isInStandaloneMode } from './app/utils';
 import AddFeatureButton from './features/app/addFeatureButton';
-import {
-	eMapFeaturesLoadingStatus,
-	isMapLoadingViaRTKOrManuallySpecified,
-	selectActiveMapId,
-	setMapFeaturesStatus,
-} from './features/app/appSlice';
+import { isMapLoadingSucceededViaRTKOrManuallySpecified, selectActiveMapId } from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
-import { isUserLoggedIn, selectUser } from './features/auth/authSlice';
+import { isMapLoadingViaRTK, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
 import { loadIconsLibrary } from './features/symbology/iconsLibraryLoader';
 
@@ -43,9 +38,9 @@ function App() {
 
 	const user = useAppSelector(selectUser);
 
-	const isLoggedIn = useAppSelector(isUserLoggedIn);
+	const isLoggedInLoading = useAppSelector(isMapLoadingViaRTK);
 
-	const isMapLoading = useAppSelector(isMapLoadingViaRTKOrManuallySpecified);
+	const isMapLoadingSucceeded = useAppSelector(isMapLoadingSucceededViaRTKOrManuallySpecified);
 
 	// ######################
 	// Speed Dial Z-Index Workaround
@@ -94,25 +89,33 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
-			// Only set the map features loader going if this is our first time initialising everything.
-			// This avoids working in dev showing the loader each time we save a file.
-			const loader = document.getElementById('loader-container');
-
-			if (loader !== null) {
-				loader.remove();
-				dispatch(setMapFeaturesStatus(eMapFeaturesLoadingStatus.LOADING));
-			}
+			document.getElementById('loader-container')?.remove();
 		}
 	}, [dispatch, iconsLibraryLoaded]);
 	// ######################
 	// Icons Library Loading (End)
 	// ######################
 
-	if (isLoggedIn === undefined) {
-		return null;
-	}
+	// ######################
+	// Initiate API Calls
+	// ######################
+	const [hasInitiateRun, setHasInitiateRun] = useState(false);
 
-	if (user === null) {
+	useEffect(() => {
+		if (isLoggedInLoading === false && user !== null && hasInitiateRun === false) {
+			// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
+			// Important: We're pre-fetching *after* we have a user object to avoid 403s
+			setHasInitiateRun(true);
+			void store.dispatch(mapsApi.endpoints.getMaps.initiate());
+			void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
+			void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
+		}
+	}, [hasInitiateRun, isLoggedInLoading, user]);
+	// ######################
+	// Initiate API Calls (End)
+	// ######################
+
+	if (isLoggedInLoading === false && user === null) {
 		return (
 			<LoginContainer>
 				<Button
@@ -127,77 +130,71 @@ function App() {
 		);
 	}
 
-	if (iconsLibraryLoaded !== true) {
-		return null;
-	}
-
-	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
-	// Important: We're pre-fetching *after* we have a user object to avoid 403s
-	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
-	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
-	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
-
 	return (
-		// <ErrorBoundary FallbackComponent={ErrorBoundaryFallback}>
 		<div className="App">
-			{mapId !== undefined && (
-				<OLMap
-					mapId={mapId}
-					mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
-					basemap={user.settings.basemap || Basemap.MapboxVectorTile}
-					basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
-				/>
+			{iconsLibraryLoaded === true && (isLoggedInLoading === true || isMapLoadingSucceeded === false) && (
+				<WholeScreenLoadingIndicator />
 			)}
 
-			{isMapLoading === true && <WholeScreenLoadingIndicator />}
-
-			{location.pathname === '/' && (
+			{user !== null && iconsLibraryLoaded === true && (
 				<React.Fragment>
-					{mapId === undefined && <WelcomeUser />}
-
-					<Box
-						sx={{
-							position: 'absolute',
-							zIndex: boxZIndex,
-							bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
-							right: theme.spacing(2),
-							// Ensures the user can still interact with the map underneath this Box
-							pointerEvents: 'none',
-						}}
-					>
-						<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
-					</Box>
-
-					<Box
-						sx={{
-							position: 'absolute',
-							bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
-							right: theme.spacing(2),
-						}}
-					>
-						<AddFeatureButton mapId={mapId} />
-					</Box>
-
-					<Box
-						sx={{
-							position: 'absolute',
-							bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
-							left: theme.spacing(2),
-							// Ensures the user can still interact with the map underneath this Box
-							pointerEvents: 'none',
-						}}
-					>
-						<MapSwitcher
-							onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
-							onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+					{mapId !== undefined && (
+						<OLMap
+							mapId={mapId}
+							mapRenderer={user.settings.map_renderer || MapRenderer.WebGLPointsLayer}
+							basemap={user.settings.basemap || Basemap.MapboxVectorTile}
+							basemap_style={user.settings.basemap_style || BasemapStyle.Monochrome}
 						/>
-					</Box>
+					)}
+
+					{location.pathname === '/' && (
+						<React.Fragment>
+							{mapId === undefined && <WelcomeUser />}
+
+							<Box
+								sx={{
+									position: 'absolute',
+									zIndex: boxZIndex,
+									bottom: theme.spacing(isInStandaloneMode() === false ? 11 : 15),
+									right: theme.spacing(2),
+									// Ensures the user can still interact with the map underneath this Box
+									pointerEvents: 'none',
+								}}
+							>
+								<SpeedDialNavigation onSpeedDialOpen={onSpeedDialOpen} onSpeedDialClose={onSpeedDialClose} />
+							</Box>
+
+							<Box
+								sx={{
+									position: 'absolute',
+									bottom: theme.spacing(isInStandaloneMode() === false ? 2 : 6),
+									right: theme.spacing(2),
+								}}
+							>
+								<AddFeatureButton mapId={mapId} />
+							</Box>
+
+							<Box
+								sx={{
+									position: 'absolute',
+									bottom: theme.spacing(isInStandaloneMode() === false ? 4 : 8),
+									left: theme.spacing(2),
+									// Ensures the user can still interact with the map underneath this Box
+									pointerEvents: 'none',
+								}}
+							>
+								<MapSwitcher
+									onSpeedDialOpen={onMapsSwitcherSpeedDialOpen}
+									onSpeedDialClose={onMapsSwitcherSpeedDialClose}
+								/>
+							</Box>
+						</React.Fragment>
+					)}
+
+					<Outlet />
 				</React.Fragment>
 			)}
-
-			<Outlet />
 		</div>
-		// </ErrorBoundary>
 	);
 }
 

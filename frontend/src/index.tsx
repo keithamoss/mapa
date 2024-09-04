@@ -18,6 +18,7 @@ import { MapaNamespace, MapaNamespaceDefaults } from './window';
 declare global {
 	interface Window {
 		MapaNamespace: MapaNamespace;
+		// log: (msg: string) => void;
 	}
 }
 

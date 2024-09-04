@@ -1,5 +1,21 @@
 [
   {
+    "version": "Bugs begone",
+    "date": "4 September, 2024",
+    "changes": {
+      "bugs fixed": [
+        [
+          "Squish!",
+          "Squished the bug where sometimes, seemingly at random, features would just not appear on the map."
+        ],
+        [
+          "Squash!",
+          "Squashed a cosmetic bug where, on loading the app up for a new session, the loading indicator would flicker briefly as it transitioned between two of the different loading states."
+        ]
+      ]
+    }
+  },
+  {
     "version": "Parlez-vous anglais?",
     "date": "31 August, 2024",
     "changes": {

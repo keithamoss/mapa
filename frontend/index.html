@@ -40,6 +40,10 @@
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
 
+  <!-- <div id="debug-log"
+    style="position: absolute; bottom: 0px; left: 0px; width: 100%; height: 200px; overflow-y: auto; background-color: lightblue; z-index: 1000000;">
+  </div> -->
+
   <div id="loader-container">
     <span id="loader-heart"></span>
   </div>
@@ -53,6 +57,21 @@
     }, 500)
   </script>
 
+  <!-- <script>
+    window.log = (msg) => {
+      const date = new Date()
+      const time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
+
+      const fullMsg = `${time}: ${msg}`;
+
+      console.log(fullMsg)
+
+      const debugLog = document.getElementById("debug-log")
+      debugLog.innerHTML = `${fullMsg}<br />${debugLog.innerHTML}`
+    }
+
+    window.log('index.html loaded - heart should be showing')
+  </script> -->
 
   <!-- Add entry point 👇 -->
   <script type="module" src="/src/index.tsx"></script>
