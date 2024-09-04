@@ -16,7 +16,7 @@ import AddFeatureButton from './features/app/addFeatureButton';
 import { isMapLoadingViaRTKOrManuallySpecified, selectActiveMapId } from './features/app/appSlice';
 import MapSwitcher from './features/app/mapsSwitcher';
 import SpeedDialNavigation from './features/app/speedDialNavigation';
-import { isMapLoadingViaRTK, isUserLoggedIn, selectUser } from './features/auth/authSlice';
+import { isMapLoadingViaRTK, selectUser } from './features/auth/authSlice';
 import OLMap from './features/ol_map/olMap';
 import { loadIconsLibrary } from './features/symbology/iconsLibraryLoader';
 
@@ -28,8 +28,6 @@ const LoginContainer = styled('div')`
 `;
 
 function App() {
-	window.log('App.tsx: Rendering');
-
 	const dispatch = useAppDispatch();
 
 	const location = useLocation();
@@ -39,8 +37,6 @@ function App() {
 	const mapId = useAppSelector(selectActiveMapId);
 
 	const user = useAppSelector(selectUser);
-
-	const isLoggedIn = useAppSelector(isUserLoggedIn);
 
 	const isLoggedInLoading = useAppSelector(isMapLoadingViaRTK);
 
@@ -86,7 +82,6 @@ function App() {
 				window.MapaNamespace.iconsLibrary.icons !== undefined &&
 				window.MapaNamespace.iconsLibrary.categories !== undefined
 			) {
-				window.log('App.tsx: Icons Library Loaded');
 				setIconsLibraryLoaded(true);
 			}
 		});
@@ -94,7 +89,6 @@ function App() {
 
 	useEffect(() => {
 		if (iconsLibraryLoaded === true) {
-			window.log('App.tsx: Removing heart loader');
 			document.getElementById('loader-container')?.remove();
 		}
 	}, [dispatch, iconsLibraryLoaded]);
@@ -102,11 +96,7 @@ function App() {
 	// Icons Library Loading (End)
 	// ######################
 
-	window.log(`App.tsx: isMapLoading = ${isMapLoading}, isLoggedInLoading = ${isLoggedInLoading}`);
-
 	if (isLoggedInLoading === true) {
-		window.log('App.tsx: Not logged in, show loading indicator');
-
 		// Don't return the loading indicator until the Icons Library is loaded, because the heart loader is showing until then
 		return iconsLibraryLoaded === true ? <WholeScreenLoadingIndicator /> : null;
 	}
@@ -128,13 +118,11 @@ function App() {
 
 	// This is the better approach because usePrefetch() runs into "you can't call hooks conditionally"
 	// Important: We're pre-fetching *after* we have a user object to avoid 403s
-	window.log('App.tsx: initiate');
 	void store.dispatch(mapsApi.endpoints.getMaps.initiate());
 	void store.dispatch(featureSchemasApi.endpoints.getFeatureSchemas.initiate());
 	void store.dispatch(featuresApi.endpoints.getFeatures.initiate());
 
 	if (iconsLibraryLoaded !== true) {
-		window.log('App.tsx: Awaiting Icons Library Loading');
 		return null;
 	}
 

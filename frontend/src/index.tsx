@@ -18,11 +18,9 @@ import { MapaNamespace, MapaNamespaceDefaults } from './window';
 declare global {
 	interface Window {
 		MapaNamespace: MapaNamespace;
-		log: (msg: string) => void;
+		// log: (msg: string) => void;
 	}
 }
-
-window.log('index.tsx loaded');
 
 window.MapaNamespace = MapaNamespaceDefaults;
 
