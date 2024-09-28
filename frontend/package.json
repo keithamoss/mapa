@@ -16,7 +16,7 @@
     "@react-spring/web": "^9.7.4",
     "@reduxjs/toolkit": "^2.2.7",
     "@sentry/browser": "^8.30.0",
-    "@sentry/react": "^8.30.0",
+    "@sentry/react": "^8.32.0",
     "@sentry/tracing": "^7.119.0",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
