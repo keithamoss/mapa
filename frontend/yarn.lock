@@ -2608,13 +2608,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.3.8":
-  version: 18.3.8
-  resolution: "@types/react@npm:18.3.8"
+"@types/react@npm:^18.3.10":
+  version: 18.3.10
+  resolution: "@types/react@npm:18.3.10"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
-  checksum: a2cc2034746cde564a49a9d7f1ae57214bc83adb0daafd4724dc400569adc54c5a489c0e7d8656752b8748908a364d6811e4d7a2adc7f18a7f7179728d20147a
+  checksum: 04261654b5f4bc9584e9d882c7dfd5b36dc58963f958f8c3efd24cb68c9d205bc2d57558a1479b86d7827f0e5116d5bd111791d1253583d1e1c165f0aeb48c48
   languageName: node
   linkType: hard
 
@@ -4679,7 +4679,7 @@ __metadata:
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
     "@types/node": ^22.5.5
-    "@types/react": ^18.3.8
+    "@types/react": ^18.3.10
     "@types/react-dom": ^18.3.0
     "@typescript-eslint/eslint-plugin": ^8.6.0
     "@typescript-eslint/parser": ^8.6.0
