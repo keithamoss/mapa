@@ -1926,9 +1926,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.2.7":
-  version: 2.2.7
-  resolution: "@reduxjs/toolkit@npm:2.2.7"
+"@reduxjs/toolkit@npm:^2.2.8":
+  version: 2.2.8
+  resolution: "@reduxjs/toolkit@npm:2.2.8"
   dependencies:
     immer: ^10.0.3
     redux: ^5.0.1
@@ -1942,7 +1942,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: 039d61d94cec25d07c7813f9cd234cbe83478f65df7622f2dafed609f2f0cbe00565999e33e7d22bf915c3c5bceb7be606ca17a9c55b51ce1841f541f63a3395
+  checksum: 4a40f9831f9d31e8822c0cc27cdf9abaabb46655d8d368e4c733955a3694b6dd4d25af6506e2fdc6c3b0abaa253b822d0b28e8807ce4a8b904f59d3b0fb1b2f0
   languageName: node
   linkType: hard
 
@@ -4904,7 +4904,7 @@ __metadata:
     "@mui/system": ^6.1.2
     "@mui/x-date-pickers": ^7.19.0
     "@react-spring/web": ^9.7.4
-    "@reduxjs/toolkit": ^2.2.7
+    "@reduxjs/toolkit": ^2.2.8
     "@sentry/browser": ^8.33.1
     "@sentry/react": ^8.33.1
     "@sentry/tracing": ^7.119.1
