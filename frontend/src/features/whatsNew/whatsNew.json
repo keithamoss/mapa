@@ -1,249 +1,249 @@
 [
-  {
-    "version": "Bugs begone",
-    "date": "4 September, 2024",
-    "changes": {
-      "bugs fixed": [
-        [
-          "Squish!",
-          "Squished the bug where sometimes, seemingly at random, features would just not appear on the map."
-        ],
-        [
-          "Squash!",
-          "Squashed a cosmetic bug where, on loading the app up for a new session, the loading indicator would flicker briefly as it transitioned between two of the different loading states."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "Parlez-vous anglais?",
-    "date": "31 August, 2024",
-    "changes": {
-      "highlights": [
-        [
-          "Welcome to the Information Superhighway!",
-          "You can now add URL Fields to your schemas! URL Fields get given an overall name of your choice and let you add as many links as you like within each field. Each link needs to be given a name (or label) and a URL. Links can be re-ordered and are available to open, copy, or share from the Feature Summary at the top of each feature. Some links will open directly in their relevant apps (e.g. Google Maps)."
-        ]
-      ],
-      "bugs fixed": [
-        [
-          "Behave yourself!",
-          "The Quick Map Switcher now behaves better when you only have one or two maps. Previously, it would be inconsistent in whether it was displaying or not."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "Gosh, Toronto is pretty great, hey?",
-    "date": "29 August, 2024",
-    "changes": {
-      "highlights": [
-        [
-          "Fewer mistakes?",
-          "The Feature Movement control has had an upgrade! By default, it's behaviour is now to turn itself off after you've moved a feature once. You can override this behaviour by tapping the 'sticky' / 'repeat' button next to it to let you make multiple moves, or to move multiple features."
-        ],
-        [
-          "Copy that. We're in the pipe, five by five",
-          "To make it easier to switch between Mapa and other apps, you can now tap on any Text or Number fields under the Summary for a feature to copy the field's value to your clipboard."
-        ],
-        [
-          "But I would walk five hundred miles...Just to be the man who...(fell) down at your door",
-          "Whenever you zoom the map a scalebar will now (temporarily) popup to give you a better sense of distance."
-        ],
-        [
-          "Pasty",
-          "Schema Text Fields can now be configured to show a handy 'Paste' button in the field that will populate the field with whatever is on your clipboard. This is opt-in, so you'll need to review your schemas and have a think about which fields it makes sense on."
-        ],
-        [
-          "Pastie",
-          "Location Search now also features the handy in-field 'Paste' button that will take whatever's on your clipboard and search for it."
-        ],
-        [
-          "Preferential treatment",
-          "When searching for a location, you can now choose to prefer results close to wherever you are. It's based on your IP address, so reliability maaaaaaay vary."
-        ]
-      ],
-      "minor changes": [
-        [
-          "Your preference, madame?",
-          "Maps can now choose to have the Location Search control. This is opt-in, so you'll need to revisit your maps and decide which maps would benefit."
-        ],
-        [
-          "Tidying up",
-          "Starting locations for maps can now be cleared. i.e. Reset back to the default behaviour of 'Start the map at my location and have it follow me as I move'."
-        ],
-        [
-          "Clear!",
-          "Hitting the 'Clear' button on the Location Search screen now gives focus to the search field, so you can just start typing your new search right away."
-        ]
-      ],
-      "bugs fixed": [
-        [
-          "Randomness be gone",
-          "The bug should (hopefully!) be fixed where sometimes you'd tap on the map, briefly see the list of features you can edit, and then have a random feature chosen from the list and opened."
-        ],
-        [
-          "The fingers, they do nothing!",
-          "Fixed the bug where you couldn't interact with the bits of map directly above the Navigation and Map Switcher buttons."
-        ],
-        [
-          "Less clutter",
-          "When searching for a symbol you've created, we no longer display empty categories in the list that clutter up the actual search results."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "I'm a lumberjack, and I'm okay",
-    "date": "26 August, 2024",
-    "changes": {
-      "highlights": [
-        [
-          "Meep meep!",
-          "We now cache the whole icons library in a new and much more reliable way than we have been so far. This means Mapa should load (or reload) much much faster than it ever has before. Enjoy"
-        ],
-        [
-          "Icons galore",
-          "We've added three brand new icon packs: Adventure, Sea Life, and Odds and Ends and we've also added a bunch of new icons to the existing Nature pack."
-        ],
-        [
-          "Where do we start?",
-          "You can now set a custom starting location for your maps. You can choose to (a) set a fixed location (i.e. setting the centre of the map and the zoom level you want to start at) or (b) to use your current location, but choose how close to zoom into it."
-        ],
-        [
-          "Quickly now, hurry",
-          "Due to popular demand, you can now quickly switch between your maps without ever having to leave the map itself. Simply tap on the button with your map's icon and your other maps are just a tap away."
-        ]
-      ],
-      "minor changes": [
-        [
-          "Waiting for Godot",
-          "The map no longer waits forever for your location. If it can't get a location fix within 4s, an alert banner will popup and give you the option of trying again."
-        ],
-        [
-          "Loading...",
-          "Whenever a map is loading up we now display a loading screen over the top of the map so you get instant feedback that something is going on. As a bonus, this means you can't interact with the map and accidently add mulberry trees to the Canada travel map."
-        ],
-        [
-          "Still loading...",
-          "In a similar vein, when switching maps from the Maps page you'll now see a loading screen so you get instant feedback that something is happening."
-        ],
-        [
-          "Semantics",
-          "Under the 'Feature Summary' we used to say that a boolean field as 'On'. This language didn't make a lot of sense for how boolean fields are being used in practice, so we now say that they are 'Checked'."
-        ],
-        [
-          "Debugging",
-          "All of the debug related guff on the Settings screen has moved over to a separate Debug screen that's accessible from the top of the navigation menu."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "Mapa and the Search For The Holy Grail",
-    "date": "2 August, 2024",
-    "changes": {
-      "highlights": [
-        [
-          "[Experimental] Location search",
-          "You can now search for the names of places, addresses, or points of interest from the map. It's still experimental until we discuss how the non-MVP version of search should work and evaluate Mapbox's search results in the real world based on the different types of travel-related places we want to add."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "Where we're going, we won't need servers",
-    "date": "29 May, 2024",
-    "changes": {
-      "highlights": [
-        [
-          "Head west, young lady",
-          "The map can now use the accelerometer and magnetometer in your device to either show you which direction you're facing (relative to the map pointing north) or to rotate the map around you as you change the direction you're facing."
-        ],
-        [
-          "No servers for you",
-          "Mapa is now 100% serverless! Not a server in sight! This reduces our running costs by about $10/month and improves performance by about 30% when loading maps with lots of features."
-        ]
-      ],
-      "minor changes": [
-        [
-          "Blue(y)",
-          "We're now consistent in our use of colours. The map buttons use 'Mapa Cool Blue' to demonstrate when they're active now, rather than the mix of 'Mapa Default Grey' and 'Mapa Warning Purple' in use previously."
-        ]
-      ],
-      "bugs fixed": [
-        [
-          "Feature movement rave party",
-          "Moving features around no longer causes a rave party of flashing icons until everything locks up."
-        ],
-        [
-          "Refresh this",
-          "Refreshing any page that isn't the map no longer results in an error page. It now...just works."
-        ]
-      ]
-    }
-  },
-  {
-    "version": "Cradle of Fur",
-    "date": "17 May, 2024",
-    "summary": "Several major new features, a few smaller features, and a whole pile of bug fixes.",
-    "changes": {
-      "highlights": [
-        [
-          "What's new",
-          "Added this page to record what's changed in each new version of Mapa."
-        ],
-        [
-          "Quicker adding of symbols",
-          "You can now quickly add symbols right from the map. Choose from symbols you've recently added, your most popular and often used symbols, or symbols you've favourited."
-        ],
-        [
-          "[Experimental] Head west, young lady",
-          "The map now lets you choose whether you want to follow your heading / compass bearing (the default), or whether the map should stay pointed to the north."
-        ],
-        [
-          "Easier feature editing",
-          "When choosing features to edit, we now show the feature's symbol and symbol name instead of just it's internal identifier."
-        ],
-        [
-          "Saving indicators",
-          "When saving maps, schemas, features (et cetera), we now show a loading indicator so you know something is happening. This is particularly helpful if you're out and about and only have a few bars of connectivity."
-        ]
-      ],
-      "bugs fixed": [
-        [
-          "Begone, weird highlighting bug",
-          "Long-pressing on the part of the map where your GPS location marker is shown no longer weirdly highlights the whole map as if it was a piece of text."
-        ],
-        [
-          "Missing heros",
-          "Making changes to a map with no hero icon no longer sets an invisible hero icon."
-        ],
-        [
-          "Feature editing",
-          "You can now also close the 'Choose which feature to edit' screen by tapping on the map behind it."
-        ],
-        [
-          "Feature editing",
-          "Reloading the page when on the 'Choose which feature to edit' screen no longer shows a list of blank features on reload."
-        ],
-        [
-          "Symbol searching",
-          "When searching for symbols, the list of symbols no longer appears to scroll and up underneath the search bar."
-        ],
-        [
-          "First time user hiccups",
-          "Squashed a few crashing bugs relating to profile and user settings for brand new first time users."
-        ],
-        [
-          "What's in a name?",
-          "When adding a feature, the title will now be 'Add Feature', not the mysterious 'Edit Feature' title we've had until now."
-        ],
-        [
-          "No menu for you",
-          "Mapa is now actually usable on the desktop - you can now open the hamburger menu without it disappearing as soon as you leave the area of the button."
-        ]
-      ]
-    }
-  }
+	{
+		"version": "Bugs begone",
+		"date": "4 September, 2024",
+		"changes": {
+			"bugs fixed": [
+				[
+					"Squish!",
+					"Squished the bug where sometimes, seemingly at random, features would just not appear on the map."
+				],
+				[
+					"Squash!",
+					"Squashed a cosmetic bug where, on loading the app up for a new session, the loading indicator would flicker briefly as it transitioned between two of the different loading states."
+				]
+			]
+		}
+	},
+	{
+		"version": "Parlez-vous anglais?",
+		"date": "31 August, 2024",
+		"changes": {
+			"highlights": [
+				[
+					"Welcome to the Information Superhighway!",
+					"You can now add URL Fields to your schemas! URL Fields get given an overall name of your choice and let you add as many links as you like within each field. Each link needs to be given a name (or label) and a URL. Links can be re-ordered and are available to open, copy, or share from the Feature Summary at the top of each feature. Some links will open directly in their relevant apps (e.g. Google Maps)."
+				]
+			],
+			"bugs fixed": [
+				[
+					"Behave yourself!",
+					"The Quick Map Switcher now behaves better when you only have one or two maps. Previously, it would be inconsistent in whether it was displaying or not."
+				]
+			]
+		}
+	},
+	{
+		"version": "Gosh, Toronto is pretty great, hey?",
+		"date": "29 August, 2024",
+		"changes": {
+			"highlights": [
+				[
+					"Fewer mistakes?",
+					"The Feature Movement control has had an upgrade! By default, it's behaviour is now to turn itself off after you've moved a feature once. You can override this behaviour by tapping the 'sticky' / 'repeat' button next to it to let you make multiple moves, or to move multiple features."
+				],
+				[
+					"Copy that. We're in the pipe, five by five",
+					"To make it easier to switch between Mapa and other apps, you can now tap on any Text or Number fields under the Summary for a feature to copy the field's value to your clipboard."
+				],
+				[
+					"But I would walk five hundred miles...Just to be the man who...(fell) down at your door",
+					"Whenever you zoom the map a scalebar will now (temporarily) popup to give you a better sense of distance."
+				],
+				[
+					"Pasty",
+					"Schema Text Fields can now be configured to show a handy 'Paste' button in the field that will populate the field with whatever is on your clipboard. This is opt-in, so you'll need to review your schemas and have a think about which fields it makes sense on."
+				],
+				[
+					"Pastie",
+					"Location Search now also features the handy in-field 'Paste' button that will take whatever's on your clipboard and search for it."
+				],
+				[
+					"Preferential treatment",
+					"When searching for a location, you can now choose to prefer results close to wherever you are. It's based on your IP address, so reliability maaaaaaay vary."
+				]
+			],
+			"minor changes": [
+				[
+					"Your preference, madame?",
+					"Maps can now choose to have the Location Search control. This is opt-in, so you'll need to revisit your maps and decide which maps would benefit."
+				],
+				[
+					"Tidying up",
+					"Starting locations for maps can now be cleared. i.e. Reset back to the default behaviour of 'Start the map at my location and have it follow me as I move'."
+				],
+				[
+					"Clear!",
+					"Hitting the 'Clear' button on the Location Search screen now gives focus to the search field, so you can just start typing your new search right away."
+				]
+			],
+			"bugs fixed": [
+				[
+					"Randomness be gone",
+					"The bug should (hopefully!) be fixed where sometimes you'd tap on the map, briefly see the list of features you can edit, and then have a random feature chosen from the list and opened."
+				],
+				[
+					"The fingers, they do nothing!",
+					"Fixed the bug where you couldn't interact with the bits of map directly above the Navigation and Map Switcher buttons."
+				],
+				[
+					"Less clutter",
+					"When searching for a symbol you've created, we no longer display empty categories in the list that clutter up the actual search results."
+				]
+			]
+		}
+	},
+	{
+		"version": "I'm a lumberjack, and I'm okay",
+		"date": "26 August, 2024",
+		"changes": {
+			"highlights": [
+				[
+					"Meep meep!",
+					"We now cache the whole icons library in a new and much more reliable way than we have been so far. This means Mapa should load (or reload) much much faster than it ever has before. Enjoy"
+				],
+				[
+					"Icons galore",
+					"We've added three brand new icon packs: Adventure, Sea Life, and Odds and Ends and we've also added a bunch of new icons to the existing Nature pack."
+				],
+				[
+					"Where do we start?",
+					"You can now set a custom starting location for your maps. You can choose to (a) set a fixed location (i.e. setting the centre of the map and the zoom level you want to start at) or (b) to use your current location, but choose how close to zoom into it."
+				],
+				[
+					"Quickly now, hurry",
+					"Due to popular demand, you can now quickly switch between your maps without ever having to leave the map itself. Simply tap on the button with your map's icon and your other maps are just a tap away."
+				]
+			],
+			"minor changes": [
+				[
+					"Waiting for Godot",
+					"The map no longer waits forever for your location. If it can't get a location fix within 4s, an alert banner will popup and give you the option of trying again."
+				],
+				[
+					"Loading...",
+					"Whenever a map is loading up we now display a loading screen over the top of the map so you get instant feedback that something is going on. As a bonus, this means you can't interact with the map and accidently add mulberry trees to the Canada travel map."
+				],
+				[
+					"Still loading...",
+					"In a similar vein, when switching maps from the Maps page you'll now see a loading screen so you get instant feedback that something is happening."
+				],
+				[
+					"Semantics",
+					"Under the 'Feature Summary' we used to say that a boolean field as 'On'. This language didn't make a lot of sense for how boolean fields are being used in practice, so we now say that they are 'Checked'."
+				],
+				[
+					"Debugging",
+					"All of the debug related guff on the Settings screen has moved over to a separate Debug screen that's accessible from the top of the navigation menu."
+				]
+			]
+		}
+	},
+	{
+		"version": "Mapa and the Search For The Holy Grail",
+		"date": "2 August, 2024",
+		"changes": {
+			"highlights": [
+				[
+					"[Experimental] Location search",
+					"You can now search for the names of places, addresses, or points of interest from the map. It's still experimental until we discuss how the non-MVP version of search should work and evaluate Mapbox's search results in the real world based on the different types of travel-related places we want to add."
+				]
+			]
+		}
+	},
+	{
+		"version": "Where we're going, we won't need servers",
+		"date": "29 May, 2024",
+		"changes": {
+			"highlights": [
+				[
+					"Head west, young lady",
+					"The map can now use the accelerometer and magnetometer in your device to either show you which direction you're facing (relative to the map pointing north) or to rotate the map around you as you change the direction you're facing."
+				],
+				[
+					"No servers for you",
+					"Mapa is now 100% serverless! Not a server in sight! This reduces our running costs by about $10/month and improves performance by about 30% when loading maps with lots of features."
+				]
+			],
+			"minor changes": [
+				[
+					"Blue(y)",
+					"We're now consistent in our use of colours. The map buttons use 'Mapa Cool Blue' to demonstrate when they're active now, rather than the mix of 'Mapa Default Grey' and 'Mapa Warning Purple' in use previously."
+				]
+			],
+			"bugs fixed": [
+				[
+					"Feature movement rave party",
+					"Moving features around no longer causes a rave party of flashing icons until everything locks up."
+				],
+				[
+					"Refresh this",
+					"Refreshing any page that isn't the map no longer results in an error page. It now...just works."
+				]
+			]
+		}
+	},
+	{
+		"version": "Cradle of Fur",
+		"date": "17 May, 2024",
+		"summary": "Several major new features, a few smaller features, and a whole pile of bug fixes.",
+		"changes": {
+			"highlights": [
+				[
+					"What's new",
+					"Added this page to record what's changed in each new version of Mapa."
+				],
+				[
+					"Quicker adding of symbols",
+					"You can now quickly add symbols right from the map. Choose from symbols you've recently added, your most popular and often used symbols, or symbols you've favourited."
+				],
+				[
+					"[Experimental] Head west, young lady",
+					"The map now lets you choose whether you want to follow your heading / compass bearing (the default), or whether the map should stay pointed to the north."
+				],
+				[
+					"Easier feature editing",
+					"When choosing features to edit, we now show the feature's symbol and symbol name instead of just it's internal identifier."
+				],
+				[
+					"Saving indicators",
+					"When saving maps, schemas, features (et cetera), we now show a loading indicator so you know something is happening. This is particularly helpful if you're out and about and only have a few bars of connectivity."
+				]
+			],
+			"bugs fixed": [
+				[
+					"Begone, weird highlighting bug",
+					"Long-pressing on the part of the map where your GPS location marker is shown no longer weirdly highlights the whole map as if it was a piece of text."
+				],
+				[
+					"Missing heros",
+					"Making changes to a map with no hero icon no longer sets an invisible hero icon."
+				],
+				[
+					"Feature editing",
+					"You can now also close the 'Choose which feature to edit' screen by tapping on the map behind it."
+				],
+				[
+					"Feature editing",
+					"Reloading the page when on the 'Choose which feature to edit' screen no longer shows a list of blank features on reload."
+				],
+				[
+					"Symbol searching",
+					"When searching for symbols, the list of symbols no longer appears to scroll and up underneath the search bar."
+				],
+				[
+					"First time user hiccups",
+					"Squashed a few crashing bugs relating to profile and user settings for brand new first time users."
+				],
+				[
+					"What's in a name?",
+					"When adding a feature, the title will now be 'Add Feature', not the mysterious 'Edit Feature' title we've had until now."
+				],
+				[
+					"No menu for you",
+					"Mapa is now actually usable on the desktop - you can now open the hamburger menu without it disappearing as soon as you leave the area of the button."
+				]
+			]
+		}
+	}
 ]

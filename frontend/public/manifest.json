@@ -1,26 +1,26 @@
 {
-  "short_name": "Mapa",
-  "name": "Mapa",
-  "description": "For H, with ❤️",
-  "icons": [
-    {
-      "src": "/app-icon/favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "/app-icon/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/app-icon/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#00ff00",
-  "background_color": "#00ff00"
+	"short_name": "Mapa",
+	"name": "Mapa",
+	"description": "For H, with ❤️",
+	"icons": [
+		{
+			"src": "/app-icon/favicon.ico",
+			"sizes": "64x64 32x32 24x24 16x16",
+			"type": "image/x-icon"
+		},
+		{
+			"src": "/app-icon/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/app-icon/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#00ff00",
+	"background_color": "#00ff00"
 }

@@ -2,7 +2,11 @@ import type dayjs from 'dayjs';
 import * as yup from 'yup';
 import type { ObjectSchema } from 'yup';
 import type { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
-import type { FeatureDataItemURLFieldLinkItemFormModifiableProps, MapaFeature, NewMapaFeature } from '../services/features';
+import type {
+	FeatureDataItemURLFieldLinkItemFormModifiableProps,
+	MapaFeature,
+	NewMapaFeature,
+} from '../services/features';
 import {
 	type FeatureSchema,
 	type FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,

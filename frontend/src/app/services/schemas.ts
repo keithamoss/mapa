@@ -1,4 +1,4 @@
-import { createEntityAdapter, type EntityState } from '@reduxjs/toolkit';
+import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import type { IconStyle } from '../../features/symbology/iconsLibraryInterfaces';
 import { api } from './api';

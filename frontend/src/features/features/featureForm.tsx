@@ -20,7 +20,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { type FeatureDataItem, type MapaFeature, type NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
+import {
+	type FeatureDataItem,
+	type MapaFeature,
+	type NewMapaFeature,
+	useDeleteFeatureMutation,
+} from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';

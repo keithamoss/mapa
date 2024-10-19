@@ -5,7 +5,10 @@ import { useRef } from 'react';
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import { symbologyGroupFormValidationSchema } from '../../app/forms/symbologyGroupForm';
-import type { FeatureSchemaSymbologyGroup, FeatureSchemaSymbologyGroupModifiableProps } from '../../app/services/schemas';
+import type {
+	FeatureSchemaSymbologyGroup,
+	FeatureSchemaSymbologyGroupModifiableProps,
+} from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 

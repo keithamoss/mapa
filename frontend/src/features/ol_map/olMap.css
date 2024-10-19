@@ -61,7 +61,16 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	display: none;
 	position: absolute;
 	/* https://codepen.io/stoumann/full/abZxoOM */
-	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
+	clip-path: polygon(
+		50% 0%,
+		2% 100%,
+		18% 95%,
+		33% 91%,
+		50% 88%,
+		68% 90%,
+		84% 95%,
+		100% 100%
+	);
 	top: -37px;
 	left: -10px;
 	height: 20px;
@@ -78,7 +87,16 @@ c.f. https://github.com/openlayers/openlayers/issues/13495
 	display: none;
 	position: absolute;
 	/* https://codepen.io/stoumann/full/abZxoOM */
-	clip-path: polygon(50% 0%, 2% 100%, 18% 95%, 33% 91%, 50% 88%, 68% 90%, 84% 95%, 100% 100%);
+	clip-path: polygon(
+		50% 0%,
+		2% 100%,
+		18% 95%,
+		33% 91%,
+		50% 88%,
+		68% 90%,
+		84% 95%,
+		100% 100%
+	);
 	top: -42px;
 	left: -14px;
 	height: 28px;

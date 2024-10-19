@@ -1,11 +1,11 @@
-import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { type PayloadAction, createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import type { Coordinate } from 'ol/coordinate';
 import { authApi } from '../../app/services/auth';
-import { featuresApi, type MapaFeature } from '../../app/services/features';
+import { type MapaFeature, featuresApi } from '../../app/services/features';
 import type { RootState } from '../../app/store';
 import { selectMapsResult } from '../maps/mapsSlice';
-import { convertFeaturesToGeoJSON, type GeoJSONFeatureCollection } from '../ol_map/olLayerManager';
+import { type GeoJSONFeatureCollection, convertFeaturesToGeoJSON } from '../ol_map/olLayerManager';
 import type { WebGLLayerSpriteSheet } from '../ol_map/olWebGLPointsLayerManager';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 

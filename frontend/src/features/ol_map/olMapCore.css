@@ -9,6 +9,6 @@
 
 /* https://github.com/openlayers/ol-mapbox-style/issues/1001 */
 @font-face {
-	font-family: 'DIN Pro';
-	src: url('/fonts/D-DIN-PRO-400-Regular.otf') format('opentype');
+	font-family: "DIN Pro";
+	src: url("/fonts/D-DIN-PRO-400-Regular.otf") format("opentype");
 }

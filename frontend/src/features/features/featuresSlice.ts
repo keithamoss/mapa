@@ -2,11 +2,11 @@ import { createSelector } from '@reduxjs/toolkit';
 import { Point } from 'ol/geom';
 import {
 	type FeatureDataItem,
+	GeomType,
+	type NewMapaFeature,
 	featuresAdapter,
 	featuresApi,
-	GeomType,
 	initialFeaturesState,
-	type NewMapaFeature,
 } from '../../app/services/features';
 import type { AppDispatch, RootState } from '../../app/store';
 import { type OLMapView, selectMapView } from '../app/appSlice';

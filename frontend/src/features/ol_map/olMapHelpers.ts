@@ -46,11 +46,11 @@ export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) => {
 
 	return basemap === Basemap.MapboxWMTS || basemap_style === BasemapStyle.Satellite
 		? getWMTSTileLayer(basemap_style)
-		: new MapboxVectorLayer({
+		: (new MapboxVectorLayer({
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Number.POSITIVE_INFINITY,
-			}) as any;
+			}) as any);
 };
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {

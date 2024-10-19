@@ -1,4 +1,4 @@
-import { type Action, configureStore, type StoreEnhancer, type ThunkAction } from '@reduxjs/toolkit';
+import { type Action, type StoreEnhancer, type ThunkAction, configureStore } from '@reduxjs/toolkit';
 import appReducer from '../features/app/appSlice';
 import { sentryInit } from './sentry';
 import { api, rtkQueryErrorLogger } from './services/api';

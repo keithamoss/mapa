@@ -1,4 +1,4 @@
-import { createEntityAdapter, type EntityState } from '@reduxjs/toolkit';
+import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
 import type { Coordinate } from 'ol/coordinate';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';

@@ -55,7 +55,7 @@ export interface SchemaFormFieldsFormValues {
 
 export interface SchemaFieldDataEntryManagerTouchedFields {
 	[x: string]: // For all other schema field types
-	| boolean
+		| boolean
 		// For FeatureDataItemURLFieldLinkItem
 		| {
 				name?: boolean | undefined;

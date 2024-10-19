@@ -1,7 +1,7 @@
-import { createTheme } from '@mui/material';
 // For @mui/lab when using TypeScript 4.x and above.
 // Ref: https://mui.com/material-ui/about-the-lab/
 import type {} from '@mui/lab/themeAugmentation';
+import { createTheme } from '@mui/material';
 import { blueGrey, grey } from '@mui/material/colors';
 
 export const mapaThemePrimaryGreen = '#699222';
