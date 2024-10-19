@@ -1,9 +1,8 @@
 repos:
   - repo: local
     hooks:
-      - id: biome
+      - id: local-biome-check
+        name: biome check
+        entry: npx biome check --write --files-ignore-unknown=true --no-errors-on-unmatched
         language: system
-        name: biome
-        entry: cd frontend && pnpm biome lint
-        pass_filenames: false
-        types_or: [javascript, jsx, ts, tsx]
+        types: [text]
