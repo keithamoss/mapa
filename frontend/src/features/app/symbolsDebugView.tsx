@@ -619,6 +619,7 @@ function SymbolsDebugView() {
 				<FormGroup>
 					{iconDefs.map((iconDef, idx) => {
 						return (
+							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 							<ListItem key={idx} sx={{ backgroundColor: 'grey' }}>
 								{getFontAwesomeIconForSymbolPreview(iconDef.props, {
 									// size: defaultSymbolSizeForFormFields,

@@ -58,6 +58,7 @@ function DebugManager() {
 									? cacheEntries.length > 0
 										? cacheEntries.map((entry, idx) =>
 												entry !== undefined ? (
+													// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 													<div key={idx} style={{ marginBottom: '15px' }}>
 														{entry.status}
 														<br />
@@ -82,9 +83,11 @@ function DebugManager() {
 							.getEntriesByType('resource')
 							// .filter((e) => e.initiatorType === 'script')
 							.filter((e) => e.name.includes(getBaseURL()) === true || e.name.includes(getAPIBaseURL()) === true)
+							// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 							.map((e: any, idx) => {
 								// console.log(e);
 								return (
+									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 									<div key={idx} style={{ marginBottom: '15px' }}>
 										{/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
 										{e.initiatorType}
