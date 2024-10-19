@@ -93,14 +93,15 @@ export const getAppDefaultSymbologyConfig = () =>
 export const getFontAwesomeIconFromLibrary = (
 	iconProps: FontAwesomeIconSVGProps,
 	iconName: string,
-	iconStyle?: IconStyle,
+	iconStylePreference?: IconStyle,
 ) => {
-	let svg;
-	let isColourLocked;
+	let svg: string | undefined;
+	let isColourLocked: boolean;
+	let iconStyle: IconStyle;
 	const icon = getIconByName(iconName);
 
 	if (icon !== null) {
-		iconStyle = iconStyle || getDefaultIconStyle(icon);
+		iconStyle = iconStylePreference || getDefaultIconStyle(icon);
 		svg = getIconSVG(icon, iconStyle) || defaultSymbolIconSVG;
 		isColourLocked = isIconColourLocked(icon, iconStyle);
 	} else {
