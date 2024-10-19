@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: local-biome-check
         name: biome check
-        entry: cd frontend && npx biome check src/index.tsx
+        entry: cd frontend && npx biome check src/index.tsx --verbose
         language: system
         types: [text]
