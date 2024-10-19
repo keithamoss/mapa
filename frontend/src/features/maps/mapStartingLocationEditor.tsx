@@ -3,7 +3,7 @@ import { AppBar, Box, Button, IconButton, Toolbar } from '@mui/material';
 import { View } from 'ol';
 import Map from 'ol/Map';
 import Attribution from 'ol/control/Attribution';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
 import 'ol/ol.css';
 import { fromLonLat, toLonLat } from 'ol/proj';

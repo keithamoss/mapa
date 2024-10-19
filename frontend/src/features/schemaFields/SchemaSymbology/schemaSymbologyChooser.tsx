@@ -21,8 +21,8 @@ import parse from 'autosuggest-highlight/parse';
 import { groupBy, sortBy } from 'lodash-es';
 import React, { startTransition, useState } from 'react';
 import { useAppSelector } from '../../../app/hooks/store';
-import { MapaFeature } from '../../../app/services/features';
-import {
+import type { MapaFeature } from '../../../app/services/features';
+import type {
 	FeatureSchema,
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologySymbolsValue,
@@ -30,7 +30,7 @@ import {
 import { DialogWithTransition } from '../../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../../app/ui/theme';
 import { selectAllFeatures } from '../../features/featuresSlice';
-import { SymbolSearchResult, isSearchingYet, searchSymbols } from '../../searchFeatures/searchFeaturesHelpers';
+import { type SymbolSearchResult, isSearchingYet, searchSymbols } from '../../searchFeatures/searchFeaturesHelpers';
 import {
 	defaultSymbolSizeForFormFields,
 	defaultSymbologyGroupId,

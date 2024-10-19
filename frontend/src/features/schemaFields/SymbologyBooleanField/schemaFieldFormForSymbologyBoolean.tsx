@@ -15,11 +15,11 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaSymbologyBooleanFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
-import {
+import type {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 	FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,

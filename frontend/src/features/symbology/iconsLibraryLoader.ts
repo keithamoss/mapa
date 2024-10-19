@@ -1,7 +1,7 @@
 import { isCacheApiSupported } from '../../app/utils';
 import { iconsLibraryCacheName, iconsLibraryCacheURL, iconsLibraryCategoriesCacheURL } from './iconsLibraryCache';
 import { getJSONResourceFromCache, getJSONResourceViaFetch, pruneCache } from './iconsLibraryCacheHelpers';
-import { IFontAwesomeCategories, IFontAwesomeIcons } from './iconsLibraryInterfaces';
+import type { IFontAwesomeCategories, IFontAwesomeIcons } from './iconsLibraryInterfaces';
 
 // Ref for this file: https://web.dev/articles/cache-api-quick-guide
 

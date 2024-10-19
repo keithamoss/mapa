@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { Map, useUpdateMapMutation } from '../../app/services/maps';
+import { type Map, useUpdateMapMutation } from '../../app/services/maps';
 import MapForm from './mapForm';
 import { selectMapById } from './mapsSlice';
 

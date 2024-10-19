@@ -10,7 +10,7 @@ import { router } from './app/routing/routes';
 import { authApi } from './app/services/auth';
 import { store } from './app/store';
 import { theme } from './app/ui/theme';
-import { MapaNamespace, MapaNamespaceDefaults } from './window';
+import { type MapaNamespace, MapaNamespaceDefaults } from './window';
 // import './browserstack';
 
 // Extend the global window object with MapaNamespace so we have a place to load the Icons Library into

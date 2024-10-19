@@ -1,8 +1,8 @@
 import { useAppSelector } from '../../app/hooks/store';
-import { FeatureDataItem, MapaFeature } from '../../app/services/features';
+import type { FeatureDataItem, MapaFeature } from '../../app/services/features';
 import {
-	FeatureSchema,
-	FeatureSchemaFieldDefinitionCollection,
+	type FeatureSchema,
+	type FeatureSchemaFieldDefinitionCollection,
 	FeatureSchemaFieldType,
 } from '../../app/services/schemas';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';

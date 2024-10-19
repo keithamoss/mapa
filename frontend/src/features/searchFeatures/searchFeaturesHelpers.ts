@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dayjs from 'dayjs';
-import MiniSearch, { SearchResult } from 'minisearch';
-import { MapaFeature } from '../../app/services/features';
-import { FeatureSchema, FeatureSchemaFieldType, FeatureSchemaSymbology } from '../../app/services/schemas';
-import { SearchField } from '../app/appSlice';
+import MiniSearch, { type SearchResult } from 'minisearch';
+import type { MapaFeature } from '../../app/services/features';
+import { type FeatureSchema, FeatureSchemaFieldType, type FeatureSchemaSymbology } from '../../app/services/schemas';
+import type { SearchField } from '../app/appSlice';
 import { getFeatureDataItemForSchemaField } from '../features/featureHelpers';
 import { getSymbolNameBySymbolId } from '../symbology/symbologyHelpers';
 

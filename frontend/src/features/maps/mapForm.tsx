@@ -27,14 +27,14 @@ import {
 	Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import React, { useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { mapFormValidationSchema } from '../../app/forms/mapForm';
 import { useAppSelector } from '../../app/hooks/store';
-import { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
-import { SymbologyProps } from '../../app/services/schemas';
+import type { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
+import type { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import FormSectionHeading from '../../app/ui/formSectionHeading';

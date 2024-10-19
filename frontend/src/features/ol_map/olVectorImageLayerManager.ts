@@ -1,12 +1,12 @@
-import { Map } from 'ol';
-import Feature from 'ol/Feature';
-import BaseEvent from 'ol/events/Event';
-import { Geometry } from 'ol/geom';
-import VectorLayer from 'ol/layer/Vector';
+import type { Map } from 'ol';
+import type Feature from 'ol/Feature';
+import type BaseEvent from 'ol/events/Event';
+import type { Geometry } from 'ol/geom';
+import type VectorLayer from 'ol/layer/Vector';
 import VectorImageLayer from 'ol/layer/VectorImage';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
-import { StyleFunction } from 'ol/style/Style';
-import { GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
+import VectorSource, { type VectorSourceEvent } from 'ol/source/Vector';
+import type { StyleFunction } from 'ol/style/Style';
+import { type GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
 import { olStyleFunction } from './olStylingManager';
 
 export const createVectorImageLayer = (features: GeoJSONFeatureCollection) => {

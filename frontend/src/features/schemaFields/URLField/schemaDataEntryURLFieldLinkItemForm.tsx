@@ -9,10 +9,10 @@ import {
 	FormHelperText,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaURLFieldLinkItemFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
-import {
+import type {
 	FeatureDataItemURLFieldLinkItem,
 	FeatureDataItemURLFieldLinkItemFormModifiableProps,
 } from '../../../app/services/features';

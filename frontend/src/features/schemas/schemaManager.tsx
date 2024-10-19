@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { FeatureSchema, FeatureSchemaModifiableProps, useAddFeatureSchemaMutation } from '../../app/services/schemas';
+import { type FeatureSchema, type FeatureSchemaModifiableProps, useAddFeatureSchemaMutation } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import SwipeableListItem from '../../app/ui/swipeableListItem/swipeableListItem';
 import { isTouchDevice } from '../../app/utils';

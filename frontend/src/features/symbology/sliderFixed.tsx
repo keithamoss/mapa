@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import styled from '@emotion/styled';
-import { Slider, SliderProps } from '@mui/material';
+import { Slider, type SliderProps } from '@mui/material';
 import { forwardRef, useEffect } from 'react';
 
 // MUI issue tracking this:

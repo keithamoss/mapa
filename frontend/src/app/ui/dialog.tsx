@@ -1,6 +1,7 @@
-import { Dialog, DialogProps, Slide } from '@mui/material';
-import { TransitionProps } from '@mui/material/transitions';
-import React, { forwardRef, useEffect, useRef } from 'react';
+import { Dialog, type DialogProps, Slide } from '@mui/material';
+import type { TransitionProps } from '@mui/material/transitions';
+import type React from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import { useUnmount } from '../hooks/useUnmount';
 import { defaultAppBarColour, defaultNakedNonFullScreenDialogColour, getThemeColour, setThemeColour } from './theme';
 

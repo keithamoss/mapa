@@ -1,11 +1,11 @@
-import { Map } from 'ol';
-import Feature from 'ol/Feature';
-import BaseEvent from 'ol/events/Event';
-import { Geometry } from 'ol/geom';
-import VectorLayer from 'ol/layer/Vector';
+import type { Map } from 'ol';
+import type Feature from 'ol/Feature';
+import type BaseEvent from 'ol/events/Event';
+import type { Geometry } from 'ol/geom';
+import type VectorLayer from 'ol/layer/Vector';
 import WebGLPointsLayer from 'ol/layer/WebGLPoints';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
-import { SymbologyProps } from '../../app/services/schemas';
+import VectorSource, { type VectorSourceEvent } from 'ol/source/Vector';
+import type { SymbologyProps } from '../../app/services/schemas';
 import { mapaThemePrimaryGreen } from '../../app/ui/theme';
 import {
 	defaultSymbolIcon,
@@ -13,7 +13,7 @@ import {
 	defaultSymbolSize,
 	getFontAwesomeIconForSymbolAsSVGString,
 } from '../symbology/symbologyHelpers';
-import { GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
+import { type GeoJSONFeatureCollection, geoJSONFormat, setupModifyInteraction } from './olLayerManager';
 
 // Types picked from LiteralSymbolStyle
 export interface WebGLLayerSpriteSheet {

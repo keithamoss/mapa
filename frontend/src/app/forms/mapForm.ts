@@ -1,7 +1,7 @@
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
+import type { ObjectSchema } from 'yup';
 import { maxZoomLevel, minZoomLevel } from '../../features/maps/mapStartingLocationEditorHelpers';
-import { MapModifiableProps } from '../services/maps';
+import type { MapModifiableProps } from '../services/maps';
 import { symbologyFormValidationSchema } from './symbologyForm';
 import { positiveFloatOptional } from './yupValidation';
 

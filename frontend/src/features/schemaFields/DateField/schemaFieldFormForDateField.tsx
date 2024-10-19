@@ -14,11 +14,11 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaDateFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
-import {
+import type {
 	FeatureSchemaFieldDefinitionDateField,
 	FeatureSchemaFieldDefinitionDateFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,

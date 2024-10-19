@@ -2,10 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, DialogActions, DialogContent, DialogTitle, FormHelperText } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { useRef } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import { forkingSchemaFormValidationSchema } from '../../app/forms/schemaForking';
-import { FeatureSchemaForkingSchemaModifiableProps } from '../../app/services/schemas';
+import type { FeatureSchemaForkingSchemaModifiableProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
 

@@ -1,7 +1,7 @@
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { SpeedDialIcon, styled, useTheme } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
-import SpeedDial, { CloseReason } from '@mui/material/SpeedDial';
+import SpeedDial, { type CloseReason } from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import * as React from 'react';
 import { useState } from 'react';

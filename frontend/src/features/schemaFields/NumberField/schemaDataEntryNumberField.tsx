@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
-import { Control, Controller } from 'react-hook-form';
-import { FeatureSchemaFieldDefinitionNumberField, FeatureSchemaFieldType } from '../../../app/services/schemas';
-import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
+import { type Control, Controller } from 'react-hook-form';
+import { type FeatureSchemaFieldDefinitionNumberField, FeatureSchemaFieldType } from '../../../app/services/schemas';
+import type { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
 	control: Control<SchemaFormFieldsFormValues, unknown>;

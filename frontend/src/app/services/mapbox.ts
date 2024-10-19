@@ -1,4 +1,4 @@
-import { IMapboxGeocodingAPIResponse } from '../../features/searchLocations/searchLocationsHelpers';
+import type { IMapboxGeocodingAPIResponse } from '../../features/searchLocations/searchLocationsHelpers';
 import { api } from './api';
 
 export const mapboxGeocodingApi = api.injectEndpoints({

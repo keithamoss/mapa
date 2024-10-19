@@ -1,7 +1,7 @@
-import { Control, Controller, UseFormSetValue } from 'react-hook-form';
-import { FeatureSchemaFieldDefinitionTextField, FeatureSchemaFieldType } from '../../../app/services/schemas';
+import { type Control, Controller, type UseFormSetValue } from 'react-hook-form';
+import { type FeatureSchemaFieldDefinitionTextField, FeatureSchemaFieldType } from '../../../app/services/schemas';
 import TextFieldWithPasteAdornment from '../../../app/ui/textFieldWithPasteAdornment';
-import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
+import type { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
 	control: Control<SchemaFormFieldsFormValues, unknown>;

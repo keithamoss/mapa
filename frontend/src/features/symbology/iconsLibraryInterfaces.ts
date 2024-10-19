@@ -1,5 +1,5 @@
-import { IconName } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeCategory } from './icons-categories-library';
+import type { IconName } from '@fortawesome/fontawesome-svg-core';
+import type { FontAwesomeCategory } from './icons-categories-library';
 
 export interface IFontAwesomeIcons {
 	[key: string]: IFontAwesomeIcon;

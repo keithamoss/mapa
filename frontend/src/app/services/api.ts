@@ -1,4 +1,4 @@
-import { isAction, isRejectedWithValue, Middleware, MiddlewareAPI } from '@reduxjs/toolkit';
+import { isAction, isRejectedWithValue, type Middleware, type MiddlewareAPI } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import * as Sentry from '@sentry/browser';
 import Cookies from 'js-cookie';

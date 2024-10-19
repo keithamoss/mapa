@@ -1,4 +1,4 @@
-import { Map } from 'ol';
+import type { Map } from 'ol';
 import { toRadians } from 'ol/math';
 import { isDevelopment } from '../../app/utils';
 

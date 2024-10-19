@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Avatar, SpeedDialIcon, styled } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
-import SpeedDial, { CloseReason } from '@mui/material/SpeedDial';
+import SpeedDial, { type CloseReason } from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import * as React from 'react';
 import { useState } from 'react';

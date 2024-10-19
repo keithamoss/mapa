@@ -1,12 +1,12 @@
-import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { QueryStatus } from '@reduxjs/toolkit/query';
-import { Coordinate } from 'ol/coordinate';
+import type { Coordinate } from 'ol/coordinate';
 import { authApi } from '../../app/services/auth';
-import { featuresApi, MapaFeature } from '../../app/services/features';
-import { RootState } from '../../app/store';
+import { featuresApi, type MapaFeature } from '../../app/services/features';
+import type { RootState } from '../../app/store';
 import { selectMapsResult } from '../maps/mapsSlice';
-import { convertFeaturesToGeoJSON, GeoJSONFeatureCollection } from '../ol_map/olLayerManager';
-import { WebGLLayerSpriteSheet } from '../ol_map/olWebGLPointsLayerManager';
+import { convertFeaturesToGeoJSON, type GeoJSONFeatureCollection } from '../ol_map/olLayerManager';
+import type { WebGLLayerSpriteSheet } from '../ol_map/olWebGLPointsLayerManager';
 import { selectAllFeatureSchemas } from '../schemas/schemasSlice';
 
 export interface OLMapView {
@@ -16,9 +16,9 @@ export interface OLMapView {
 }
 
 export enum eMapFeaturesLoadingStatus {
-	LOADING,
-	SUCCEEDED,
-	FAILED,
+	LOADING = 0,
+	SUCCEEDED = 1,
+	FAILED = 2,
 }
 
 export enum SearchField {

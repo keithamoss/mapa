@@ -11,14 +11,14 @@ import {
 	FormHelperText,
 	TextField,
 } from '@mui/material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaNumberFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import {
 	getNumberOrZeroForSchemasFieldsFormField,
 	getStringOrEmptyStringForSchemasFieldsFormField,
 } from '../../../app/forms/schemaForm';
-import {
+import type {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 	FeatureSchemaFieldDefinitionNumberField,
 	FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,

@@ -17,10 +17,10 @@ import {
 } from '@mui/material';
 import { isEqual } from 'lodash-es';
 import React, { useEffect, useRef, useState } from 'react';
-import { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
+import type { SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { FeatureDataItem, MapaFeature, NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
+import { type FeatureDataItem, type MapaFeature, type NewMapaFeature, useDeleteFeatureMutation } from '../../app/services/features';
 import { usePatchMapMutation } from '../../app/services/maps';
 import { FeatureSchemaFieldType } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
@@ -29,8 +29,8 @@ import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { mapaThemeSecondaryBlue } from '../../app/ui/theme';
 import SchemaDataEntrySymbology from '../schemaFields/SchemaSymbology/schemaDataEntrySymbology';
 import SchemaFieldDataEntryManager, {
-	SchemaFieldDataEntryManagerTouchedFields,
-	SchemaFormFieldsFormValues,
+	type SchemaFieldDataEntryManagerTouchedFields,
+	type SchemaFormFieldsFormValues,
 } from '../schemaFields/schemaFieldDataEntryManager';
 import SchemaFieldSummaryPanel from '../schemaFields/schemaFieldSummaryPanel';
 import { SchemaEditor } from '../schemas/schemaEditor';

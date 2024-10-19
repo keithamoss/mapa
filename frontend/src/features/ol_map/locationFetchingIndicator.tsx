@@ -2,7 +2,7 @@ import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import GpsNotFixedIcon from '@mui/icons-material/GpsNotFixed';
 
 import Box from '@mui/material/Box';
-import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
+import CircularProgress, { type CircularProgressProps } from '@mui/material/CircularProgress';
 import { useEffect, useState } from 'react';
 
 const CircularProgressWithLabel = (props: CircularProgressProps & { value: number }) => (

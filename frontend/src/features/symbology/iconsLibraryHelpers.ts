@@ -1,10 +1,10 @@
 import { upperFirst } from 'lodash-es';
-import MiniSearch, { SearchResult } from 'minisearch';
+import MiniSearch, { type SearchResult } from 'minisearch';
 import { defaultSymbolIconStyle } from './symbologyHelpers';
 
-import { FontAwesomeCategory } from './icons-categories-library';
+import type { FontAwesomeCategory } from './icons-categories-library';
 import { getCategories } from './iconsLibrary';
-import { IFontAwesomeIcon, IFontAwesomeIcons, IconStyle } from './iconsLibraryInterfaces';
+import type { IFontAwesomeIcon, IFontAwesomeIcons, IconStyle } from './iconsLibraryInterfaces';
 
 export const isIconsLibraryLoaded = () => window.MapaNamespace.iconsLibrary.loaded;
 
@@ -58,7 +58,7 @@ export interface IconSearchResult extends SearchResult {
 export const searchIcons = (
 	searchTerm: string,
 	categoryName?: string,
-	boostCircularModifierIcons: boolean = false,
+	boostCircularModifierIcons = false,
 	iconNamesAvailableToSearch?: string[],
 ) => {
 	if (isIconsLibraryLoaded() === true && window.MapaNamespace.iconsLibrary.icons !== undefined) {

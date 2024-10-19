@@ -1,12 +1,12 @@
 import { createSelector } from '@reduxjs/toolkit';
 import {
-	FeatureSchemaFieldDefinitionCollection,
+	type FeatureSchemaFieldDefinitionCollection,
 	featureSchemasAdapter,
 	featureSchemasApi,
 	initialFeatureSchemasState,
 } from '../../app/services/schemas';
 
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 import { selectMapById } from '../maps/mapsSlice';
 
 export const selectFeatureSchemasResult = featureSchemasApi.endpoints.getFeatureSchemas.select();

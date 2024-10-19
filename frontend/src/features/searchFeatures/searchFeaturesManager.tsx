@@ -26,17 +26,17 @@ import {
 	Typography,
 } from '@mui/material';
 import React from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { searchFormValidationSchema } from '../../app/forms/searchForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { MapaFeature } from '../../app/services/features';
+import type { MapaFeature } from '../../app/services/features';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import {
 	SearchField,
 	SearchFieldLabel,
-	SearchParameters,
+	type SearchParameters,
 	defaultSearchParameters,
 	getSearchParameters,
 	selectActiveMapId,

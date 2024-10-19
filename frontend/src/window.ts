@@ -1,4 +1,4 @@
-import { IFontAwesomeCategories, IFontAwesomeIcons } from './features/symbology/iconsLibraryInterfaces';
+import type { IFontAwesomeCategories, IFontAwesomeIcons } from './features/symbology/iconsLibraryInterfaces';
 
 export interface MapaNamespace {
 	iconsLibrary: {

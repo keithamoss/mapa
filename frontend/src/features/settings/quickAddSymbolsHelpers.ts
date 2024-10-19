@@ -1,12 +1,12 @@
 import { sortBy } from 'lodash-es';
-import { QuickAddMode, UserProfileSettings } from '../../app/services/auth';
-import { MapaFeature } from '../../app/services/features';
-import { FeatureSchema } from '../../app/services/schemas';
+import { QuickAddMode, type UserProfileSettings } from '../../app/services/auth';
+import type { MapaFeature } from '../../app/services/features';
+import type { FeatureSchema } from '../../app/services/schemas';
 import { getSchemaById, getSchemasUsedByFeatures } from '../schemas/schemaHelpers';
 import {
-	SchemaIdAndSymbolId,
-	SchemaIdAndSymbolIdWithCount,
-	SymbolAndSchema,
+	type SchemaIdAndSymbolId,
+	type SchemaIdAndSymbolIdWithCount,
+	type SymbolAndSchema,
 	getSomeRecentlyAddedSymbols,
 	getSymbolFromSchemaSymbology,
 	getSymbolsFavouritedForMap,

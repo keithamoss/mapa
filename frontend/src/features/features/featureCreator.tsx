@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { NewMapaFeature, useAddFeatureToMapMutation } from '../../app/services/features';
+import { type NewMapaFeature, useAddFeatureToMapMutation } from '../../app/services/features';
 import { selectActiveMapId } from '../app/appSlice';
 import FeatureForm from './featureForm';
 

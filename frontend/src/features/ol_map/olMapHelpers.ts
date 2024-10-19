@@ -1,18 +1,19 @@
-import { MapBrowserEvent, Overlay, View } from 'ol';
+import { type MapBrowserEvent, Overlay, View } from 'ol';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
-import Geolocation, { GeolocationError } from 'ol/Geolocation';
-import Map from 'ol/Map';
-import { Coordinate } from 'ol/coordinate';
-import BaseEvent from 'ol/events/Event';
+import type Geolocation from 'ol/Geolocation';
+import type { GeolocationError } from 'ol/Geolocation';
+import type Map from 'ol/Map';
+import type { Coordinate } from 'ol/coordinate';
+import type BaseEvent from 'ol/events/Event';
 import TopoJSON from 'ol/format/TopoJSON';
-import { Point } from 'ol/geom';
-import { ModifyEvent } from 'ol/interaction/Modify';
+import type { Point } from 'ol/geom';
+import type { ModifyEvent } from 'ol/interaction/Modify';
 import VectorLayer from 'ol/layer/Vector';
 import { fromLonLat } from 'ol/proj';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
+import VectorSource, { type VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
-import { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
-import { MapStartingLocation, Map as MapaMap } from '../../app/services/maps';
+import type { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
+import type { MapStartingLocation, Map as MapaMap } from '../../app/services/maps';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;
@@ -48,8 +49,8 @@ export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) => {
 		: new MapboxVectorLayer({
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
-				preload: Infinity,
-			});
+				preload: Number.POSITIVE_INFINITY,
+			}) as any;
 };
 
 export const createGeolocationMarkerOverlay = (markerElementOverlayId: string) => {

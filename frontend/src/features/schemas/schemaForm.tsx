@@ -24,20 +24,20 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { schemaFormValidationSchema } from '../../app/forms/schemaForm';
 import { useAppSelector } from '../../app/hooks/store';
 import {
-	FeatureSchema,
-	FeatureSchemaFieldDefinitionCollection,
+	type FeatureSchema,
+	type FeatureSchemaFieldDefinitionCollection,
 	FeatureSchemaFieldType,
 	FeatureSchemaFieldTypeLabel,
-	FeatureSchemaModifiableProps,
-	FeatureSchemaSymbologySymbolsValue,
-	NewFeatureSchema,
-	NewFeatureSchemaFieldDefinitionCollection,
-	SymbologyProps,
+	type FeatureSchemaModifiableProps,
+	type FeatureSchemaSymbologySymbolsValue,
+	type NewFeatureSchema,
+	type NewFeatureSchemaFieldDefinitionCollection,
+	type SymbologyProps,
 } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';

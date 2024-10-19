@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { authApi } from '../../app/services/auth';
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 
 export const selectCheckLoginStateResult = authApi.endpoints.checkLoginStatus.select();
 

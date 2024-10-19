@@ -7,7 +7,7 @@ import {
 	MenuItem,
 	Paper,
 	Select,
-	SelectChangeEvent,
+	type SelectChangeEvent,
 	Toolbar,
 	Typography,
 } from '@mui/material';

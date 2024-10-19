@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
-import {
+import type { ObjectSchema } from 'yup';
+import type {
 	FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps,
 	FeatureSchemaSymbologyGroupModifiableProps,
 } from '../services/schemas';

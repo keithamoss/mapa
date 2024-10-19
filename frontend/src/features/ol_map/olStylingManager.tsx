@@ -1,9 +1,9 @@
-import Feature from 'ol/Feature';
+import type Feature from 'ol/Feature';
 import { Icon } from 'ol/style';
 import Style from 'ol/style/Style';
 
-import { MapaFeature } from '../../app/services/features';
-import { FeatureSchema, FeatureSchemaFieldType, SymbologyProps } from '../../app/services/schemas';
+import type { MapaFeature } from '../../app/services/features';
+import { type FeatureSchema, FeatureSchemaFieldType, type SymbologyProps } from '../../app/services/schemas';
 import { getFeatureDataItemForSchemaField, getSymbolValueForFeatureDataItem } from '../features/featureHelpers';
 import { getSchemaById, isFieldDefinitionSymbology, isSchemaDataItemToBeUsed } from '../schemas/schemaHelpers';
 import {

@@ -1,28 +1,28 @@
 import omitBy from 'lodash-es/omitBy';
-import Feature from 'ol/Feature';
-import { Coordinate } from 'ol/coordinate';
-import BaseEvent from 'ol/events/Event';
+import type Feature from 'ol/Feature';
+import type { Coordinate } from 'ol/coordinate';
+import type BaseEvent from 'ol/events/Event';
 import { getTopLeft, getWidth } from 'ol/extent.js';
 import GeoJSON from 'ol/format/GeoJSON';
-import { Geometry, Point } from 'ol/geom';
+import type { Geometry, Point } from 'ol/geom';
 import { Modify } from 'ol/interaction';
-import Layer from 'ol/layer/Layer';
+import type Layer from 'ol/layer/Layer';
 import VectorLayer from 'ol/layer/Vector';
 import TileLayer from 'ol/layer/WebGLTile';
 import 'ol/ol.css';
-import { Projection, get as getProjection, toLonLat } from 'ol/proj';
-import VectorSource, { VectorSourceEvent } from 'ol/source/Vector';
+import { type Projection, get as getProjection, toLonLat } from 'ol/proj';
+import VectorSource, { type VectorSourceEvent } from 'ol/source/Vector';
 import WMTS from 'ol/source/WMTS.js';
 import { Circle, Stroke } from 'ol/style';
 import Fill from 'ol/style/Fill';
 import Style from 'ol/style/Style';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js';
-import { BasemapStyle } from '../../app/services/auth';
-import { MapaFeature } from '../../app/services/features';
-import { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
+import type { BasemapStyle } from '../../app/services/auth';
+import type { MapaFeature } from '../../app/services/features';
+import type { FeatureSchema, SymbologyProps } from '../../app/services/schemas';
 import { mapaThemeSecondaryBlueRGB } from '../../app/ui/theme';
 import { determineSymbolForFeature } from './olStylingManager';
-import { WebGLLayerSpriteSheet, buildSpriteSheet } from './olWebGLPointsLayerManager';
+import { type WebGLLayerSpriteSheet, buildSpriteSheet } from './olWebGLPointsLayerManager';
 
 export const geoJSONFormat = new GeoJSON({
 	dataProjection: 'EPSG:4326',
@@ -71,7 +71,7 @@ export const getWMTSTileLayer = (basemap_style: BasemapStyle) => {
 	};
 
 	return new TileLayer({
-		preload: Infinity,
+		preload: Number.POSITIVE_INFINITY,
 		source: new WMTS({
 			urls: [
 				`https://api.mapbox.com/styles/v1/keithmoss/${basemap_style}/tiles/{TileMatrix}/{TileCol}/{TileRow}?access_token=${

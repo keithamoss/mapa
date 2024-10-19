@@ -5,7 +5,7 @@ import { blueGrey } from '@mui/material/colors';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { useCallback, useState } from 'react';
-import { FeatureSchema } from '../../services/schemas';
+import type { FeatureSchema } from '../../services/schemas';
 import { mapaThemePrimaryGreen } from '../theme';
 import styles from './swipeableListItem.module.css';
 

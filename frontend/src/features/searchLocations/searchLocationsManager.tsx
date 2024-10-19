@@ -27,7 +27,7 @@ import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
 import Cookies from 'js-cookie';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { searchLocationsFormValidationSchema } from '../../app/forms/searchLocationsForm';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
@@ -35,14 +35,14 @@ import { useFetchMapboxGeocodingResultsQuery } from '../../app/services/mapbox';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import TextFieldWithPasteAdornment from '../../app/ui/textFieldWithPasteAdornment';
 import {
-	SearchLocationsParameters,
+	type SearchLocationsParameters,
 	defaultSearchLocationsParameters,
 	getSearchLocationsParameters,
 	setSearchLocationsParameters,
 	setSearchLocationsZoomToCoordinates,
 } from '../app/appSlice';
 import {
-	IMapboxGeocodingAPIResponseFeature,
+	type IMapboxGeocodingAPIResponseFeature,
 	defaultMapboxSearchTypes,
 	getMapboxAPIKey,
 	isSearchingYet,

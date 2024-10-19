@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import {
+import type {
 	FeatureSchema,
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologySymbolsValue,
@@ -9,10 +9,10 @@ import {
 import { grey } from '@mui/material/colors';
 import { sortBy } from 'lodash-es';
 import { hextoRGBACSS } from '../../app/colourUtils';
-import { MapaFeature } from '../../app/services/features';
+import type { MapaFeature } from '../../app/services/features';
 import { isDevelopment } from '../../app/utils';
 import { getDefaultIconStyle, getIconByName, getIconSVG, isIconColourLocked } from './iconsLibraryHelpers';
-import { IconStyle } from './iconsLibraryInterfaces';
+import type { IconStyle } from './iconsLibraryInterfaces';
 import { parseAndManipulateSVGIcon } from './svgHelpers';
 
 export const defaultSymbolIcon = 'location-question';

@@ -1,6 +1,6 @@
 import ContentPasteGoIcon from '@mui/icons-material/ContentPasteGo';
-import { IconButton, InputAdornment, TextField, TextFieldProps } from '@mui/material';
-import { ForwardedRef, forwardRef } from 'react';
+import { IconButton, InputAdornment, TextField, type TextFieldProps } from '@mui/material';
+import { type ForwardedRef, forwardRef } from 'react';
 import { isClipboardApiSupported } from '../utils';
 
 interface Props {

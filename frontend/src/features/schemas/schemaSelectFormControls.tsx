@@ -3,7 +3,7 @@ import { Schema } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 
-import { Button, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, FormGroup, InputLabel, MenuItem, Select, type SelectChangeEvent } from '@mui/material';
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
@@ -24,7 +24,7 @@ function SchemaSelectFormControls(props: Props) {
 	const availableSchemas = useAppSelector((state) => getSchemasAvailableForMap(state, mapId));
 
 	const onChangeSchema = (e: SelectChangeEvent<number | string>) => {
-		const schemaId = parseInt(`${e.target.value}`);
+		const schemaId = Number.parseInt(`${e.target.value}`);
 		if (Number.isNaN(schemaId) === false) {
 			onChooseSchema(schemaId);
 		}

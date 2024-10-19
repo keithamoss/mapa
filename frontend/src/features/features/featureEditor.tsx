@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { MapaFeature, useUpdateFeatureMutation } from '../../app/services/features';
+import { type MapaFeature, useUpdateFeatureMutation } from '../../app/services/features';
 import { selectActiveMapId } from '../app/appSlice';
 import FeatureForm from './featureForm';
 import { selectFeatureById } from './featuresSlice';

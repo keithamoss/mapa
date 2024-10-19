@@ -7,9 +7,9 @@ import {
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibraryHelpers';
-import { IconStyle } from './iconsLibraryInterfaces';
+import type { IconStyle } from './iconsLibraryInterfaces';
 import {
-	FontAwesomeIconSVGProps,
+	type FontAwesomeIconSVGProps,
 	defaultSymbolDarkenColourByPercentage,
 	defaultSymbolIconSVG,
 } from './symbologyHelpers';
@@ -332,10 +332,10 @@ export const parseAndManipulateSVGIcon = (
 			svgDOMElement.replaceChildren(groupElementsTogether(svgDOMElement, 'scale: 80%'));
 
 			// Gather some important information we'll need to work out how to position the modifier icon.
-			const originalIconViewboxWidth = parseInt(viewbox[2]);
-			const originalIconViewboxHeight = parseInt(viewbox[3]);
-			const modifierIconViewboxWidth = parseInt(modifierIconViewbox[2]);
-			const modifierIconViewboxHeight = parseInt(modifierIconViewbox[3]);
+			const originalIconViewboxWidth = Number.parseInt(viewbox[2]);
+			const originalIconViewboxHeight = Number.parseInt(viewbox[3]);
+			const modifierIconViewboxWidth = Number.parseInt(modifierIconViewbox[2]);
+			const modifierIconViewboxHeight = Number.parseInt(modifierIconViewbox[3]);
 			const modifierIconCircleBackgroundViewboxWidthAndHeight = 512;
 
 			// ######################

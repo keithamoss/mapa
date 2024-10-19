@@ -24,15 +24,15 @@ import {
 	MenuItem,
 	Paper,
 	Select,
-	SelectChangeEvent,
+	type SelectChangeEvent,
 	TextField,
 	Toolbar,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
 import { isEmpty, pickBy } from 'lodash-es';
-import React, { SyntheticEvent, useRef, useState } from 'react';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import React, { type SyntheticEvent, useRef, useState } from 'react';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import {
 	getColourFromSVGOrDefaultForSymbologyField,
@@ -49,7 +49,7 @@ import {
 	symbolMinimumSize,
 	symbologyFormValidationSchema,
 } from '../../app/forms/symbologyForm';
-import { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/schemas';
+import type { FeatureSchemaSymbologyGroup, SymbologyProps } from '../../app/services/schemas';
 import {
 	defaultSymbolColour,
 	defaultSymbolIcon,
@@ -74,7 +74,7 @@ import {
 } from './symbologyHelpers';
 
 import { useAppSelector } from '../../app/hooks/store';
-import { Map } from '../../app/services/maps';
+import type { Map } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
@@ -91,7 +91,7 @@ import {
 	isIconStyleDuotoneOrTritone,
 	isIconStyleTritone,
 } from './iconsLibraryHelpers';
-import { IconStyle } from './iconsLibraryInterfaces';
+import type { IconStyle } from './iconsLibraryInterfaces';
 import SliderFixed from './sliderFixed';
 import SymbologyIconChooser from './symbologyIconChooser';
 import SymbologyIconStyleChooser from './symbologyIconStyleChooser';
@@ -569,7 +569,7 @@ function SymbologyFieldEditor(props: Props) {
 	const [selectedGroupId, setSelectedGroupId] = useState<number>(currentGroupId || defaultSymbologyGroupId);
 
 	const onChooseGroupId = (e: SelectChangeEvent<number>) => {
-		const groupId = parseInt(`${e.target.value}`);
+		const groupId = Number.parseInt(`${e.target.value}`);
 
 		if (Number.isNaN(groupId) === false) {
 			setSelectedGroupId(groupId);

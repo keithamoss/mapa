@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { initialMapsState, mapsAdapter, mapsApi } from '../../app/services/maps';
-import { RootState } from '../../app/store';
+import type { RootState } from '../../app/store';
 
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
 // the query result object for a query with those parameters.

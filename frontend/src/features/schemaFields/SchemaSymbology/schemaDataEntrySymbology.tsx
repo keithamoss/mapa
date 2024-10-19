@@ -6,11 +6,11 @@ import React, { useState } from 'react';
 
 import NotFound from '../../../NotFound';
 import { useAppSelector } from '../../../app/hooks/store';
-import { Map } from '../../../app/services/maps';
+import type { Map } from '../../../app/services/maps';
 import {
-	FeatureSchema,
-	FeatureSchemaSymbologySymbolsValue,
-	SymbologyProps,
+	type FeatureSchema,
+	type FeatureSchemaSymbologySymbolsValue,
+	type SymbologyProps,
 	useUpdateFeatureSchemaMutation,
 } from '../../../app/services/schemas';
 import { selectMapById } from '../../maps/mapsSlice';

@@ -1,16 +1,16 @@
-import dayjs from 'dayjs';
+import type dayjs from 'dayjs';
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
-import { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
-import { FeatureDataItemURLFieldLinkItemFormModifiableProps, MapaFeature, NewMapaFeature } from '../services/features';
+import type { ObjectSchema } from 'yup';
+import type { SchemaFormFieldsFormValues } from '../../features/schemaFields/schemaFieldDataEntryManager';
+import type { FeatureDataItemURLFieldLinkItemFormModifiableProps, MapaFeature, NewMapaFeature } from '../services/features';
 import {
-	FeatureSchema,
-	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
-	FeatureSchemaFieldDefinitionDateFieldFormModifiableProps,
-	FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
-	FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
-	FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
-	FeatureSchemaFieldDefinitionURLFieldFormModifiableProps,
+	type FeatureSchema,
+	type FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
+	type FeatureSchemaFieldDefinitionDateFieldFormModifiableProps,
+	type FeatureSchemaFieldDefinitionNumberFieldFormModifiableProps,
+	type FeatureSchemaFieldDefinitionSymbologyBooleanFormModifiableProps,
+	type FeatureSchemaFieldDefinitionTextFieldFormModifiableProps,
+	type FeatureSchemaFieldDefinitionURLFieldFormModifiableProps,
 	FeatureSchemaFieldType,
 } from '../services/schemas';
 import { symbologyFormValidationSchema } from './symbologyForm';

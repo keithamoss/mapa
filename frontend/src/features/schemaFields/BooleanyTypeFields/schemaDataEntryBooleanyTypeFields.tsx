@@ -1,13 +1,13 @@
 import { Checkbox, FormControlLabel, FormHelperText, Typography } from '@mui/material';
 import { isBoolean } from 'lodash-es';
-import { Control, Controller } from 'react-hook-form';
-import { FeatureDataItem } from '../../../app/services/features';
+import { type Control, Controller } from 'react-hook-form';
+import type { FeatureDataItem } from '../../../app/services/features';
 import {
-	FeatureSchemaFieldDefinitionBooleanField,
-	FeatureSchemaFieldDefinitionSymbologyBooleanField,
+	type FeatureSchemaFieldDefinitionBooleanField,
+	type FeatureSchemaFieldDefinitionSymbologyBooleanField,
 	FeatureSchemaFieldType,
 } from '../../../app/services/schemas';
-import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
+import type { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 
 interface Props {
 	control: Control<SchemaFormFieldsFormValues, unknown>;

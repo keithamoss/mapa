@@ -10,10 +10,10 @@ import {
 	Select,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../app/forms/formUtils';
 import { symbologyGroupFormValidationSchemaIDOnly } from '../../app/forms/symbologyGroupForm';
-import {
+import type {
 	FeatureSchemaSymbologyGroup,
 	FeatureSchemaSymbologyGroupChooserForRearragingModifiableProps,
 } from '../../app/services/schemas';

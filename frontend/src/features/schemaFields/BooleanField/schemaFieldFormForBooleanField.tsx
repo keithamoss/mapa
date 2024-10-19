@@ -11,11 +11,11 @@ import {
 	FormHelperText,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaBooleanFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
-import {
+import type {
 	FeatureSchemaFieldDefinitionBooleanField,
 	FeatureSchemaFieldDefinitionBooleanFieldFormModifiableProps,
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,

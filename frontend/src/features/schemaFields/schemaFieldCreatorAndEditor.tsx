@@ -1,15 +1,15 @@
 import React from 'react';
 import {
-	FeatureSchemaFieldDefinitionBooleanField,
-	FeatureSchemaFieldDefinitionCollection,
-	FeatureSchemaFieldDefinitionDateField,
-	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
-	FeatureSchemaFieldDefinitionNumberField,
-	FeatureSchemaFieldDefinitionSymbologyBooleanField,
-	FeatureSchemaFieldDefinitionTextField,
-	FeatureSchemaFieldDefinitionURLField,
+	type FeatureSchemaFieldDefinitionBooleanField,
+	type FeatureSchemaFieldDefinitionCollection,
+	type FeatureSchemaFieldDefinitionDateField,
+	type FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
+	type FeatureSchemaFieldDefinitionNumberField,
+	type FeatureSchemaFieldDefinitionSymbologyBooleanField,
+	type FeatureSchemaFieldDefinitionTextField,
+	type FeatureSchemaFieldDefinitionURLField,
 	FeatureSchemaFieldType,
-	NewFeatureSchemaFieldDefinitionCollection,
+	type NewFeatureSchemaFieldDefinitionCollection,
 } from '../../app/services/schemas';
 import SchemaFieldFormForBooleanField from './BooleanField/schemaFieldFormForBooleanField';
 import SchemaFieldFormForDateField from './DateField/schemaFieldFormForDateField';

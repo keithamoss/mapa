@@ -23,7 +23,7 @@ import {
 
 import React, { startTransition, useRef, useState } from 'react';
 import { getCategories } from './iconsLibrary';
-import { IconStyle } from './iconsLibraryInterfaces';
+import type { IconStyle } from './iconsLibraryInterfaces';
 import { getFontAwesomeIconFromLibraryAsSVGImage } from './symbologyHelpers';
 
 import { grey } from '@mui/material/colors';

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
-import { FeatureSchemaForkingSchemaModifiableProps } from '../services/schemas';
+import type { ObjectSchema } from 'yup';
+import type { FeatureSchemaForkingSchemaModifiableProps } from '../services/schemas';
 
 export const forkingSchemaFormValidationSchema: ObjectSchema<FeatureSchemaForkingSchemaModifiableProps> = yup
 	.object({

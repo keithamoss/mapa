@@ -1,29 +1,29 @@
 import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
-import { MapBrowserEvent, MapEvent } from 'ol';
-import Feature from 'ol/Feature';
-import Geolocation, { GeolocationError } from 'ol/Geolocation';
+import type { MapBrowserEvent, MapEvent } from 'ol';
+import type Feature from 'ol/Feature';
+import Geolocation, { type GeolocationError } from 'ol/Geolocation';
 import Map from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
-import { EventsKey } from 'ol/events';
-import { Geometry } from 'ol/geom';
+import type { EventsKey } from 'ol/events';
+import type { Geometry } from 'ol/geom';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
-import VectorImageLayer from 'ol/layer/VectorImage';
-import WebGLPointsLayer from 'ol/layer/WebGLPoints';
+import type VectorImageLayer from 'ol/layer/VectorImage';
+import type WebGLPointsLayer from 'ol/layer/WebGLPoints';
 import 'ol/ol.css';
 import { transform } from 'ol/proj';
-import VectorSource from 'ol/source/Vector';
+import type VectorSource from 'ol/source/Vector';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks/store';
-import { Basemap, BasemapStyle, MapRenderer } from '../../app/services/auth';
+import { type Basemap, type BasemapStyle, MapRenderer } from '../../app/services/auth';
 import {
-	MapaFeature,
-	MapaOpenLayersFeature,
+	type MapaFeature,
+	type MapaOpenLayersFeature,
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
-import { Map as MapaMap } from '../../app/services/maps';
+import type { Map as MapaMap } from '../../app/services/maps';
 import {
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,
@@ -532,7 +532,7 @@ function OLMap(props: Props) {
 		// ######################
 		// Scale Bar
 		// ######################
-		let isMapResolutionChanged: boolean = false;
+		let isMapResolutionChanged = false;
 		let isMapResolutionChangedTimeoutHandler: number | undefined;
 
 		initialMap.getView().on('change:resolution', () => {

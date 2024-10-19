@@ -1,4 +1,4 @@
-import { FeatureDataItemURLFieldLinkItem } from '../../../app/services/features';
+import type { FeatureDataItemURLFieldLinkItem } from '../../../app/services/features';
 
 export const addLinkToURLField = (
 	urlFieldLinkItem: FeatureDataItemURLFieldLinkItem,

@@ -1,4 +1,4 @@
-import { IFontAwesomeCategories } from './iconsLibraryInterfaces';
+import type { IFontAwesomeCategories } from './iconsLibraryInterfaces';
 
 // Whilst not strictly true that (it can be undefiend), we don't actually load the main parts of the app until the icons library is loaded, so in practice it's never undefined.
 export const getCategories = () => window.MapaNamespace.iconsLibrary.categories as IFontAwesomeCategories;

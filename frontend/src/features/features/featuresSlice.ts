@@ -1,15 +1,15 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { Point } from 'ol/geom';
 import {
-	FeatureDataItem,
+	type FeatureDataItem,
 	featuresAdapter,
 	featuresApi,
 	GeomType,
 	initialFeaturesState,
-	NewMapaFeature,
+	type NewMapaFeature,
 } from '../../app/services/features';
-import { AppDispatch, RootState } from '../../app/store';
-import { OLMapView, selectMapView } from '../app/appSlice';
+import type { AppDispatch, RootState } from '../../app/store';
+import { type OLMapView, selectMapView } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import { getPointGeoJSONFromCoordinates } from '../ol_map/olLayerManager';
 import { getSchemasAvailableForMap } from '../schemas/schemasSlice';

@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
-import { FeatureDataItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
-import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
+import type { FeatureDataItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
+import { type FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { isClipboardApiSupported } from '../../app/utils';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 

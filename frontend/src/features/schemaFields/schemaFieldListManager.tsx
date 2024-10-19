@@ -11,7 +11,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import TodayIcon from '@mui/icons-material/Today';
 import { IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import React, { useState } from 'react';
-import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
+import { type FeatureSchemaFieldDefinitionCollection, FeatureSchemaFieldType } from '../../app/services/schemas';
 import { StyledMenu } from '../../app/ui/styledMenu';
 import SchemaFieldDeleteManager from '../schemas/schemaFieldDeleteManager';
 import { moveFieldDown, moveFieldUp, removeField } from '../schemas/schemaHelpers';

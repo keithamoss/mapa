@@ -8,7 +8,7 @@ import React from 'react';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import { defaultNakedDialogColour } from '../../app/ui/theme';
 import { getAvailableStylesForIcon, getIconLabelByName, getIconStyleName } from './iconsLibraryHelpers';
-import { IconStyle } from './iconsLibraryInterfaces';
+import type { IconStyle } from './iconsLibraryInterfaces';
 
 interface Props {
 	selectedIcon: string;

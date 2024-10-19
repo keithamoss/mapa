@@ -1,9 +1,9 @@
-import { EntityState, createEntityAdapter } from '@reduxjs/toolkit';
-import { Coordinate } from 'ol/coordinate';
-import { Point } from 'ol/geom';
+import { type EntityState, createEntityAdapter } from '@reduxjs/toolkit';
+import type { Coordinate } from 'ol/coordinate';
+import type { Point } from 'ol/geom';
 import { prepareFeaturesForMap } from '../../features/app/appSlice';
 import { api } from './api';
-import { SymbologyProps } from './schemas';
+import type { SymbologyProps } from './schemas';
 
 export enum GeomType {
 	Point = 'Point',

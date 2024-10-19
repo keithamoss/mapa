@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { FeatureSchema, useUpdateFeatureSchemaMutation } from '../../app/services/schemas';
+import { type FeatureSchema, useUpdateFeatureSchemaMutation } from '../../app/services/schemas';
 import SchemaForm from './schemaForm';
 import { selectFeatureSchemaById } from './schemasSlice';
 

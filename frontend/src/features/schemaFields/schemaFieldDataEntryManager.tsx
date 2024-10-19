@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, FormGroup, FormHelperText } from '@mui/material';
 import { isEqual } from 'lodash-es';
-import React, { useEffect } from 'react';
-import { UseFormHandleSubmit, useForm } from 'react-hook-form';
+import type React from 'react';
+import { useEffect } from 'react';
+import { type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import NotFound from '../../NotFound';
 import {
 	getDefaultValuesForSchemaFieldForm,
@@ -10,8 +11,8 @@ import {
 } from '../../app/forms/schemaFieldsForms';
 import { useAppSelector } from '../../app/hooks/store';
 import { usePrevious } from '../../app/hooks/usePrevious';
-import { FeatureDataItemURLFieldLinkItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
-import { FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
+import type { FeatureDataItemURLFieldLinkItem, MapaFeature, NewMapaFeature } from '../../app/services/features';
+import { type FeatureSchema, FeatureSchemaFieldType } from '../../app/services/schemas';
 import FormSectionHeading from '../../app/ui/formSectionHeading';
 import { selectFeatureSchemaById } from '../schemas/schemasSlice';
 import SchemaDataEntryBooleanyTypeFields from './BooleanyTypeFields/schemaDataEntryBooleanyTypeFields';

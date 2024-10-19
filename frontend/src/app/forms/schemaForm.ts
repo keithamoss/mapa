@@ -1,6 +1,6 @@
 import * as yup from 'yup';
-import { ObjectSchema } from 'yup';
-import { FeatureSchemaFieldDefinitionCollection, FeatureSchemaModifiableProps } from '../services/schemas';
+import type { ObjectSchema } from 'yup';
+import type { FeatureSchemaFieldDefinitionCollection, FeatureSchemaModifiableProps } from '../services/schemas';
 import { symbologyFormValidationSchema } from './symbologyForm';
 
 export const schemaFormValidationSchema: ObjectSchema<FeatureSchemaModifiableProps> = yup

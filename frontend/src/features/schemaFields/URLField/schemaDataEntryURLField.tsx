@@ -19,11 +19,11 @@ import {
 	Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { FeatureDataItemURLFieldLinkItem } from '../../../app/services/features';
-import { FeatureSchemaFieldDefinitionURLField, FeatureSchemaFieldType } from '../../../app/services/schemas';
+import type { UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import type { FeatureDataItemURLFieldLinkItem } from '../../../app/services/features';
+import { type FeatureSchemaFieldDefinitionURLField, FeatureSchemaFieldType } from '../../../app/services/schemas';
 import { getLinkDomainName } from '../../../app/utils';
-import { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
+import type { SchemaFormFieldsFormValues } from '../schemaFieldDataEntryManager';
 import {
 	addLinkToURLField,
 	modifyLinkInURLField,

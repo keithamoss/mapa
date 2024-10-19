@@ -11,7 +11,7 @@ import {
 	Radio,
 	RadioGroup,
 	Select,
-	SelectChangeEvent,
+	type SelectChangeEvent,
 	Toolbar,
 	Typography,
 } from '@mui/material';

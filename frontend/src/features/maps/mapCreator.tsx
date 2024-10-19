@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { useUpdateUserProfileMutation } from '../../app/services/auth';
-import { NewMap, useAddMapMutation } from '../../app/services/maps';
+import { type NewMap, useAddMapMutation } from '../../app/services/maps';
 import MapForm from './mapForm';
 import { selectAllMaps } from './mapsSlice';
 

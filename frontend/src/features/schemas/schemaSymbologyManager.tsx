@@ -32,7 +32,7 @@ import { groupBy, isEqual } from 'lodash-es';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import {
+import type {
 	FeatureSchemaSymbology,
 	FeatureSchemaSymbologyGroup,
 	FeatureSchemaSymbologySymbolsValue,

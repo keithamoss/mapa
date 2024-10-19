@@ -12,11 +12,11 @@ import {
 	FormGroup,
 	FormHelperText,
 } from '@mui/material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { stopPropagate } from '../../../app/forms/formUtils';
 import { schemaURLFieldFormValidationSchema } from '../../../app/forms/schemaFieldsForms';
 import { getStringOrEmptyStringForSchemasFieldsFormField } from '../../../app/forms/schemaForm';
-import {
+import type {
 	FeatureSchemaFieldDefinitionFormModifiablePropsCollection,
 	FeatureSchemaFieldDefinitionURLField,
 	FeatureSchemaFieldDefinitionURLFieldFormModifiableProps,

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks/store';
 import { usePatchMapMutation } from '../../app/services/maps';
-import { NewFeatureSchema, useAddFeatureSchemaMutation } from '../../app/services/schemas';
+import { type NewFeatureSchema, useAddFeatureSchemaMutation } from '../../app/services/schemas';
 import { selectActiveMapId } from '../app/appSlice';
 import { selectMapById } from '../maps/mapsSlice';
 import SchemaForm from './schemaForm';
