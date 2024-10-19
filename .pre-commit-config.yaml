@@ -1,9 +1,9 @@
 repos:
   - repo: local
     hooks:
-      - id: eslint
+      - id: biome
         language: system
-        name: eslint
-        entry: cd frontend && yarn run lint
+        name: biome
+        entry: cd frontend && pnpm biome lint
         pass_filenames: false
         types_or: [javascript, jsx, ts, tsx]

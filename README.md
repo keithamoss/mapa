@@ -31,23 +31,14 @@ https://api.mapa.test.keithmoss.me/login/google-oauth2/
 
 # Local development setup
 
-- Run `yarn dlx @yarnpkg/sdks vscode` in the `frontend` folder (and then move the contents of the `.vscode` to the root)
-- [Set Up ESLint and Prettier in a React TypeScript App (2023)](https://dev.to/eshankvaish/set-up-eslint-and-prettier-in-a-react-typescript-app-2022-29c9)
-
-If you're having trouble with yarn, try running:
-
-```
-rm -f .yarn*
-yarn set version 3.x
-yarn install
-```
+Run `pnpm install --force` to ensures the optional dep `@rollup/rollup-linux-x64-musl` gets installed. This ensures Vite is happy running in Docker when it was installed via pnpm in MacOS.
 
 To dump all deps en masse:
 
 ```
-npm install -g npm-check-updates
+pnpm install -g npm-check-updates
 npm-check-updates -u
-yarn install
+pnpm install
 ```
 
 # Testing local dev on a real physical device

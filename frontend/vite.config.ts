@@ -1,6 +1,6 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
-import { defineConfig, loadEnv, Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import checker from 'vite-plugin-checker';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
@@ -26,7 +26,7 @@ export default defineConfig(({ command, mode }) => {
 				output: {
 					manualChunks(id: string) {
 						// Creating a chunk for third-party packages
-						if (id.includes('/.yarn/')) {
+						if (id.includes('/node_modules/')) {
 							return 'vendor';
 						}
 
