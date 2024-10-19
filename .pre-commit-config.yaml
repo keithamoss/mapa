@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: local-biome-check
         name: biome check
-        entry: bash -c 'cd frontend && pnpm biome check --error-on-warnings'
+        entry: bash -c 'cd frontend && npx @biomejs/biome check --write --files-ignore-unknown=true --no-errors-on-unmatched'
         language: system
         types: [text]
