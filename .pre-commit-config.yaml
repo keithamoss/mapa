@@ -3,6 +3,7 @@ repos:
     hooks:
       - id: local-biome-check
         name: biome check
-        entry: bash -c 'cd frontend && pnpm biome check --write --files-ignore-unknown=true --no-errors-on-unmatched'
+        # entry: bash -c 'cd frontend && pnpm biome check --write --files-ignore-unknown=true --no-errors-on-unmatched'
+        entry: ./test.sh
         language: system
         types: [text]
