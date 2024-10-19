@@ -13,6 +13,8 @@ import { theme } from './app/ui/theme';
 import { type MapaNamespace, MapaNamespaceDefaults } from './window';
 // import './browserstack';
 
+// Test
+
 // Extend the global window object with MapaNamespace so we have a place to load the Icons Library into
 // Ref: https://stackoverflow.com/questions/12709074/how-do-you-explicitly-set-a-new-property-on-window-in-typescript
 declare global {
