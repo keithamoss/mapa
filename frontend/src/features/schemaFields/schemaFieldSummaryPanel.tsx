@@ -15,31 +15,35 @@ const getDataItemForDisplay = (
 ) => {
 	if (schemaFieldDefinition.type === FeatureSchemaFieldType.TextField) {
 		return dataItem.value !== '' ? (dataItem.value as string) : <em>No text entered</em>;
-	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
+	}
+	if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
 		return dataItem.value as number;
-	}if (
+	}
+	if (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 		schemaFieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
 	) {
 		return dataItem.value === true ? 'Checked' : 'Unchecked';
-	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
+	}
+	if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
 		return typeof dataItem.value === 'string' && dataItem.value !== '' ? (
 			dayjs(dataItem.value).format('ddd, MMM D YYYY')
 		) : (
 			<em>No date entered</em>
 		);
-	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
+	}
+	if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
 		return Array.isArray(dataItem.value) && dataItem.value.length > 0 ? (
 			<List dense disablePadding sx={{ '& a': { color: 'rgba(0, 0, 0, 0.87)', textDecoration: 'none' } }}>
-				{dataItem.value.map((i, idx) => (
-					<ListItem key={idx} dense disablePadding disableGutters>
+				{dataItem.value.map((i) => (
+					<ListItem key={i.id} dense disablePadding disableGutters>
 						<ListItemIcon sx={{ minWidth: 24 + 8 }}>
 							<LinkIcon />
 						</ListItemIcon>
 						<ListItemButton dense disableGutters>
 							<ListItemText
 								primary={
-									<Link key={idx} to={i.url} target="_blank">
+									<Link to={i.url} target="_blank">
 										{i.name}
 									</Link>
 								}
@@ -52,7 +56,7 @@ const getDataItemForDisplay = (
 			<em>No links entered</em>
 		);
 	}
-		return 'Unknown value-to-string mapping';
+	return 'Unknown value-to-string mapping';
 };
 
 interface Props {
