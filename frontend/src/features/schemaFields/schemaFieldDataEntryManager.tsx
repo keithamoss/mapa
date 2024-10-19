@@ -95,12 +95,12 @@ function SchemaFieldDataEntryManager(props: Props) {
 	isDirtyRef.current = isDirty;
 
 	// Ensure we reset the form's state, and set new default values, when the schema changes.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		// This is a good enough check to know if the schema has changed.
 		if (isEqual(defaultValues, previousDefaultValues) === false) {
 			reset(defaultValues);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [defaultValues]);
 
 	return (

@@ -153,6 +153,7 @@ function GoogleMapsImportButton(props: Props) {
 		}
 	};
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	const onClickButton = useCallback(async () => {
 		try {
 			const url = await getClipboardContents();
