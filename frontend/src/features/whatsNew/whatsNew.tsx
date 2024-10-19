@@ -54,6 +54,7 @@ function WhatsNewPage() {
 
 				<Paper elevation={0} sx={{ m: 3 }}>
 					{whatsNewJSON.map((release, key) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						<Box key={key} sx={{ mb: 4 }}>
 							<Typography
 								sx={{ color: mapaThemeSecondaryBlueGrey, fontWeight: 500, mb: 2 }}
@@ -91,6 +92,7 @@ function WhatsNewPage() {
 											{Array.isArray(fieldValue) === true && (
 												<List disablePadding sx={{ '& li:first-of-type': { pt: 0 } }}>
 													{fieldValue.map((whatChanged, key) => (
+														// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 														<ListItem key={key} sx={{ pb: 0, alignItems: 'start' }}>
 															<ListItemIcon sx={{ minWidth: 16, marginTop: 0.5 }}>
 																<CircleIcon sx={{ width: 8, color: mapaThemeSecondaryBlueGrey }} />

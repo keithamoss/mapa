@@ -37,8 +37,7 @@ export const hextoRGBACSS = (
 		a = `0x${h[7]}${h[8]}`;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	a = +((a as any) / 255).toFixed(3);
+	a = +(Number(a) / 255).toFixed(3);
 
 	return `rgba(${+r}, ${+g}, ${+b}, ${a})`;
 };
@@ -56,8 +55,11 @@ export function RGBACSSDarkenColour(rgba: string, darken_by_percentage: number) 
 
 export function RGBAToHSLA(r: number, g: number, b: number, a: number, darken_by_percentage: number) {
 	// Make r, g, and b fractions of 1
+	// biome-ignore lint/style/noParameterAssign: <explanation>
 	r /= 255;
+	// biome-ignore lint/style/noParameterAssign: <explanation>
 	g /= 255;
+	// biome-ignore lint/style/noParameterAssign: <explanation>
 	b /= 255;
 
 	// Find greatest and smallest channel values
@@ -99,7 +101,9 @@ export function RGBAToHSLA(r: number, g: number, b: number, a: number, darken_by
 
 export function HSLAToRGBA(h: number, s: number, l: number, a: number) {
 	// Must be fractions of 1
+	// biome-ignore lint/style/noParameterAssign: <explanation>
 	s /= 100;
+	// biome-ignore lint/style/noParameterAssign: <explanation>
 	l /= 100;
 
 	const c = (1 - Math.abs(2 * l - 1)) * s;
