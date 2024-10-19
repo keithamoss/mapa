@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: local-biome-check
         name: biome check
-        entry: npx biome check --write --files-ignore-unknown=true --no-errors-on-unmatched
+        entry: cd frontend && npx biome check --write --files-ignore-unknown=true --no-errors-on-unmatched
         language: system
         types: [text]
