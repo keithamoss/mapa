@@ -5,7 +5,7 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks/store';
 import { useGoogleMapsImportQuery } from '../../../app/services/googlemapsimport';
-import type { Map } from '../../../app/services/maps';
+import type { MapaMap } from '../../../app/services/maps';
 import { type FeatureSchema, FeatureSchemaFieldType } from '../../../app/services/schemas';
 import { mapaThemeMapButtonControlGrey } from '../../../app/ui/theme';
 import { isClipboardApiSupported } from '../../../app/utils';
@@ -27,11 +27,11 @@ function GoogleMapsImportButtonEntrypointLayer1() {
 	if (isClipboardApiSupported() === true) {
 		return <GoogleMapsImportButtonEntrypointLayer2 map={activeMap} />;
 	}
-		return null;
+	return null;
 }
 
 interface PropsEntrypointLayer2 {
-	map: Map;
+	map: MapaMap;
 }
 
 function GoogleMapsImportButtonEntrypointLayer2(props: PropsEntrypointLayer2) {
@@ -44,11 +44,11 @@ function GoogleMapsImportButtonEntrypointLayer2(props: PropsEntrypointLayer2) {
 	if (availableSchemas.length === 1) {
 		return <GoogleMapsImportButtonEntrypointLayer3 map={map} schema={availableSchemas[0]} />;
 	}
-		return <GoogleMapsImportButton map={map} />;
+	return <GoogleMapsImportButton map={map} />;
 }
 
 interface PropsEntrypointLayer3 {
-	map: Map;
+	map: MapaMap;
 	schema: FeatureSchema;
 }
 
@@ -60,11 +60,11 @@ function GoogleMapsImportButtonEntrypointLayer3(props: PropsEntrypointLayer3) {
 	if (field?.type === FeatureSchemaFieldType.TextField) {
 		return <GoogleMapsImportButton map={map} schema={schema} schemaFieldIdForName={field.id} />;
 	}
-		return <GoogleMapsImportButton map={map} />;
+	return <GoogleMapsImportButton map={map} />;
 }
 
 interface Props {
-	map: Map;
+	map: MapaMap;
 	schema?: FeatureSchema;
 	schemaFieldIdForName?: number;
 }

@@ -20,7 +20,7 @@ export interface MapModifiableProps {
 
 export type NewMap = MapModifiableProps;
 
-export interface Map extends MapModifiableProps {
+export interface MapaMap extends MapModifiableProps {
 	id: number;
 	owner_id: number;
 	last_used_schema_id: number | null;
@@ -31,16 +31,16 @@ export interface MapFavouritedSymbols {
 	symbol_ids: number[];
 }
 
-type MapsResponse = Map[];
+type MapsResponse = MapaMap[];
 
-export const mapsAdapter = createEntityAdapter<Map>();
+export const mapsAdapter = createEntityAdapter<MapaMap>();
 
 const initialState = mapsAdapter.getInitialState();
 export { initialState as initialMapsState };
 
 export const mapsApi = api.injectEndpoints({
 	endpoints: (builder) => ({
-		getMaps: builder.query<EntityState<Map, number>, void>({
+		getMaps: builder.query<EntityState<MapaMap, number>, void>({
 			query: () => 'maps/',
 			transformResponse: (res: MapsResponse) => {
 				return mapsAdapter.setAll(initialState, res);
@@ -59,7 +59,7 @@ export const mapsApi = api.injectEndpoints({
 				dispatch(prepareFeaturesForMap());
 			},
 		}),
-		addMap: builder.mutation<Map, Partial<Map>>({
+		addMap: builder.mutation<MapaMap, Partial<MapaMap>>({
 			query: (initialMap) => ({
 				url: 'maps/',
 				method: 'POST',
@@ -69,7 +69,7 @@ export const mapsApi = api.injectEndpoints({
 			// that newly created map could show up in any lists.
 			invalidatesTags: [{ type: 'Map', id: 'LIST' }],
 		}),
-		updateMap: builder.mutation<Map, Partial<Map>>({
+		updateMap: builder.mutation<MapaMap, Partial<MapaMap>>({
 			query: (map) => ({
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				url: `maps/${map.id}/`,
@@ -80,7 +80,7 @@ export const mapsApi = api.injectEndpoints({
 			// In this case, `getMap` will be re-run. `getMaps` *might*  rerun, if this id was under its results.
 			invalidatesTags: (result, error, { id }) => [{ type: 'Map', id }],
 		}),
-		patchMap: builder.mutation<Map, Partial<Map>>({
+		patchMap: builder.mutation<MapaMap, Partial<MapaMap>>({
 			query: (map) => ({
 				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 				url: `maps/${map.id}/`,

@@ -23,7 +23,7 @@ import {
 	type MapaOpenLayersFeature,
 	useUpdateFeaturePositionForOLModifyInteractionMutation,
 } from '../../app/services/features';
-import type { Map as MapaMap } from '../../app/services/maps';
+import type { MapaMap } from '../../app/services/maps';
 import {
 	getSearchLocationsParameters,
 	getSearchLocationsZoomToCoordinates,

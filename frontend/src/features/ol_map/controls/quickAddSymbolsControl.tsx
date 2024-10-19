@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks/store';
 import type { User } from '../../../app/services/auth';
 import { type MapaFeature, useAddFeatureToMapMutation } from '../../../app/services/features';
-import type { Map } from '../../../app/services/maps';
+import type { MapaMap } from '../../../app/services/maps';
 import type { FeatureSchemaSymbologySymbolsValue } from '../../../app/services/schemas';
 import { mapaThemeMapButtonControlGrey } from '../../../app/ui/theme';
 import { selectActiveMapId } from '../../app/appSlice';
@@ -49,7 +49,7 @@ function QuickAddSymbolsControlEntrypoint() {
 }
 
 interface Props {
-	map: Map;
+	map: MapaMap;
 	user: User;
 	features: MapaFeature[];
 }

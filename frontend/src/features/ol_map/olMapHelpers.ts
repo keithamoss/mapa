@@ -13,7 +13,7 @@ import { fromLonLat } from 'ol/proj';
 import VectorSource, { type VectorSourceEvent } from 'ol/source/Vector';
 import { Basemap, BasemapStyle } from '../../app/services/auth';
 import type { MapaFeature, MapaOpenLayersFeature } from '../../app/services/features';
-import type { MapStartingLocation, Map as MapaMap } from '../../app/services/maps';
+import type { MapStartingLocation, MapaMap } from '../../app/services/maps';
 import { getPointGeoJSONFromCoordinates, getWMTSTileLayer, isDataVectorLayer } from './olLayerManager';
 
 export const defaultZoomLevel = 20;

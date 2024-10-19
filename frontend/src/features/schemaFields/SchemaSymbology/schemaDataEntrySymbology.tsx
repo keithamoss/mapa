@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 
 import NotFound from '../../../NotFound';
 import { useAppSelector } from '../../../app/hooks/store';
-import type { Map } from '../../../app/services/maps';
+import type { MapaMap } from '../../../app/services/maps';
 import {
 	type FeatureSchema,
 	type FeatureSchemaSymbologySymbolsValue,
@@ -50,7 +50,7 @@ function SchemaDataEntrySymbologyEntrypoint(props: EntryPointProps) {
 }
 
 interface Props extends Omit<EntryPointProps, 'mapId' | 'schemaId'> {
-	map: Map;
+	map: MapaMap;
 	schema: FeatureSchema;
 }
 

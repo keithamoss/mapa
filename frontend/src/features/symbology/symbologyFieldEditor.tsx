@@ -74,7 +74,7 @@ import {
 } from './symbologyHelpers';
 
 import { useAppSelector } from '../../app/hooks/store';
-import type { Map } from '../../app/services/maps';
+import type { MapaMap } from '../../app/services/maps';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
 import TextFieldWithout1Password from '../../app/ui/textFieldWithout1Password';
@@ -271,7 +271,7 @@ function SymbologyFieldEditorEntrypointLayer2(props: EntrypointPropsLayer2) {
 }
 
 interface Props extends Omit<EntrypointProps, 'mapId'> {
-	map?: Map;
+	map?: MapaMap;
 }
 
 function SymbologyFieldEditor(props: Props) {

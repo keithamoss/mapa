@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../NotFound';
 import { useAppSelector } from '../../app/hooks/store';
 import { getIntegerParamOrUndefined } from '../../app/routing/routingHelpers';
-import { type Map, useUpdateMapMutation } from '../../app/services/maps';
+import { type MapaMap, useUpdateMapMutation } from '../../app/services/maps';
 import type { SymbologyProps } from '../../app/services/schemas';
 import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import { selectMapById } from './mapsSlice';
@@ -31,7 +31,7 @@ function MapHeroIconEditorEntrypointLayer2(props: { mapId: number }) {
 }
 
 interface Props {
-	map: Map;
+	map: MapaMap;
 }
 
 function MapHeroIconEditor(props: Props) {

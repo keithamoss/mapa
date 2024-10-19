@@ -33,7 +33,7 @@ import { Controller, type SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { mapFormValidationSchema } from '../../app/forms/mapForm';
 import { useAppSelector } from '../../app/hooks/store';
-import type { Map, MapModifiableProps, NewMap } from '../../app/services/maps';
+import type { MapModifiableProps, MapaMap, NewMap } from '../../app/services/maps';
 import type { SymbologyProps } from '../../app/services/schemas';
 import { DialogWithTransition } from '../../app/ui/dialog';
 import DiscardChangesDialog from '../../app/ui/discardChangesDialog';
@@ -46,10 +46,10 @@ import SymbologyFieldEditor from '../symbology/symbologyFieldEditor';
 import MapStartingLocationEditor from './mapStartingLocationEditor';
 
 interface Props {
-	map?: Map;
+	map?: MapaMap;
 	isMapSaving: boolean;
 	onDoneAdding?: (map: NewMap) => void;
-	onDoneEditing?: (map: Map) => void;
+	onDoneEditing?: (map: MapaMap) => void;
 }
 
 function MapForm(props: Props) {
@@ -175,7 +175,7 @@ function MapForm(props: Props) {
 				};
 				onDoneAdding(mapData);
 			} else if (map !== undefined && onDoneEditing !== undefined) {
-				const mapData: Map = {
+				const mapData: MapaMap = {
 					...map,
 					...data,
 					// For some reason when we we're saving a Map, MapForm was turning a null hero_icon into an empty {} object, rather than retaining it as null.
