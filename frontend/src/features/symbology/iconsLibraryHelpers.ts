@@ -116,13 +116,13 @@ export const getIconsForCategory = (categoryName: string) => {
 	const icons: IFontAwesomeIcon[] = [];
 
 	if (categories[categoryName as FontAwesomeCategory] !== undefined) {
-		categories[categoryName as FontAwesomeCategory].icons.forEach((iconName: string) => {
+		for (const iconName of categories[categoryName as FontAwesomeCategory].icons) {
 			const icon = getIconByName(iconName);
 
 			if (icon !== null) {
 				icons.push(icon);
 			}
-		});
+		}
 	}
 
 	return icons;
@@ -130,7 +130,10 @@ export const getIconsForCategory = (categoryName: string) => {
 
 export const getIconsForCategoryIndexedByIconName = (categoryName: string) => {
 	const icons: IFontAwesomeIcons = {};
-	getIconsForCategory(categoryName).forEach((icon) => (icons[icon.name] = icon));
+
+	for (const icon of getIconsForCategory(categoryName)) {
+		icons[icon.name] = icon;
+	}
 	return icons;
 };
 
@@ -160,8 +163,7 @@ export const getAvailableStylesForIcon = (iconName?: string) => {
 		if (icon !== null) {
 			const styles: IconStyle[] = [];
 
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			Object.entries(icon.svgs).forEach(([iconStyle, iconStyleDefinition]) => {
+			for (const [iconStyle, iconStyleDefinition] of Object.entries(icon.svgs)) {
 				styles.push(iconStyle as IconStyle);
 
 				// This wasn't a great way of doing the differentiator between FontAwesome's duotone style and the FlatIcon icons that had two colours.
@@ -171,7 +173,7 @@ export const getAvailableStylesForIcon = (iconName?: string) => {
 				// if (iconStyleDefinition.has_colours === true) {
 				// 	styles.push(`${iconStyle}-coloured` as IconStyle);
 				// }
-			});
+			}
 
 			return styles;
 		}
@@ -249,12 +251,12 @@ export const getIconStyleName = (icon_style: IconStyle) =>
 export const getCategoryLabelsForIconNames = (iconNames: string[]) => {
 	let categories: string[] = [];
 
-	iconNames.forEach((iconName: string) => {
+	for (const iconName of iconNames) {
 		const icon = getIconByName(iconName);
 		if (icon !== null) {
 			categories = [...categories, ...icon.categories];
 		}
-	});
+	}
 
 	return Array.from(new Set(categories));
 };
@@ -285,17 +287,14 @@ export const findIconsAvailableForUseAsModifiers = () => {
 	const allowList = ['circle', 'pen-circle'];
 
 	if (isIconsLibraryLoaded() === true && window.MapaNamespace.iconsLibrary.icons !== undefined) {
-		Object.keys(window.MapaNamespace.iconsLibrary.icons)
-			.filter(
-				(iconName) =>
-					(iconName.startsWith('circle') || allowList.includes(iconName)) && denyList.includes(iconName) === false,
-			)
-			.forEach((iconName) => {
+		for (const iconName of Object.keys(window.MapaNamespace.iconsLibrary.icons)) {
+			if ((iconName.startsWith('circle') || allowList.includes(iconName)) && denyList.includes(iconName) === false) {
 				const icon = getIconByName(iconName);
 				if (icon !== null) {
 					modifiers.push(icon);
 				}
-			});
+			}
+		}
 	}
 
 	return modifiers.map((icon) => icon.name);

@@ -30,10 +30,11 @@ const getSVGPathElementsByClassName = (rootElement: SVGSVGElement, className: st
 	return elements;
 };
 
-const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) =>
-	Object.entries(attributes).forEach(([attributeName, attributeValue]) =>
-		svg.setAttribute(attributeName, attributeValue),
-	);
+const setAttributesOnElement = (svg: Element, attributes: { [key: string]: string }) => {
+	for (const [attributeName, attributeValue] of Object.entries(attributes)) {
+		svg.setAttribute(attributeName, attributeValue);
+	}
+};
 
 const groupElementsTogether = (svgDOMElement: SVGSVGElement, groupStyle: string) => {
 	const grpDOMElementWrapped = new DOMParser().parseFromString(
@@ -254,18 +255,18 @@ export const parseAndManipulateSVGIcon = (
 		// Apply the primary colour to all path elements as a default
 		// Duotone and Tritone will come through afterwards and set their own colours
 		// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
-		getSVGPathElementsByClassName(svgDOMElement, 'primary', true).forEach((pathElement) => {
+		for (const pathElement of getSVGPathElementsByClassName(svgDOMElement, 'primary', true)) {
 			// We're null checking because the FontAwesome icons don't assign 'primary' to simple icons, and it would be a waste of characters to do so.
 			if (pathElement.getAttribute('class') === 'primary' || pathElement.getAttribute('class') === null) {
 				pathElement.setAttribute('fill', iconProps.colour);
 			} else if (pathElement.getAttribute('class') === 'primary darker') {
 				pathElement.setAttribute('fill', RGBACSSDarkenColour(iconProps.colour, defaultSymbolDarkenColourByPercentage));
 			}
-		});
+		}
 
 		// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
 		if (isIconStyleDuotoneOrTritone(iconStyle)) {
-			getSVGPathElementsByClassName(svgDOMElement, 'secondary').forEach((pathElement) => {
+			for (const pathElement of getSVGPathElementsByClassName(svgDOMElement, 'secondary')) {
 				if (pathElement.getAttribute('class') === 'secondary') {
 					pathElement.setAttribute('fill', iconProps.secondaryColour);
 				} else if (pathElement.getAttribute('class') === 'secondary darker') {
@@ -274,12 +275,12 @@ export const parseAndManipulateSVGIcon = (
 						RGBACSSDarkenColour(iconProps.secondaryColour, defaultSymbolDarkenColourByPercentage),
 					);
 				}
-			});
+			}
 		}
 
 		// Tritone icons only: Apply the tertiary colour style properties to the tertiary path elements
 		if (isIconStyleTritone(iconStyle)) {
-			getSVGPathElementsByClassName(svgDOMElement, 'tertiary').forEach((pathElement) => {
+			for (const pathElement of getSVGPathElementsByClassName(svgDOMElement, 'tertiary')) {
 				if (pathElement.getAttribute('class') === 'tertiary') {
 					pathElement.setAttribute('fill', iconProps.tertiaryColour);
 				} else if (pathElement.getAttribute('class') === 'tertiary darker') {
@@ -288,7 +289,7 @@ export const parseAndManipulateSVGIcon = (
 						RGBACSSDarkenColour(iconProps.tertiaryColour, defaultSymbolDarkenColourByPercentage),
 					);
 				}
-			});
+			}
 		}
 	}
 
@@ -365,12 +366,12 @@ export const parseAndManipulateSVGIcon = (
 				// bottom right-hand corner of the original icon.
 				// Note: We use modifierCircleColour because the paths in the circular modifier icons describe the circle,
 				// and leave a transparent cut out for the shape of the icon.
-				getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true).forEach((pathElement) => {
+				for (const pathElement of getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true)) {
 					pathElement.setAttribute(
 						'style',
 						`fill: ${iconProps.modifierCircleColour}; translate: ${translateXIcon}px ${translateYIcon}px; scale: ${scaleIcon}%;`,
 					);
-				});
+				}
 
 				// Place a background circle behind the modifier icon so we can colour the icon.
 				// This is a little odd, but it works because the special circular modifier icons
@@ -418,13 +419,13 @@ export const parseAndManipulateSVGIcon = (
 
 				// Apply the desired colours to the modifier icon if it's not colour-locked
 				if (isIconColourLocked(modifierIcon, modifierIconStyle) === false) {
-					getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true).forEach((pathElement) =>
-						pathElement.setAttribute('style', `fill: ${iconProps.modifierColour};`),
-					);
+					for (const pathElement of getSVGPathElementsByClassName(modifierSVGDOMElement, 'primary', true)) {
+						pathElement.setAttribute('style', `fill: ${iconProps.modifierColour};`);
+					}
 
 					// Duotone icons only: Apply the secondary colour style properties to the secondary path elements
 					if (isIconStyleDuotoneOrTritone(modifierIconStyle)) {
-						getSVGPathElementsByClassName(modifierSVGDOMElement, 'secondary').forEach((pathElement) => {
+						for (const pathElement of getSVGPathElementsByClassName(modifierSVGDOMElement, 'secondary')) {
 							if (pathElement.getAttribute('class') === 'secondary') {
 								pathElement.setAttribute('style', `fill: ${iconProps.modifierSecondaryColour};`);
 							} else if (pathElement.getAttribute('class') === 'secondary darker') {
@@ -436,7 +437,7 @@ export const parseAndManipulateSVGIcon = (
 									)};`,
 								);
 							}
-						});
+						}
 					}
 				}
 

@@ -44,7 +44,7 @@ const getPopularSymbols = (quickAddSymbolCount: number, features: MapaFeature[],
 		[key: string]: SchemaIdAndSymbolIdWithCount;
 	} = {};
 
-	features.forEach((f) => {
+	for (const f of features) {
 		if (f.schema_id !== null && f.symbol_id !== null) {
 			const key = `${f.schema_id}.${f.symbol_id}`;
 
@@ -58,7 +58,7 @@ const getPopularSymbols = (quickAddSymbolCount: number, features: MapaFeature[],
 
 			symbolsTally[key].count += 1;
 		}
-	});
+	}
 
 	// ... and rank them by popularity and give us the last [n] symbols (with the most popular ones first)
 	const popularSymbolsRanked = sortBy(symbolsTally, ['count']).slice(-quickAddSymbolCount).reverse();
@@ -74,19 +74,20 @@ const getFavouritedSymbols = (
 ) => {
 	// Get all of the favourited symbols in use on the map
 	let favouritedSymbolsInUse: string[] = [];
-	getSchemasUsedByFeatures(features, schemas).forEach((s) => {
+
+	for (const s of getSchemasUsedByFeatures(features, schemas)) {
 		favouritedSymbolsInUse = [
 			...favouritedSymbolsInUse,
 			...getSymbolsFavouritedForMap(s.symbology, mapId).map((sy) => `${s.id}.${sy.id}`),
 		];
-	});
+	}
 
 	// Tally up the number of uses of each favourited symbol
 	const favouritedSymbolsTally: {
 		[key: string]: SchemaIdAndSymbolIdWithCount;
 	} = {};
 
-	features.forEach((f) => {
+	for (const f of features) {
 		if (
 			f.schema_id !== null &&
 			f.symbol_id !== null &&
@@ -104,7 +105,7 @@ const getFavouritedSymbols = (
 
 			favouritedSymbolsTally[key].count += 1;
 		}
-	});
+	}
 
 	// ... and rank them by popularity and give us the last [n] symbols (with the most popular ones first)
 	const favouritedSymbolsRanked = sortBy(favouritedSymbolsTally, ['count']).slice(-quickAddSymbolCount).reverse();
