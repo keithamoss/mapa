@@ -1,4 +1,4 @@
-import type { Map } from 'ol';
+import type { Map as OpenLayersMap } from 'ol';
 import { toRadians } from 'ol/math';
 import { isDevelopment } from '../../app/utils';
 
@@ -251,7 +251,7 @@ export const setOverlayElementRotation = (
 	}
 };
 
-export const setMapRotation = (map: Map | undefined, compass: number) => {
+export const setMapRotation = (map: OpenLayersMap | undefined, compass: number) => {
 	if (map !== undefined) {
 		const view = map.getView();
 		const compassHeadingInRadians = toRadians(compass);

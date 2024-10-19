@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { AppBar, Box, Button, IconButton, Toolbar } from '@mui/material';
 import { View } from 'ol';
-import Map from 'ol/Map';
+import OpenLayersMap from 'ol/Map';
 import Attribution from 'ol/control/Attribution';
 import type { Coordinate } from 'ol/coordinate';
 import { DblClickDragZoom, MouseWheelZoom, defaults as defaultInteractions } from 'ol/interaction';
@@ -33,18 +33,18 @@ export default function MapStartingLocationEditor(props: Props) {
 	// ######################
 	// OpenLayers Map
 	// ######################
-	const [map, setMap] = useState<Map>();
+	const [map, setMap] = useState<OpenLayersMap>();
 
 	// Create state ref that can be accessed in OpenLayers callback functions et cetera
 	// https://stackoverflow.com/a/60643670
-	const mapRef = useRef<Map>();
+	const mapRef = useRef<OpenLayersMap>();
 	mapRef.current = map;
 
 	// The trick here - and the thing we spent ages beating our heads against - is to only init the map when the DialogWithTransition it's in has completely finished rendering and is shown.
 	// If we don't do this, we get a lot of weird and subtle errors where the `map` variable points to earlier
 	// copies of the map that were init'd while the DialogWithTransition was still setting itself up.
 	const makeMap = useCallback(() => {
-		const map = new Map({
+		const map = new OpenLayersMap({
 			target: mapTargetElementId,
 			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
 				new DblClickDragZoom(),

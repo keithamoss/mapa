@@ -1,4 +1,4 @@
-import type { Map } from 'ol';
+import type { Map as OpenLayersMap } from 'ol';
 import type Feature from 'ol/Feature';
 import type BaseEvent from 'ol/events/Event';
 import type { Geometry } from 'ol/geom';
@@ -30,7 +30,7 @@ export const createVectorImageLayer = (features: GeoJSONFeatureCollection) => {
 
 export const manageVectorImageLayerCreation = (
 	features: GeoJSONFeatureCollection,
-	map: Map,
+	map: OpenLayersMap,
 	isFeatureMovementAllowed: boolean,
 	onModifyInteractionStartEnd: (evt: BaseEvent | Event) => void,
 	onModifyInteractionAddRemoveFeature: (evt: VectorSourceEvent) => void,

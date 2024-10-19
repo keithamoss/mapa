@@ -2,7 +2,7 @@ import { type MapBrowserEvent, Overlay, View } from 'ol';
 import { MapboxVectorLayer } from 'ol-mapbox-style';
 import type Geolocation from 'ol/Geolocation';
 import type { GeolocationError } from 'ol/Geolocation';
-import type Map from 'ol/Map';
+import type OpenLayersMap from 'ol/Map';
 import type { Coordinate } from 'ol/coordinate';
 import type BaseEvent from 'ol/events/Event';
 import TopoJSON from 'ol/format/TopoJSON';
@@ -110,7 +110,7 @@ export const hideCompassHeadingMarker = () => {
 };
 
 export const updateMapWithGPSPosition = (
-	map: Map,
+	map: OpenLayersMap,
 	position: Coordinate | undefined,
 	centreOnMarker: boolean,
 	mapStartingZoomLevel: number,
@@ -141,7 +141,7 @@ export const updateMapWithGPSPosition = (
 	}
 };
 
-export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate, mapStartingZoomLevel: number) => {
+export const updateAndCentreMapOnPosition = (map: OpenLayersMap, position: Coordinate, mapStartingZoomLevel: number) => {
 	const view = map.getView();
 	view.setCenter(fromLonLat(position));
 	view.setZoom(mapStartingZoomLevel);
@@ -150,7 +150,7 @@ export const updateAndCentreMapOnPosition = (map: Map, position: Coordinate, map
 
 export const onGeolocationChangePosition =
 	(
-		map: Map,
+		map: OpenLayersMap,
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		mapStartingZoomLevel: number,
@@ -182,7 +182,7 @@ export const onGeolocationChangePosition =
 
 export const onGeolocationError =
 	(
-		map: Map,
+		map: OpenLayersMap,
 		mapHasPositionRef: React.MutableRefObject<boolean>,
 		setMapHasPosition: React.Dispatch<React.SetStateAction<boolean>>,
 		setGeolocationHasError: React.Dispatch<React.SetStateAction<false | GeolocationError>>,
@@ -221,7 +221,7 @@ export const onMapClick =
 		callback(features);
 	};
 
-export const setModifyInteractionStatus = (map: Map | undefined, status: boolean) => {
+export const setModifyInteractionStatus = (map: OpenLayersMap | undefined, status: boolean) => {
 	if (map !== undefined) {
 		map.getInteractions().forEach((interaction) => {
 			if (interaction.getProperties().is_modify === true) {
