@@ -50,6 +50,8 @@ export const getBasemap = (basemap: Basemap, basemap_style: BasemapStyle) => {
 				styleUrl: `mapbox://styles/keithmoss/${basemap_style}`,
 				accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
 				preload: Number.POSITIVE_INFINITY,
+				// @TODO Fix this when we upgrade OL and get the better types
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			}) as any);
 };
 
@@ -141,7 +143,11 @@ export const updateMapWithGPSPosition = (
 	}
 };
 
-export const updateAndCentreMapOnPosition = (map: OpenLayersMap, position: Coordinate, mapStartingZoomLevel: number) => {
+export const updateAndCentreMapOnPosition = (
+	map: OpenLayersMap,
+	position: Coordinate,
+	mapStartingZoomLevel: number,
+) => {
 	const view = map.getView();
 	view.setCenter(fromLonLat(position));
 	view.setZoom(mapStartingZoomLevel);

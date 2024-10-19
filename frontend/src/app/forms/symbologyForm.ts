@@ -34,6 +34,7 @@ export const symbologyFormValidationSchema = (
 			modifier_icon: yup.string().optional(),
 			modifier_icon_style: yup.string<IconStyle>().when('modifier_icon', {
 				is: (val: string | undefined) => typeof val === 'string' && val.length > 0,
+				// biome-ignore lint/suspicious/noThenProperty: <explanation>
 				then: (schema) => schema.required(),
 				otherwise: (schema) => schema.optional(),
 			}),
@@ -58,7 +59,8 @@ export const getNumberOrDefaultForSymbologyField = (
 
 	if (typeof value === 'number') {
 		return value;
-	}if (typeof value === 'string') {
+	}
+	if (typeof value === 'string') {
 		return Number.parseInt(value);
 	}
 	return defaultValue;
@@ -73,7 +75,8 @@ export const getNumberOrUndefinedForSymbologyField = (
 
 	if (typeof value === 'number') {
 		return value;
-	}if (typeof value === 'string') {
+	}
+	if (typeof value === 'string') {
 		return Number.parseInt(value);
 	}
 	return undefined;

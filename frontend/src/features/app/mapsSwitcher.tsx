@@ -58,6 +58,7 @@ export default function MapSwitcher(props: Props) {
 		onSpeedDialOpen();
 	};
 
+	// biome-ignore lint/complexity/noBannedTypes: <explanation>
 	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
 		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
 		if (reason !== 'mouseLeave') {

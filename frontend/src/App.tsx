@@ -122,6 +122,7 @@ function App() {
 					variant="contained"
 					size="large"
 					startIcon={<GoogleIcon />}
+					// biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
 					onClick={() => (window.location.href = `${getAPIBaseURL()}/social_django/login/google-oauth2/`)}
 				>
 					Login

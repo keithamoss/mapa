@@ -24,6 +24,7 @@ declare global {
 
 window.MapaNamespace = MapaNamespaceDefaults;
 
+// biome-ignore lint/style/noNonNullAssertion: <explanation>
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 

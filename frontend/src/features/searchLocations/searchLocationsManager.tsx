@@ -73,7 +73,7 @@ function SearchLocationsManager() {
 		resolver: yupResolver(searchLocationsFormValidationSchema),
 		defaultValues: {
 			search_term: searchParameters.search_term,
-			proximity: Cookies.get('locationSearchProximity')  === 'true',
+			proximity: Cookies.get('locationSearchProximity') === 'true',
 		},
 	});
 
@@ -269,6 +269,7 @@ function SearchLocationsManager() {
 															<span>
 																{parts.map((part, index) => (
 																	<span
+																		// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 																		key={index}
 																		style={{
 																			fontWeight: part.highlight ? 700 : 400,

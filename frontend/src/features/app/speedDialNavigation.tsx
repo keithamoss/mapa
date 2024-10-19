@@ -87,6 +87,7 @@ export default function SpeedDialNavigation(props: Props) {
 		onSpeedDialOpen();
 	};
 
+	// biome-ignore lint/complexity/noBannedTypes: <explanation>
 	const handleClose = (event: React.SyntheticEvent<{}, Event>, reason: CloseReason) => {
 		// Stops the SpeedDial from closing when the mouse leaves the FAB on desktop
 		if (reason !== 'mouseLeave') {
@@ -138,9 +139,10 @@ export default function SpeedDialNavigation(props: Props) {
 				open={open}
 			>
 				{actions.map((action) => {
-					const highlightIcon =
-						!!(
-						(highlightSearchFilter && action.name === 'Search') || (highlightWhatsNew && action.name === "What's New"));
+					const highlightIcon = !!(
+						(highlightSearchFilter && action.name === 'Search') ||
+						(highlightWhatsNew && action.name === "What's New")
+					);
 
 					return (
 						<SpeedDialAction

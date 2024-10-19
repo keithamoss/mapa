@@ -31,11 +31,13 @@ const StyledSlider = styled(Slider)`
 	}
 `;
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 function SliderFixed(props: SliderProps, ref: any) {
 	useEffect(() => {
 		if (ref.current) {
 			ref.current.addEventListener(
 				'touchstart',
+				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 				(e: any) => {
 					const isThumb = e.target.dataset.index;
 
