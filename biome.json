@@ -10,7 +10,10 @@
 		"ignore": [
 			".pnpm-store/",
 			"build/",
-			"vite.config.ts"
+			"vite.config.ts",
+			"src/features/symbology/flaticon/",
+			"src/features/symbology/font-awesome/",
+			"public/icons-library/"
 		]
 	},
 	"formatter": {
