@@ -182,7 +182,7 @@ function FeatureForm(props: Props) {
 		// the filtered data items.
 		const dataFiltered: SchemaFormFieldsFormValues = {};
 
-		Object.entries(data).forEach(([fieldName, fieldValue]) => {
+		for (const [fieldName, fieldValue] of Object.entries(data)) {
 			const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
 			const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
 
@@ -203,13 +203,13 @@ function FeatureForm(props: Props) {
 					dataFiltered[fieldName] = fieldValue;
 				}
 			}
-		});
+		}
 
 		// This ensures that when a field is touched, and it's value is set to an empty string, that it actually gets
 		// included in the data.
 		// ReactHookForm, rightly, doesn't include it in the `data` from the form because most forms don't care about
 		// a field that is blank.
-		Object.entries(touchedFieldsRef.current || {}).forEach(([fieldName /*, wasTouched*/]) => {
+		for (const [fieldName /*, wasTouched*/] of Object.entries(touchedFieldsRef.current || {})) {
 			const fieldId = Number(fieldName.split('_')[2]); // schema_field_[number]
 			const schemaField = getFieldFromSchemaDefinitionById(schema, fieldId);
 
@@ -223,11 +223,11 @@ function FeatureForm(props: Props) {
 			) {
 				dataFiltered[fieldName] = '';
 			}
-		});
+		}
 
 		// And this ensures that, if the item is already saved as an empty string on the feature, but the user
 		// hasn't touched the field this time, that it's still included in the data being saved.
-		Object.values(localFeature.data).forEach((data) => {
+		for (const data of Object.values(localFeature.data)) {
 			const fieldName = `schema_field_${data.schema_field_id}`;
 			const schemaField = getFieldFromSchemaDefinitionById(schema, data.schema_field_id);
 
@@ -241,7 +241,7 @@ function FeatureForm(props: Props) {
 			) {
 				dataFiltered[fieldName] = '';
 			}
-		});
+		}
 
 		onSaveAndCreateOrUpdateFeature(updateFeatureDataFromForm(localFeature, dataFiltered));
 	};
@@ -253,12 +253,12 @@ function FeatureForm(props: Props) {
 		// This neatly handles additions, modifications, and deletions
 		// whilst avoiding the need to manually handle those separately
 		// like we were before.
-		Object.entries(data).forEach(([schemaFieldName, schemaFieldValue]) => {
+		for (const [schemaFieldName, schemaFieldValue] of Object.entries(data)) {
 			featureData.push({
 				value: schemaFieldValue,
 				schema_field_id: Number(schemaFieldName.replace('schema_field_', '')),
 			});
-		});
+		}
 
 		return {
 			...feature,
