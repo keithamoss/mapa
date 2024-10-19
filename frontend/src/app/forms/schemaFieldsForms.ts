@@ -88,7 +88,7 @@ export const schemaDateFieldFormValidationSchema: ObjectSchema<FeatureSchemaFiel
 export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, feature: MapaFeature | NewMapaFeature) => {
 	const values: SchemaFormFieldsFormValues = {};
 
-	for(const fieldDefinition of schema.definition) {
+	for (const fieldDefinition of schema.definition) {
 		const schemaFieldName = `schema_field_${fieldDefinition.id}`;
 
 		const featureDataItemForSchemaField = feature.data.find(
@@ -117,7 +117,7 @@ export const getDefaultValuesForSchemaFieldForm = (schema: FeatureSchema, featur
 export const getYupValidationSchemaForSchemaFieldForm = (schema: FeatureSchema): ObjectSchema<yup.AnyObject> => {
 	const values: yup.ObjectShape = {};
 
-	for(const fieldDefinition of schema.definition) {
+	for (const fieldDefinition of schema.definition) {
 		const schemaFieldName = `schema_field_${fieldDefinition.id}`;
 
 		// Note: The undefined transforms here ensures that empty form fields are not included in what's passed to onDoneWithForm

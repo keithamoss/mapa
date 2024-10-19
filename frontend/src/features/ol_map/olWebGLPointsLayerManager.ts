@@ -49,7 +49,7 @@ export const buildSpriteSheet = async (symbols: {
 	};
 
 	// Create Image elements and use the browser to asynchronously convert the SVG to an image
-	for(const symbolCacheKey of Object.keys(symbols)) {
+	for (const symbolCacheKey of Object.keys(symbols)) {
 		const symbol = symbols[symbolCacheKey];
 
 		const icon = getFontAwesomeIconForSymbolAsSVGString(
@@ -77,8 +77,8 @@ export const buildSpriteSheet = async (symbols: {
 	const imgs: [img: HTMLImageElement, symbolCacheKey: string][] = [];
 
 	const loadedSVGImages = await Promise.all(imgPromises);
-	
-	for(const [img, symbolCacheKey] of loadedSVGImages) {
+
+	for (const [img, symbolCacheKey] of loadedSVGImages) {
 		canvasWidth = Math.max(canvasWidth, img.width + padding + padding);
 		canvasHeight = canvasHeight + padding + img.height;
 
@@ -99,7 +99,7 @@ export const buildSpriteSheet = async (symbols: {
 
 	let nextCanvasPositionY = padding;
 
-	for(const [img, symbolCacheKey] of imgs) {
+	for (const [img, symbolCacheKey] of imgs) {
 		// Draw the SVG image data on to the canvas
 		if (spriteSheetCanvasContext !== null) {
 			spriteSheetCanvasContext.drawImage(

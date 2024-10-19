@@ -46,7 +46,8 @@ export const searchFeatures = (
 			if (fieldName === 'symbol_name') {
 				const schema = schemas.find((s) => s.id === document.schema_id);
 				return schema !== undefined ? getSymbolNameBySymbolId(document.symbol_id, schema) : null;
-			}if (fieldName === 'text_fields') {
+			}
+			if (fieldName === 'text_fields') {
 				const schema = schemas.find((s) => s.id === document.schema_id);
 
 				if (schema !== undefined) {
@@ -60,7 +61,8 @@ export const searchFeatures = (
 				}
 
 				return null;
-			}if (fieldName === 'date_fields') {
+			}
+			if (fieldName === 'date_fields') {
 				// Hacky, but it'll do.
 				// Ref: https://github.com/lucaong/minisearch/issues/173
 				// ^ suggests we might need to add an entirely separate layer of date searching alongside (via DayJS?)
