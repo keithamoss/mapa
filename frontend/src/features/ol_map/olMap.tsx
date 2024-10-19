@@ -2,7 +2,7 @@ import { Alert, AlertTitle, Box, Button, styled } from '@mui/material';
 import type { MapBrowserEvent, MapEvent } from 'ol';
 import type Feature from 'ol/Feature';
 import Geolocation, { type GeolocationError } from 'ol/Geolocation';
-import Map from 'ol/Map';
+import OpenLayersMap from 'ol/Map';
 import { unByKey } from 'ol/Observable';
 import Attribution from 'ol/control/Attribution';
 import ScaleLine from 'ol/control/ScaleLine';
@@ -139,12 +139,12 @@ function OLMap(props: Props) {
 	// ######################
 	// OpenLayers Map
 	// ######################
-	const [map, setMap] = useState<Map>();
+	const [map, setMap] = useState<OpenLayersMap>();
 
 	// Create state ref that can be accessed in OpenLayers callback functions et cetera
 	// https://stackoverflow.com/a/60643670
 	// Note: We make `map` the default when we create the Ref, rather than assigning it to `.current` on the next line, as that *seems* to be behind a weird race condition bug with feature loading. In this case, everything would load up, the map would get created, dumped, and created again, and when it came to add the layer to the map, mapRef.current would be undefined. It seemed to happen more when the app loaded fast (i.e. good conditions, everything was cached) and was reproducible in Safari on macOS as well in in iOS Safari, Chrome, et al.
-	const mapRef = useRef<Map | undefined>(map);
+	const mapRef = useRef<OpenLayersMap | undefined>(map);
 
 	// Used to let the component know that a new OL map has been created (e.g. when we're switching between maps) so it knows it needs to re-initialise a number of pieces of state
 	const mapReadyToBeReinitialisedRef = useRef<boolean>(false);
@@ -505,7 +505,7 @@ function OLMap(props: Props) {
 
 		let isScrollZooming = false;
 
-		const initialMap = new Map({
+		const initialMap = new OpenLayersMap({
 			target: mapTargetElementId,
 			interactions: defaultInteractions({ mouseWheelZoom: false }).extend([
 				new DblClickDragZoom(),
