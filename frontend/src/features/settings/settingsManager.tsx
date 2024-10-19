@@ -40,7 +40,7 @@ function SettingsManager() {
 		if (isUpdatingUpdateUserProfileSuccessful === true) {
 			window.location.href = '/';
 		}
-	}, [isUpdatingUpdateUserProfileSuccessful, navigate]);
+	}, [isUpdatingUpdateUserProfileSuccessful]);
 
 	const onMapRendererChange = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
 		if (value in MapRenderer) {

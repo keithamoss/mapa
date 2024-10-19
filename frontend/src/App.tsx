@@ -91,7 +91,7 @@ function App() {
 		if (iconsLibraryLoaded === true) {
 			document.getElementById('loader-container')?.remove();
 		}
-	}, [dispatch, iconsLibraryLoaded]);
+	}, [iconsLibraryLoaded]);
 	// ######################
 	// Icons Library Loading (End)
 	// ######################
