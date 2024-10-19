@@ -15,20 +15,20 @@ const getDataItemForDisplay = (
 ) => {
 	if (schemaFieldDefinition.type === FeatureSchemaFieldType.TextField) {
 		return dataItem.value !== '' ? (dataItem.value as string) : <em>No text entered</em>;
-	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
+	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.NumberField) {
 		return dataItem.value as number;
-	} else if (
+	}if (
 		schemaFieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 		schemaFieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean
 	) {
 		return dataItem.value === true ? 'Checked' : 'Unchecked';
-	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
+	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.DateField) {
 		return typeof dataItem.value === 'string' && dataItem.value !== '' ? (
 			dayjs(dataItem.value).format('ddd, MMM D YYYY')
 		) : (
 			<em>No date entered</em>
 		);
-	} else if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
+	}if (schemaFieldDefinition.type === FeatureSchemaFieldType.URLField) {
 		return Array.isArray(dataItem.value) && dataItem.value.length > 0 ? (
 			<List dense disablePadding sx={{ '& a': { color: 'rgba(0, 0, 0, 0.87)', textDecoration: 'none' } }}>
 				{dataItem.value.map((i, idx) => (
@@ -51,9 +51,8 @@ const getDataItemForDisplay = (
 		) : (
 			<em>No links entered</em>
 		);
-	} else {
-		return 'Unknown value-to-string mapping';
 	}
+		return 'Unknown value-to-string mapping';
 };
 
 interface Props {

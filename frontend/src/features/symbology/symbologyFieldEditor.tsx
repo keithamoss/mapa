@@ -207,24 +207,24 @@ const removeDefaultValuesFromForm = (
 	});
 
 	if (isIconStyleDuotoneOrTritone(data.icon_style) === false) {
-		delete data.secondary_colour;
-		delete data.secondary_opacity;
+		data.secondary_colour = undefined;
+		data.secondary_opacity = undefined;
 	}
 
 	if (isIconStyleTritone(data.icon_style) === false) {
-		delete data.tertiary_colour;
-		delete data.tertiary_opacity;
+		data.tertiary_colour = undefined;
+		data.tertiary_opacity = undefined;
 	}
 
 	if (data.modifier_icon === undefined) {
-		delete data.modifier_icon;
-		delete data.modifier_icon_style;
-		delete data.modifier_colour;
-		delete data.modifier_opacity;
-		delete data.modifier_secondary_colour;
-		delete data.modifier_secondary_opacity;
-		delete data.modifier_circle_colour;
-		delete data.modifier_circle_opacity;
+		data.modifier_icon = undefined;
+		data.modifier_icon_style = undefined;
+		data.modifier_colour = undefined;
+		data.modifier_opacity = undefined;
+		data.modifier_secondary_colour = undefined;
+		data.modifier_secondary_opacity = undefined;
+		data.modifier_circle_colour = undefined;
+		data.modifier_circle_opacity = undefined;
 	}
 
 	return data;

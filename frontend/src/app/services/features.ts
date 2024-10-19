@@ -95,7 +95,7 @@ export { initialState as initialFeaturesState };
 export const featuresApi = api.injectEndpoints({
 	endpoints: (builder) => ({
 		getFeatures: builder.query<EntityState<MapaFeature, number>, void>({
-			query: () => `maps/features/`,
+			query: () => 'maps/features/',
 			transformResponse: (res: FeaturesResponse) => {
 				return featuresAdapter.setAll(initialState, res);
 			},

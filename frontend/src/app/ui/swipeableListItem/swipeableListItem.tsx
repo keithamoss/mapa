@@ -18,7 +18,7 @@ const left = {
 };
 
 const right = {
-	bg: `linear-gradient(120deg, #96fbc4 0%, #f9f586 100%)`,
+	bg: 'linear-gradient(120deg, #96fbc4 0%, #f9f586 100%)',
 	justifySelf: 'start',
 };
 

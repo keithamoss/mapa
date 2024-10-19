@@ -787,9 +787,9 @@ function OLMap(props: Props) {
 				<LocationFetchingIndicator />
 			) : isMapLoading === false ? (
 				<React.Fragment>
-					<div id="centre_of_the_map"></div>
+					<div id="centre_of_the_map" />
 
-					<div id="workaround_modify_interaction_bug"></div>
+					<div id="workaround_modify_interaction_bug" />
 
 					<MapButtonsContainer>
 						<SnapToGPSButton

@@ -83,7 +83,7 @@ export const searchIcons = (
 			},
 			// Access nested fields (and regular top-level fields)
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-			extractField: (document, fieldName) => fieldName.split('.').reduce((doc, key) => doc && doc[key], document),
+			extractField: (document, fieldName) => fieldName.split('.').reduce((doc, key) => doc?.[key], document),
 		});
 
 		// Index documents

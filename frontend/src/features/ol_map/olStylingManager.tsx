@@ -40,8 +40,6 @@ export const olStyleFunction = (olFeature: Feature) => {
 	if (feature.symbolCacheKey !== undefined && styleCache[feature.symbolCacheKey] !== undefined) {
 		// console.log("cache hit");
 		return styleCache[feature.symbolCacheKey];
-	} else {
-		// console.log("cache miss");
 	}
 
 	if (feature.symbol !== undefined) {

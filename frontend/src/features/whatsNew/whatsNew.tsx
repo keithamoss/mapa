@@ -119,7 +119,7 @@ function WhatsNewPage() {
 																		fontSize: '0.875rem',
 																	},
 																}}
-															></ListItemText>
+															/>
 														</ListItem>
 													))}
 												</List>

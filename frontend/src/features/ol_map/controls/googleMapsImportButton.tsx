@@ -26,9 +26,8 @@ function GoogleMapsImportButtonEntrypointLayer1() {
 
 	if (isClipboardApiSupported() === true) {
 		return <GoogleMapsImportButtonEntrypointLayer2 map={activeMap} />;
-	} else {
-		return null;
 	}
+		return null;
 }
 
 interface PropsEntrypointLayer2 {
@@ -44,9 +43,8 @@ function GoogleMapsImportButtonEntrypointLayer2(props: PropsEntrypointLayer2) {
 	// If not, they'll just have to type it in themselves!
 	if (availableSchemas.length === 1) {
 		return <GoogleMapsImportButtonEntrypointLayer3 map={map} schema={availableSchemas[0]} />;
-	} else {
-		return <GoogleMapsImportButton map={map} />;
 	}
+		return <GoogleMapsImportButton map={map} />;
 }
 
 interface PropsEntrypointLayer3 {
@@ -61,9 +59,8 @@ function GoogleMapsImportButtonEntrypointLayer3(props: PropsEntrypointLayer3) {
 
 	if (field?.type === FeatureSchemaFieldType.TextField) {
 		return <GoogleMapsImportButton map={map} schema={schema} schemaFieldIdForName={field.id} />;
-	} else {
-		return <GoogleMapsImportButton map={map} />;
 	}
+		return <GoogleMapsImportButton map={map} />;
 }
 
 interface Props {

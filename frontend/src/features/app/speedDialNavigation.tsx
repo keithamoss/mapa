@@ -139,9 +139,8 @@ export default function SpeedDialNavigation(props: Props) {
 			>
 				{actions.map((action) => {
 					const highlightIcon =
-						(highlightSearchFilter && action.name === 'Search') || (highlightWhatsNew && action.name === "What's New")
-							? true
-							: false;
+						!!(
+						(highlightSearchFilter && action.name === 'Search') || (highlightWhatsNew && action.name === "What's New"));
 
 					return (
 						<SpeedDialAction

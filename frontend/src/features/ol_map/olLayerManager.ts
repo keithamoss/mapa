@@ -59,7 +59,7 @@ export const getWMTSTileLayer = (basemap_style: BasemapStyle) => {
 		const resolutions = new Array(23);
 		const matrixIds = new Array(23);
 		for (let z = 0; z < 23; ++z) {
-			resolutions[z] = size / Math.pow(2, z);
+			resolutions[z] = size / 2 ** z;
 			matrixIds[z] = z;
 		}
 

@@ -73,7 +73,7 @@ function SearchLocationsManager() {
 		resolver: yupResolver(searchLocationsFormValidationSchema),
 		defaultValues: {
 			search_term: searchParameters.search_term,
-			proximity: Cookies.get('locationSearchProximity') === 'true' ? true : false,
+			proximity: Cookies.get('locationSearchProximity')  === 'true',
 		},
 	});
 
@@ -239,7 +239,7 @@ function SearchLocationsManager() {
 								<List sx={{ pt: 0 }}>
 									{mapboxSearchResults === null && (
 										<ListItem>
-											<ListItemText primary="An error occurred"></ListItemText>
+											<ListItemText primary="An error occurred" />
 										</ListItem>
 									)}
 
@@ -247,7 +247,7 @@ function SearchLocationsManager() {
 										mapboxSearchResults !== null &&
 										mapboxSearchResults.features.length === 0 && (
 											<ListItem>
-												<ListItemText primary="No results found"></ListItemText>
+												<ListItemText primary="No results found" />
 											</ListItem>
 										)}
 
@@ -280,7 +280,7 @@ function SearchLocationsManager() {
 															</span>
 														}
 														secondary={place_name_rest.join(', ')}
-													></ListItemText>
+													/>
 												</ListItem>
 											);
 										})}

@@ -71,8 +71,8 @@ export const buildSpriteSheet = async (symbols: {
 	// Determine Canvas Size
 	// ######################
 	const padding = 10;
-	let canvasWidth = 0,
-		canvasHeight = padding;
+	let canvasWidth = 0;
+	let canvasHeight = padding;
 
 	const imgs: [img: HTMLImageElement, symbolCacheKey: string][] = [];
 

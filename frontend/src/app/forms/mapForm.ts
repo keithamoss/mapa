@@ -16,7 +16,7 @@ export const mapFormValidationSchema: ObjectSchema<MapModifiableProps> = yup
 				centre: yup
 					.array()
 					.test('two-numbers-or-undefined', 'The centre coordinate looks...wrong', (value) =>
-						value !== undefined ? !value.some(isNaN) && value.length === 2 : true,
+						value !== undefined ? !value.some(Number.isNaN) && value.length === 2 : true,
 					),
 				zoom: positiveFloatOptional
 					.min(minZoomLevel, `Must be ${minZoomLevel} or larger`)

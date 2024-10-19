@@ -208,7 +208,7 @@ function SchemaDataEntryURLField(props: Props) {
 								<ListItemText
 									primary={urlFieldItem.name}
 									secondary={getLinkDomainName(urlFieldItem.url) || 'Unknown Domain'}
-								></ListItemText>
+								/>
 							</ListItemButton>
 						</ListItem>
 					))}

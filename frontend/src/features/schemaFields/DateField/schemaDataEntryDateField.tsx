@@ -24,7 +24,7 @@ function SchemaDataEntryDateField(props: Props) {
 				<DatePicker
 					// If we are editing a saved field, we need to parse the ISO8601 date string into
 					// a DayJS object.
-					{...{ ...field, value: field.value != '' && typeof field.value === 'string' ? dayjs(field.value) : null }}
+					{...{ ...field, value: field.value !== '' && typeof field.value === 'string' ? dayjs(field.value) : null }}
 					label={schemaField.name}
 					format={'DD/MM/YYYY'}
 					slotProps={{

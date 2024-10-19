@@ -174,7 +174,7 @@ function SchemaFieldDataEntryManager(props: Props) {
 								mb:
 									fieldDefinition.type === FeatureSchemaFieldType.BooleanField ||
 									fieldDefinition.type === FeatureSchemaFieldType.SymbologyFieldBoolean ||
-									index == schema.definition.length - 1
+									index === schema.definition.length - 1
 										? 0
 										: 3,
 							}}

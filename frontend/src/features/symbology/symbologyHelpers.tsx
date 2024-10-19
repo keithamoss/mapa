@@ -95,7 +95,8 @@ export const getFontAwesomeIconFromLibrary = (
 	iconName: string,
 	iconStyle?: IconStyle,
 ) => {
-	let svg, isColourLocked;
+	let svg;
+	let isColourLocked;
 	const icon = getIconByName(iconName);
 
 	if (icon !== null) {

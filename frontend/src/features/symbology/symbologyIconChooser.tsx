@@ -240,7 +240,7 @@ function SymbologyIconChooser(props: Props) {
 														))}
 													</span>
 												}
-											></ListItemText>
+											/>
 										</ListItemButton>
 									</ListItem>
 								);

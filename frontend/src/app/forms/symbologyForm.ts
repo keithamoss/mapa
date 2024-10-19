@@ -58,7 +58,7 @@ export const getNumberOrDefaultForSymbologyField = (
 
 	if (typeof value === 'number') {
 		return value;
-	} else if (typeof value === 'string') {
+	}if (typeof value === 'string') {
 		return Number.parseInt(value);
 	}
 	return defaultValue;
@@ -73,7 +73,7 @@ export const getNumberOrUndefinedForSymbologyField = (
 
 	if (typeof value === 'number') {
 		return value;
-	} else if (typeof value === 'string') {
+	}if (typeof value === 'string') {
 		return Number.parseInt(value);
 	}
 	return undefined;

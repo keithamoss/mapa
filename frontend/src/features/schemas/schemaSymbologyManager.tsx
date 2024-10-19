@@ -225,7 +225,7 @@ function SchemaSymbologyManager(props: Props) {
 
 	const onCancelEditingSymbol = () => {
 		setSymbolFieldForEditor(undefined);
-		navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : `/SchemaManager/Create`);
+		navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : '/SchemaManager/Create');
 	};
 
 	const onDoneEditingSymbol = (symbologyField: SymbologyProps, groupId: number) => {
@@ -238,7 +238,7 @@ function SchemaSymbologyManager(props: Props) {
 			onEditObject(local_symbol);
 
 			setSymbolFieldForEditor(undefined);
-			navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : `/SchemaManager/Create`);
+			navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : '/SchemaManager/Create');
 		}
 	};
 	// ######################
@@ -355,13 +355,13 @@ function SchemaSymbologyManager(props: Props) {
 			const selectedSymbol = symbology.symbols.find((s) => s.id === symbolId);
 
 			if (selectedSymbol === undefined) {
-				navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : `/SchemaManager/Create`, {
+				navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : '/SchemaManager/Create', {
 					replace: true,
 				});
 				setIsSnackbarOpen(true);
 				setSnackbarMessage('Symbol not found - maybe it was deleted?');
 			} else if (selectedSymbol !== undefined && isEqual(selectedSymbol, symbolFieldForEditor) === false) {
-				navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : `/SchemaManager/Create`, {
+				navigate(schemaId !== undefined ? `/SchemaManager/Edit/${schemaId}` : '/SchemaManager/Create', {
 					replace: true,
 				});
 				setIsSnackbarOpen(true);

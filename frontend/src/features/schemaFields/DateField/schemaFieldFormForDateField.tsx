@@ -88,7 +88,7 @@ function SchemaFieldFormForDateField(props: Props) {
 										// a DayJS object.
 										{...{
 											...field,
-											value: field.value != '' && typeof field.value === 'string' ? dayjs(field.value) : null,
+											value: field.value !== '' && typeof field.value === 'string' ? dayjs(field.value) : null,
 										}}
 										label="Default value"
 										format={'DD/MM/YYYY'}

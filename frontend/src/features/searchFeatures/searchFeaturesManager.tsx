@@ -209,7 +209,7 @@ function SearchFeaturesManager(props: Props) {
 									<List>
 										{searchResults.map((result) => (
 											<ListItem key={result.id}>
-												<ListItemText primary={result.terms.join(', ')} secondary={`#${result.id}`}></ListItemText>
+												<ListItemText primary={result.terms.join(', ')} secondary={`#${result.id}`} />
 											</ListItem>
 										))}
 									</List>

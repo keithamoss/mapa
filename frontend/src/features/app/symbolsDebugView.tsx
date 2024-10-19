@@ -624,7 +624,7 @@ function SymbolsDebugView() {
 									// size: defaultSymbolSizeForFormFields,
 									size: 75,
 								})}
-								<ListItemText primary={iconDef.props.name}></ListItemText>
+								<ListItemText primary={iconDef.props.name} />
 							</ListItem>
 						);
 					})}
