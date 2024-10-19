@@ -82,13 +82,12 @@ export const determineSymbolForFeature = (
 		// Add in any symbology config present in the schema data items (e.g. checkboxes modifying symbology)
 		// We use the schema field order to loop through the field definitions
 		// because feature data items don't have any inherent order
-		schema.definition
-			.filter((fieldDefinition) => isFieldDefinitionSymbology(fieldDefinition) === true)
-			.forEach((fieldDefinition) => {
+		for (const fieldDefinition of schema.definition) {
+			if (isFieldDefinitionSymbology(fieldDefinition) === true) {
 				const dataItem = getFeatureDataItemForSchemaField(fieldDefinition, feature);
 
-				// The user has provided data for this field on the feature
 				if (dataItem !== undefined && isSchemaDataItemToBeUsed(fieldDefinition, dataItem)) {
+					// The user has provided data for this field on the feature
 					const symbologyValue = getSymbolValueForFeatureDataItem(dataItem, fieldDefinition);
 
 					// NOTE: These aren't strictly speaking SymbologyValue entities because they contain non-symbology fields (e.g. the name of the symbol that appears in the schema)
@@ -102,7 +101,8 @@ export const determineSymbolForFeature = (
 						symbologyConfig = { ...symbologyConfig, ...fieldDefinition.symbol };
 					}
 				}
-			});
+			}
+		}
 	}
 
 	return {

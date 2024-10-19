@@ -223,6 +223,7 @@ export const onMapClick =
 
 export const setModifyInteractionStatus = (map: OpenLayersMap | undefined, status: boolean) => {
 	if (map !== undefined) {
+		// biome-ignore lint/complexity/noForEach: <explanation>
 		map.getInteractions().forEach((interaction) => {
 			if (interaction.getProperties().is_modify === true) {
 				interaction.setActive(status);
@@ -240,6 +241,7 @@ export const onModifyInteractionStartEnd =
 			target.style.cursor = e.type === 'modifystart' ? 'grabbing' : 'pointer';
 
 			if (e.type === 'modifyend') {
+				// biome-ignore lint/complexity/noForEach: <explanation>
 				e.features.forEach((feature) => {
 					const point = feature.getGeometry() as Point;
 

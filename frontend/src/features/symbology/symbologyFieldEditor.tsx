@@ -192,7 +192,7 @@ const removeDefaultValuesFromForm = (
 	nameFieldRequired: boolean,
 	iconFieldRequired: boolean,
 ) => {
-	Object.keys(data).forEach((propName) => {
+	for (const propName of Object.keys(data)) {
 		if (data[propName as keyof SymbologyProps] === defaults[propName as keyof SymbologyProps]) {
 			delete data[propName as keyof SymbologyProps];
 		}
@@ -204,7 +204,7 @@ const removeDefaultValuesFromForm = (
 		if (propName === 'icon' && iconFieldRequired === false && data[propName as keyof SymbologyProps] === '') {
 			delete data[propName as keyof SymbologyProps];
 		}
-	});
+	}
 
 	if (isIconStyleDuotoneOrTritone(data.icon_style) === false) {
 		data.secondary_colour = undefined;

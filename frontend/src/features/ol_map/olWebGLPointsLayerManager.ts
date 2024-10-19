@@ -49,7 +49,7 @@ export const buildSpriteSheet = async (symbols: {
 	};
 
 	// Create Image elements and use the browser to asynchronously convert the SVG to an image
-	Object.keys(symbols).forEach((symbolCacheKey) => {
+	for(const symbolCacheKey of Object.keys(symbols)) {
 		const symbol = symbols[symbolCacheKey];
 
 		const icon = getFontAwesomeIconForSymbolAsSVGString(
@@ -62,7 +62,7 @@ export const buildSpriteSheet = async (symbols: {
 				loadImage(`data:image/svg+xml;utf8,<?xml version="1.0" encoding="UTF-8"?>${icon}`, symbolCacheKey),
 			);
 		}
-	});
+	}
 	// ######################
 	// Convert SVGs to Images (End)
 	// ######################
@@ -77,12 +77,13 @@ export const buildSpriteSheet = async (symbols: {
 	const imgs: [img: HTMLImageElement, symbolCacheKey: string][] = [];
 
 	const loadedSVGImages = await Promise.all(imgPromises);
-	loadedSVGImages.forEach(([img, symbolCacheKey]) => {
+	
+	for(const [img, symbolCacheKey] of loadedSVGImages) {
 		canvasWidth = Math.max(canvasWidth, img.width + padding + padding);
 		canvasHeight = canvasHeight + padding + img.height;
 
 		imgs.push([img, symbolCacheKey]);
-	});
+	}
 
 	spriteSheetCanvas.width = canvasWidth;
 	spriteSheetCanvas.height = canvasHeight;
@@ -98,7 +99,7 @@ export const buildSpriteSheet = async (symbols: {
 
 	let nextCanvasPositionY = padding;
 
-	imgs.forEach(([img, symbolCacheKey]) => {
+	for(const [img, symbolCacheKey] of imgs) {
 		// Draw the SVG image data on to the canvas
 		if (spriteSheetCanvasContext !== null) {
 			spriteSheetCanvasContext.drawImage(
@@ -119,7 +120,7 @@ export const buildSpriteSheet = async (symbols: {
 		iconSizeCoords.push(symbolCacheKey, [img.width, img.height]);
 
 		nextCanvasPositionY += img.height + padding;
-	});
+	}
 
 	// Use our default icon as the fallback.
 	const defaultIconOffsetCoordsIdx = iconOffsetCoords.findIndex((item) => item === 'default_icon');
@@ -251,6 +252,7 @@ export const manageWebGLPointsLayerUpdate = (
 	}
 
 	// Remove and cleanup the current layer
+	// biome-ignore lint/complexity/noForEach: <explanation>
 	map.getInteractions().forEach((interaction) => {
 		if (interaction.getProperties().is_modify && map !== undefined) {
 			map.removeInteraction(interaction);
