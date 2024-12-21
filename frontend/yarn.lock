@@ -2596,12 +2596,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.0.1":
-  version: 19.0.1
-  resolution: "@types/react@npm:19.0.1"
+"@types/react@npm:^19.0.2":
+  version: 19.0.2
+  resolution: "@types/react@npm:19.0.2"
   dependencies:
     csstype: ^3.0.2
-  checksum: e5e05cdf5fc53804e94548ca4e139102fffaab95d4c19be821d30d81dbab75ca3e30b72f2e2e750b90fcb535058cb694c4403402f14eb8a19a1282629c8222d8
+  checksum: 2f12c2a84b778283884d41560c723d815153d88c56cacf25c0166329e9099c35c82c602a21d8831a381e2ef5574434ebd7bf09a636fe073558919474b0b3c9ed
   languageName: node
   linkType: hard
 
@@ -4688,7 +4688,7 @@ __metadata:
     "@types/js-cookie": ^3.0.6
     "@types/lodash-es": ^4.17.12
     "@types/node": ^22.10.2
-    "@types/react": ^19.0.1
+    "@types/react": ^19.0.2
     "@types/react-dom": ^19.0.2
     "@typescript-eslint/eslint-plugin": ^8.18.0
     "@typescript-eslint/parser": ^8.18.0
