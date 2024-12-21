@@ -2047,30 +2047,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/browser-utils@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry-internal/browser-utils@npm:8.45.0"
-  dependencies:
-    "@sentry/core": 8.45.0
-  checksum: 13d6800be63026e8b31545645ac7675d633c6e02347eb5b9bf5c8001ebfecf16b61f7003494db437a13636d329c264b1dcf43b84ca9d688bd07768d6716e4011
-  languageName: node
-  linkType: hard
-
 "@sentry-internal/browser-utils@npm:8.47.0":
   version: 8.47.0
   resolution: "@sentry-internal/browser-utils@npm:8.47.0"
   dependencies:
     "@sentry/core": 8.47.0
   checksum: daf6ce359e902ea5e7e9f1bce5b7f50c5b0f3209adc2255fc8c16c8c1c4615f60eb69ed437de29ad3651d9c145c1df144a6b5c1e40977a5c7b9e42d2fd23c32e
-  languageName: node
-  linkType: hard
-
-"@sentry-internal/feedback@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry-internal/feedback@npm:8.45.0"
-  dependencies:
-    "@sentry/core": 8.45.0
-  checksum: 1e9927585abf884a311eda692ba8ff82c9cc48cfec46614b86c0e6cdd496733298f148d92f1ddb32ba9690a3299304ef034de47a343531db2bc46f68b872a2ca
   languageName: node
   linkType: hard
 
@@ -2083,16 +2065,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/replay-canvas@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry-internal/replay-canvas@npm:8.45.0"
-  dependencies:
-    "@sentry-internal/replay": 8.45.0
-    "@sentry/core": 8.45.0
-  checksum: aab6bbe98ad10f84d9bb8bf9093cea76d767fd0f40ba5c1224d5c020b2ed1064264343a489a651b45338d8f0310770aa547f152c872c04015e8933f357742539
-  languageName: node
-  linkType: hard
-
 "@sentry-internal/replay-canvas@npm:8.47.0":
   version: 8.47.0
   resolution: "@sentry-internal/replay-canvas@npm:8.47.0"
@@ -2100,16 +2072,6 @@ __metadata:
     "@sentry-internal/replay": 8.47.0
     "@sentry/core": 8.47.0
   checksum: 2430b698fd18003b3f092515c49443cd8b2a22233f4fee66c495be47725a755351e86ce3b92d725e097dd41ce0923bb853928a621ce7803da367fa27ce89f408
-  languageName: node
-  linkType: hard
-
-"@sentry-internal/replay@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry-internal/replay@npm:8.45.0"
-  dependencies:
-    "@sentry-internal/browser-utils": 8.45.0
-    "@sentry/core": 8.45.0
-  checksum: 409b556bb4d616c8c403575a958662571c6fc962d777bb0903b46aed64750ac381a15590b0cb9b268fac640ffb023c6b71a5748380f7a0e91ff053577e6315a1
   languageName: node
   linkType: hard
 
@@ -2141,20 +2103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry/browser@npm:8.45.0"
-  dependencies:
-    "@sentry-internal/browser-utils": 8.45.0
-    "@sentry-internal/feedback": 8.45.0
-    "@sentry-internal/replay": 8.45.0
-    "@sentry-internal/replay-canvas": 8.45.0
-    "@sentry/core": 8.45.0
-  checksum: c9db0f28157589639363b34d115ecc5684524c3db2970fdd0bd006d31a20facc401f25ea9c3a61c962b9637084500a6c08b7f46af3f6c7cb65643f1c26cff61f
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:^8.47.0":
+"@sentry/browser@npm:8.47.0, @sentry/browser@npm:^8.47.0":
   version: 8.47.0
   resolution: "@sentry/browser@npm:8.47.0"
   dependencies:
@@ -2279,13 +2228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:8.45.0":
-  version: 8.45.0
-  resolution: "@sentry/core@npm:8.45.0"
-  checksum: 4e0fef83925bc3fb8c1fe75d18eb5c6eaad44ef6357c65ada0c28fbf987fe7024697a2e93de718e78cc473c1d3dc80885523b00f5dac66523f9e347a89813be4
-  languageName: node
-  linkType: hard
-
 "@sentry/core@npm:8.47.0":
   version: 8.47.0
   resolution: "@sentry/core@npm:8.47.0"
@@ -2293,16 +2235,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:^8.45.0":
-  version: 8.45.0
-  resolution: "@sentry/react@npm:8.45.0"
+"@sentry/react@npm:^8.47.0":
+  version: 8.47.0
+  resolution: "@sentry/react@npm:8.47.0"
   dependencies:
-    "@sentry/browser": 8.45.0
-    "@sentry/core": 8.45.0
+    "@sentry/browser": 8.47.0
+    "@sentry/core": 8.47.0
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: ^16.14.0 || 17.x || 18.x || 19.x
-  checksum: 0efe86214e549d39ff72e7472c6cab4990a304d45377c3854e1f836cf65e16e78b072ccbe66e913c16269b717ac6288bde3e5be43c3357b3aa06b43c29987e4e
+  checksum: 8d7cfc5b6e82576a6640fe4246e1b87788d2151645089110c9d0bb1060aab4b83373e77da867012e4b354223497a95097302d0edd5d97d453b9a3c39c02e12fe
   languageName: node
   linkType: hard
 
@@ -4889,7 +4831,7 @@ __metadata:
     "@react-spring/web": ^9.7.5
     "@reduxjs/toolkit": ^2.5.0
     "@sentry/browser": ^8.47.0
-    "@sentry/react": ^8.45.0
+    "@sentry/react": ^8.47.0
     "@sentry/tracing": ^7.120.2
     "@sentry/vite-plugin": ^2.22.7
     "@testing-library/jest-dom": ^6.6.3
