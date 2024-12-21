@@ -15,7 +15,7 @@
     "@mui/x-date-pickers": "^7.23.2",
     "@react-spring/web": "^9.7.5",
     "@reduxjs/toolkit": "^2.5.0",
-    "@sentry/browser": "^8.45.0",
+    "@sentry/browser": "^8.47.0",
     "@sentry/react": "^8.45.0",
     "@sentry/tracing": "^7.120.2",
     "@testing-library/jest-dom": "^6.6.3",
