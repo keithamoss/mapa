@@ -1604,13 +1604,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^7.23.3":
-  version: 7.23.3
-  resolution: "@mui/x-date-pickers@npm:7.23.3"
+"@mui/x-date-pickers@npm:^7.23.6":
+  version: 7.23.6
+  resolution: "@mui/x-date-pickers@npm:7.23.6"
   dependencies:
     "@babel/runtime": ^7.25.7
     "@mui/utils": ^5.16.6 || ^6.0.0
-    "@mui/x-internals": 7.23.0
+    "@mui/x-internals": 7.23.6
     "@types/react-transition-group": ^4.4.11
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1621,7 +1621,7 @@ __metadata:
     "@mui/material": ^5.15.14 || ^6.0.0
     "@mui/system": ^5.15.14 || ^6.0.0
     date-fns: ^2.25.0 || ^3.2.0 || ^4.0.0
-    date-fns-jalali: ^2.13.0-0 || ^3.2.0-0
+    date-fns-jalali: ^2.13.0-0 || ^3.2.0-0 || ^4.0.0-0
     dayjs: ^1.10.7
     luxon: ^3.0.2
     moment: ^2.29.4
@@ -1648,19 +1648,19 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 923ce6909ea9b5eac0e2c322e68ad9d9b762db6991e2dc31e49ac82694b705cee2b4bc20967fd738119c3caa610eafb5da1a73040dc5e878f1abb4aab065a408
+  checksum: 5ea654d0908e6ce5a7e62a7fbf2a7ad4bd47239a198bcd951856b5d5f0397c942c67c8b24d460a300b6f53324b03e62709d37544be8b7e2774a7cfb05b9a498f
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:7.23.0":
-  version: 7.23.0
-  resolution: "@mui/x-internals@npm:7.23.0"
+"@mui/x-internals@npm:7.23.6":
+  version: 7.23.6
+  resolution: "@mui/x-internals@npm:7.23.6"
   dependencies:
     "@babel/runtime": ^7.25.7
     "@mui/utils": ^5.16.6 || ^6.0.0
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 2af6f344ca6c7a503d5bb99757496b64cb15aeedf78d60faae77bf147c2c18e9cc674ad9865ad48843562a440a429c32e1362a6a3588bf5904ca39071dd44a85
+  checksum: 7f843a8c431554040351a12b895f9d7ccfbf1cc98daef863d4b74145f03b3d49a2c2924d89f0f4b299e4c5d63acb0983d40654981b0124e4151b788b26f4eb41
   languageName: node
   linkType: hard
 
@@ -4983,7 +4983,7 @@ __metadata:
     "@mui/lab": ^6.0.0-beta.8
     "@mui/material": ^6.3.1
     "@mui/system": ^6.3.1
-    "@mui/x-date-pickers": ^7.23.3
+    "@mui/x-date-pickers": ^7.23.6
     "@react-spring/web": ^9.7.5
     "@reduxjs/toolkit": ^2.5.0
     "@sentry/browser": ^8.48.0
