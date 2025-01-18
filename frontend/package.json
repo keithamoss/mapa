@@ -19,7 +19,7 @@
     "@sentry/react": "^8.48.0",
     "@sentry/tracing": "^7.120.3",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.1.0",
+    "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.5.2",
     "@use-gesture/react": "^10.3.1",
     "autosuggest-highlight": "^3.3.4",
