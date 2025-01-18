@@ -2006,10 +2006,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/babel-plugin-component-annotate@npm:2.23.0":
-  version: 2.23.0
-  resolution: "@sentry/babel-plugin-component-annotate@npm:2.23.0"
-  checksum: 689a697302aaa142f90a2761075e169b86cdd03243faadd4d81bfb9a26cc522abd398f4613202921e6e4d9ba554adb5f2f8f9dfdd5e898d2c32da85fb2b1ac60
+"@sentry/babel-plugin-component-annotate@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@sentry/babel-plugin-component-annotate@npm:3.0.0"
+  checksum: d37cd21c1311e0390e57b3582f8c943d66477ca5ee196cbb5cdf0c29fce6056605bbb1c84c8b56f20d5ad69a2952d47332cbb330c5afe5f1ff98dfa0ad614df2
   languageName: node
   linkType: hard
 
@@ -2026,19 +2026,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:2.23.0":
-  version: 2.23.0
-  resolution: "@sentry/bundler-plugin-core@npm:2.23.0"
+"@sentry/bundler-plugin-core@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@sentry/bundler-plugin-core@npm:3.0.0"
   dependencies:
     "@babel/core": ^7.18.5
-    "@sentry/babel-plugin-component-annotate": 2.23.0
+    "@sentry/babel-plugin-component-annotate": 3.0.0
     "@sentry/cli": 2.39.1
     dotenv: ^16.3.1
     find-up: ^5.0.0
     glob: ^9.3.2
     magic-string: 0.30.8
     unplugin: 1.0.1
-  checksum: 1c51600d9f9862f29de09b34680339cc4bfc537fb2f65a6a48ec6ca90bcce1e4f5386cce96065667af1ca6df3c156ed3452199e79da4a29b8fb3ca2432994e5a
+  checksum: 6754f4b6f94c8d50d09d77a62d412805cbbcb9cbdb27637407b148b01a0b7f8963936434aff76aac6c2c577993912d7d47eaf8d64fb758df746f2a8d84305d3b
   languageName: node
   linkType: hard
 
@@ -2183,13 +2183,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^2.23.0":
-  version: 2.23.0
-  resolution: "@sentry/vite-plugin@npm:2.23.0"
+"@sentry/vite-plugin@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@sentry/vite-plugin@npm:3.0.0"
   dependencies:
-    "@sentry/bundler-plugin-core": 2.23.0
+    "@sentry/bundler-plugin-core": 3.0.0
     unplugin: 1.0.1
-  checksum: 115c6b081cb9ba9d0c39fd9cae42f0513d0e03fffa753c0643d04e0368ba14447a46e1e2813fd98ab72a0397507513ad43206d8300620dce459fca8c4bc88650
+  checksum: e6ad829d8db039360afa994ce84ee95cc34c9b1b339d5df3bfa3b897768e42ea6138f4708dae0d67b81b94801796c0f797f2060f69917bb444f469ba3e1a0710
   languageName: node
   linkType: hard
 
@@ -4889,7 +4889,7 @@ __metadata:
     "@sentry/browser": ^8.48.0
     "@sentry/react": ^8.48.0
     "@sentry/tracing": ^7.120.3
-    "@sentry/vite-plugin": ^2.23.0
+    "@sentry/vite-plugin": ^3.0.0
     "@testing-library/jest-dom": ^6.6.3
     "@testing-library/react": ^16.1.0
     "@testing-library/user-event": ^14.5.2
