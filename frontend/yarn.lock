@@ -4920,7 +4920,7 @@ __metadata:
     js-cookie: ^3.0.5
     lodash-es: ^4.17.21
     minisearch: ^7.1.1
-    ol: ^10.3.1
+    ol: ^10.4.0
     ol-mapbox-style: ^12.4.0
     prettier: ^3.4.2
     react: ^19.0.0
@@ -6838,9 +6838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^10.3.1":
-  version: 10.3.1
-  resolution: "ol@npm:10.3.1"
+"ol@npm:^10.4.0":
+  version: 10.4.0
+  resolution: "ol@npm:10.4.0"
   dependencies:
     "@types/rbush": 4.0.0
     color-rgba: ^3.0.0
@@ -6849,7 +6849,7 @@ __metadata:
     geotiff: ^2.1.3
     pbf: 4.0.1
     rbush: ^4.0.0
-  checksum: 737f3f0cda00c32a09e829cc4b1caf3228024e1b964f918351625417b0b795b11877a8fbec13aa2ba282062d5f2379ef3b559b11122e3b67f65e9c3e03d054ab
+  checksum: 9662d7614f174bb333d0ec76587fdca67e91de0f020de961c80bcb006ec19f2e68990ae6b50b2ea7265add9462cb637c2a5796e9e441f23098ab5c3c920b8a18
   languageName: node
   linkType: hard
 
