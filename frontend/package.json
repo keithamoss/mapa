@@ -81,7 +81,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.1",
     "vite": "^6.1.0",
     "vite-plugin-checker": "^0.8.0",
     "vite-tsconfig-paths": "^5.1.4"
