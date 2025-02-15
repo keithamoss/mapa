@@ -1257,10 +1257,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^6.4.3":
-  version: 6.4.3
-  resolution: "@mui/core-downloads-tracker@npm:6.4.3"
-  checksum: db1449d2b3c97b3dac3e8802e54d58114f369f508d919c3efd6dfbb08fba3cd1440e66ffb174eb99abacabf01607c3b99aa4150dea8e76f75ae50a26c1c70ac2
+"@mui/core-downloads-tracker@npm:^6.4.4":
+  version: 6.4.4
+  resolution: "@mui/core-downloads-tracker@npm:6.4.4"
+  checksum: 93f43021ebda70980446e2dc0dbfe3b3ab53772e446d0e94b05182a28e4b42d8573b4aae4048bbcfe2db7648088a20ec7ce71c79ca370ad30a91c0eba85ebef7
   languageName: node
   linkType: hard
 
@@ -1312,12 +1312,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^6.4.3":
-  version: 6.4.3
-  resolution: "@mui/material@npm:6.4.3"
+"@mui/material@npm:^6.4.4":
+  version: 6.4.4
+  resolution: "@mui/material@npm:6.4.4"
   dependencies:
     "@babel/runtime": ^7.26.0
-    "@mui/core-downloads-tracker": ^6.4.3
+    "@mui/core-downloads-tracker": ^6.4.4
     "@mui/system": ^6.4.3
     "@mui/types": ^7.2.21
     "@mui/utils": ^6.4.3
@@ -1344,7 +1344,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 486bf00860a69bb253558c4f4c99c0aa64ece1065eb183b473310ab4795f68d4231aafdf287999eb0b7fd9691bc2ff23c81c9a5081628fec1ddce05f73b067bf
+  checksum: 53597c329d0f929020782232f1cf3320a2dac640565e5ac14c0240c866a5735bf879f7c626178c5f76a76ffc17dd37e5fe682fdfb5acbb7b7170c0d6bfd9dac3
   languageName: node
   linkType: hard
 
@@ -4840,7 +4840,7 @@ __metadata:
     "@hookform/resolvers": ^3.10.0
     "@mui/icons-material": ^6.4.3
     "@mui/lab": ^7.0.0-beta.0
-    "@mui/material": ^6.4.3
+    "@mui/material": ^6.4.4
     "@mui/system": ^6.4.3
     "@mui/x-date-pickers": ^7.26.0
     "@react-spring/web": ^9.7.5
