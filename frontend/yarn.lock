@@ -2552,12 +2552,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^19.0.3":
-  version: 19.0.3
-  resolution: "@types/react-dom@npm:19.0.3"
+"@types/react-dom@npm:^19.0.4":
+  version: 19.0.4
+  resolution: "@types/react-dom@npm:19.0.4"
   peerDependencies:
     "@types/react": ^19.0.0
-  checksum: a253931fc3a41a74ef99a7380fa3fa02b94ddd1addba9fc0aea39c90ce3dfb22d60fbac292669de224b1ffb23836cde3cc78c2425f0c77593435b6368a9fd2ed
+  checksum: 2d0c74769ddcb4a9f404a62b3241d3e550ca962ff80c8c5b624f6626cd39f8b18aadee8e447424b52cffdd9165b1f02eb51020fc486584c8395236d97d4abedf
   languageName: node
   linkType: hard
 
@@ -4923,7 +4923,7 @@ __metadata:
     "@types/lodash-es": ^4.17.12
     "@types/node": ^22.13.4
     "@types/react": ^19.0.10
-    "@types/react-dom": ^19.0.3
+    "@types/react-dom": ^19.0.4
     "@typescript-eslint/eslint-plugin": ^8.24.1
     "@typescript-eslint/parser": ^8.24.0
     "@use-gesture/react": ^10.3.1
