@@ -9,7 +9,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@hookform/resolvers": "^4.1.0",
     "@mui/icons-material": "^6.4.4",
-    "@mui/lab": "^7.0.0-beta.1",
+    "@mui/lab": "^7.0.0-beta.2",
     "@mui/material": "^6.4.4",
     "@mui/system": "^6.4.3",
     "@mui/x-date-pickers": "^7.26.0",
