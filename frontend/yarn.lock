@@ -449,12 +449,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.26.7":
-  version: 7.26.7
-  resolution: "@babel/runtime@npm:7.26.7"
+"@babel/runtime@npm:^7.26.9":
+  version: 7.26.9
+  resolution: "@babel/runtime@npm:7.26.9"
   dependencies:
     regenerator-runtime: ^0.14.0
-  checksum: a1664a08f3f4854b895b540cca2f5f5c6c1993b5fb788c9615d70fc201e16bb254df8e0550c83eaf2749a14d87775e11a7c9ded6161203e9da7a4a323d546925
+  checksum: 838492d8a925092f9ccfbd82ec183a54f430af3a4ce88fb1337a4570629202d5123bad3097a5b8df53822504d12ccb29f45c0f6842e86094f0164f17a51eec92
   languageName: node
   linkType: hard
 
@@ -1280,22 +1280,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:^7.0.0-beta.1":
-  version: 7.0.0-beta.1
-  resolution: "@mui/lab@npm:7.0.0-beta.1"
+"@mui/lab@npm:^7.0.0-beta.2":
+  version: 7.0.0-beta.2
+  resolution: "@mui/lab@npm:7.0.0-beta.2"
   dependencies:
-    "@babel/runtime": ^7.26.7
+    "@babel/runtime": ^7.26.9
     "@mui/base": 5.0.0-beta.69
-    "@mui/system": 7.0.0-alpha.1
+    "@mui/system": 7.0.0-alpha.2
     "@mui/types": ^7.2.22
-    "@mui/utils": 7.0.0-alpha.1
+    "@mui/utils": 7.0.0-alpha.2
     clsx: ^2.1.1
     prop-types: ^15.8.1
   peerDependencies:
     "@emotion/react": ^11.5.0
     "@emotion/styled": ^11.3.0
-    "@mui/material": 7.0.0-alpha.1
-    "@mui/material-pigment-css": ^7.0.0-alpha.1
+    "@mui/material": 7.0.0-alpha.2
+    "@mui/material-pigment-css": ^7.0.0-alpha.2
     "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1308,7 +1308,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 71cc56f7335cd2c492ebf2e87a7554c4a1bce0732fb7dcb5a773b55035a17d7646dd92eef3f3c877094954511a0c186c67c841519a9adea3375be0c38e3482e3
+  checksum: 0e3b7657257bf284ad728bdafc63542555d936202d490a62efee7631ff75ccc8986f12254a8ce9f85fd146451b8d936c5002a4cd752b076f4249ecb519f69288
   languageName: node
   linkType: hard
 
@@ -1348,12 +1348,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/private-theming@npm:7.0.0-alpha.1":
-  version: 7.0.0-alpha.1
-  resolution: "@mui/private-theming@npm:7.0.0-alpha.1"
+"@mui/private-theming@npm:7.0.0-alpha.2":
+  version: 7.0.0-alpha.2
+  resolution: "@mui/private-theming@npm:7.0.0-alpha.2"
   dependencies:
-    "@babel/runtime": ^7.26.7
-    "@mui/utils": 7.0.0-alpha.1
+    "@babel/runtime": ^7.26.9
+    "@mui/utils": 7.0.0-alpha.2
     prop-types: ^15.8.1
   peerDependencies:
     "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1361,7 +1361,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: ec8594b0a2e9c35912d099a33a73caadaa35b1ea8e9d519ee4c2ccbd847786e11c074faab83abecd2980d70a09d08ce2fbab9c948d2dcd2f72d2e7f1d9349805
+  checksum: 7418f159c02cca584926919f5231a983b0969d7a808c38ae901fd9642a99124f90a828128026657645b0cb7f52528e2151a12f9adca62934034a5b4c7add5783
   languageName: node
   linkType: hard
 
@@ -1382,11 +1382,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styled-engine@npm:7.0.0-alpha.1":
-  version: 7.0.0-alpha.1
-  resolution: "@mui/styled-engine@npm:7.0.0-alpha.1"
+"@mui/styled-engine@npm:7.0.0-alpha.2":
+  version: 7.0.0-alpha.2
+  resolution: "@mui/styled-engine@npm:7.0.0-alpha.2"
   dependencies:
-    "@babel/runtime": ^7.26.7
+    "@babel/runtime": ^7.26.9
     "@emotion/cache": ^11.13.5
     "@emotion/serialize": ^1.3.3
     "@emotion/sheet": ^1.4.0
@@ -1401,7 +1401,7 @@ __metadata:
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: 5c498964654e74021200834fde23f298b2a65e17d8f2d82ba3d8d8343544dff7dd7da3ee58838e3fab7f307e59353b8a48b7863653aa158b918fe8fd8244f998
+  checksum: 7e99938fa232a43a8f9b276ddab53619399eac6a0a07004ae57dc7944af9887f48db7efbe43d05defbeae30a9d0e8087084e8eb9ab6eee821b3a104ba7111f5e
   languageName: node
   linkType: hard
 
@@ -1428,15 +1428,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:7.0.0-alpha.1":
-  version: 7.0.0-alpha.1
-  resolution: "@mui/system@npm:7.0.0-alpha.1"
+"@mui/system@npm:7.0.0-alpha.2":
+  version: 7.0.0-alpha.2
+  resolution: "@mui/system@npm:7.0.0-alpha.2"
   dependencies:
-    "@babel/runtime": ^7.26.7
-    "@mui/private-theming": 7.0.0-alpha.1
-    "@mui/styled-engine": 7.0.0-alpha.1
+    "@babel/runtime": ^7.26.9
+    "@mui/private-theming": 7.0.0-alpha.2
+    "@mui/styled-engine": 7.0.0-alpha.2
     "@mui/types": ^7.2.22
-    "@mui/utils": 7.0.0-alpha.1
+    "@mui/utils": 7.0.0-alpha.2
     clsx: ^2.1.1
     csstype: ^3.1.3
     prop-types: ^15.8.1
@@ -1452,7 +1452,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: c205e8f325b0b23e7c068bc22a3b29a5dcc3ccdb1f792062577f5facee7b1f1b2b6b5c6004ce198e465644f2770b827d836338524484187194635bdf98d93b3d
+  checksum: bdbc338fad19b99f41b5bcff0e0b863f8685825415bdbb5941e12e7df08cb8b88fabe1faba3cf681f787f4ed6e93a8e9d7b0482a4e6a744ff2cd219497c96541
   languageName: node
   linkType: hard
 
@@ -1520,11 +1520,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:7.0.0-alpha.1":
-  version: 7.0.0-alpha.1
-  resolution: "@mui/utils@npm:7.0.0-alpha.1"
+"@mui/utils@npm:7.0.0-alpha.2":
+  version: 7.0.0-alpha.2
+  resolution: "@mui/utils@npm:7.0.0-alpha.2"
   dependencies:
-    "@babel/runtime": ^7.26.7
+    "@babel/runtime": ^7.26.9
     "@mui/types": ^7.2.22
     "@types/prop-types": ^15.7.14
     clsx: ^2.1.1
@@ -1536,7 +1536,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 3351be420b312a247b2661f06254267a4e118a39ec73114eec30da2fa0ffc7005df24bf8677bcc42f00846400fc338ed85300ae34cd9b9a784ad816b23718b67
+  checksum: e66d278d1d1954b8d0a914ceabdf87729677706323d23b6006b310c331a45f72b8b3cafbe4a23461afa4330e3ce0f76dcfd431e9986b0d5a798f514c3125a26a
   languageName: node
   linkType: hard
 
@@ -4850,7 +4850,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^6.7.2
     "@hookform/resolvers": ^4.0.0
     "@mui/icons-material": ^6.4.4
-    "@mui/lab": ^7.0.0-beta.1
+    "@mui/lab": ^7.0.0-beta.2
     "@mui/material": ^6.4.4
     "@mui/system": ^6.4.3
     "@mui/x-date-pickers": ^7.26.0
