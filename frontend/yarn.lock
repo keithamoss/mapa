@@ -4889,7 +4889,7 @@ __metadata:
     eslint-plugin-react-hooks: ^5.1.0
     js-cookie: ^3.0.5
     lodash-es: ^4.17.21
-    minisearch: ^7.1.1
+    minisearch: ^7.1.2
     ol: ^10.4.0
     ol-mapbox-style: ^12.4.1
     prettier: ^3.5.1
@@ -6500,10 +6500,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minisearch@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "minisearch@npm:7.1.1"
-  checksum: 5fad09aea42f0ba81b00f7fd90b1ac111154eb117a8465a972c37f42bc28dabc0ca467ba76bb89eecc927d3eecf38f6d705e010e7de0f1c836903d92a1598674
+"minisearch@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "minisearch@npm:7.1.2"
+  checksum: 40fc8534bd40bf131f2c3928b03321b31cc9a49d0bff57edb23ac67a7cd4c9c83e32a304cce23d1cdb0926d7c09d78a767d5956a7e464c53556412b630cdf7af
   languageName: node
   linkType: hard
 
