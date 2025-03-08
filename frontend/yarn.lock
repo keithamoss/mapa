@@ -1456,34 +1456,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^6.4.6":
-  version: 6.4.6
-  resolution: "@mui/system@npm:6.4.6"
-  dependencies:
-    "@babel/runtime": ^7.26.0
-    "@mui/private-theming": ^6.4.6
-    "@mui/styled-engine": ^6.4.6
-    "@mui/types": ^7.2.21
-    "@mui/utils": ^6.4.6
-    clsx: ^2.1.1
-    csstype: ^3.1.3
-    prop-types: ^15.8.1
-  peerDependencies:
-    "@emotion/react": ^11.5.0
-    "@emotion/styled": ^11.3.0
-    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
-    react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  peerDependenciesMeta:
-    "@emotion/react":
-      optional: true
-    "@emotion/styled":
-      optional: true
-    "@types/react":
-      optional: true
-  checksum: 592d300f869e2255e3f44ac77b8fc665125f57f31e4eccd805cf806fbbe891c67dea8fb0bb5c413496e407b0c7799ff904c10fcf7a344601b5dd97c4978d515f
-  languageName: node
-  linkType: hard
-
 "@mui/system@npm:^6.4.7":
   version: 6.4.7
   resolution: "@mui/system@npm:6.4.7"
@@ -4991,7 +4963,7 @@ __metadata:
     "@mui/icons-material": ^6.4.7
     "@mui/lab": ^7.0.0-beta.6
     "@mui/material": ^6.4.7
-    "@mui/system": ^6.4.6
+    "@mui/system": ^6.4.7
     "@mui/x-date-pickers": ^7.27.1
     "@react-spring/web": ^9.7.5
     "@reduxjs/toolkit": ^2.6.1
