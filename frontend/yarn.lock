@@ -1625,10 +1625,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reduxjs/toolkit@npm:^2.6.1":
-  version: 2.6.1
-  resolution: "@reduxjs/toolkit@npm:2.6.1"
+"@reduxjs/toolkit@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "@reduxjs/toolkit@npm:2.7.0"
   dependencies:
+    "@standard-schema/spec": ^1.0.0
+    "@standard-schema/utils": ^0.3.0
     immer: ^10.0.3
     redux: ^5.0.1
     redux-thunk: ^3.1.0
@@ -1641,7 +1643,7 @@ __metadata:
       optional: true
     react-redux:
       optional: true
-  checksum: b30f8c4fba64d414879b50413a1ab96013aef6cac0a338f8472d1f2b7ae2763ab1606add7118aec04e8a727cc42f9c7b97714e09e33859781641d634d44c65ba
+  checksum: 9e77b65404a685d4f9f69900741cb9b333a94788676b8332e2eacb578320e72c3546b938b638bbc4fe8c6b7ba3abb7137fa82801f4120a4a318e745c633cf9b0
   languageName: node
   linkType: hard
 
@@ -2025,6 +2027,13 @@ __metadata:
   version: 0.27.8
   resolution: "@sinclair/typebox@npm:0.27.8"
   checksum: 00bd7362a3439021aa1ea51b0e0d0a0e8ca1351a3d54c606b115fdcc49b51b16db6e5f43b4fe7a28c38688523e22a94d49dd31168868b655f0d4d50f032d07a1
+  languageName: node
+  linkType: hard
+
+"@standard-schema/spec@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@standard-schema/spec@npm:1.0.0"
+  checksum: 2d7d73a1c9706622750ab06fc40ef7c1d320b52d5e795f8a1c7a77d0d6a9f978705092bc4149327b3cff4c9a14e5b3800d3b00dc945489175a2d3031ded8332a
   languageName: node
   linkType: hard
 
@@ -4792,7 +4801,7 @@ __metadata:
     "@mui/system": ^7.0.2
     "@mui/x-date-pickers": ^7.28.3
     "@react-spring/web": ^9.7.5
-    "@reduxjs/toolkit": ^2.6.1
+    "@reduxjs/toolkit": ^2.7.0
     "@sentry/browser": ^9.12.0
     "@sentry/react": ^9.12.0
     "@sentry/tracing": ^7.120.3
