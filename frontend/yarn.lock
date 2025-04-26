@@ -4842,7 +4842,7 @@ __metadata:
     react-dom: ^19.1.0
     react-hook-form: ^7.55.0
     react-redux: ^9.2.0
-    react-router-dom: ^7.5.1
+    react-router-dom: ^7.5.2
     typescript: 5.8.3
     usehooks-ts: ^3.1.1
     vite: ^6.3.2
@@ -7169,21 +7169,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.5.1":
-  version: 7.5.1
-  resolution: "react-router-dom@npm:7.5.1"
+"react-router-dom@npm:^7.5.2":
+  version: 7.5.2
+  resolution: "react-router-dom@npm:7.5.2"
   dependencies:
-    react-router: 7.5.1
+    react-router: 7.5.2
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: dc968f0a4b2df21670e2f20f368de6d3826654102aa30ecc7d68cf0d46d421d692c3b17f3077791200377f6191b71e86b59ba42732b399a5ac80023ca9911348
+  checksum: 32cea1350808b6033c79ebd36d69d81e47f3ace0d35dac5debbcfc2175275caf9f6fbdf598170a8220d4ea26f9fb84f39802fe6d96437988284d01dc17c5b13f
   languageName: node
   linkType: hard
 
-"react-router@npm:7.5.1":
-  version: 7.5.1
-  resolution: "react-router@npm:7.5.1"
+"react-router@npm:7.5.2":
+  version: 7.5.2
+  resolution: "react-router@npm:7.5.2"
   dependencies:
     cookie: ^1.0.1
     set-cookie-parser: ^2.6.0
@@ -7194,7 +7194,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: e0ab3ad239447761567e4b01cee19e6f334698914cdc32ec0ef90b09e4538494b37acd9059bbfefd1313a48feba8d0a64ecfe4cc5232b160c6ac23e8f7b9a3e7
+  checksum: cc8c9729c4adc79c82ab9435594dffcdf0659d555d5da0f6f530d4e8d19f1c0bcd08f1b4fc8df8ca6ce021b6fa3da87f01498f55b36b1821a5c8da3bb69955a0
   languageName: node
   linkType: hard
 
