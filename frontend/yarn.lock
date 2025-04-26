@@ -4715,6 +4715,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fdir@npm:^6.4.4":
+  version: 6.4.4
+  resolution: "fdir@npm:6.4.4"
+  peerDependencies:
+    picomatch: ^3 || ^4
+  peerDependenciesMeta:
+    picomatch:
+      optional: true
+  checksum: 79043610236579ffbd0647c508b43bd030a2d034a17c43cf96813a00e8e92e51acdb115c6ddecef3b5812cc2692b976155b4f6413e51e3761f1e772fa019a321
+  languageName: node
+  linkType: hard
+
 "file-entry-cache@npm:^8.0.0":
   version: 8.0.0
   resolution: "file-entry-cache@npm:8.0.0"
@@ -4845,7 +4857,7 @@ __metadata:
     react-router-dom: ^7.5.1
     typescript: 5.8.3
     usehooks-ts: ^3.1.1
-    vite: ^6.3.2
+    vite: ^6.3.3
     vite-plugin-checker: ^0.9.1
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^4.2.4
@@ -8181,6 +8193,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tinyglobby@npm:^0.2.13":
+  version: 0.2.13
+  resolution: "tinyglobby@npm:0.2.13"
+  dependencies:
+    fdir: ^6.4.4
+    picomatch: ^4.0.2
+  checksum: 3a2e87a2518cb3616057b0aa58be4f17771ae78c6890556516ae1e631f8ce4cfee1ba1dcb62fcc54a64e2bdd6c3104f4f3d021e1a3e3f8fb0875bca380b913e5
+  languageName: node
+  linkType: hard
+
 "tinyqueue@npm:^3.0.0":
   version: 3.0.0
   resolution: "tinyqueue@npm:3.0.0"
@@ -8714,17 +8736,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^6.3.2":
-  version: 6.3.2
-  resolution: "vite@npm:6.3.2"
+"vite@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "vite@npm:6.3.3"
   dependencies:
     esbuild: ^0.25.0
-    fdir: ^6.4.3
+    fdir: ^6.4.4
     fsevents: ~2.3.3
     picomatch: ^4.0.2
     postcss: ^8.5.3
     rollup: ^4.34.9
-    tinyglobby: ^0.2.12
+    tinyglobby: ^0.2.13
   peerDependencies:
     "@types/node": ^18.0.0 || ^20.0.0 || >=22.0.0
     jiti: ">=1.21.0"
@@ -8765,7 +8787,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 1773809788935e4f7b3f718680f80c4e6ff0f9a39b22596bd7d405d996f0c21e67b573418aba23afbb0d54e570a315a0252b045c4a68987aa19974cf70e5d3a1
+  checksum: b12dcd715324d5033226005b514f281541578d619675724c6ba0f684efe875d145ae53404fc7dc604332f2b52b5bd197ed6b6edea219abd604336052f3f3c79e
   languageName: node
   linkType: hard
 
