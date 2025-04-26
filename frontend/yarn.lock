@@ -2819,9 +2819,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "@vitejs/plugin-react@npm:4.4.0"
+"@vitejs/plugin-react@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "@vitejs/plugin-react@npm:4.4.1"
   dependencies:
     "@babel/core": ^7.26.10
     "@babel/plugin-transform-react-jsx-self": ^7.25.9
@@ -2830,7 +2830,7 @@ __metadata:
     react-refresh: ^0.17.0
   peerDependencies:
     vite: ^4.2.0 || ^5.0.0 || ^6.0.0
-  checksum: d15226cdbddea5dc9b5eedcb89ec68cf008cfde326a43d94819ef52944231ae702c6a26e5979c0584554fe6443222c552b7e6bc226229968eab031016bf00a7d
+  checksum: 62d941d9035f2625be636bc1ae941b4738f7458313fa66cb481b7662dd639b1849f0393ffb6abd3caaa2660f84764a6e71c5ef154fa8cfd8b30277fa6bb72cb6
   languageName: node
   linkType: hard
 
@@ -4895,7 +4895,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^8.30.1
     "@typescript-eslint/parser": ^8.30.1
     "@use-gesture/react": ^10.3.1
-    "@vitejs/plugin-react": ^4.4.0
+    "@vitejs/plugin-react": ^4.4.1
     "@vitejs/plugin-react-swc": ^3.9.0
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.13
