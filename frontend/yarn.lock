@@ -455,6 +455,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.27.1":
+  version: 7.27.1
+  resolution: "@babel/runtime@npm:7.27.1"
+  checksum: 11339838a54783e5b14e04d94d7a4d032e9965c5823f3f687e41556fa40344ae7aeb57c535720b7a74ab3e8217def7834a6f1a665ee55bbb3befede141419913
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -1468,13 +1475,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "@mui/x-date-pickers@npm:8.2.0"
+"@mui/x-date-pickers@npm:^8.3.0":
+  version: 8.3.0
+  resolution: "@mui/x-date-pickers@npm:8.3.0"
   dependencies:
-    "@babel/runtime": ^7.27.0
+    "@babel/runtime": ^7.27.1
     "@mui/utils": ^7.0.2
-    "@mui/x-internals": 8.2.0
+    "@mui/x-internals": 8.3.0
     "@types/react-transition-group": ^4.4.12
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1512,19 +1519,19 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: e55371d4631fe1098d414ee1157ccb3d01537ff30a5e173b5a60ba9d6e2d3b99aca78e0f6075b816c935422edd05bcb2034a3ab87c0c7597e691740288b15173
+  checksum: 757b3d428e7926a19219f10ebc3cbf474cce7cf6838f80f3d32695c9a4b64935b14e1fc96fff22614f4561daf22251336712a986891802956d8a0f3526a848d5
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:8.2.0":
-  version: 8.2.0
-  resolution: "@mui/x-internals@npm:8.2.0"
+"@mui/x-internals@npm:8.3.0":
+  version: 8.3.0
+  resolution: "@mui/x-internals@npm:8.3.0"
   dependencies:
-    "@babel/runtime": ^7.27.0
+    "@babel/runtime": ^7.27.1
     "@mui/utils": ^7.0.2
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 668e79715713308981568704e1318ef4e1f6597de08a3860f757b3959e58e0f72852b1c0cb9d2526c1f2bc1efa3f2477f84aecca5591cf35cc909637573409b3
+  checksum: a7dea2f51c64faf5eefafaf530d22af78cbf1ce803585fad3330248fda5759290f7ece2820e6ca79a2c6ed28f637eb914191128f8bf2dbea97d0909979ac1792
   languageName: node
   linkType: hard
 
@@ -5034,7 +5041,7 @@ __metadata:
     "@mui/lab": ^7.0.0-beta.11
     "@mui/material": ^7.0.2
     "@mui/system": ^7.0.2
-    "@mui/x-date-pickers": ^8.2.0
+    "@mui/x-date-pickers": ^8.3.0
     "@react-spring/web": ^9.7.5
     "@reduxjs/toolkit": ^2.7.0
     "@sentry/browser": ^9.15.0
