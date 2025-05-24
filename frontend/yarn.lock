@@ -4429,9 +4429,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:^4.3.4":
-  version: 4.3.4
-  resolution: "eslint-import-resolver-typescript@npm:4.3.4"
+"eslint-import-resolver-typescript@npm:^4.3.5":
+  version: 4.3.5
+  resolution: "eslint-import-resolver-typescript@npm:4.3.5"
   dependencies:
     debug: ^4.4.0
     get-tsconfig: ^4.10.0
@@ -4448,7 +4448,7 @@ __metadata:
       optional: true
     eslint-plugin-import-x:
       optional: true
-  checksum: dc80df435a33b0358939dcaea120e4f38523b4dc07430e2ee0a8d1145fbf751dedce10d7b882db9bd3c614451879940416e21daeb8b4b19cd86e2d21f24ea2b9
+  checksum: 64ac68ebcd38c3ffa2dd7082e94295c5be82c1d53564797a7553567439832586ab1aa8cb30d6af43264dac7ca236408c33f8c28820387302ea2c51b2db84d71e
   languageName: node
   linkType: hard
 
@@ -4903,7 +4903,7 @@ __metadata:
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^18.0.0
     eslint-config-prettier: ^10.1.5
-    eslint-import-resolver-typescript: ^4.3.4
+    eslint-import-resolver-typescript: ^4.3.5
     eslint-plugin-import: ^2.31.0
     eslint-plugin-jsx-a11y: ^6.10.2
     eslint-plugin-prettier: ^5.4.0
