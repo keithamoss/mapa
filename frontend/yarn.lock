@@ -2850,15 +2850,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^3.10.0":
-  version: 3.10.0
-  resolution: "@vitejs/plugin-react-swc@npm:3.10.0"
+"@vitejs/plugin-react-swc@npm:^3.10.1":
+  version: 3.10.1
+  resolution: "@vitejs/plugin-react-swc@npm:3.10.1"
   dependencies:
     "@rolldown/pluginutils": 1.0.0-beta.9
     "@swc/core": ^1.11.22
   peerDependencies:
     vite: ^4 || ^5 || ^6
-  checksum: bff7fc4a05a763a87ffa1bb1833d6461de5d1deea3c397a17819025d8193b79077318789d0799335c463a677ca1a645206b439c87b228764642384bb4a494357
+  checksum: 0e7f56e527fd14ed784aeb30d9d40fd26e49754dea6f26e0727dc6508ed67bb9619a1c68c4b51c68575be04895b2991b89a0163be985fa76a6bb8269f5b7d66f
   languageName: node
   linkType: hard
 
@@ -4944,7 +4944,7 @@ __metadata:
     "@typescript-eslint/parser": ^8.33.0
     "@use-gesture/react": ^10.3.1
     "@vitejs/plugin-react": ^4.5.1
-    "@vitejs/plugin-react-swc": ^3.10.0
+    "@vitejs/plugin-react-swc": ^3.10.1
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.13
     eslint: ^9.28.0
