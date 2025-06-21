@@ -1262,9 +1262,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/lab@npm:^7.0.0-beta.13":
-  version: 7.0.0-beta.13
-  resolution: "@mui/lab@npm:7.0.0-beta.13"
+"@mui/lab@npm:^7.0.0-beta.14":
+  version: 7.0.0-beta.14
+  resolution: "@mui/lab@npm:7.0.0-beta.14"
   dependencies:
     "@babel/runtime": ^7.27.1
     "@mui/system": ^7.1.1
@@ -1275,7 +1275,7 @@ __metadata:
   peerDependencies:
     "@emotion/react": ^11.5.0
     "@emotion/styled": ^11.3.0
-    "@mui/material": ^7.1.1
+    "@mui/material": ^7.1.2
     "@mui/material-pigment-css": ^7.1.1
     "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1289,7 +1289,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: fb42a3d293faa8819580296709ef7347a9b13dba117987b5d6475ebee50ef92b8376dc50ee2015610b3372a74f558d14195e327ee70a7364a8386eb8ebc905ca
+  checksum: 99f60049f3550d653231aa3cf60b52d181ffe522166863ab3d0b000087dd2d8292b22883de05087e9c4f43b3c55cf03263f8aae93ec9d55f2c895c3af4092b02
   languageName: node
   linkType: hard
 
@@ -5031,7 +5031,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^6.7.2
     "@hookform/resolvers": ^5.1.1
     "@mui/icons-material": ^7.1.2
-    "@mui/lab": ^7.0.0-beta.13
+    "@mui/lab": ^7.0.0-beta.14
     "@mui/material": ^7.1.2
     "@mui/system": ^7.1.1
     "@mui/x-date-pickers": ^8.5.1
