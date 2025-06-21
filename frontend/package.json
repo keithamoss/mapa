@@ -31,7 +31,7 @@
     "ol-mapbox-style": "^13.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-hook-form": "^7.57.0",
+    "react-hook-form": "^7.58.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
     "typescript": "5.8.3",
