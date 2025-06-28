@@ -1663,6 +1663,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rolldown/pluginutils@npm:1.0.0-beta.19":
+  version: 1.0.0-beta.19
+  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.19"
+  checksum: a82592c47ca7d7b56477e4d7065d3f06286ed3fd909c05bc645fb021361a02c66ed6c08f13692a893858ba3cb331e16ddc66ab793d3febfa0837ffa4269157c5
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.44.1":
   version: 4.44.1
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.44.1"
@@ -2783,19 +2790,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^4.5.2":
-  version: 4.5.2
-  resolution: "@vitejs/plugin-react@npm:4.5.2"
+"@vitejs/plugin-react@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "@vitejs/plugin-react@npm:4.6.0"
   dependencies:
     "@babel/core": ^7.27.4
     "@babel/plugin-transform-react-jsx-self": ^7.27.1
     "@babel/plugin-transform-react-jsx-source": ^7.27.1
-    "@rolldown/pluginutils": 1.0.0-beta.11
+    "@rolldown/pluginutils": 1.0.0-beta.19
     "@types/babel__core": ^7.20.5
     react-refresh: ^0.17.0
   peerDependencies:
     vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0-beta.0
-  checksum: caa6f002d557d9436f77263336ac6defa51395beafd9f57d8fbf3c75460fca89dd0fda26092b06c69ee114178b46708ac1d39c601debca873a0f9ecee629e5f5
+  checksum: 3d4c72388a7a8ce0da3ac760eb4ae249839dbe1f7b5f0e21a5d0eb55b0e54bb90d360ca975c852aaa2eb4b2423e5e9599b59d38abbe5231314aeee2619be2494
   languageName: node
   linkType: hard
 
@@ -4991,7 +4998,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^8.35.0
     "@typescript-eslint/parser": ^8.35.0
     "@use-gesture/react": ^10.3.1
-    "@vitejs/plugin-react": ^4.5.2
+    "@vitejs/plugin-react": ^4.6.0
     "@vitejs/plugin-react-swc": ^3.10.2
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.13
