@@ -4502,15 +4502,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:^4.4.3":
-  version: 4.4.3
-  resolution: "eslint-import-resolver-typescript@npm:4.4.3"
+"eslint-import-resolver-typescript@npm:^4.4.4":
+  version: 4.4.4
+  resolution: "eslint-import-resolver-typescript@npm:4.4.4"
   dependencies:
     debug: ^4.4.1
     eslint-import-context: ^0.1.8
     get-tsconfig: ^4.10.1
     is-bun-module: ^2.0.0
-    stable-hash-x: ^0.1.1
+    stable-hash-x: ^0.2.0
     tinyglobby: ^0.2.14
     unrs-resolver: ^1.7.11
   peerDependencies:
@@ -4522,7 +4522,7 @@ __metadata:
       optional: true
     eslint-plugin-import-x:
       optional: true
-  checksum: 7678cc2af2446663b44cbc0fd1c657be1694276963929446229289576b24ed6e89435a76119303099a8cb66299ee146fde3ad3d431f405085762e7e65b01c33c
+  checksum: c6286f8b3464a1dddbba3dbbe1d7d5261f5728ad69364e02b69ad493fc0962ea354f8c8ccaea242b6e4109177a96ebd581405bbf3ee1d7b3263e2d540b7e00a8
   languageName: node
   linkType: hard
 
@@ -4987,7 +4987,7 @@ __metadata:
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^18.0.0
     eslint-config-prettier: ^10.1.5
-    eslint-import-resolver-typescript: ^4.4.3
+    eslint-import-resolver-typescript: ^4.4.4
     eslint-plugin-import: ^2.32.0
     eslint-plugin-jsx-a11y: ^6.10.2
     eslint-plugin-prettier: ^5.5.0
@@ -8119,6 +8119,13 @@ __metadata:
   version: 0.1.1
   resolution: "stable-hash-x@npm:0.1.1"
   checksum: b21afd1259b77719fe2a7af6788c22e5d093172e2932954a29a73a426eae4bdc6d6d8f3920cf73a607c5297784d6830d13ec057f4eb9466f8933658d8882a896
+  languageName: node
+  linkType: hard
+
+"stable-hash-x@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "stable-hash-x@npm:0.2.0"
+  checksum: ed5d814ff4d74e7873d4672584a8c136cc452995459fede2ee897784b658ba4bc338c9b7cf7cca4c5cc43a84dcf1ebac60c4aa01345e9b8609d0265e95837a6c
   languageName: node
   linkType: hard
 
