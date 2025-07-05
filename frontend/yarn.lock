@@ -1239,10 +1239,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "@mui/core-downloads-tracker@npm:7.1.2"
-  checksum: 42b10f453c5f86f687edbb463ebe110dc1b50e2fe9d628878646c2f6c84daadc083c671c36be8fb4e4179fda43147a650db823c53c390af76987309a9289a5c2
+"@mui/core-downloads-tracker@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@mui/core-downloads-tracker@npm:7.2.0"
+  checksum: 49a694d95cf9e51db3c52cbc8694be76a4f15b35373be45b7e94f973ba4e3cee63db2132a64b55730e98ab3e25152cab6c0bab03a72f5d48b5bdd0a44aaf078c
   languageName: node
   linkType: hard
 
@@ -1293,15 +1293,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^7.1.2":
-  version: 7.1.2
-  resolution: "@mui/material@npm:7.1.2"
+"@mui/material@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@mui/material@npm:7.2.0"
   dependencies:
-    "@babel/runtime": ^7.27.1
-    "@mui/core-downloads-tracker": ^7.1.2
-    "@mui/system": ^7.1.1
-    "@mui/types": ^7.4.3
-    "@mui/utils": ^7.1.1
+    "@babel/runtime": ^7.27.6
+    "@mui/core-downloads-tracker": ^7.2.0
+    "@mui/system": ^7.2.0
+    "@mui/types": ^7.4.4
+    "@mui/utils": ^7.2.0
     "@popperjs/core": ^2.11.8
     "@types/react-transition-group": ^4.4.12
     clsx: ^2.1.1
@@ -1312,7 +1312,7 @@ __metadata:
   peerDependencies:
     "@emotion/react": ^11.5.0
     "@emotion/styled": ^11.3.0
-    "@mui/material-pigment-css": ^7.1.1
+    "@mui/material-pigment-css": ^7.2.0
     "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -1325,7 +1325,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 382a7fc7a180f7e1a718092db8e43aea1ef7427912b31058b0c2e8a277c2b533ee1878a4eb1d9bb2121e4f25ecc03047abcd21291ec74f37c37eac8d9b828e6b
+  checksum: 43a5a446b104ca8ddc18afa4195492ee14f3119065472f0c46a090639442b2df7459a0028b039af8b149c4082d7544701ca53b7047364aebe8d3dccf698c34e4
   languageName: node
   linkType: hard
 
@@ -5143,7 +5143,7 @@ __metadata:
     "@hookform/resolvers": ^5.1.1
     "@mui/icons-material": ^7.2.0
     "@mui/lab": ^7.0.0-beta.14
-    "@mui/material": ^7.1.2
+    "@mui/material": ^7.2.0
     "@mui/system": ^7.2.0
     "@mui/x-date-pickers": ^8.6.0
     "@react-spring/web": ^10.0.1
