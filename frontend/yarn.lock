@@ -5271,7 +5271,7 @@ __metadata:
     typescript: 5.8.3
     usehooks-ts: ^3.1.1
     vite: ^7.0.4
-    vite-plugin-checker: ^0.9.3
+    vite-plugin-checker: ^0.10.0
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^5.0.3
     yup: ^1.6.1
@@ -8689,16 +8689,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.13":
-  version: 0.2.13
-  resolution: "tinyglobby@npm:0.2.13"
-  dependencies:
-    fdir: ^6.4.4
-    picomatch: ^4.0.2
-  checksum: 3a2e87a2518cb3616057b0aa58be4f17771ae78c6890556516ae1e631f8ce4cfee1ba1dcb62fcc54a64e2bdd6c3104f4f3d021e1a3e3f8fb0875bca380b913e5
-  languageName: node
-  linkType: hard
-
 "tinyglobby@npm:^0.2.14":
   version: 0.2.14
   resolution: "tinyglobby@npm:0.2.14"
@@ -9176,9 +9166,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-checker@npm:^0.9.3":
-  version: 0.9.3
-  resolution: "vite-plugin-checker@npm:0.9.3"
+"vite-plugin-checker@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "vite-plugin-checker@npm:0.10.0"
   dependencies:
     "@babel/code-frame": ^7.27.1
     chokidar: ^4.0.3
@@ -9187,7 +9177,7 @@ __metadata:
     picomatch: ^4.0.2
     strip-ansi: ^7.1.0
     tiny-invariant: ^1.3.3
-    tinyglobby: ^0.2.13
+    tinyglobby: ^0.2.14
     vscode-uri: ^3.1.0
   peerDependencies:
     "@biomejs/biome": ">=1.7"
@@ -9199,7 +9189,7 @@ __metadata:
     vite: ">=2.0.0"
     vls: "*"
     vti: "*"
-    vue-tsc: ~2.2.10
+    vue-tsc: ~2.2.10 || ^3.0.0
   peerDependenciesMeta:
     "@biomejs/biome":
       optional: true
@@ -9219,7 +9209,7 @@ __metadata:
       optional: true
     vue-tsc:
       optional: true
-  checksum: 71a0f6e3ec5ba83ba9fee99cd678b1d18fd01c9a721f12070333fbb4a98b508791fab80bb6358335e1bfadc9fa906f466eb1fb82d55baea7fd4bb17fe761eb68
+  checksum: e6bd1aed5d70c1497223889eea20277fe3ff0c672474cdd692d966a2727cd68b1611668f8f86725cc350789d0c074c17cf0f2412f13c1abd8743f889dd5a2e46
   languageName: node
   linkType: hard
 
