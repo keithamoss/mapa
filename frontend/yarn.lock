@@ -5231,7 +5231,7 @@ __metadata:
     typescript: 5.8.3
     usehooks-ts: ^3.1.1
     vite: ^7.0.5
-    vite-plugin-checker: ^0.10.0
+    vite-plugin-checker: ^0.10.1
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^5.0.3
     yup: ^1.6.1
@@ -9126,9 +9126,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-checker@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "vite-plugin-checker@npm:0.10.0"
+"vite-plugin-checker@npm:^0.10.1":
+  version: 0.10.1
+  resolution: "vite-plugin-checker@npm:0.10.1"
   dependencies:
     "@babel/code-frame": ^7.27.1
     chokidar: ^4.0.3
@@ -9169,7 +9169,7 @@ __metadata:
       optional: true
     vue-tsc:
       optional: true
-  checksum: e6bd1aed5d70c1497223889eea20277fe3ff0c672474cdd692d966a2727cd68b1611668f8f86725cc350789d0c074c17cf0f2412f13c1abd8743f889dd5a2e46
+  checksum: feb223f781a238f4c6193caef5b85209a5bf3f2fe0ede29c9194ce0aef4886a7d739503c3e9e6ec648f794981f8bdd2da1250e2acea3735d669ae10f790fc1b9
   languageName: node
   linkType: hard
 
