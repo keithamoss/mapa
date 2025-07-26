@@ -5348,7 +5348,7 @@ __metadata:
     react-router-dom: ^7.7.1
     typescript: 5.8.3
     usehooks-ts: ^3.1.1
-    vite: ^7.0.5
+    vite: ^7.0.6
     vite-plugin-checker: ^0.10.1
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^5.0.3
@@ -7494,6 +7494,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picomatch@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "picomatch@npm:4.0.3"
+  checksum: 6817fb74eb745a71445debe1029768de55fd59a42b75606f478ee1d0dc1aa6e78b711d041a7c9d5550e042642029b7f373dc1a43b224c4b7f12d23436735dba0
+  languageName: node
+  linkType: hard
+
 "possible-typed-array-names@npm:^1.0.0":
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
@@ -9307,14 +9314,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.0.5":
-  version: 7.0.5
-  resolution: "vite@npm:7.0.5"
+"vite@npm:^7.0.6":
+  version: 7.0.6
+  resolution: "vite@npm:7.0.6"
   dependencies:
     esbuild: ^0.25.0
     fdir: ^6.4.6
     fsevents: ~2.3.3
-    picomatch: ^4.0.2
+    picomatch: ^4.0.3
     postcss: ^8.5.6
     rollup: ^4.40.0
     tinyglobby: ^0.2.14
@@ -9358,7 +9365,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: d5f7f44f53d723a020dd64569906bf9b92eb002bb26d0dd21aa2a7c557685795e084672593fdc5b136c69c954ea405f0fa51de23ffb48add70f05c3413f07830
+  checksum: 867f82ba0c2fa18e4a3e1abf3bad0811bb4ec4260b4ef4281e4ffa7d7e0b9b6d30053f7106d9a7f1955b87870b579f00168503ee84bc18eb8d385a1bb213338b
   languageName: node
   linkType: hard
 
