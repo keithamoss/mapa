@@ -18,7 +18,7 @@
     "@sentry/browser": "^9.42.0",
     "@sentry/react": "^9.42.0",
     "@sentry/tracing": "^7.120.3",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@use-gesture/react": "^10.3.1",
