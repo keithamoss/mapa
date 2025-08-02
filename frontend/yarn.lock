@@ -1079,14 +1079,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "@hookform/resolvers@npm:5.2.0"
+"@hookform/resolvers@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@hookform/resolvers@npm:5.2.1"
   dependencies:
     "@standard-schema/utils": ^0.3.0
   peerDependencies:
     react-hook-form: ^7.55.0
-  checksum: 960ec5c88fcfa1da644d40afc2a7e2c70b7dac370a6931aed6954bad40d2446de09cb2dd29ecfb3e082679bdcc08925a99a5d70a042e663301fabfea9c40b584
+  checksum: 7c1626ddd1833796ee4f8407125547bc83f7972a91a2564eee5f8056b0fd9d56f6ac7093041d5f2b5734016b9df9e5ca8fa0184fe7755f39db29a74abfacb58c
   languageName: node
   linkType: hard
 
@@ -5225,7 +5225,7 @@ __metadata:
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.1
     "@fortawesome/fontawesome-svg-core": ^7.0.0
-    "@hookform/resolvers": ^5.2.0
+    "@hookform/resolvers": ^5.2.1
     "@mui/icons-material": ^7.2.0
     "@mui/lab": ^7.0.0-beta.14
     "@mui/material": ^7.2.0
