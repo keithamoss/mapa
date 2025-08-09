@@ -1882,13 +1882,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:1.0.0-beta.27":
-  version: 1.0.0-beta.27
-  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.27"
-  checksum: b57d8de44534bdbb92e9dda70a29c5b3cb7a13cc3a2efaaf9d27923ca23e2526e9470939fe1d7c6a96623da20aaf96a1517502e1d9a6d4f98fbb544cf502600a
-  languageName: node
-  linkType: hard
-
 "@rolldown/pluginutils@npm:1.0.0-beta.30":
   version: 1.0.0-beta.30
   resolution: "@rolldown/pluginutils@npm:1.0.0-beta.30"
@@ -2310,90 +2303,90 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-arm64@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-darwin-arm64@npm:1.13.0"
+"@swc/core-darwin-arm64@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-darwin-arm64@npm:1.13.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-darwin-x64@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-darwin-x64@npm:1.13.0"
+"@swc/core-darwin-x64@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-darwin-x64@npm:1.13.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm-gnueabihf@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.13.0"
+"@swc/core-linux-arm-gnueabihf@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.13.3"
   conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-gnu@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-linux-arm64-gnu@npm:1.13.0"
+"@swc/core-linux-arm64-gnu@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.13.3"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-arm64-musl@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-linux-arm64-musl@npm:1.13.0"
+"@swc/core-linux-arm64-musl@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-linux-arm64-musl@npm:1.13.3"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-gnu@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-linux-x64-gnu@npm:1.13.0"
+"@swc/core-linux-x64-gnu@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-linux-x64-gnu@npm:1.13.3"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@swc/core-linux-x64-musl@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-linux-x64-musl@npm:1.13.0"
+"@swc/core-linux-x64-musl@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-linux-x64-musl@npm:1.13.3"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@swc/core-win32-arm64-msvc@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-win32-arm64-msvc@npm:1.13.0"
+"@swc/core-win32-arm64-msvc@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-win32-arm64-msvc@npm:1.13.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@swc/core-win32-ia32-msvc@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-win32-ia32-msvc@npm:1.13.0"
+"@swc/core-win32-ia32-msvc@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.13.3"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@swc/core-win32-x64-msvc@npm:1.13.0":
-  version: 1.13.0
-  resolution: "@swc/core-win32-x64-msvc@npm:1.13.0"
+"@swc/core-win32-x64-msvc@npm:1.13.3":
+  version: 1.13.3
+  resolution: "@swc/core-win32-x64-msvc@npm:1.13.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.12.11":
-  version: 1.13.0
-  resolution: "@swc/core@npm:1.13.0"
+"@swc/core@npm:^1.13.2":
+  version: 1.13.3
+  resolution: "@swc/core@npm:1.13.3"
   dependencies:
-    "@swc/core-darwin-arm64": 1.13.0
-    "@swc/core-darwin-x64": 1.13.0
-    "@swc/core-linux-arm-gnueabihf": 1.13.0
-    "@swc/core-linux-arm64-gnu": 1.13.0
-    "@swc/core-linux-arm64-musl": 1.13.0
-    "@swc/core-linux-x64-gnu": 1.13.0
-    "@swc/core-linux-x64-musl": 1.13.0
-    "@swc/core-win32-arm64-msvc": 1.13.0
-    "@swc/core-win32-ia32-msvc": 1.13.0
-    "@swc/core-win32-x64-msvc": 1.13.0
+    "@swc/core-darwin-arm64": 1.13.3
+    "@swc/core-darwin-x64": 1.13.3
+    "@swc/core-linux-arm-gnueabihf": 1.13.3
+    "@swc/core-linux-arm64-gnu": 1.13.3
+    "@swc/core-linux-arm64-musl": 1.13.3
+    "@swc/core-linux-x64-gnu": 1.13.3
+    "@swc/core-linux-x64-musl": 1.13.3
+    "@swc/core-win32-arm64-msvc": 1.13.3
+    "@swc/core-win32-ia32-msvc": 1.13.3
+    "@swc/core-win32-x64-msvc": 1.13.3
     "@swc/counter": ^0.1.3
     "@swc/types": ^0.1.23
   peerDependencies:
@@ -2422,7 +2415,7 @@ __metadata:
   peerDependenciesMeta:
     "@swc/helpers":
       optional: true
-  checksum: 98960d094564e51dd822ea85ff7b227d44e895b4eb4e4b55669c5c8d615a4ab5827f653deb74d7def29beca13c27434e77b81c261f059ea4189227152e96777e
+  checksum: 2f6a1cf1241db40b11c3fa7452da099325b4ee4419e658950221f357a12ea967390414243d51e81fa52d4fcc002f7ae477311b0602d4524a70f95e569902f229
   languageName: node
   linkType: hard
 
@@ -3022,15 +3015,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^3.11.0":
-  version: 3.11.0
-  resolution: "@vitejs/plugin-react-swc@npm:3.11.0"
+"@vitejs/plugin-react-swc@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@vitejs/plugin-react-swc@npm:4.0.0"
   dependencies:
-    "@rolldown/pluginutils": 1.0.0-beta.27
-    "@swc/core": ^1.12.11
+    "@rolldown/pluginutils": 1.0.0-beta.30
+    "@swc/core": ^1.13.2
   peerDependencies:
     vite: ^4 || ^5 || ^6 || ^7
-  checksum: 03f52655f4eb3c7c6325b11b863f7d3f11b9c0a367fe2ee39cafd690b7622bbec7b21b5bad5c3216c9e82390ef28a915119112c348659637ec454f09596656db
+  checksum: 6521332118c846d564114f2bdc37c722feb2bd42f3c9a806f690e27bf4054c2ed166d87071e9552f9a7de33039e7cc085c5eedc15af18d3b3af78d5d2835a92e
   languageName: node
   linkType: hard
 
@@ -5233,7 +5226,7 @@ __metadata:
     "@typescript-eslint/parser": ^8.39.0
     "@use-gesture/react": ^10.3.1
     "@vitejs/plugin-react": ^5.0.0
-    "@vitejs/plugin-react-swc": ^3.11.0
+    "@vitejs/plugin-react-swc": ^4.0.0
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.13
     eslint: ^9.33.0
