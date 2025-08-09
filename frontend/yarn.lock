@@ -1657,13 +1657,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^8.9.2":
-  version: 8.9.2
-  resolution: "@mui/x-date-pickers@npm:8.9.2"
+"@mui/x-date-pickers@npm:^8.10.0":
+  version: 8.10.0
+  resolution: "@mui/x-date-pickers@npm:8.10.0"
   dependencies:
     "@babel/runtime": ^7.28.2
     "@mui/utils": ^7.2.0
-    "@mui/x-internals": 8.9.2
+    "@mui/x-internals": 8.10.0
     "@types/react-transition-group": ^4.4.12
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1701,22 +1701,21 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 210088b51187f56965c6934cdd345fac5d0684d9792668de0152a7a2aee20c8c4f8647306132baab23af79345a37014614c3bc05c30efbb1c4463fbcbd57b5a4
+  checksum: 9d007b34224b33328776ba8e17b6a6f6e9c8665e5551b900bcb79c4b8a3bab8be8e596618148030769505a8ef623ea0ba21bc8bbb8c93457cd0b3d5f2e5be23f
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:8.9.2":
-  version: 8.9.2
-  resolution: "@mui/x-internals@npm:8.9.2"
+"@mui/x-internals@npm:8.10.0":
+  version: 8.10.0
+  resolution: "@mui/x-internals@npm:8.10.0"
   dependencies:
     "@babel/runtime": ^7.28.2
     "@mui/utils": ^7.2.0
     reselect: ^5.1.1
     use-sync-external-store: ^1.5.0
   peerDependencies:
-    "@mui/system": ^5.15.14 || ^6.0.0 || ^7.0.0
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: e2fad58085d33f038db5f783869f515d338c7b64d25004387c2b2b8f5ed57d8607f08aff2af4ae807392906c6bfe30b91e4d2f090cb2678fe1e2dc69109c55fe
+  checksum: 401998d2ee99038ec72f3a71bbabafbd59b4dcbcc1b9ba829a8cefa2dc66e03042d7ae81c9b893bf2b60368c5ffbcbf379110fa0624592afa103a049a23fa2db
   languageName: node
   linkType: hard
 
@@ -5213,7 +5212,7 @@ __metadata:
     "@mui/lab": ^7.0.0-beta.14
     "@mui/material": ^7.3.1
     "@mui/system": ^7.3.1
-    "@mui/x-date-pickers": ^8.9.2
+    "@mui/x-date-pickers": ^8.10.0
     "@react-spring/web": ^10.0.1
     "@reduxjs/toolkit": ^2.8.2
     "@sentry/browser": ^10.3.0
