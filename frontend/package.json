@@ -28,7 +28,7 @@
     "lodash-es": "^4.17.21",
     "minisearch": "^7.1.2",
     "ol": "^10.6.1",
-    "ol-mapbox-style": "^13.0.1",
+    "ol-mapbox-style": "^13.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
