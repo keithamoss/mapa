@@ -2313,18 +2313,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.6.4":
-  version: 6.6.4
-  resolution: "@testing-library/jest-dom@npm:6.6.4"
+"@testing-library/jest-dom@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "@testing-library/jest-dom@npm:6.7.0"
   dependencies:
     "@adobe/css-tools": ^4.4.0
     aria-query: ^5.0.0
     css.escape: ^1.5.1
     dom-accessibility-api: ^0.6.3
-    lodash: ^4.17.21
     picocolors: ^1.1.1
     redent: ^3.0.0
-  checksum: 45c8be7b4a577d926210ff10a444dcc5a40132ff6865512406b76c2768d0530c0b3c4d6babccf97c63108bd8b59d1fab58fab08b02452d286be76320323d91be
+  checksum: b73ca999ebc33b63c259b9a7c47cc3eec159986931ff4ba7b68b889ce99bd6ddc7b87c71dcb5c39f0d72e6c9351ea60ece1265dfa56527e9d42350fd901662c2
   languageName: node
   linkType: hard
 
@@ -5083,7 +5082,7 @@ __metadata:
     "@sentry/react": ^10.3.0
     "@sentry/tracing": ^7.120.4
     "@sentry/vite-plugin": ^4.0.2
-    "@testing-library/jest-dom": ^6.6.4
+    "@testing-library/jest-dom": ^6.7.0
     "@testing-library/react": ^16.3.0
     "@testing-library/user-event": ^14.6.1
     "@types/autosuggest-highlight": ^3.2.3
@@ -6500,13 +6499,6 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: ad580b4bdbb7ca1f7abf7e1bce63a9a0b98e370cf40194b03380a46b4ed799c9573029599caebc1b14e3f24b111aef72b96674a56cfa105e0f5ac70546cdc005
-  languageName: node
-  linkType: hard
-
-"lodash@npm:^4.17.21":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
   languageName: node
   linkType: hard
 
