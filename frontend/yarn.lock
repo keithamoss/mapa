@@ -5218,7 +5218,7 @@ __metadata:
     "@mui/icons-material": ^7.3.1
     "@mui/lab": ^7.0.0-beta.17
     "@mui/material": ^7.3.1
-    "@mui/system": ^7.3.1
+    "@mui/system": ^7.3.2
     "@mui/x-date-pickers": ^8.10.2
     "@react-spring/web": ^10.0.1
     "@reduxjs/toolkit": ^2.9.0
