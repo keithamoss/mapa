@@ -26,7 +26,7 @@
     "dayjs": "^1.11.18",
     "js-cookie": "^3.0.5",
     "lodash-es": "^4.17.21",
-    "minisearch": "^7.1.2",
+    "minisearch": "^7.2.0",
     "ol": "^10.6.1",
     "ol-mapbox-style": "^13.1.0",
     "react": "^19.1.1",
