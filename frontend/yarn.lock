@@ -5148,7 +5148,7 @@ __metadata:
     prettier: ^3.6.2
     react: ^19.1.1
     react-dom: ^19.1.1
-    react-hook-form: ^7.62.0
+    react-hook-form: ^7.63.0
     react-redux: ^9.2.0
     react-router-dom: ^7.9.1
     typescript: 5.9.2
@@ -7457,12 +7457,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.62.0":
-  version: 7.62.0
-  resolution: "react-hook-form@npm:7.62.0"
+"react-hook-form@npm:^7.63.0":
+  version: 7.63.0
+  resolution: "react-hook-form@npm:7.63.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18 || ^19
-  checksum: 76f0574d0df632c22b37c2666e8aef8b4378dfa0bcc5ae5b20c410d3103abd17e0bcf6256f8a6d9d18cbd687f96edf3fce35bf41d06872ffb412c91664361b1a
+  checksum: 7194e8c4be1d7e618765b603bd4ab7b8bb44ada24d1d8395fbe4c8bf9daf012485396a4629cf1c25d71ffb618762fb0689e31f9f389109963a082aaf182784c0
   languageName: node
   linkType: hard
 
