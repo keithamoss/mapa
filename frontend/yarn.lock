@@ -5272,7 +5272,7 @@ __metadata:
     vite-plugin-checker: ^0.10.3
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^5.1.0
-    yup: ^1.7.0
+    yup: ^1.7.1
   languageName: unknown
   linkType: soft
 
@@ -9551,15 +9551,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yup@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "yup@npm:1.7.0"
+"yup@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "yup@npm:1.7.1"
   dependencies:
     property-expr: ^2.0.5
     tiny-case: ^1.0.3
     toposort: ^2.0.2
     type-fest: ^2.19.0
-  checksum: 845f4bb66df547208c1906a15d03a0cd838789dc22fa9ae948247752f360b273834f7d607176285d8c11779bb143640c65ae5f8f4045351505b17413a183aea9
+  checksum: 80d0d6838da457d489a97ee0b9c26fa9f59355a553f86842ea114b049811a918a0e7221f9c22bb88314699ddfb3e24ded49f7ab10a0e74dd273d03430110d5af
   languageName: node
   linkType: hard
 
