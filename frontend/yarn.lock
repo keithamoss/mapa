@@ -5141,7 +5141,7 @@ __metadata:
     react-router-dom: ^7.9.3
     typescript: 5.9.2
     usehooks-ts: ^3.1.1
-    vite: ^7.1.7
+    vite: ^7.1.9
     vite-plugin-checker: ^0.10.3
     vite-tsconfig-paths: ^5.1.4
     web-vitals: ^5.1.0
@@ -9119,9 +9119,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^7.1.7":
-  version: 7.1.7
-  resolution: "vite@npm:7.1.7"
+"vite@npm:^7.1.9":
+  version: 7.1.9
+  resolution: "vite@npm:7.1.9"
   dependencies:
     esbuild: ^0.25.0
     fdir: ^6.5.0
@@ -9170,7 +9170,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 2c19531d491336491573f8164e04be15dfbd445e3c60833659d31ce847be08d3690ac55656d4afff6aa59fa3fb70d6d330c9de7f73855d91c509263e719c5bcf
+  checksum: 58a1cb1be9d3f43677d8d7d5bb2c81c4657a97ca16eeaf69a635797bd6588e0f3bc4e6c56a8a299f482cd1c34d4fd36fb65b0d8778bf7964774690e0b27e8490
   languageName: node
   linkType: hard
 
