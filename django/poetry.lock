@@ -858,14 +858,14 @@ referencing = ">=0.31.0"
 
 [[package]]
 name = "oauthlib"
-version = "3.2.2"
+version = "3.3.1"
 description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "oauthlib-3.2.2-py3-none-any.whl", hash = "sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca"},
-    {file = "oauthlib-3.2.2.tar.gz", hash = "sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918"},
+    {file = "oauthlib-3.3.1-py3-none-any.whl", hash = "sha256:88119c938d2b8fb88561af5f6ee0eec8cc8d552b7bb1f712743136eb7523b7a1"},
+    {file = "oauthlib-3.3.1.tar.gz", hash = "sha256:0f0f8aa759826a193cf66c12ea1af1637f87b9b4622d46e866952bb022e538c9"},
 ]
 
 [package.extras]
@@ -1044,20 +1044,23 @@ files = [
 
 [[package]]
 name = "pyjwt"
-version = "2.8.0"
+version = "2.10.1"
 description = "JSON Web Token implementation in Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "PyJWT-2.8.0-py3-none-any.whl", hash = "sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320"},
-    {file = "PyJWT-2.8.0.tar.gz", hash = "sha256:57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de"},
+    {file = "PyJWT-2.10.1-py3-none-any.whl", hash = "sha256:dcdd193e30abefd5debf142f9adfcdd2b58004e644f25406ffaebd50bd98dacb"},
+    {file = "pyjwt-2.10.1.tar.gz", hash = "sha256:3cc5772eb20009233caf06e9d8a0577824723b44e6648ee0a2aedb6cf9381953"},
 ]
+
+[package.dependencies]
+cryptography = {version = ">=3.4.0", optional = true, markers = "extra == \"crypto\""}
 
 [package.extras]
 crypto = ["cryptography (>=3.4.0)"]
-dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
-docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
+docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
@@ -1139,14 +1142,14 @@ rpds-py = ">=0.7.0"
 
 [[package]]
 name = "requests"
-version = "2.32.4"
+version = "2.32.5"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "requests-2.32.4-py3-none-any.whl", hash = "sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c"},
-    {file = "requests-2.32.4.tar.gz", hash = "sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422"},
+    {file = "requests-2.32.5-py3-none-any.whl", hash = "sha256:2462f94637a34fd532264295e186976db0f5d453d1cdd31473c85a6a161affb6"},
+    {file = "requests-2.32.5.tar.gz", hash = "sha256:dbba0bac56e100853db0ea71b82b4dfd5fe2bf6d3754a8893c3af500cec7d7cf"},
 ]
 
 [package.dependencies]
@@ -1432,33 +1435,31 @@ dev = ["coverage (>=3.6)", "django-stubs (==5.2.7)", "django-stubs-ext (==5.2.7)
 
 [[package]]
 name = "social-auth-core"
-version = "4.7.0"
+version = "4.8.1"
 description = "Python social authentication made simple."
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "social_auth_core-4.7.0-py3-none-any.whl", hash = "sha256:9eef9b49c332d1a3265b37dcc698a7ace97c3fc59df2d874b51576d11d31f6a6"},
-    {file = "social_auth_core-4.7.0.tar.gz", hash = "sha256:2bba127c7b7166a81085ddb0c248d93751b3bc3cdab8569f62d9f70c6bc4ed40"},
+    {file = "social_auth_core-4.8.1-py3-none-any.whl", hash = "sha256:9fe54f7c7d566465ae34b165bfe1c0d3ba8fa1f7042dc17df5e7dcef8675f3a0"},
+    {file = "social_auth_core-4.8.1.tar.gz", hash = "sha256:6186576eb4e9f25c789d0ce19b942cc668a3a714a246f9e688c0fb93f65bf111"},
 ]
 
 [package.dependencies]
-cryptography = ">=1.4"
-defusedxml = ">=0.5.0"
-oauthlib = ">=1.0.3"
-PyJWT = ">=2.7.0"
-python3-openid = ">=3.0.10"
-requests = ">=2.9.1"
-requests-oauthlib = ">=0.6.1"
+defusedxml = ">=0.7.1"
+oauthlib = ">=3.3.1"
+PyJWT = {version = ">=2.10.1", extras = ["crypto"]}
+python3-openid = ">=3.2.0"
+requests = ">=2.32.5"
+requests-oauthlib = ">=2.0.0"
 
 [package.extras]
 all = ["social-auth-core[azuread]", "social-auth-core[google-onetap]", "social-auth-core[saml]", "social-auth-core[shopify]"]
 allpy3 = ["social-auth-core[all]"]
-azuread = ["cryptography (>=2.1.1)"]
-dev = ["coverage (>=3.6)", "flake8 (>=5.0.4)", "google-auth-stubs (==0.3.0)", "mypy (==1.16.1)", "pyright (==1.1.402)", "pytest (>=4.5)", "pytest-cov (>=2.7.1)", "pytest-xdist (>=3.6.1)", "responses (==0.25.7)", "types-defusedxml (==0.7.0.20250516)", "types-oauthlib (==3.3.0.20250622)", "types-python-jose (==3.5.0.20250531)", "types-requests (==2.32.4.20250611)", "types-requests-oauthlib (==2.0.0.20250516)"]
-google-onetap = ["google-auth (>=2.40.0,<2.41.0)"]
-ping = ["python-jose (>=3.4.0,<4.0)"]
-saml = ["python3-saml (>=1.5.0)"]
+azuread = ["cryptography (>=42.0.8)"]
+dev = ["coverage (==7.10.7)", "flake8 (==7.3.0)", "google-auth-stubs (==0.3.0)", "mypy (==1.18.2)", "pyright (==1.1.406)", "pytest (==8.4.2)", "pytest-cov (==7.0.0)", "pytest-github-actions-annotate-failures (==0.3.0)", "pytest-profiling (==1.8.1)", "pytest-xdist (==3.8.0)", "responses (==0.25.8)", "ty (==0.0.1a21)", "types-defusedxml (==0.7.0.20250822)", "types-oauthlib (==3.3.0.20250822)", "types-requests (==2.32.4.20250913)", "types-requests-oauthlib (==2.0.0.20250809)"]
+google-onetap = ["google-auth (>=2.40.0,<2.42)"]
+saml = ["python3-saml (>=1.16.0)"]
 shopify = ["ShopifyAPI"]
 
 [[package]]
@@ -1609,4 +1610,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "1f17d8df19a5a024d6aa9ee80f4bfa0cc086a8ddf452d57533508e273f4b2de2"
+content-hash = "68ccc2d5ebf292cd4377ea2b81ee1cb2a262432a31cde3ececb9b41d72229361"
