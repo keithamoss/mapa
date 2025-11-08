@@ -1876,6 +1876,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rolldown/pluginutils@npm:1.0.0-beta.46":
+  version: 1.0.0-beta.46
+  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.46"
+  checksum: 7eea2a1218a3f8615c1fe5681e37834f76c8719f826b44f6f95733ca49cf00a063decd45258dfc42f12179f14c635ecd48184181ff1c892667dff860d591c4e1
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.46.2":
   version: 4.46.2
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.46.2"
@@ -3121,15 +3128,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "@vitejs/plugin-react-swc@npm:4.2.0"
+"@vitejs/plugin-react-swc@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@vitejs/plugin-react-swc@npm:4.2.1"
   dependencies:
-    "@rolldown/pluginutils": 1.0.0-beta.43
+    "@rolldown/pluginutils": 1.0.0-beta.46
     "@swc/core": ^1.13.5
   peerDependencies:
     vite: ^4 || ^5 || ^6 || ^7
-  checksum: 501ff3ebf06c27e0690b2464434831da0acf08afe53e89ca58091acd09d1a6f7aacd91facacee2fe7e6959a76a1d2f944c922c622af3b063da1d1b6817113873
+  checksum: e6cd5193c85ed173a6a6ba63678b9dd4a9763c9fcc1fff32521716fd9066ad1fb9acb843b6b8870e6fd47d2a59587ca554a5a5605d28efe6f99b8c2e5a1c203a
   languageName: node
   linkType: hard
 
@@ -5337,7 +5344,7 @@ __metadata:
     "@typescript-eslint/parser": ^8.46.3
     "@use-gesture/react": ^10.3.1
     "@vitejs/plugin-react": ^5.1.0
-    "@vitejs/plugin-react-swc": ^4.2.0
+    "@vitejs/plugin-react-swc": ^4.2.1
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.19
     eslint: ^9.39.1
