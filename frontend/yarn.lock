@@ -97,7 +97,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.24.4, @babel/core@npm:^7.28.4":
+"@babel/core@npm:^7.24.4":
   version: 7.28.4
   resolution: "@babel/core@npm:7.28.4"
   dependencies:
@@ -117,6 +117,29 @@ __metadata:
     json5: ^2.2.3
     semver: ^6.3.1
   checksum: f55b90b2c61a6461f5c0ccab74d32af9c67448c43c629529ba7ec3c61d87fa8c408cc9305bfb1f5b09e671d25436d44eaf75c48dee5dc0a5c5e21c01290f5134
+  languageName: node
+  linkType: hard
+
+"@babel/core@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/core@npm:7.28.5"
+  dependencies:
+    "@babel/code-frame": ^7.27.1
+    "@babel/generator": ^7.28.5
+    "@babel/helper-compilation-targets": ^7.27.2
+    "@babel/helper-module-transforms": ^7.28.3
+    "@babel/helpers": ^7.28.4
+    "@babel/parser": ^7.28.5
+    "@babel/template": ^7.27.2
+    "@babel/traverse": ^7.28.5
+    "@babel/types": ^7.28.5
+    "@jridgewell/remapping": ^2.3.5
+    convert-source-map: ^2.0.0
+    debug: ^4.1.0
+    gensync: ^1.0.0-beta.2
+    json5: ^2.2.3
+    semver: ^6.3.1
+  checksum: 1ee35b20448f73e9d531091ad4f9e8198dc8f0cebb783263fbff1807342209882ddcaf419be04111326b6f0e494222f7055d71da316c437a6a784d230c11ab9f
   languageName: node
   linkType: hard
 
@@ -155,6 +178,19 @@ __metadata:
     "@jridgewell/trace-mapping": ^0.3.28
     jsesc: ^3.0.2
   checksum: e2202bf2b9c8a94f7e7a0a049fda0ee037d055c46922e85afa3bbc53309113f859b8193894f991045d7865226028b8f4f06152ed315ab414451932016dba5e42
+  languageName: node
+  linkType: hard
+
+"@babel/generator@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/generator@npm:7.28.5"
+  dependencies:
+    "@babel/parser": ^7.28.5
+    "@babel/types": ^7.28.5
+    "@jridgewell/gen-mapping": ^0.3.12
+    "@jridgewell/trace-mapping": ^0.3.28
+    jsesc: ^3.0.2
+  checksum: 3e86fa0197bb33394a85a73dbbca92bb1b3f250a30294c7e327359c0978ad90f36f3d71c7f2965a3fc349cfa82becc8f87e7421c75796c8bc48dd9010dd866d1
   languageName: node
   linkType: hard
 
@@ -324,6 +360,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-validator-identifier@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/helper-validator-identifier@npm:7.28.5"
+  checksum: 5a251a6848e9712aea0338f659a1a3bd334d26219d5511164544ca8ec20774f098c3a6661e9da65a0d085c745c00bb62c8fada38a62f08fa1f8053bc0aeb57e4
+  languageName: node
+  linkType: hard
+
 "@babel/helper-validator-option@npm:^7.23.5":
   version: 7.23.5
   resolution: "@babel/helper-validator-option@npm:7.23.5"
@@ -430,6 +473,17 @@ __metadata:
   bin:
     parser: ./bin/babel-parser.js
   checksum: d95e283fe1153039b396926ef567ca1ab114afb5c732a23bbcbbd0465ac59971aeb6a63f37593ce7671a52d34ec52b23008c999d68241b42d26928c540464063
+  languageName: node
+  linkType: hard
+
+"@babel/parser@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/parser@npm:7.28.5"
+  dependencies:
+    "@babel/types": ^7.28.5
+  bin:
+    parser: ./bin/babel-parser.js
+  checksum: 5c2456e3f26c70d4a3ce1a220b529a91a2df26c54a2894fd0dea2342699ea1067ffdda9f0715eeab61da46ff546fd5661bc70be6d8d11977cbe21f5f0478819a
   languageName: node
   linkType: hard
 
@@ -567,6 +621,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/traverse@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/traverse@npm:7.28.5"
+  dependencies:
+    "@babel/code-frame": ^7.27.1
+    "@babel/generator": ^7.28.5
+    "@babel/helper-globals": ^7.28.0
+    "@babel/parser": ^7.28.5
+    "@babel/template": ^7.27.2
+    "@babel/types": ^7.28.5
+    debug: ^4.3.1
+  checksum: e028ee9654f44be7c2a2df268455cee72d5c424c9ae536785f8f7c8680356f7b977c77ad76909d07eeed09ff1e125ce01cf783011f66b56c838791a85fa6af04
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.0.0, @babel/types@npm:^7.20.7, @babel/types@npm:^7.22.15, @babel/types@npm:^7.22.5, @babel/types@npm:^7.23.0, @babel/types@npm:^7.8.3":
   version: 7.23.0
   resolution: "@babel/types@npm:7.23.0"
@@ -616,6 +685,16 @@ __metadata:
     "@babel/helper-string-parser": ^7.27.1
     "@babel/helper-validator-identifier": ^7.27.1
   checksum: a369b4fb73415a2ed902a15576b49696ae9777ddee394a7a904c62e6fbb31f43906b0147ae0b8f03ac17f20c248eac093df349e33c65c94617b12e524b759694
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.28.5":
+  version: 7.28.5
+  resolution: "@babel/types@npm:7.28.5"
+  dependencies:
+    "@babel/helper-string-parser": ^7.27.1
+    "@babel/helper-validator-identifier": ^7.28.5
+  checksum: 5bc266af9e55ff92f9ddf33d83a42c9de1a87f9579d0ed62ef94a741a081692dd410a4fbbab18d514b83e135083ff05bc0e37003834801c9514b9d8ad748070d
   languageName: node
   linkType: hard
 
@@ -1869,13 +1948,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:1.0.0-beta.43":
-  version: 1.0.0-beta.43
-  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.43"
-  checksum: dd6d6ebc03426a691e4c17a6ebe3c3aab140b0570253998d3f2f50d706873a5c44d8046cf75e3f5e13f79b15ef45a606745980065685716b0959e79d9bd7430d
-  languageName: node
-  linkType: hard
-
 "@rolldown/pluginutils@npm:1.0.0-beta.47":
   version: 1.0.0-beta.47
   resolution: "@rolldown/pluginutils@npm:1.0.0-beta.47"
@@ -3082,19 +3154,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "@vitejs/plugin-react@npm:5.1.0"
+"@vitejs/plugin-react@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@vitejs/plugin-react@npm:5.1.1"
   dependencies:
-    "@babel/core": ^7.28.4
+    "@babel/core": ^7.28.5
     "@babel/plugin-transform-react-jsx-self": ^7.27.1
     "@babel/plugin-transform-react-jsx-source": ^7.27.1
-    "@rolldown/pluginutils": 1.0.0-beta.43
+    "@rolldown/pluginutils": 1.0.0-beta.47
     "@types/babel__core": ^7.20.5
     react-refresh: ^0.18.0
   peerDependencies:
     vite: ^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: bba8e0e3f980224fe8a882273836eb0acc8ff680d48e4f91af87f99d25a76ee76bc22e38e6e7f00f1acdc79b63083692de857a8bc448da231745262b173ed3be
+  checksum: 8a0ca5c4d088177cb1b48e74260f53176632b6a8277ab7c4a2914c2fc51ab172a6bea0faff53d0c0354a80c367aab56091c25b3a162da36860fd7647cabcd501
   languageName: node
   linkType: hard
 
@@ -5285,7 +5357,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^8.46.4
     "@typescript-eslint/parser": ^8.46.3
     "@use-gesture/react": ^10.3.1
-    "@vitejs/plugin-react": ^5.1.0
+    "@vitejs/plugin-react": ^5.1.1
     "@vitejs/plugin-react-swc": ^4.2.2
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.19
