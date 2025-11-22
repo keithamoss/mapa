@@ -33,7 +33,7 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.66.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^7.9.5",
+    "react-router-dom": "^7.9.6",
     "typescript": "5.9.3",
     "usehooks-ts": "^3.1.1",
     "web-vitals": "^5.1.0",
