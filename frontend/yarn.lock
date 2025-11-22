@@ -2189,10 +2189,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/babel-plugin-component-annotate@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@sentry/babel-plugin-component-annotate@npm:4.6.0"
-  checksum: d95f3fe2539fcc39846754a938b6eba55874a9275d42755bfba7fa3b4d6d4f85bd3c82a37a0de377e20a4c16c7838b57852f4915356a28a2190acef2669d7562
+"@sentry/babel-plugin-component-annotate@npm:4.6.1":
+  version: 4.6.1
+  resolution: "@sentry/babel-plugin-component-annotate@npm:4.6.1"
+  checksum: 452b7cbc4073fd91289d6605ffa4879cd94fc666c4ec7f9c65f5ffa31e3e32fb0e6d7944e7610950791d38966ebba4b045810a5df0a4cbfdb3f6450e46980507
   languageName: node
   linkType: hard
 
@@ -2222,19 +2222,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/bundler-plugin-core@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@sentry/bundler-plugin-core@npm:4.6.0"
+"@sentry/bundler-plugin-core@npm:4.6.1":
+  version: 4.6.1
+  resolution: "@sentry/bundler-plugin-core@npm:4.6.1"
   dependencies:
     "@babel/core": ^7.18.5
-    "@sentry/babel-plugin-component-annotate": 4.6.0
+    "@sentry/babel-plugin-component-annotate": 4.6.1
     "@sentry/cli": ^2.57.0
     dotenv: ^16.3.1
     find-up: ^5.0.0
-    glob: ^9.3.2
+    glob: ^10.5.0
     magic-string: 0.30.8
     unplugin: 1.0.1
-  checksum: 08a80562e0807d02554bfe9b733cda5cd6b20081c3779585975749f45d51ea7b75cd8376b0bcdf47bf2dea1c54c6ed4ab89f482e179914ecfc25adc5ed19ef54
+  checksum: 30b74b72a8d08a18b92b86c51c993a64ea284f6c9d28dcf65caf2118282ec379eed0a47a28f320816cb242091710df45066aff6ea9f7cc816f817f513bdadb83
   languageName: node
   linkType: hard
 
@@ -2396,13 +2396,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/vite-plugin@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "@sentry/vite-plugin@npm:4.6.0"
+"@sentry/vite-plugin@npm:^4.6.1":
+  version: 4.6.1
+  resolution: "@sentry/vite-plugin@npm:4.6.1"
   dependencies:
-    "@sentry/bundler-plugin-core": 4.6.0
+    "@sentry/bundler-plugin-core": 4.6.1
     unplugin: 1.0.1
-  checksum: 1fe2b5f6928280bf45fd07a83189dbf71fda66c06510010d3e64357269ccb8c01c9c655f6d1d7a9396ecf7b2543c06309b67a6c70086fac4aee62375a063ec23
+  checksum: 4340cbbee3d235b9ffa70998c9b9b9c1b024027b2bd917df760d35db7893cda14b4e0c3db6a80d26233a53b25fd32642c09fb21e4478124d89b557eb8ee2e428
   languageName: node
   linkType: hard
 
@@ -5408,7 +5408,7 @@ __metadata:
     "@sentry/browser": ^10.25.0
     "@sentry/react": ^10.26.0
     "@sentry/tracing": ^7.120.4
-    "@sentry/vite-plugin": ^4.6.0
+    "@sentry/vite-plugin": ^4.6.1
     "@testing-library/jest-dom": ^6.9.1
     "@testing-library/react": ^16.3.0
     "@testing-library/user-event": ^14.6.1
@@ -5725,6 +5725,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^10.5.0":
+  version: 10.5.0
+  resolution: "glob@npm:10.5.0"
+  dependencies:
+    foreground-child: ^3.1.0
+    jackspeak: ^3.1.2
+    minimatch: ^9.0.4
+    minipass: ^7.1.2
+    package-json-from-dist: ^1.0.0
+    path-scurry: ^1.11.1
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: cda96c074878abca9657bd984d2396945cf0d64283f6feeb40d738fe2da642be0010ad5210a1646244a5fc3511b0cab5a374569b3de5a12b8a63d392f18c6043
+  languageName: node
+  linkType: hard
+
 "glob@npm:^7.1.3, glob@npm:^7.1.4":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
@@ -5736,18 +5752,6 @@ __metadata:
     once: ^1.3.0
     path-is-absolute: ^1.0.0
   checksum: 29452e97b38fa704dabb1d1045350fb2467cf0277e155aa9ff7077e90ad81d1ea9d53d3ee63bd37c05b09a065e90f16aec4a65f5b8de401d1dac40bc5605d133
-  languageName: node
-  linkType: hard
-
-"glob@npm:^9.3.2":
-  version: 9.3.5
-  resolution: "glob@npm:9.3.5"
-  dependencies:
-    fs.realpath: ^1.0.0
-    minimatch: ^8.0.2
-    minipass: ^4.2.4
-    path-scurry: ^1.6.1
-  checksum: 94b093adbc591bc36b582f77927d1fb0dbf3ccc231828512b017601408be98d1fe798fc8c0b19c6f2d1a7660339c3502ce698de475e9d938ccbb69b47b647c84
   languageName: node
   linkType: hard
 
@@ -6583,6 +6587,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jackspeak@npm:^3.1.2":
+  version: 3.4.3
+  resolution: "jackspeak@npm:3.4.3"
+  dependencies:
+    "@isaacs/cliui": ^8.0.2
+    "@pkgjs/parseargs": ^0.11.0
+  dependenciesMeta:
+    "@pkgjs/parseargs":
+      optional: true
+  checksum: be31027fc72e7cc726206b9f560395604b82e0fddb46c4cbf9f97d049bcef607491a5afc0699612eaa4213ca5be8fd3e1e7cd187b3040988b65c9489838a7c00
+  languageName: node
+  linkType: hard
+
 "jest-diff@npm:30.0.2":
   version: 30.0.2
   resolution: "jest-diff@npm:30.0.2"
@@ -6856,6 +6873,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^10.2.0":
+  version: 10.4.3
+  resolution: "lru-cache@npm:10.4.3"
+  checksum: 6476138d2125387a6d20f100608c2583d415a4f64a0fecf30c9e2dda976614f09cad4baa0842447bd37dd459a7bd27f57d9d8f8ce558805abd487c583f3d774a
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^5.1.1":
   version: 5.1.1
   resolution: "lru-cache@npm:5.1.1"
@@ -6967,15 +6991,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^8.0.2":
-  version: 8.0.4
-  resolution: "minimatch@npm:8.0.4"
-  dependencies:
-    brace-expansion: ^2.0.1
-  checksum: 2e46cffb86bacbc524ad45a6426f338920c529dd13f3a732cc2cf7618988ee1aae88df4ca28983285aca9e0f45222019ac2d14ebd17c1edadd2ee12221ab801a
-  languageName: node
-  linkType: hard
-
 "minimatch@npm:^9.0.1":
   version: 9.0.3
   resolution: "minimatch@npm:9.0.3"
@@ -7061,13 +7076,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minipass@npm:^4.2.4":
-  version: 4.2.8
-  resolution: "minipass@npm:4.2.8"
-  checksum: 7f4914d5295a9a30807cae5227a37a926e6d910c03f315930fde52332cf0575dfbc20295318f91f0baf0e6bb11a6f668e30cde8027dea7a11b9d159867a3c830
-  languageName: node
-  linkType: hard
-
 "minipass@npm:^5.0.0":
   version: 5.0.0
   resolution: "minipass@npm:5.0.0"
@@ -7079,6 +7087,13 @@ __metadata:
   version: 7.0.4
   resolution: "minipass@npm:7.0.4"
   checksum: 87585e258b9488caf2e7acea242fd7856bbe9a2c84a7807643513a338d66f368c7d518200ad7b70a508664d408aa000517647b2930c259a8b1f9f0984f344a21
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "minipass@npm:7.1.2"
+  checksum: 2bfd325b95c555f2b4d2814d49325691c7bee937d753814861b0b49d5edcda55cbbf22b6b6a60bb91eddac8668771f03c5ff647dcd9d0f798e9548b9cdc46ee3
   languageName: node
   linkType: hard
 
@@ -7471,6 +7486,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"package-json-from-dist@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "package-json-from-dist@npm:1.0.1"
+  checksum: 58ee9538f2f762988433da00e26acc788036914d57c71c246bf0be1b60cdbd77dd60b6a3e1a30465f0b248aeb80079e0b34cb6050b1dfa18c06953bb1cbc7602
+  languageName: node
+  linkType: hard
+
 "pako@npm:^2.0.4":
   version: 2.1.0
   resolution: "pako@npm:2.1.0"
@@ -7541,13 +7563,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^1.10.1, path-scurry@npm:^1.6.1":
+"path-scurry@npm:^1.10.1":
   version: 1.10.1
   resolution: "path-scurry@npm:1.10.1"
   dependencies:
     lru-cache: ^9.1.1 || ^10.0.0
     minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
   checksum: e2557cff3a8fb8bc07afdd6ab163a92587884f9969b05bbbaf6fe7379348bfb09af9ed292af12ed32398b15fb443e81692047b786d1eeb6d898a51eb17ed7d90
+  languageName: node
+  linkType: hard
+
+"path-scurry@npm:^1.11.1":
+  version: 1.11.1
+  resolution: "path-scurry@npm:1.11.1"
+  dependencies:
+    lru-cache: ^10.2.0
+    minipass: ^5.0.0 || ^6.0.2 || ^7.0.0
+  checksum: 890d5abcd593a7912dcce7cf7c6bf7a0b5648e3dee6caf0712c126ca0a65c7f3d7b9d769072a4d1baf370f61ce493ab5b038d59988688e0c5f3f646ee3c69023
   languageName: node
   linkType: hard
 
