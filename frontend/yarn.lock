@@ -5264,7 +5264,7 @@ __metadata:
     minisearch: ^7.2.0
     ol: ^10.7.0
     ol-mapbox-style: ^13.1.1
-    prettier: ^3.7.2
+    prettier: ^3.7.4
     react: ^19.2.0
     react-dom: ^19.2.0
     react-hook-form: ^7.67.0
@@ -7493,12 +7493,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.7.2":
-  version: 3.7.2
-  resolution: "prettier@npm:3.7.2"
+"prettier@npm:^3.7.4":
+  version: 3.7.4
+  resolution: "prettier@npm:3.7.4"
   bin:
     prettier: bin/prettier.cjs
-  checksum: c074283242714c401b7ba67a8c034c21610badaf8dde9346d74df021e37c975be582630c79dde660b9f959a00beb3cccd64277185a5a918cfa5fa36cff76bad7
+  checksum: 955e37e87b1151ca3b3282463f5295f4c415821884791df152ff66e6eb1c5257115153cccba61b13962546100dd00ae45670ff27077dcab04c977d84036eaf80
   languageName: node
   linkType: hard
 
