@@ -5431,7 +5431,7 @@ __metadata:
     ol: ^10.7.0
     ol-mapbox-style: ^13.1.1
     prettier: ^3.7.4
-    react: ^19.2.1
+    react: ^19.2.3
     react-dom: ^19.2.3
     react-hook-form: ^7.68.0
     react-redux: ^9.2.0
@@ -7875,10 +7875,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.2.1":
-  version: 19.2.1
-  resolution: "react@npm:19.2.1"
-  checksum: 9b32ace5c532ed78bc5a907bfec77d966c8f117049d9bf06b627c4cebe5ef2c899f18ed283f8ed5b85346176b5ccc5328ab6fae0b389f2936a87575ce0e47670
+"react@npm:^19.2.3":
+  version: 19.2.3
+  resolution: "react@npm:19.2.3"
+  checksum: 506e369ae13cb46b7f303c0201aadf856642f482cdf5b1c3730c3a6d1762fd5a3ae1dd31196a4686bfbbe56456dcd0c48a4656c75cbcb45620e3028c54789ae9
   languageName: node
   linkType: hard
 
