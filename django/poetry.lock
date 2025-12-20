@@ -447,14 +447,14 @@ Django = ">=3.2"
 
 [[package]]
 name = "django-simple-history"
-version = "3.10.1"
+version = "3.11.0"
 description = "Store model history and view/revert changes from admin site."
 optional = false
-python-versions = ">=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "django_simple_history-3.10.1-py3-none-any.whl", hash = "sha256:e12c27abfcd7e801a9d274d94542549ce8c617b0b384ae69afb161b56cd02ba4"},
-    {file = "django_simple_history-3.10.1.tar.gz", hash = "sha256:040f0c2286bed730312aa15f0acee9e7e6f839c4bcd721693251aa7ec5b65d95"},
+    {file = "django_simple_history-3.11.0-py3-none-any.whl", hash = "sha256:f3c298db49e418ffce7fb709a5e83108452ea2179ec5c4b9232484c25427192a"},
+    {file = "django_simple_history-3.11.0.tar.gz", hash = "sha256:2c587479cf2c3071e9aa555d0d11b73676994db4910770958f57659ade2deffe"},
 ]
 
 [package.dependencies]
@@ -1611,4 +1611,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "9772096026da6674ffe715df187eecb6674966f86e5f3318317257c05ff2b325"
+content-hash = "99ee457cd8c872a902d0b26c1396d9028ad479d0c48676f0d8c884c99d160e39"
