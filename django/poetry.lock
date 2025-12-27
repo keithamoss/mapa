@@ -1417,22 +1417,22 @@ files = [
 
 [[package]]
 name = "social-auth-app-django"
-version = "5.6.0"
+version = "5.7.0"
 description = "Python Social Authentication, Django integration."
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "social_auth_app_django-5.6.0-py3-none-any.whl", hash = "sha256:43ca88cc5cd9161710896165ced58b3155e8aafaaff847e859879194770f138d"},
-    {file = "social_auth_app_django-5.6.0.tar.gz", hash = "sha256:c695501fcbf6fe87f68f5a79e379abe853662f5129e7ec6cb758a75d5b28c888"},
+    {file = "social_auth_app_django-5.7.0-py3-none-any.whl", hash = "sha256:492b6f64e1e9fa5ed62b24bc19bde31c235fd4eb7fbd5c310e999e752b8f699a"},
+    {file = "social_auth_app_django-5.7.0.tar.gz", hash = "sha256:c0cc118d1bb935dbf02acb8a57fabd7b07694452fce755a5956282c69f019c79"},
 ]
 
 [package.dependencies]
 Django = ">=5.1"
-social-auth-core = ">=4.4,<5.0"
+social-auth-core = ">=4.8.3,<4.9.0"
 
 [package.extras]
-dev = ["coverage (>=3.6)", "django-stubs (==5.2.7)", "django-stubs-ext (==5.2.7)", "mypy (==1.18.2)", "pre-commit", "pyright (==1.1.406)", "tox"]
+dev = ["coverage (>=3.6)", "django-stubs (==5.2.8)", "django-stubs-ext (==5.2.8)", "mypy (==1.19.1)", "pre-commit", "pyright (==1.1.407)", "tox"]
 
 [[package]]
 name = "social-auth-core"
@@ -1611,4 +1611,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "e74d00b6404ec86db06e0b643fff4fa06019a02f9881e967b872a5d5182fad33"
+content-hash = "a981da131d427dd8b5ddc5963c4c3f399219238bd010cd5cf288ad6aa810c5e7"
