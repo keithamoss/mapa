@@ -25,7 +25,7 @@
     "autosuggest-highlight": "^3.3.4",
     "dayjs": "^1.11.19",
     "js-cookie": "^3.0.5",
-    "lodash-es": "^4.17.22",
+    "lodash-es": "^4.17.23",
     "minisearch": "^7.2.0",
     "ol": "^10.7.0",
     "ol-mapbox-style": "^13.2.0",
