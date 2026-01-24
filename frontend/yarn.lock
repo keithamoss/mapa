@@ -5335,7 +5335,7 @@ __metadata:
     usehooks-ts: ^3.1.1
     vite: ^7.3.1
     vite-plugin-checker: ^0.12.0
-    vite-tsconfig-paths: ^6.0.4
+    vite-tsconfig-paths: ^6.0.5
     web-vitals: ^5.1.0
     yup: ^1.7.1
   languageName: unknown
@@ -9329,24 +9329,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-tsconfig-paths@npm:^6.0.4":
-  version: 6.0.4
-  resolution: "vite-tsconfig-paths@npm:6.0.4"
+"vite-tsconfig-paths@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "vite-tsconfig-paths@npm:6.0.5"
   dependencies:
     debug: ^4.1.1
     globrex: ^0.1.2
     tsconfck: ^3.0.3
-    vite: "*"
   peerDependencies:
     vite: "*"
-  peerDependenciesMeta:
-    vite:
-      optional: true
-  checksum: 090f61b9623df341fde090ff60383a11f223f68c863e4b505b1853e9d17c07cc031a2070c09319a94ac4e97b03f6252bded236cfa2a275d62e0db6baab2faa84
+  checksum: c698b98207e732f3c2e60da89456dba0e91ff147cbe2c9dc90c184a7dd5422a58f4b847dc942d1027c6372ac7716d11ce583bb2d5207d245aafb14a7bb090a1d
   languageName: node
   linkType: hard
 
-"vite@npm:*, vite@npm:^7.3.1":
+"vite@npm:^7.3.1":
   version: 7.3.1
   resolution: "vite@npm:7.3.1"
   dependencies:
