@@ -1204,19 +1204,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-common-types@npm:7.1.0":
-  version: 7.1.0
-  resolution: "@fortawesome/fontawesome-common-types@npm:7.1.0"
-  checksum: 4cc34a4cd4b96dcf4e83a40f9537038e25a6069b6c6f57c15138b9e00188b3f610ff794995672548831c51634b5513111743ae41b9ce68b836954e0f0044766a
+"@fortawesome/fontawesome-common-types@npm:7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-common-types@npm:7.2.0"
+  checksum: d8886411efb978c5a22374a1076b504b1815641bc4a6dc69b9e630c1e04be2297d8700369f839a95566aad234dd6a5068f9fb84add24122a9314db87073e5a90
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "@fortawesome/fontawesome-svg-core@npm:7.1.0"
+"@fortawesome/fontawesome-svg-core@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "@fortawesome/fontawesome-svg-core@npm:7.2.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 7.1.0
-  checksum: 83d0839257c979dfd689ca068d231fca00896da97e1f91fd4a1e27de87b5afb1bf341dc2cbc90e9476885bb720bd9d0cf1d29f7736338ecdba3fceb6f923298e
+    "@fortawesome/fontawesome-common-types": 7.2.0
+  checksum: e07c1d71dfd5206b87bd24576980e7398da745b2a617a390d3a86577b4e84ca628385a85628b8135c9bdefee45f8dac88bda7bccb4e2758b5d97756a4b66a1d9
   languageName: node
   linkType: hard
 
@@ -5318,7 +5318,7 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.14.0
     "@emotion/styled": ^11.14.1
-    "@fortawesome/fontawesome-svg-core": ^7.1.0
+    "@fortawesome/fontawesome-svg-core": ^7.2.0
     "@hookform/resolvers": ^5.2.2
     "@mui/icons-material": ^7.3.7
     "@mui/lab": ^7.0.0-beta.17
