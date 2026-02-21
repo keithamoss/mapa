@@ -67,7 +67,7 @@ export const searchIcons = (
 		fields: ['label', 'search.terms', 'categories'], // Fields to index for full-text search
 		storeFields: ['name', 'label', 'search.terms', 'categories'], // Fields to return with search results
 		searchOptions: {
-			boost: { name: 3, categories: 1.5 }, // Fields to boost in the results
+			boost: { label: 5, name: 3, categories: 1.5 }, // Fields to boost in the results (label gets highest priority)
 			// documentId is the icon name
 			boostDocument: (documentId) =>
 				boostCircularModifierIcons === true &&
