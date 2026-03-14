@@ -1824,13 +1824,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:1.0.0-rc.2":
-  version: 1.0.0-rc.2
-  resolution: "@rolldown/pluginutils@npm:1.0.0-rc.2"
-  checksum: ef87aab5642ca45d12b356fe5a82c1b4d69ffa260c197f59135a332da2fe0f70fc97bf31b632445ef26031c1c455b86c0bde49ecd89f208edd363e13211f3a26
-  languageName: node
-  linkType: hard
-
 "@rolldown/pluginutils@npm:1.0.0-rc.7":
   version: 1.0.0-rc.7
   resolution: "@rolldown/pluginutils@npm:1.0.0-rc.7"
@@ -2932,15 +2925,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^4.2.3":
-  version: 4.2.3
-  resolution: "@vitejs/plugin-react-swc@npm:4.2.3"
+"@vitejs/plugin-react-swc@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "@vitejs/plugin-react-swc@npm:4.3.0"
   dependencies:
-    "@rolldown/pluginutils": 1.0.0-rc.2
+    "@rolldown/pluginutils": 1.0.0-rc.7
     "@swc/core": ^1.15.11
   peerDependencies:
-    vite: ^4 || ^5 || ^6 || ^7
-  checksum: 1da6aa4323116bfc2f3a020dfd190568f161847abe710dde85d2ef7bdf5baf695fd12e9af133ae055a6745df084aaa10afd1b2775f1d79ef565d1c02d38b3622
+    vite: ^4 || ^5 || ^6 || ^7 || ^8
+  checksum: dcf102bb6409135f9596e24de2f9081ea10529f51dcc2b6e32af8f7c88ed163734b4c5c6df6295f6c61e8ed6e825daee968880281bfc7d3f4856fdb921e320ac
   languageName: node
   linkType: hard
 
@@ -5020,7 +5013,7 @@ __metadata:
     "@typescript-eslint/parser": ^8.56.1
     "@use-gesture/react": ^10.3.1
     "@vitejs/plugin-react": ^6.0.1
-    "@vitejs/plugin-react-swc": ^4.2.3
+    "@vitejs/plugin-react-swc": ^4.3.0
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.20
     eslint: ^10.0.3
