@@ -3875,10 +3875,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.19":
-  version: 1.11.19
-  resolution: "dayjs@npm:1.11.19"
-  checksum: dfafcca2c67cc6e542fd880d77f1d91667efd323edc28f0487b470b184a11cc97696163ed5be1142ea2a031045b27a0d0555e72f60a63275e0e0401ac24bea5d
+"dayjs@npm:^1.11.20":
+  version: 1.11.20
+  resolution: "dayjs@npm:1.11.20"
+  checksum: 26f4867c4ae1315885ac3e560906d3f8c49cb6a1303e6fdd5f87ace3b814b07a45f036facad70299cea36f3eb62ee2070dd239079c56d8f55e4e684afb752a67
   languageName: node
   linkType: hard
 
@@ -5124,7 +5124,7 @@ __metadata:
     "@vitejs/plugin-react": ^6.0.1
     "@vitejs/plugin-react-swc": ^4.2.3
     autosuggest-highlight: ^3.3.4
-    dayjs: ^1.11.19
+    dayjs: ^1.11.20
     eslint: ^10.0.3
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^18.0.0
