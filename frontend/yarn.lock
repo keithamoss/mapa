@@ -5026,7 +5026,7 @@ __metadata:
     vite: ^8.0.1
     vite-plugin-checker: ^0.12.0
     vite-tsconfig-paths: ^6.1.1
-    web-vitals: ^5.1.0
+    web-vitals: ^5.2.0
     yup: ^1.7.1
   languageName: unknown
   linkType: soft
@@ -9113,10 +9113,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "web-vitals@npm:5.1.0"
-  checksum: bd6a3186d9e7d7d3ab418ce67f3df81df1f7bbea88235ee092c47504966d1abc7e784ba27229f0a6ed919b8b8584defdc983d51aeb450dad5725b231e26bafb4
+"web-vitals@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "web-vitals@npm:5.2.0"
+  checksum: ced94ccc76817f607c6545d415d364a340f0b471a1199d3edc035efdb4611585fc44080338a56dd93b275341dba9ed61045957afadbfeb84af72aa0f029d36cb
   languageName: node
   linkType: hard
 
