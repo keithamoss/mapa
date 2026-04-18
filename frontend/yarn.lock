@@ -4877,7 +4877,7 @@ __metadata:
     typescript: 6.0.2
     usehooks-ts: ^3.1.1
     vite: ^8.0.8
-    vite-plugin-checker: ^0.12.0
+    vite-plugin-checker: ^0.13.0
     vite-tsconfig-paths: ^6.1.1
     web-vitals: ^5.2.0
     yup: ^1.7.1
@@ -5217,7 +5217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.6":
+"graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: ac85f94da92d8eb6b7f5a8b20ce65e43d66761c55ce85ac96df6865308390da45a8d3f0296dd3a663de65d30ba497bd46c696cc1e248c72b13d6d567138a4fc7
@@ -7200,6 +7200,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "proper-lockfile@npm:4.1.2"
+  dependencies:
+    graceful-fs: ^4.2.4
+    retry: ^0.12.0
+    signal-exit: ^3.0.2
+  checksum: 00078ee6a61c216a56a6140c7d2a98c6c733b3678503002dc073ab8beca5d50ca271de4c85fca13b9b8ee2ff546c36674d1850509b84a04a5d0363bcb8638939
+  languageName: node
+  linkType: hard
+
 "property-expr@npm:^2.0.5":
   version: 2.0.6
   resolution: "property-expr@npm:2.0.6"
@@ -7965,7 +7976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"signal-exit@npm:^3.0.7":
+"signal-exit@npm:^3.0.2, signal-exit@npm:^3.0.7":
   version: 3.0.7
   resolution: "signal-exit@npm:3.0.7"
   checksum: a2f098f247adc367dffc27845853e9959b9e88b01cb301658cfe4194352d8d2bb32e18467c786a7fe15f1d44b233ea35633d076d5e737870b7139949d1ab6318
@@ -8840,25 +8851,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-checker@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "vite-plugin-checker@npm:0.12.0"
+"vite-plugin-checker@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "vite-plugin-checker@npm:0.13.0"
   dependencies:
     "@babel/code-frame": ^7.27.1
     chokidar: ^4.0.3
     npm-run-path: ^6.0.0
     picocolors: ^1.1.1
-    picomatch: ^4.0.3
+    picomatch: ^4.0.4
+    proper-lockfile: ^4.1.2
     tiny-invariant: ^1.3.3
     tinyglobby: ^0.2.15
     vscode-uri: ^3.1.0
   peerDependencies:
     "@biomejs/biome": ">=1.7"
-    eslint: ">=9.39.1"
-    meow: ^13.2.0
+    eslint: ">=9.39.4"
+    meow: ^13.2.0 || ^14.0.0
     optionator: ^0.9.4
     oxlint: ">=1"
-    stylelint: ">=16"
+    stylelint: ">=16.26.1"
     typescript: "*"
     vite: ">=5.4.21"
     vls: "*"
@@ -8885,7 +8897,7 @@ __metadata:
       optional: true
     vue-tsc:
       optional: true
-  checksum: 4ab00f97c6caa0d4f10788fdcd4f3f59f66c2c88b5acd92b0993cfe8b00934407c6824033fad73eff0545735cde99bb63825e069daece9b950d5b336bc5d75b9
+  checksum: 2b5c14ade023968c19b00008c326a25d50c0fe1c8a705bfe2af36171c8a3a9314f8b426e094da181d97d3705929631e04fe9d9015e00bfcde7a16c2cf1dc46c7
   languageName: node
   linkType: hard
 
