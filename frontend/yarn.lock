@@ -1559,10 +1559,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@petamoriken/float16@npm:^3.4.7":
-  version: 3.8.4
-  resolution: "@petamoriken/float16@npm:3.8.4"
-  checksum: b9fc36988c9ece375575c918a26879ff126df06c45614fb12cc1b1254df4011b9ea1a22a216ebaecfff1417cd3dc23c5b4d2b6f173ea648b06510d61bd9566b4
+"@petamoriken/float16@npm:^3.9.3":
+  version: 3.9.3
+  resolution: "@petamoriken/float16@npm:3.9.3"
+  checksum: 99e4710c86d8c256db5841cc72df3f9433d1b0d9903edde102f15bb6e69b37c0e5e6032794d08416313868016c83cccf6a096f35bfd3391cf81c9e3025ddea4d
   languageName: node
   linkType: hard
 
@@ -2918,13 +2918,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zarrita/storage@npm:^0.1.4":
-  version: 0.1.4
-  resolution: "@zarrita/storage@npm:0.1.4"
+"@zarrita/storage@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@zarrita/storage@npm:0.2.0"
   dependencies:
     reference-spec-reader: ^0.2.0
-    unzipit: 1.4.3
-  checksum: 5e8696d7ae5171b7b4f090896532d3bd82fd142bb99bfd7dc811697909bccccc8a8b65d06c53aa8fadf7b7029d7b48c6bfc611707dbe349c8ebfe3c0d98c09e8
+    unzipit: 2.0.0
+  checksum: 1bd26476efe4a1083e3fa7ae935b697d1d2d15812646e74fec00f4d95a0008d5b43323c285826e18d0a982b56ea98741c761c3ae343c5fa596274344b00f4d78
   languageName: node
   linkType: hard
 
@@ -4992,7 +4992,7 @@ __metadata:
     js-cookie: ^3.0.5
     lodash-es: ^4.18.1
     minisearch: ^7.2.0
-    ol: ^10.8.0
+    ol: ^10.9.0
     ol-mapbox-style: ^13.4.1
     prettier: ^3.8.2
     react: ^19.2.5
@@ -5117,11 +5117,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"geotiff@npm:^3.0.2":
-  version: 3.0.3
-  resolution: "geotiff@npm:3.0.3"
+"geotiff@npm:^3.0.5 || ^3.1.0-beta.0":
+  version: 3.1.0-beta.0
+  resolution: "geotiff@npm:3.1.0-beta.0"
   dependencies:
-    "@petamoriken/float16": ^3.4.7
+    "@petamoriken/float16": ^3.9.3
     lerc: ^3.0.0
     pako: ^2.0.4
     parse-headers: ^2.0.2
@@ -5129,7 +5129,7 @@ __metadata:
     web-worker: ^1.5.0
     xml-utils: ^1.10.2
     zstddec: ^0.2.0
-  checksum: f4163955a40d7bd543a3043f696f8fefa6198da6216d4d9e79df34ca9e62f6a11e843f30ffc920e623f1f5b16085957cae363082caa33565223d6e2b96349eab
+  checksum: 62d1ec7f3978598e738e5c69adf30c575debfe7d74a86a174609751f012f2c67e840505001ca34c26e31b8bd80ceed46befdef37709316d85c3ef62e2727c781
   languageName: node
   linkType: hard
 
@@ -7019,17 +7019,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ol@npm:^10.8.0":
-  version: 10.8.0
-  resolution: "ol@npm:10.8.0"
+"ol@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "ol@npm:10.9.0"
   dependencies:
     "@types/rbush": 4.0.0
     earcut: ^3.0.0
-    geotiff: ^3.0.2
+    geotiff: ^3.0.5 || ^3.1.0-beta.0
     pbf: 4.0.1
     rbush: ^4.0.0
-    zarrita: ^0.6.0
-  checksum: c9032a81332f6462b3ed1a505d3791fa02c126a6641779af7d3206e542b4ca15093ceae7fcb88d87c720b7936a86997668e2576b0438be718854f54f1fe12ca9
+    zarrita: ^0.7.1
+  checksum: 66b628fd2f1ee9b7929ceeecf05ec6e8a3577f6f77098b034e0d2f355bd95a5261f8f69b819b3f4fbdc0d2fe19fa0a0dc9075d69ee0a112f282391207fcf5889
   languageName: node
   linkType: hard
 
@@ -8888,12 +8888,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unzipit@npm:1.4.3":
-  version: 1.4.3
-  resolution: "unzipit@npm:1.4.3"
-  dependencies:
-    uzip-module: ^1.0.2
-  checksum: ce29348edab7b5fb5b7b4d43437f48e35812ac8b3cc2d76efd1acfcad6dd1b96b4f96bfd03250a724b87ba99dd531d7727ad24b590acf727dde79f54f5e779ed
+"unzipit@npm:2.0.0":
+  version: 2.0.0
+  resolution: "unzipit@npm:2.0.0"
+  checksum: f1ee48b5d94b283a0f3f8f9271362c0bd920ea9313559c53ced50cbeb1e5f94fc3a1d17023bcfa3d254e859f67ed9df7b28b7676f766b08005091c97abb0f822
   languageName: node
   linkType: hard
 
@@ -8967,13 +8965,6 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
-  languageName: node
-  linkType: hard
-
-"uzip-module@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "uzip-module@npm:1.0.3"
-  checksum: fc286c44a04d75055577fae8293d3fee499d1e850f87e88c158b1e3657f4794a3a40ca2d34f73474ff82917176dd5ca9d1c0d1e375a083714e11afabd3afa423
   languageName: node
   linkType: hard
 
@@ -9345,13 +9336,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zarrita@npm:^0.6.0":
-  version: 0.6.1
-  resolution: "zarrita@npm:0.6.1"
+"zarrita@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "zarrita@npm:0.7.1"
   dependencies:
-    "@zarrita/storage": ^0.1.4
+    "@zarrita/storage": ^0.2.0
     numcodecs: ^0.3.2
-  checksum: 3d364ea3d4e0fb47b34151120b48c4796e4ff87d334456432442e3578ad42b931377133460a1c1cb6a0653c34c50fb330497b540fd77e3244da08c061c47acac
+  checksum: 87bb6ed183dadb4e5e73aaaa343300a06329a168ef3f9eac66a934393fca0f23411aa1df761263f7888dc60b1ad6aef9b5ff51b4cb058948079e147b651b5222
   languageName: node
   linkType: hard
 
