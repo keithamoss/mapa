@@ -29,7 +29,7 @@
     "minisearch": "^7.2.0",
     "ol": "^10.9.0",
     "ol-mapbox-style": "^13.4.1",
-    "react": "^19.2.5",
+    "react": "^19.2.6",
     "react-dom": "^19.2.5",
     "react-hook-form": "^7.75.0",
     "react-redux": "^9.2.0",
