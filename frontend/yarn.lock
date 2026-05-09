@@ -1807,12 +1807,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry-internal/browser-utils@npm:10.52.0":
+  version: 10.52.0
+  resolution: "@sentry-internal/browser-utils@npm:10.52.0"
+  dependencies:
+    "@sentry/core": 10.52.0
+  checksum: 3513d3a9be9eb4cc7f343550d29e863671435f33e5d1709f11c64e676d91d33a43b9ea58ab5d676519f8904f703c48151c176e4af2bd4a268cb35439220f8703
+  languageName: node
+  linkType: hard
+
 "@sentry-internal/feedback@npm:10.51.0":
   version: 10.51.0
   resolution: "@sentry-internal/feedback@npm:10.51.0"
   dependencies:
     "@sentry/core": 10.51.0
   checksum: 2cc513c8361f9e13970ca3c5aef5a6c198399063177cd963ee950841b75952c60622bd43b1091e09e9b5c8ee774cb29094083c94409b88a85aba865ec5121696
+  languageName: node
+  linkType: hard
+
+"@sentry-internal/feedback@npm:10.52.0":
+  version: 10.52.0
+  resolution: "@sentry-internal/feedback@npm:10.52.0"
+  dependencies:
+    "@sentry/core": 10.52.0
+  checksum: a02c902ad51eb94f1f475da7ae8d92be50ec242a063135fa17c8172c483fd753e19da283af8698b1a97fe20d8e51e9c4d3afc625c63fa1c06c5032754f5f0e4b
   languageName: node
   linkType: hard
 
@@ -1826,6 +1844,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry-internal/replay-canvas@npm:10.52.0":
+  version: 10.52.0
+  resolution: "@sentry-internal/replay-canvas@npm:10.52.0"
+  dependencies:
+    "@sentry-internal/replay": 10.52.0
+    "@sentry/core": 10.52.0
+  checksum: f49e81abc58b1f0475040d9c376fc89b9e9e20e6d705b9c705181dad042bf5936e66b7d685411e3e77886fe4bb49c55fda29a5189400aca46d2a6e7c7a63e8d5
+  languageName: node
+  linkType: hard
+
 "@sentry-internal/replay@npm:10.51.0":
   version: 10.51.0
   resolution: "@sentry-internal/replay@npm:10.51.0"
@@ -1833,6 +1861,16 @@ __metadata:
     "@sentry-internal/browser-utils": 10.51.0
     "@sentry/core": 10.51.0
   checksum: 01c1405e1e83d45fcf5aa15525b1e5764d1911c26d188bc4a81282c6024a4a468fcf2849df78dd9830e105fa0dc8b8afac4ecf2c020a8894a2c348e8fb76dcab
+  languageName: node
+  linkType: hard
+
+"@sentry-internal/replay@npm:10.52.0":
+  version: 10.52.0
+  resolution: "@sentry-internal/replay@npm:10.52.0"
+  dependencies:
+    "@sentry-internal/browser-utils": 10.52.0
+    "@sentry/core": 10.52.0
+  checksum: 503143a60d09d84bb6c822ba8ae3ced67f5264bedc57375e517f5208a78ecd1d9b7ce850727b1baa0003a920c201b726f9ac92409c7a7c276dbe32f93ac75be8
   languageName: node
   linkType: hard
 
@@ -1854,7 +1892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:10.51.0, @sentry/browser@npm:^10.51.0":
+"@sentry/browser@npm:10.51.0":
   version: 10.51.0
   resolution: "@sentry/browser@npm:10.51.0"
   dependencies:
@@ -1864,6 +1902,19 @@ __metadata:
     "@sentry-internal/replay-canvas": 10.51.0
     "@sentry/core": 10.51.0
   checksum: cc32de1de9ebff181c1fda49423b70b665e0db39d2074a1629fcfab7f94410e68747eb7143c4b731ec02fbf9cad35b59b37da2471581f0ac6a39d7e39b723412
+  languageName: node
+  linkType: hard
+
+"@sentry/browser@npm:^10.52.0":
+  version: 10.52.0
+  resolution: "@sentry/browser@npm:10.52.0"
+  dependencies:
+    "@sentry-internal/browser-utils": 10.52.0
+    "@sentry-internal/feedback": 10.52.0
+    "@sentry-internal/replay": 10.52.0
+    "@sentry-internal/replay-canvas": 10.52.0
+    "@sentry/core": 10.52.0
+  checksum: 38d11373d0ac235d432ec11c688a967ed78b702dcf4a8eadfe4aed00235c6a2139837db2c9a837fe1936efbc51670e437f1f3c7144005fe2d06d429fb9b35b01
   languageName: node
   linkType: hard
 
@@ -1982,6 +2033,13 @@ __metadata:
   version: 10.51.0
   resolution: "@sentry/core@npm:10.51.0"
   checksum: daa2903db36743afc0b238b2a5e4c2d2483499ef4876057a18a73a6fe632824e56bfae2d8a4664759d474a008652bf466024978e08de2597feb10a4374ec099d
+  languageName: node
+  linkType: hard
+
+"@sentry/core@npm:10.52.0":
+  version: 10.52.0
+  resolution: "@sentry/core@npm:10.52.0"
+  checksum: c14a03c122428e915e49c183999c8ea9054c04cca738b69a87add8bbffe19ed3fb8ae683fad5646bc10ca0b4e164d21220bdda548d54b36b024d5b1802452e1d
   languageName: node
   linkType: hard
 
@@ -4893,7 +4951,7 @@ __metadata:
     "@mui/x-date-pickers": ^9.0.4
     "@react-spring/web": ^10.0.2
     "@reduxjs/toolkit": ^2.11.2
-    "@sentry/browser": ^10.51.0
+    "@sentry/browser": ^10.52.0
     "@sentry/react": ^10.51.0
     "@sentry/tracing": ^7.120.4
     "@sentry/vite-plugin": ^5.2.1
