@@ -1264,23 +1264,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/private-theming@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@mui/private-theming@npm:9.0.0"
-  dependencies:
-    "@babel/runtime": ^7.29.2
-    "@mui/utils": ^9.0.0
-    prop-types: ^15.8.1
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
-    react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: f5cce5fb5bbe950f0b4173178289b29c0244cdd1cbae177cbeba24a7638cdec449fe62651708d68373b9ab4abab6da7381be576c9874f1adab4771ee8aee52dd
-  languageName: node
-  linkType: hard
-
 "@mui/private-theming@npm:^9.0.1":
   version: 9.0.1
   resolution: "@mui/private-theming@npm:9.0.1"
@@ -1372,34 +1355,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/system@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@mui/system@npm:9.0.0"
-  dependencies:
-    "@babel/runtime": ^7.29.2
-    "@mui/private-theming": ^9.0.0
-    "@mui/styled-engine": ^9.0.0
-    "@mui/types": ^9.0.0
-    "@mui/utils": ^9.0.0
-    clsx: ^2.1.1
-    csstype: ^3.2.3
-    prop-types: ^15.8.1
-  peerDependencies:
-    "@emotion/react": ^11.5.0
-    "@emotion/styled": ^11.3.0
-    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
-    react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  peerDependenciesMeta:
-    "@emotion/react":
-      optional: true
-    "@emotion/styled":
-      optional: true
-    "@types/react":
-      optional: true
-  checksum: 5f8d4cbb8ad03876d8225b83995075472eb3ca2212a4c2ca5acbdcd72ee2a6bd3e42f7662ecf63d3309cb0ba4281782c402d79be159b3fe823a37ed888c75bf5
-  languageName: node
-  linkType: hard
-
 "@mui/system@npm:^9.0.1":
   version: 9.0.1
   resolution: "@mui/system@npm:9.0.1"
@@ -1456,7 +1411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:9.0.0, @mui/utils@npm:^9.0.0":
+"@mui/utils@npm:9.0.0":
   version: 9.0.0
   resolution: "@mui/utils@npm:9.0.0"
   dependencies:
@@ -5012,7 +4967,7 @@ __metadata:
     "@mui/icons-material": ^9.0.0
     "@mui/lab": ^7.0.0-beta.17
     "@mui/material": ^9.0.1
-    "@mui/system": ^9.0.0
+    "@mui/system": ^9.0.1
     "@mui/x-date-pickers": ^9.0.4
     "@react-spring/web": ^10.0.2
     "@reduxjs/toolkit": ^2.11.2
