@@ -115,9 +115,8 @@ export const searchSymbols = (
 			// boost: {  }, // Fields to boost in the results
 			prefix: true, // Prefix search (so that 'moto' will match 'motorcycle')
 			combineWith: 'AND', // Combine terms with AND, not OR
-			// Fuzzy search with a max edit distance of 0.2 * term length,
-			// rounded to nearest integer. The mispelled 'ismael' will match 'ishmael'.
-			fuzzy: 2,
+			// Fuzzy search disabled to prevent false matches (e.g. "min" matching "Fig" with fuzzy: 2)
+			// fuzzy: 2,
 		},
 		// Access schema-derived fields and nested fields (and regular top-level fields)
 		extractField: (document, fieldName) => {
