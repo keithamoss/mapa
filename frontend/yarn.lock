@@ -306,13 +306,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@base-ui/utils@npm:^0.2.9":
-  version: 0.2.9
-  resolution: "@base-ui/utils@npm:0.2.9"
+"@base-ui/utils@npm:^0.3.0":
+  version: 0.3.1
+  resolution: "@base-ui/utils@npm:0.3.1"
   dependencies:
     "@babel/runtime": ^7.29.2
     "@floating-ui/utils": ^0.2.11
-    reselect: ^5.1.1
+    reselect: ^5.2.0
     use-sync-external-store: ^1.6.0
   peerDependencies:
     "@types/react": ^17 || ^18 || ^19
@@ -321,7 +321,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: be9bcb742f81d9b258b1c98d681edc885132827f4fee3a496b46b5a325f0bb83ca08777fceb783f8d287c8794099115e733c7290702caf7bc1a9d78f75cd02da
+  checksum: fc0c7eb62cd1cdffa723af49c203599ee608183fb812538b92fa174da292ff180c183de2ad90830985446f9bc7d62debbb14fda55e4e3fe23407c0421f984cb3
   languageName: node
   linkType: hard
 
@@ -1138,7 +1138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/utils@npm:^9.0.1, @mui/utils@npm:^9.1.1":
+"@mui/utils@npm:^9.1.1":
   version: 9.1.1
   resolution: "@mui/utils@npm:9.1.1"
   dependencies:
@@ -1158,13 +1158,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^9.6.0":
-  version: 9.6.0
-  resolution: "@mui/x-date-pickers@npm:9.6.0"
+"@mui/x-date-pickers@npm:^9.7.0":
+  version: 9.7.0
+  resolution: "@mui/x-date-pickers@npm:9.7.0"
   dependencies:
     "@babel/runtime": ^7.29.7
-    "@mui/utils": ^9.0.1
-    "@mui/x-internals": ^9.6.0
+    "@mui/utils": ^9.1.1
+    "@mui/x-internals": ^9.7.0
     "@types/react-transition-group": ^4.4.12
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1202,23 +1202,23 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: 4ef94077ec0b3026d471e321c43dc475fbed18e1309d758fd2cfb0c546dfa46e8fd89136c63282627c3138e30301a981e40a153b586f52414ab20b54e55ce228
+  checksum: fdb9509e8fb92aeb9704686d1ddf585cf306240b247b8abc07740693d581c650283d97eda990bf17df8e6ca766c295e60c0e0897bdd85f3e9203a046ae721013
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:^9.6.0":
-  version: 9.6.0
-  resolution: "@mui/x-internals@npm:9.6.0"
+"@mui/x-internals@npm:^9.7.0":
+  version: 9.7.0
+  resolution: "@mui/x-internals@npm:9.7.0"
   dependencies:
     "@babel/runtime": ^7.29.7
-    "@base-ui/utils": ^0.2.9
-    "@mui/utils": ^9.0.1
+    "@base-ui/utils": ^0.3.0
+    "@mui/utils": ^9.1.1
     core-js-pure: ^3.49.0
     reselect: ^5.2.0
     use-sync-external-store: ^1.6.0
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 9343d2319bdc1c8a2c7a5f38bf621c89d8304de8b48ddaba36213e204c5217a4d072526453b86266f188cee3e654c893dcd27d5d29669aef2167560b642ae71f
+  checksum: 900cdb3cddeffa11444e40268e7c27f44572c0857e33cf38eb3c23c97086172f364eb50081fa1ff6133a413bd16009e126f3a3b9490f020e43beb3f6cda6da24
   languageName: node
   linkType: hard
 
@@ -4497,7 +4497,7 @@ __metadata:
     "@mui/lab": ^7.0.0-beta.17
     "@mui/material": ^9.1.1
     "@mui/system": ^9.1.1
-    "@mui/x-date-pickers": ^9.6.0
+    "@mui/x-date-pickers": ^9.7.0
     "@react-spring/web": ^10.1.1
     "@reduxjs/toolkit": ^2.12.0
     "@sentry/browser": ^10.59.0
@@ -7158,13 +7158,6 @@ __metadata:
   version: 5.1.0
   resolution: "reselect@npm:5.1.0"
   checksum: 5bc9c5d03d7caea00d0c0e24330bf23d91801227346fec1cef6a60988ab8d3dd7cee76e6994ca0915bc1c20845bb2bd929b95753763e0a9db74c0f9dff5cb845
-  languageName: node
-  linkType: hard
-
-"reselect@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "reselect@npm:5.1.1"
-  checksum: 5d32d48be29071ddda21a775945c2210cf4ca3fccde1c4a0e1582ac3bf99c431c6c2330ef7ca34eae4c06feea617e7cb2c275c4b33ccf9a930836dfc98b49b13
   languageName: node
   linkType: hard
 
