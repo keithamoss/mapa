@@ -864,10 +864,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/core-downloads-tracker@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "@mui/core-downloads-tracker@npm:9.1.1"
-  checksum: d036e08f7967664005f46c6820925ca2366997288bedfb8d5a34ec92880bb079a06a462e6ab2817ab777fabc85369ce19e8130b0d312e9eb3230e847b42f400a
+"@mui/core-downloads-tracker@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "@mui/core-downloads-tracker@npm:9.1.2"
+  checksum: 25bf663e8798542a834faf4689148ee8860b7bad3b0587abc23fc9392511595cd217b6b990d5a680d78183f8642b6943e3aaa54f364d06f1f5b25a568dd77ade
   languageName: node
   linkType: hard
 
@@ -918,13 +918,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/material@npm:^9.1.1":
-  version: 9.1.1
-  resolution: "@mui/material@npm:9.1.1"
+"@mui/material@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "@mui/material@npm:9.1.2"
   dependencies:
     "@babel/runtime": ^7.29.2
-    "@mui/core-downloads-tracker": ^9.1.1
-    "@mui/system": ^9.1.1
+    "@mui/core-downloads-tracker": ^9.1.2
+    "@mui/system": ^9.1.2
     "@mui/types": ^9.1.1
     "@mui/utils": ^9.1.1
     "@popperjs/core": ^2.11.8
@@ -950,7 +950,7 @@ __metadata:
       optional: true
     "@types/react":
       optional: true
-  checksum: 5c11962117c6e4d6684af5802cb94f495ff55a5c7ad774969fa08545ca672913e019a37759cf326e3ab9dea61ed8b3ce6d437ae7408e0ce8b1db9a06f52dc653
+  checksum: 21e9d360e1d1c391cc76caa6825aa87040edf6c5b2087795afef4d18de1731170ecb0bec68a36ddbf4e631a2de5bbc422ae5293154dec9e139d7681320554907
   languageName: node
   linkType: hard
 
@@ -1087,6 +1087,34 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 390e72f2c4b72457cd0e96d7d9e38d591ecab3c7d7c798f48fedcbd63b54ffeedcab0a7ea4e3e8177c19f23f5c2785ae593b768af225656f25e57c6bb338599e
+  languageName: node
+  linkType: hard
+
+"@mui/system@npm:^9.1.2":
+  version: 9.1.2
+  resolution: "@mui/system@npm:9.1.2"
+  dependencies:
+    "@babel/runtime": ^7.29.2
+    "@mui/private-theming": ^9.1.1
+    "@mui/styled-engine": ^9.1.1
+    "@mui/types": ^9.1.1
+    "@mui/utils": ^9.1.1
+    clsx: ^2.1.1
+    csstype: ^3.2.3
+    prop-types: ^15.8.1
+  peerDependencies:
+    "@emotion/react": ^11.5.0
+    "@emotion/styled": ^11.3.0
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/react":
+      optional: true
+    "@emotion/styled":
+      optional: true
+    "@types/react":
+      optional: true
+  checksum: 79471fd5e36f21d97bd77fba79b2873664be5a148db68d84f019853f2afef042634fb83d2f7f23082d40f0f3404c3588e2576dbf9d725e30f550d4976ff4ed21
   languageName: node
   linkType: hard
 
@@ -4621,7 +4649,7 @@ __metadata:
     "@hookform/resolvers": ^5.4.0
     "@mui/icons-material": ^9.1.1
     "@mui/lab": ^7.0.0-beta.17
-    "@mui/material": ^9.1.1
+    "@mui/material": ^9.1.2
     "@mui/system": ^9.1.1
     "@mui/x-date-pickers": ^9.7.0
     "@react-spring/web": ^10.1.1
