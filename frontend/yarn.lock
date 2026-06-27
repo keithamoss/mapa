@@ -1515,7 +1515,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:^1.0.0":
+"@rolldown/pluginutils@npm:^1.0.0, @rolldown/pluginutils@npm:^1.0.1":
   version: 1.0.1
   resolution: "@rolldown/pluginutils@npm:1.0.1"
   checksum: 240365ad4301aa209ae0efeded39d1e8ef8df07927fe1e57c9ffc60ac46a8e8b824752f6b27a4aae071e8b43ee288455e9db5055838a1e057244dab55f7c529a
@@ -2624,11 +2624,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@vitejs/plugin-react@npm:6.0.2"
+"@vitejs/plugin-react@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@vitejs/plugin-react@npm:6.0.3"
   dependencies:
-    "@rolldown/pluginutils": ^1.0.0
+    "@rolldown/pluginutils": ^1.0.1
   peerDependencies:
     "@rolldown/plugin-babel": ^0.1.7 || ^0.2.0
     babel-plugin-react-compiler: ^1.0.0
@@ -2638,7 +2638,7 @@ __metadata:
       optional: true
     babel-plugin-react-compiler:
       optional: true
-  checksum: 5d35fc812479823fe8bfdda81e525e8ba7f205ad8b7b5ec19718f4c8facedcab71ddc829405b53706585dfb3beeb90e0a46e9bdd45cf2ecd5b6feaf6a4cbb753
+  checksum: 740f64ce2af8aec67bb601f3a0f1d6fe6f548c71160fd4b5eaa9d0a2e373a16d18691059b881d8d35f0831c109dd8d9232566a96ed44728279472316c6838035
   languageName: node
   linkType: hard
 
@@ -4671,7 +4671,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^8.62.0
     "@typescript-eslint/parser": ^8.61.1
     "@use-gesture/react": ^10.3.1
-    "@vitejs/plugin-react": ^6.0.2
+    "@vitejs/plugin-react": ^6.0.3
     "@vitejs/plugin-react-swc": ^4.3.1
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.21
