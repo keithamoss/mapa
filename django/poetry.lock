@@ -37,14 +37,14 @@ tests-no-zope = ["attrs[tests-mypy]", "cloudpickle ; platform_python_implementat
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "3.29.0"
+version = "3.31.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "aws_lambda_powertools-3.29.0-py3-none-any.whl", hash = "sha256:e9ca87b5a8a835a7f7e327d5bafa43b6e0c150c6cb8c6b42158b0814377edc7a"},
-    {file = "aws_lambda_powertools-3.29.0.tar.gz", hash = "sha256:a81ce122356343878e095a11bd38f3e9a70f3fa0fea57b10b327d1e8dfe82b6e"},
+    {file = "aws_lambda_powertools-3.31.0-py3-none-any.whl", hash = "sha256:fb6e7753ba1657490c8ed43bac9f44bef4c08bdcde2ddf9af2b35d31b061c5f6"},
+    {file = "aws_lambda_powertools-3.31.0.tar.gz", hash = "sha256:65f81f1c81e536fb04c20885b7bcd468d5cd232b813c11b6a1634b7d03bd3c8c"},
 ]
 
 [package.dependencies]
@@ -59,7 +59,7 @@ datamasking = ["aws-encryption-sdk (>=3.3.1,!=4.0.0,!=4.0.1,!=4.0.2,!=4.0.3,!=4.
 kafka-consumer-avro = ["avro (>=1.12.0,<2.0.0)"]
 kafka-consumer-protobuf = ["protobuf (>=6.30.2,<8.0.0)"]
 parser = ["pydantic (>=2.4.0,<3.0.0)"]
-redis = ["redis (>=4.4,<8.0)"]
+redis = ["redis (>=4.4,<9.0)"]
 tracer = ["aws-xray-sdk (>=2.8.0,<3.0.0)"]
 validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 valkey = ["valkey-glide (>=1.3.5,<3.0)"]
@@ -1695,4 +1695,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "426659d573782a7991bbf2dee35c3a3f6d455988a78ba0604d7a977f8cacdbfe"
+content-hash = "94da1cf6a596ceee8e3f8ef7a5942c79a58a8ca85b41f52335206b50b59bb0c7"
