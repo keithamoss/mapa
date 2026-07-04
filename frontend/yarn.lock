@@ -1178,13 +1178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/x-date-pickers@npm:^9.7.0":
-  version: 9.7.0
-  resolution: "@mui/x-date-pickers@npm:9.7.0"
+"@mui/x-date-pickers@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "@mui/x-date-pickers@npm:9.8.0"
   dependencies:
     "@babel/runtime": ^7.29.7
     "@mui/utils": ^9.1.1
-    "@mui/x-internals": ^9.7.0
+    "@mui/x-internals": ^9.8.0
     "@types/react-transition-group": ^4.4.12
     clsx: ^2.1.1
     prop-types: ^15.8.1
@@ -1222,23 +1222,22 @@ __metadata:
       optional: true
     moment-jalaali:
       optional: true
-  checksum: fdb9509e8fb92aeb9704686d1ddf585cf306240b247b8abc07740693d581c650283d97eda990bf17df8e6ca766c295e60c0e0897bdd85f3e9203a046ae721013
+  checksum: 04b97cd026bded8da9ac1b78f74f1bb490d46db4221369913c18166b22d4cd3d87d6e583cd5e6c8cf57df7c07a1cf7068be7b397a2f6127dbb70cb47603ea5ee
   languageName: node
   linkType: hard
 
-"@mui/x-internals@npm:^9.7.0":
-  version: 9.7.0
-  resolution: "@mui/x-internals@npm:9.7.0"
+"@mui/x-internals@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "@mui/x-internals@npm:9.8.0"
   dependencies:
     "@babel/runtime": ^7.29.7
     "@base-ui/utils": ^0.3.0
     "@mui/utils": ^9.1.1
-    core-js-pure: ^3.49.0
     reselect: ^5.2.0
     use-sync-external-store: ^1.6.0
   peerDependencies:
     react: ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 900cdb3cddeffa11444e40268e7c27f44572c0857e33cf38eb3c23c97086172f364eb50081fa1ff6133a413bd16009e126f3a3b9490f020e43beb3f6cda6da24
+  checksum: 1e94101ffb27989820a5fc05654783142db0b5f629df9f06bc61f5790748709cbfb71c5c038cb2020bde2eab3a230fe401e3a6067ae24440f0b6f65245e63130
   languageName: node
   linkType: hard
 
@@ -3370,13 +3369,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:^3.49.0":
-  version: 3.49.0
-  resolution: "core-js-pure@npm:3.49.0"
-  checksum: 6d717ad23665135f0ba5fd18645d3ae6c0647752982037e61e571b7bea3910ad67a9482bbb558461a72015679dd25a40d114249e23c4267a69df494d3d4349ab
-  languageName: node
-  linkType: hard
-
 "cosmiconfig@npm:^7.0.0":
   version: 7.1.0
   resolution: "cosmiconfig@npm:7.1.0"
@@ -4643,7 +4635,7 @@ __metadata:
     "@mui/lab": ^7.0.0-beta.17
     "@mui/material": ^9.2.0
     "@mui/system": ^9.2.0
-    "@mui/x-date-pickers": ^9.7.0
+    "@mui/x-date-pickers": ^9.8.0
     "@react-spring/web": ^10.1.2
     "@reduxjs/toolkit": ^2.12.0
     "@sentry/browser": ^10.63.0
