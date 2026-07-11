@@ -4375,9 +4375,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^10.6.0":
-  version: 10.6.0
-  resolution: "eslint@npm:10.6.0"
+"eslint@npm:^10.7.0":
+  version: 10.7.0
+  resolution: "eslint@npm:10.7.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.8.0
     "@eslint-community/regexpp": ^4.12.2
@@ -4416,7 +4416,7 @@ __metadata:
       optional: true
   bin:
     eslint: bin/eslint.js
-  checksum: 7022eee742ba9268daa3fcae76a7f06f6b98387be7992379a3c8926b4f8a8953d6b57b10a049ed8662e3abac34ac7c0625587253c7797720e02daa9a3e6c1063
+  checksum: f07102501b3b68f006e1d89b34a101a519ecc55baf9fb65ccdffcb59ad25c29c11e6735d336ffa0182de47b74dc260d15e2967f5f0a63b217700738fb5b4b4d5
   languageName: node
   linkType: hard
 
@@ -4659,7 +4659,7 @@ __metadata:
     "@vitejs/plugin-react-swc": ^4.3.1
     autosuggest-highlight: ^3.3.4
     dayjs: ^1.11.21
-    eslint: ^10.6.0
+    eslint: ^10.7.0
     eslint-config-airbnb: ^19.0.4
     eslint-config-airbnb-typescript: ^18.0.0
     eslint-config-prettier: ^10.1.8
