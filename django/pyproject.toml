@@ -26,7 +26,7 @@ pytz = "^2026.2"
 google-api-python-client = "^2.198.0"
 google-auth-httplib2 = "^0.4.0"
 google-auth-oauthlib = "^1.4.0"
-aws-lambda-powertools = "^3.31.0"
+aws-lambda-powertools = "^3.31.1"
 boto3 = "^1.43.40"
 
 [tool.poetry.dev-dependencies]
