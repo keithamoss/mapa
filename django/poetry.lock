@@ -533,20 +533,20 @@ djangorestframework = "*"
 
 [[package]]
 name = "djangorestframework-gis"
-version = "1.2.1"
+version = "1.3.0"
 description = "Geographic add-ons for Django Rest Framework"
 optional = false
 python-versions = "*"
 groups = ["main"]
 files = [
-    {file = "djangorestframework_gis-1.2.1-py2.py3-none-any.whl", hash = "sha256:73acb51918b18e484407c0fff61aca11a1f5a216fa694bc4c0c734b7097ecc77"},
-    {file = "djangorestframework_gis-1.2.1.tar.gz", hash = "sha256:649ad0cb361dd85f2113b1796248eb2b198a01fa3d64c5e486106224c0ad51fd"},
+    {file = "djangorestframework_gis-1.3.0-py2.py3-none-any.whl", hash = "sha256:6e39a16f17c62cb4f4e2a6e5c0821fe257a6bf458c48933e07dbc442262ee500"},
+    {file = "djangorestframework_gis-1.3.0.tar.gz", hash = "sha256:f9ab54cf2f737f798fccd1f3b0501377f1053699ca421154cc3fb3edc4856366"},
 ]
 
 [package.dependencies]
 django = ">=4.2"
-django-filter = ">=23.5,<26.0"
-djangorestframework = ">=3.12,<3.18"
+django-filter = ">=23.5,<27.0"
+djangorestframework = ">=3.12,<3.19"
 
 [[package]]
 name = "gevent"
@@ -1694,4 +1694,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "e699045267ce492c1689de219be84f7a65a136d5f2a8681a0c8eea1b40d87da9"
+content-hash = "648fa045da48bc4325de50f33436d30deb31a2e07c7dadaa0cfb5ae2d8c2d1ff"
