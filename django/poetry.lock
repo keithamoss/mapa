@@ -692,14 +692,14 @@ requests = ["requests (>=2.20.0,<3.0.0)"]
 
 [[package]]
 name = "google-auth-httplib2"
-version = "0.4.2"
+version = "0.4.3"
 description = "Google Authentication Library: httplib2 transport"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "google_auth_httplib2-0.4.2-py3-none-any.whl", hash = "sha256:4298dd6b1415972d0c464b7177e6a69a595e7aec5b972222ecdca342f6009647"},
-    {file = "google_auth_httplib2-0.4.2.tar.gz", hash = "sha256:916225a6367e613c9af44d83f41688a599d3f687777846b8b91bec65085ed1f1"},
+    {file = "google_auth_httplib2-0.4.3-py3-none-any.whl", hash = "sha256:5459dd8da1a31339f51838edaedd0ca1221f5a5c1d292672e7d8ea0816c0d93a"},
+    {file = "google_auth_httplib2-0.4.3.tar.gz", hash = "sha256:0ba8d2eeab86e820f23466f57c45d509052db0a5f1bef6ed1cf92e4bb75b847d"},
 ]
 
 [package.dependencies]
@@ -1694,4 +1694,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "9a887f9f9d6642576a8d8804145d0f119cb064851431180f1acb6572942c2260"
+content-hash = "54678843a4b5e1acf18e605e6e3a5b20557cdf53288185faf008d53171f39696"
